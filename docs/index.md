@@ -10,6 +10,13 @@ The Very Broadband Rheology (VBR) Calculator provides a useful framework for cal
 
 At present, the code is in Matlab, but it is functional in [GNU Octave](https://www.gnu.org/software/octave/). There are plans for a python release, pending funding.
 
+## Getting the Code
+
+Two ways to get the code:
+* Clone from [the github stable branch](https://github.com/vbr-calc/vbr/tree/stableDownload)
+* Download a [zip file of the latest stable release](https://github.com/vbr-calc/vbr/releases/latest)
+
+
 ## Bug Reporting and User Support
 
 Found a bug? Got a question? Join our slack channel at [vbr-calc.slack.com](https://join.slack.com/t/vbr-calc/shared_invite/enQtODI0MTk4NzIxNzkzLTZlYjMwYTc4MTVkOTg2ZDgyNTQxNTAxNjc2NmNkMzA2MmVjOTJkYjYzNjc1ZDJhNzg5ZWU2MzE4OTEyNmMxNGU)!
