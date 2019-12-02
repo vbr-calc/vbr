@@ -16,6 +16,12 @@ Found a bug? Got a question? Join our slack channel at [vbr-calc.slack.com](http
 
 **Why doesn't the VBR Calculator do X that I need for my project Y?** The code VBR Calculator is intended as a starting point for calculating isotropic material properties that account for anelasticity of earth materials and we expect that you will need to tweak the code for your particular application in ways that we did not anticipate. If you don't know where to start in modifying the code, join our slack channel and tell us more about your project! If you are writing a proposal which would benefit from a modified VBR Calculator, get in touch to discuss a collaboration!   
 
+# Getting the Code
+
+Two ways to get the code:
+* [Clone from the github stable branch](https://github.com/vbr-calc/vbr/tree/stableDownload)
+* [Download a zip file of the latest stable release](https://github.com/vbr-calc/vbr/releases/latest)
+
 # Basic Usage
 
 The following outlines the basic usage for the VBR calculator. Additionally, there is a growing number of examples in  Projects/ to illustrate more complex usage, particularly in developing a statistical framework for comparing predicted mechanical properties to observed properties.  
