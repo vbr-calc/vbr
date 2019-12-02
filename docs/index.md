@@ -13,7 +13,7 @@ At present, the code is in Matlab, but it is functional in [GNU Octave](https://
 ## Getting the Code
 
 Two ways to get the code:
-* Clone from [the github stable branch](https://github.com/vbr-calc/vbr/tree/stableDownload)
+* Clone from [the github stable branch](https://github.com/vbr-calc/vbr/tree/stable)
 * Download a [zip file of the latest stable release](https://github.com/vbr-calc/vbr/releases/latest)
 
 
