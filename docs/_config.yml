@@ -24,6 +24,16 @@ description: >- # this means to ignore newlines until "baseurl:"
 baseurl: "/vbr" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  vbr-calc
+name: &name "Ben Holtzman & Chris Havlin" # &name is a YAML anchor which can be *referenced later
+author:
+  name: *name # *name is a YAML reference pointing to the &anchor earlier
+
+# Site Footer
+footer:
+  links:
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/vbr-calc/vbr"
 
 # Build settings
 # theme: jekyll-theme-slate
@@ -31,7 +41,7 @@ remote_theme: "mmistakes/minimal-mistakes@4.17.2"
 minimal_mistakes_skin: "dark" # "default" "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum" "sunrise"
 plugins:
   - jekyll-include-cache
-  # - jekyll-feed
+  - jekyll-feed
 # extensions:
 #   - fenced_code_blocks
 include:
