@@ -1,4 +1,7 @@
-# Developing the VBR calculator
+---
+permalink: /devguide/
+title: "Developing the VBR calculator"
+---
 
 You are welcome to extend the VBR calculator in any way you see fit. This guide is for those who want to do so following the existing framework or for those who want to contribute to the github repository.
 
