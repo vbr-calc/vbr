@@ -9,7 +9,7 @@ sidebar:
 ---
 The **Very Broadband Rheology (VBR)** Calculator is a **very** flexible framework for calculating mechanical properties (e.g., viscosity, shear wave velocity, intrinsic attenuation) across the entire band of geophysical time scales from seismic wave propagation to convection, as functions of input thermodynamic state variables (e.g., temperature, pressure, melt fraction, grain size) using a wide range of experimentally derived constitutive models.
 
-!['simpleflowchart'](docs/assets/images/VBRsimpleFlowchart.png){:class="img-responsive"}
+!['VBRsimpleflowchart'](/vbr/docs/assets/images/VBRsimpleFlowchart.png){:class="img-responsive"}
 
 The code is free to use and expand. Read more about the background of the VBR Calculator [here](/vbr/about/), or dive into using it with the [installation](/vbr/gettingstarted/installation/) and [quick start](/vbr/gettingstarted/) guides or [example usage](/vbr/examples/).
 
