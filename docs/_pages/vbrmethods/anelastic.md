@@ -7,7 +7,7 @@ toc: false
 The anelastic methods displayed by `vbrListMethods` currently include:
 
 * `eburgers_psp` [documentation](/vbr/vbrmethods/anel/eburgerspsp/): Extended Burgers Model, pseudo period scaling
-* `andrade_psp` [documentation](/vbr/vbrmethods/anel/andradespsp/): Andrade Model, pseudo period scaling
+* `andrade_psp` [documentation](/vbr/vbrmethods/anel/andradepsp/): Andrade Model, pseudo period scaling
 * `xfit_mxw` [documentation](/vbr/vbrmethods/anel/xfitmxw/): Master Curve Fit, maxwell scaling
 * `xfit_premelt` [documentation](/vbr/vbrmethods/anel/xfitpremelt/): Master Curve Fit, pre-melting maxwell scaling
 
