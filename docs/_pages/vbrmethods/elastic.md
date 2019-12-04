@@ -1,6 +1,7 @@
 ---
 permalink: /vbrmethods/elastic/
 title: "Elastic Methods"
+toc: false
 ---
 
 The elastic methods displayed by `vbrListMethods` currently include:
