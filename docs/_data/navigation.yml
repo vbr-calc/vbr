@@ -10,8 +10,19 @@ docs:
         url: /gettingstarted/installation/
       - title: "Quick-Start Guide"
         url: /gettingstarted/
+      - title: "Methods"
+        url: /gettingstarted/methods/
       - title: "Code Structure"
         url: /gettingstarted/structure/
+
+  - title: Method Descriptions
+    children:
+      - title: Elastic
+        url: /vbrmethods/elastic/
+      - title: Viscous
+        url: /vbrmethods/viscous/
+      - title: Anelastic
+        url: /vbrmethods/anelastic/
 
   - title: Examples
     children:

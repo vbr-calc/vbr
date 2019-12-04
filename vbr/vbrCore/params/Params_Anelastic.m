@@ -16,7 +16,7 @@ function params = Params_Anelastic(method)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   % available anelastic methods
-  params.possible_methods={'eburgers_psp','andrade_psp','xfit_mxw','xfit_premelt','andrade_mxw'};
+  params.possible_methods={'eburgers_psp','andrade_psp','xfit_mxw','xfit_premelt'};
 
   if strcmp(method,'eburgers_psp')
     % extended burgers parameters

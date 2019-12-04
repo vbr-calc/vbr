@@ -3,9 +3,22 @@ permalink: /gettingstarted/
 title: "Quick Start"
 ---
 
-The following outlines the basic usage for the VBR calculator. Additionally, there is a growing number of examples in  Projects/ to illustrate more complex usage, particularly in developing a statistical framework for comparing predicted mechanical properties to observed properties.  
+The following outlines the basic usage for the VBR calculator. Additionally, there are a growing number of [examples](/vbr/examples/) in  Projects/ to illustrate more complex usage, particularly in developing a statistical framework for comparing predicted mechanical properties to observed properties. In general, the flow is to:
 
-### Initialize VBR
+1. Initialize VBR
+2. Set Methods List
+3. Specify State Variables
+4. Adjust Parameters (optional)
+5. Run the VBR Calculator
+6. Extract results
+
+## 0. The VBR structure
+
+The VBR Calculator is built around Matlab structures. All direction and data is stored in the ```VBR``` structure, which gets passed around to where it needs to go. ```VBR.in``` contains the user's input. ```VBR.out``` contains the results of any calculations.
+
+!['VBRstructure'](/vbr/assets/images/vbrcoreflowchart.png){:class="img-responsive"}
+
+## 1. Initialize VBR
 
 To start, add the top level directory to your matlab path (relative or absolute path) and run vbr_init to add all the required directories to your path:
 ```matlab
@@ -14,11 +27,12 @@ addpath(vbr_path)
 vbr_init
 ```
 
-### Initialize Methods List
+If desired, you can permanently add the vbr directory to your path and even call `vbr_init` on opening Matlab by adding the above lines to the `startup.m` file (see [here](https://www.mathworks.com/help/matlab/ref/startup.html?searchHighlight=startup.m) for help).
 
-The VBR Calculator is built around matlab structures. All direction and data is stored in the ```VBR``` structure, which gets passed around to where it needs to go. ```VBR.in``` contains the user's input. ```VBR.out``` contains the results of any calculations.
+## 2. Set Methods List
 
-**First**, the user must supply a cell array called ```methods_list``` for each property for which they want to calculate:
+The user must supply a cell array called ```methods_list``` for each property for which they want to calculate (see [here](/vbr/gettingstarted/methods/) for more on available methods):
+
 ```matlab
 VBR.in.elastic.methods_list={'anharmonic';'anh_poro';};
 VBR.in.viscous.methods_list={'HK2003','HZK2011'};
@@ -37,7 +51,7 @@ beneath which there will be fields for the output for the calculations, e.g., ``
 
 After VBR is initialized, a list of available methods can be printed by running `vbrListMethods()`. For theoretical background on the different methods, see the accompanying VBR Calculator Manual.
 
-### Initialize the State Variables
+## 3. Specify the State Variables
 
 The input structure ```VBR.in.SV``` contains the state variables that define the conditions at which you want to apply the methods. The following fields **MUST** be defined:
 
@@ -57,15 +71,19 @@ The input structure ```VBR.in.SV``` contains the state variables that define the
    VBR.in.SV.phi = 0.0 * ones(n1,1); % melt fraction
    VBR.in.SV.dg_um = 0.01 * 1e6 * ones(n1,1); % grain size [um]
 
+```
+
+while the following fields are optional:
+
+```matlab
 %  optional state variables
    VBR.in.SV.chi=1*ones(n1,1); % composition fraction: 1 for olivine, 0 for crust (OPTIONAL, DEFAULT 1)
    VBR.in.SV.Ch2o = 0 * ones(n1,1) ; % water concentration  (OPTIONAL, DEFAULT 0)
-
 ```
 
-All SV arrays must be the same size and shape, except for the frequency ```VBR.in.SV.f```. They can be any length and shape as long as they are the same. Frequency dependent variables store the frequency dependencein an extra dimension of the output. If ```shape(VBR.in.SV.T)``` is (50,100) and ```numel(VBR.in.SV.f)``` is 3, then  ```shape(VBR.out.anelastic.eburgers_psp.V)``` will be (50,100,3).
+All SV arrays must be the same size and shape, except for the frequency ```VBR.in.SV.f```. They can be any length and shape as long as they are the same. Frequency dependent variables store the frequency dependencein an extra dimension of the output. If ```size(VBR.in.SV.T)``` is (50,100) and ```numel(VBR.in.SV.f)``` is 3, then  ```size(VBR.out.anelastic.eburgers_psp.V)``` will be (50,100,3).
 
-### Adjust parameters (optional)
+## 4. Adjust parameters (optional)
 
 The VBR calculator allows the user to change any parameter they see fit. Parameters are stored in the VBR.in.(property).(method) structure, e.g.:
 
@@ -83,7 +101,7 @@ VBR.in.viscous.HZK2011=Params_Viscous('HZK2011'); % HZK2011 params
 
 When changing parameters from those loaded by default, you can either load all the parameters then overwrite them or in most cases you can simply set the parameters without loading the full set of parameters.
 
-### Run the VBR Calculator
+## 5. Run the VBR Calculator
 
 The VBR Calculator executes calculations by passing the ```VBR``` structure to the ``VBR_spine()```:
 
@@ -91,7 +109,7 @@ The VBR Calculator executes calculations by passing the ```VBR``` structure to t
 [VBR] = VBR_spine(VBR) ;
 ```
 
-### Extracting results
+## 6. Extract results
 
 Results are stored in ```VBR.out``` for each property type and method:
 
@@ -100,3 +118,4 @@ VBR.out.elastic.anharmonic.Vsu % unrelaxed seismic shear wave velocity
 VBR.out.anelastic.eburgers_psp.V % anelastic-dependent seismic shear wave velocity
 VBR.out.viscous.HZK2011.eta_total % composite steady state creep viscosity
 ```
+As noted above, any frequency dependence is stored in an additional dimension. For example, if ```size(VBR.in.SV.T)``` is (50,100) and ```numel(VBR.in.SV.f)``` is 3, then  ```size(VBR.out.anelastic.eburgers_psp.V)``` will be (50,100,3).
