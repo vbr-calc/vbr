@@ -3,7 +3,7 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 layout: archive
-title: "The Very Broadband Rheology (VBR) Calculator"
+title: "The Very Broadband Rheology Calculator"
 sidebar:
   nav: "docs"
 ---

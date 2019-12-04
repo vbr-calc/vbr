@@ -1,5 +1,5 @@
 ---
-permalink: /contributing/
+permalink: /contrib/contributing/
 title: "Contributing & Help"
 ---
 

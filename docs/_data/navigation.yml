@@ -34,6 +34,8 @@ docs:
   - title: Contributing
     children:
       - title: "Contributing & Getting Help"
-        url: /contributing/
+        url: /contrib/contributing/
       - title: "Develpment Guide"
-        url: /devguide/
+        url: /contrib/devguide/
+      - title: "Adding a new method"
+        url: /contrib/newmethod/

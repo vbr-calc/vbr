@@ -14,21 +14,21 @@ A detailed theoretical description of each is provided in the full VBR Manual do
 
 All of the anelastic methods require results of an elastic calculation, specifically the unrelaxed elastic moduli. If calculated, the anelastic methods will use moduli from `VBR.out.elastic.anh_poro` and default to those from  `VBR.out.elastic.anharmonic`.
 
-## Extended Burgers Model, pseudo period scaling (`eburgers_psp`)
+## `eburgers_psp`
 Brief description.
 * How to turn/off dissipation peak
 * FastBurger
 
-## Andrade Model, pseudo period scaling (`andrade_psp`)
+## `andrade_psp`
 Brief description
 
-## Master Curve Fit, maxwell scaling (`xfit_mxw`)
-Brief description
-* relies on viscous method
-
-## Master Curve Fit, pre-melting maxwell scaling (`xfit_premelt`)
+## `xfit_mxw`
 Brief description
 * relies on viscous method
 
-## The small-melt effect
+## `xfit_premelt`
+Brief description
+* relies on viscous method
+
+## Small-melt effect
 Brief description, how to turn on.
