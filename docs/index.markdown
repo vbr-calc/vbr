@@ -3,12 +3,15 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 layout: archive
-title: "The Very Broadband Rheology (VBR) Calculator"
+title: "The Very Broadband Rheology Calculator"
 sidebar:
   nav: "docs"
 ---
 
 The **Very Broadband Rheology (VBR)** Calculator provides a useful framework for calculating material properties (e.g., shear wave velocity, intrinsic attenuation) from thermodynamic state variables (e.g., temperature, pressure, melt fraction, grain size) using a wide range of experimental scalings.
+
+!['VBRgeneral'](/vbr/assets/images/VBR-logo.png){:class="img-responsive"}
+
 
 It is free to use and expand. Read more about the background of the VBR Calculator [here](/vbr/about/), or dive into using it with the [installation](/vbr/gettingstarted/installation/) and [quick start](/vbr/gettingstarted/) guides or [example usage](/vbr/examples/).
 
