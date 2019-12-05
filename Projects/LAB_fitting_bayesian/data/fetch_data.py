@@ -52,11 +52,11 @@ def fetchVelModels(savedir='./vel_models'):
     for ref in iris_files.keys():
         full_url=url_base+iris_files[ref]['server_name']
         if os.path.isfile(os.path.join(savedir,ref)+'.nc') or os.path.isfile(os.path.join(savedir,ref)+'.mat'):
-            print(ref+' already downloaded.')
+            print('  '+ref+' already downloaded.')
         else:
-            print("attempting to fetch "+full_url)
+            print("'  '+attempting to fetch "+full_url)
             urlrequest.urlretrieve(full_url, os.path.join(savedir,ref)+'.nc')
-            print("file downloaded as "+os.path.join(savedir,ref)+'.nc')
+            print("'  '+file downloaded as "+os.path.join(savedir,ref)+'.nc')
 
 
     # slightly different fieldnames
@@ -67,10 +67,10 @@ def fetchVelModels(savedir='./vel_models'):
                        'Longitude':ds[iris_files[fi]['lon_field']].values,
                        'Depth':ds[iris_files[fi]['z_field']].values,
                        'Vs':ds[iris_files[fi]['Vs_field']].values.transpose(1,2,0)}
-            print(fi+'.nc converted to '+fi+'.mat')
+            print('  '+fi+'.nc converted to '+fi+'.mat')
             scp.savemat(os.path.join(savedir,fi)+'.mat',{'Vs_Model':save_dict})
         else:
-            print(os.path.join(savedir,fi)+'.mat already exists')
+            print('  '+fi+'.mat already exists')
     return
 
 def fetchQModels(savedir='./Q_models'):
@@ -81,11 +81,11 @@ def fetchQModels(savedir='./Q_models'):
     for ref in iris_files.keys():
         full_url=url_base+iris_files[ref]['server_name']
         if os.path.isfile(os.path.join(savedir,ref)+'.nc') or os.path.isfile(os.path.join(savedir,ref)+'.mat'):
-            print(ref+' already downloaded.')
+            print('  '+ref+' already downloaded.')
         else:
-            print("attempting to fetch "+full_url)
+            print('  '+"attempting to fetch "+full_url)
             urlrequest.urlretrieve(full_url, os.path.join(savedir,ref)+'.nc')
-            print("file downloaded as "+os.path.join(savedir,ref)+'.nc')
+            print('  '+"file downloaded as "+os.path.join(savedir,ref)+'.nc')
 
     # slightly different fieldnames
     for fi in iris_files.keys():
@@ -93,7 +93,7 @@ def fetchQModels(savedir='./Q_models'):
             ds=xr.open_dataset(os.path.join(savedir,fi)+'.nc')
 
             if fi is 'Gung_Romanowicz_2002':
-                print('ref Q is QL6c.1D')
+                print('  '+'ref Q is QL6c.1D')
                 # Values below are at the depths [80, 80, 100, 120, 140, 160, 180
                 # 200, 220, 200, 265, 310, 355, 400, 400, 450, 500, 550, 600, 600,
                 # 635, 670]
@@ -113,10 +113,10 @@ def fetchQModels(savedir='./Q_models'):
                        'Longitude':ds[iris_files[fi]['lon_field']].values,
                        'Depth':ds[iris_files[fi]['z_field']].values,
                        'Q':Q_field, 'Qinv':1/Q_field}
-            print(fi+'.nc converted to '+fi+'.mat')
+            print('  '+fi+'.nc converted to '+fi+'.mat')
             scp.savemat(os.path.join(savedir,fi)+'.mat',{'Q_Model':save_dict})
         else:
-            print(os.path.join(savedir,fi)+'.mat already exists')
+            print('  '+fi+'.mat already exists')
     return
 
 def setupDir(savedir):
@@ -139,7 +139,7 @@ if __name__=='__main__':
             help='directory to save Q models')
     arg = parser.parse_args()
 
-    print("Attempting to fetch Q Models")
+    print("\nAttempting to fetch Q Models\n")
     fetchQModels(arg.QDir)
-    print("Attempting to fetch Velocity Models")
+    print("\nAttempting to fetch Velocity Models\n")
     fetchVelModels(arg.velDir)
