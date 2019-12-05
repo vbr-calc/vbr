@@ -36,7 +36,11 @@ q_method = 'andrade_psp';
 posterior_A = fit_seismic_observations(filenames, location, q_method);
 
 if exist(filenames.LAB)
-  posterior_L = fit_plate(filenames, location, q_method, posterior_A);
+  if exist(filenames.Q) || exist(filenames.Vs)
+    posterior_L = fit_plate(filenames, location, q_method, posterior_A);
+  else
+    disp('fit_plate() requires at least Q or Vs, skipping fit_plate()')
+  end
 else
   disp([filenames.LAB,' does not exist, skipping fit_plate()'])
 end
