@@ -90,8 +90,8 @@ Any of the parameters can be set before calling `VBR_spine`.
 
 # Example at Laboratory Conditions
 
-The Project script, `Projects/1_LabData/1_Attenuation/FitData_YT16.m` calculates attenuation and modulus for borneol sample 41 at temperatures of 8, 13, 18, 29, 35, 39 and 47<sup>o</sup>C following
+The Project script, `Projects/1_LabData/1_Attenuation/FitData_YT16.m` calculates attenuation and modulus for borneol sample 41 at temperatures of 8, 13, 18, 29, 35, 39 and 47<sup>o</sup>C following Yamauchi and Takei (2016):
 
 !['mxwPMLab'](/vbr/assets/images/xfitpremelt1.png){:class="img-responsive"}
 
-Data are from figure 10 of and are not included in the repository at present.
+Data are from figure 10 of Yamauchi and Takei (2016) and are not included in the repository at present.
