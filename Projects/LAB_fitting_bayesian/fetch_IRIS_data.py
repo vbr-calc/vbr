@@ -1,10 +1,12 @@
 '''
 fetch_data.py
 
-script for fetching velocity and Q models from IRIS. If fetch is succesful, will
-process the files and save as .mat files.
+python script for fetching velocity and Q models from IRIS. If fetch is succesful,
+will process the files and save as .mat files.
 
 Required libraries: xarray, scipy, numpy (all are easily installed with pip)
+
+Works with Python 2 or 3. 
 '''
 
 try:
@@ -132,10 +134,10 @@ if __name__=='__main__':
 
     parser = argparse.ArgumentParser(description='fetch IRIS data')
     parser.add_argument('--velDir',
-            type=str,default='./vel_models',
+            type=str,default='./data/vel_models',
             help='directory to save velocity models')
     parser.add_argument('--QDir',
-            type=str,default='./Q_models',
+            type=str,default='./data/Q_models',
             help='directory to save Q models')
     arg = parser.parse_args()
 
