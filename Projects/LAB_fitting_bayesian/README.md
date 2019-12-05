@@ -24,6 +24,11 @@ The seismic observations are assumed to be saved in some file, `xxxx.mat`, that 
 ```
 Note that the error is often not reported and released with seismic observations! As such, if there is no such field in the saved `.mat` file, a default value is assumed, with a message printed to screen.
 
+To help get you started, you can use the python script, `fetch_IRIS_data.py` to fetch some Q and velocity models from IRIS:
+
+```
+python fetch_IRIS_data.py
+```
 ### Things you should change
 
 * location.lat, location.lon - (lat, lon) of your desired point
@@ -112,7 +117,7 @@ Calculate the posterior in a joint sense given constraints from both Vs and Q. W
 ### Returns
 * `posterior_S_given_Vs_and_Q`   (n_T, n_phi, n_gs) matrix of the posterior probability of the state variables given both Vs and Q
 
-## End of `fit_seismic_observations` 
+## End of `fit_seismic_observations`
 If calling this as a function rather than section by section,Returns:
 * `posterior`: structure containing the best posterior distribution that you calculated and details of the state variables you tested.
 

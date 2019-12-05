@@ -10,9 +10,9 @@ function posterior = fit_seismic_observations(filenames, location, q_method)
 % -----------
 %       filenames   structure with the paths to observational data saved
 %                   as .mat files in the required format.  Depending on
-%                   the fields in filenames, this code will return a 
+%                   the fields in filenames, this code will return a
 %                   posterior given Vs, Q, or Vs and Q.
-%       
+%
 %
 %       location    structure with the following required fields
 %           lat         latitude [degrees North]
@@ -32,8 +32,8 @@ function posterior = fit_seismic_observations(filenames, location, q_method)
 %               per_bw_min      minimum period (max. freq.) considered [s]
 %
 %       pdf_type            line 121
-%                           shape of prior distribution assumed for 
-%                           (independent priors) - can be set to 
+%                           shape of prior distribution assumed for
+%                           (independent priors) - can be set to
 %                               'uniform' (currently hardwired)
 %                               'normal' (mean, std calculated from range)
 %                               'input' (assumes there is a field in
@@ -44,11 +44,11 @@ function posterior = fit_seismic_observations(filenames, location, q_method)
 %       posterior           structure with the following fields
 %               pS              posterior probability of S
 %               state_names     as state_names in sweep - that is, a list
-%                               of the state variables that have been 
+%                               of the state variables that have been
 %                               varied in this calculation
-%               [SV name]       for each state variable listed in 
+%               [SV name]       for each state variable listed in
 %                               state_names, a vector of the values used
-%      
+%
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -61,19 +61,23 @@ addpath(genpath('./functions'))
 buildProjectDirectories()
 addpath(genpath('./'))
 
+% check that Vs and Q files exist
+VsExists=checkFileNames(filenames,'Vs');
+QExists=checkFileNames(filenames,'Q');
+
 %% %%%%%%%%%%%%%%%% Get data for Vs(x, f) and Q(x, f) %%%%%%%%%%%%%%%%% %%
 % Vs(x, f) and Q(x, f) are constrained by seismic observations and their %
 % uncertainties.                                                         %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        
+
 ifplot = 1;
-if isfield(filenames, 'Vs')
+if VsExists
     [obs_Vs, sigma_Vs] = process_SeismicModels('Vs', ...
         location, filenames.Vs, ifplot);
 end
 
-if isfield(filenames, 'Q')
+if QExists
     [obs_Q, sigma_Q] = process_SeismicModels('Q', ...
         location, filenames.Q, ifplot);
 end
@@ -102,11 +106,11 @@ if ~exist(fname, 'file')
 end
 
 load(fname, 'sweep');
-if isfield(filenames, 'Vs')
+if VsExists
     [sweep.meanVs, sweep.z_inds] = extract_calculated_values_in_depth_range(...
         sweep, 'Vs', q_method, [location.z_min, location.z_max]);
 end
-if isfield(filenames, 'Q')
+if QExists
     sweep.meanQ = extract_calculated_values_in_depth_range(sweep, ...
         'Q', q_method, [location.z_min, location.z_max]);
 end
@@ -135,23 +139,23 @@ prior_statevars = priorModelProbs(params, sweep.state_names, pdf_type);
 % variable values.                                                        %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-if isfield(filenames, 'Vs')
+if VsExists
     likelihood_Vs = probability_distributions('likelihood from residuals', ...
         obs_Vs, sigma_Vs, sweep.meanVs);
 end
-   
-if isfield(filenames, 'Q')
+
+if QExists
     likelihood_Q = probability_distributions('likelihood from residuals', ...
         obs_Q, sigma_Q, sweep.meanQ);
 end
-    
+
 %% %%%%%%%%%%%%%%%% Get posterior for State Variables %%%%%%%%%%%%%%%%%% %%
 % The posterior probability distribution is calculated in a Bayesian way  %
 %       p(S | D)    proportional to    p(D | S) * p(S)                    %
 % The probability of the state variables given the observed Q and Vs.     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-if isfield(filenames, 'Vs')
+if VsExists
     posterior_S_given_Vs = probability_distributions('A|B', ...
         likelihood_Vs, prior_statevars, 1);
     vs_str = sprintf(['Vs = %.3g ', 177, ' %.2g km/s'], obs_Vs, sigma_Vs);
@@ -160,7 +164,7 @@ if isfield(filenames, 'Vs')
     posterior.pS = posterior_S_given_Vs;
 end
 
-if isfield(filenames, 'Q')
+if QExists
     posterior_S_given_Q =  probability_distributions('A|B', ...
         likelihood_Q, prior_statevars, 1);
     q_str = sprintf(['Q = %.2g ', 177, ' %.2g '], obs_Q, sigma_Q);
@@ -179,19 +183,19 @@ end
 % from both Vs and Q.                                                     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-if isfield(filenames, 'Vs') && isfield(filenames, 'Q')
+if VsExists && isfield(filenames, 'Q')
     posterior_S_given_Vs_and_Q = probability_distributions(...
         'C|A,B conditionally independent', likelihood_Vs, likelihood_Q, ...
         prior_statevars, 1);
-    
+
     vs_q_str = [vs_str, ', ', q_str];
     plot_Bayes(posterior_S_given_Vs_and_Q, sweep, vs_q_str, q_method)
-    
+
     plot_tradeoffs_posterior(posterior_S_given_Vs_and_Q, sweep, ...
         vs_q_str, q_method)
-    
+
     posterior.pS = posterior_S_given_Vs_and_Q;
-    
+
 end
 
 posterior.state_names = sweep.state_names;
@@ -200,4 +204,25 @@ for nm = sweep.state_names
 end
 
 
+end
+
+function FileExists = checkFileNames(filenames,field)
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % FileExists = checkFileNames(filenames,field)
+  %
+  % checks if (1) field exists in filenames structure and (2) if
+  % filenames.(field) exists
+  %
+  % returns 1 if exists, 0 otherwise
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  FileExists=0;
+  if isfield(filenames,field)
+    if exist(filenames.(field))
+      FileExists=1;
+    else
+      fn=filenames.(field);
+      disp([fn,' does not exist.'])
+      disp('Check path, or download an example using fetch_IRIS_data.py')
+    end
+  end
 end

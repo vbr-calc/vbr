@@ -33,9 +33,10 @@ filenames.LAB = './data/LAB_models/HopperFischer2018.mat';
 %       see possible methods by running vbrListMethods()
 q_method = 'andrade_psp';
 
-
 posterior_A = fit_seismic_observations(filenames, location, q_method);
 
-posterior_L = fit_plate(filenames, location, q_method, posterior_A);
-
-
+if exist(filenames.LAB)
+  posterior_L = fit_plate(filenames, location, q_method, posterior_A);
+else
+  disp([filenames.LAB,' does not exist, skipping fit_plate()'])
+end
