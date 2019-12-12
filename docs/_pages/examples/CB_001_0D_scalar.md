@@ -1,3 +1,11 @@
+---
+permalink: /examples/CB_001_0D_scalar/
+title: ""
+---
+
+# CB_001_0D_scalar.m
+## contents
+```matlab
 %% ===================================================================== %%
 %%                     CB_001_0D_scalar.m
 %% ===================================================================== %%
@@ -62,3 +70,4 @@
        disp(['Vs(' num2str(VBR.in.SV.f(iFq)) ' Hz)=' ...
            num2str(VBR.out.anelastic.eburgers_psp.V(iFq)/1e3) ' km/s'])
    end
+```

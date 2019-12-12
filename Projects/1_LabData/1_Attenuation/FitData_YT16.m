@@ -32,7 +32,7 @@ function plot_Q()
   viscData = loadYT2016visc();
   Qdata=loadYT2016Q();
 
-  figure('DefaultAxesFontSize',12)
+  figure('DefaultAxesFontSize',12,'PaperPosition',[0,0,12,6],'PaperPositionMode','manual')
   OutVBR=struct();
   if viscData.has_data && Qdata.Qinv.has_data
 
@@ -115,22 +115,22 @@ function plot_Q()
       end
       clr=clrs{icolor};
 
-      subplot(2,1,2)
+      subplot(1,2,2)
       hold on
       loglog(Q_obs_f,Q_obs,'.','color',clr,'displayname',[num2str(dg),',',num2str(samp)],'MarkerSize',12)
       loglog(VBR.in.SV.f,VBR_Q_samp,[lnsty,clr],'displayname',[num2str(dg),',',num2str(samp)],'LineWidth',1.5)
 
-      subplot(2,1,1)
+      subplot(1,2,1)
       hold on
       semilogx(E_obs_f,E_obs,'.','color',clr,'displayname',[num2str(dg),',',num2str(samp)],'MarkerSize',12)
       semilogx(VBR.in.SV.f,VBR_G_samp,[lnsty,clr],'displayname',[num2str(dg),',',num2str(samp)],'LineWidth',1.5)
 
     end
-    subplot(2,1,2)
+    subplot(1,2,2)
     xlabel('f [Hz]'); ylabel('Q^{-1}')
     box on
 
-    subplot(2,1,1)
+    subplot(1,2,1)
     xlabel('f [Hz]'); ylabel('M [GPa]')
     box on
 
