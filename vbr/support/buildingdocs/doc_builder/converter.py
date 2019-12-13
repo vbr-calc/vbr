@@ -1,4 +1,5 @@
 import os
+from shutil import copyfile
 
 class VBRinit(object):
     ''' VBRinit class '''
@@ -53,6 +54,8 @@ class CBexample(VBRinit):
         # build the markdown file
         if mfile is not None:
             self.md_rows=self.build_md()
+
+        self.HasImageFiles=False
         return
 
     def build_md(self):
@@ -86,6 +89,22 @@ class CBexample(VBRinit):
                 mdfile.write(ln)
         return
 
+    def copyImages(self):
+
+        ImDir=os.path.join(self.mfile_dir,'figures')
+        ImFi=os.path.join(ImDir,self.mfile+'.png')
+
+        Targ=os.path.join(self.DocsPath,'assets','images','CBs')
+
+        if os.path.isfile(ImFi):
+            print("Copying "+ImFi +" to "+Targ)
+            TargFi=os.path.join(Targ,self.mfile+'.png')
+            copyfile(ImFi,TargFi)
+            self.HasImageFiles=True
+
+        return
+
+
 class CBwalker(object):
     def __init__(self,**kwargs):
         self.CB0=CBexample() # pulls in default paths
@@ -103,6 +122,7 @@ class CBwalker(object):
                 fullfi=os.path.join(self.CB0.examplePath,f)
                 os.remove(fullfi)
         return
+
     def walkDir(self,clearTargetDir=True):
         ''' walks the mfile directory, builds markdown file for each mfile '''
 
@@ -119,8 +139,9 @@ class CBwalker(object):
                 print("Processing "+f)
                 CB=CBexample(mfile=f)
                 CB.write_md()
-
+                CB.copyImages()
                 CB_list.append(self.CBlistEntry(f,CB.permalinkpath))
+
 
         # rebuild vbrcore.md:
         vbrcore=self.header()

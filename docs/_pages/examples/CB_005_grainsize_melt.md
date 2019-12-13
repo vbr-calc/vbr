@@ -49,7 +49,7 @@ title: ""
 
 %% Build Plots %%
   close all;
-  figure('Position', [10 10 650 650]);
+  figure('Position', [10 10 650 650],'PaperPosition',[0,0,7,7],'PaperPositionMode','manual');
   fixed_dg=.01 * 1e6; % 1 cm grain size
   fixed_phi=.001; % melt fraction
   [val,iphi]=min(abs(phi-fixed_phi));
@@ -97,4 +97,5 @@ title: ""
 
   subplot(2,2,1)
   legend('location','southwest')
+  saveas(gcf,'./figures/CB_005_grainsize_melt.png')
 ```

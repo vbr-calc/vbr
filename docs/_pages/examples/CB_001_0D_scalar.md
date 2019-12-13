@@ -54,8 +54,7 @@ title: ""
   [VBR] = VBR_spine(VBR) ;
 
 %% Build plots %%
-
-  figure()
+  figure('PaperPosition',[0,0,7,4],'PaperPositionMode','manual')
   % Loop over anelastic methods, plot result of each
   for imeth=1:numel(VBR.in.anelastic.methods_list)
     ane_meth=VBR.in.anelastic.methods_list{imeth};
@@ -81,4 +80,6 @@ title: ""
 
   subplot(1,2,2)
   xlabel('Frequency [Hz]'); ylabel('Q'); box on
+
+  saveas(gcf,'./figures/CB_001_0D_scalar.png')
 ```
