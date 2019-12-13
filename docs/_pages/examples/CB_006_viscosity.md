@@ -6,48 +6,74 @@ title: ""
 # CB_006_viscosity.m
 ## contents
 ```matlab
-%% ===================================================================== %%
-%%                     CB_006_viscosity.m
-%% ===================================================================== %%
-%  Calculates viscosity
-%% ===================================================================== %%
-   clear
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CB_006_viscosity.m
+%
+%   Calculates viscosity using different flow laws, plots log-log plots of
+%   composite strain rate, effective viscosity vs stress, grain size for
+%   all full flow-law viscous methods.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% ====================================================
-%% Load and set VBR parameters ========================
-%% ====================================================
-
-% put VBR in the path
+%% put VBR in the path %%
+  clear
   path_to_top_level_vbr='../../';
   addpath(path_to_top_level_vbr)
   vbr_init
 
-%  write method list (these are the things to calculate)
-%  all methods will end up as output like:
-%      VBR.out.elastic.anharmonic, VBR.out.anelastic.eBurgers, etc.
-   VBR.in.viscous.methods_list={'HK2003','HZK2011'};
+%%write method list  %%
+  VBR.in.viscous.methods_list={'HK2003';'HZK2011'};
 
-%% ====================================================
-%% Define the Thermodynamic State =====================
-%% ====================================================
+%% Define the Thermodynamic State %%
+  VBR.in.SV.dg_um=logspace(-6,-1,80)*1e6;
+  sz=size(VBR.in.SV.dg_um);
+  VBR.in.SV.phi = zeros(sz); % melt raction
+  VBR.in.SV.P_GPa = 2 * ones(sz); % pressure [GPa]
+  VBR.in.SV.T_K = 1473 * ones(sz); % temperature [K]
+  VBR.in.SV.sig_MPa = 10 * ones(sz); % differential stress [MPa]
 
-%  size of the state variable arrays. arrays can be any shape
-%  but all arays must be the same shape.
-   phi=logspace(-10,-1,100);
-   dg_um=logspace(-4,-1.3,80)*1e6;
-   [VBR.in.SV.phi,VBR.in.SV.dg_um] =meshgrid(phi,dg_um) ;
-   sz=size(VBR.in.SV.phi);
+%% CALL THE VBR CALCULATOR %%
+  [VBR_vs_dg] = VBR_spine(VBR) ;
 
-%  remaining state variables (ISV)
-   VBR.in.SV.P_GPa = 2 * ones(sz); % pressure [GPa]
-   VBR.in.SV.T_K = 1473 * ones(sz); % temperature [K]
-   VBR.in.SV.rho = 3300 * ones(sz); % density [kg m^-3]
-   VBR.in.SV.sig_MPa = 10 * ones(sz); % differential stress [MPa]
+%% adjust input, call again
+  VBR.in.SV=struct(); % clear out SV struct to clear default fields
+  VBR.in.SV.sig_MPa=logspace(-1,2,50);
+  sz=size(VBR.in.SV.sig_MPa);
+  VBR.in.SV.dg_um=1000 * ones(sz);
+  VBR.in.SV.phi = zeros(sz); % melt raction
+  VBR.in.SV.P_GPa = 2 * ones(sz); % pressure [GPa]
+  VBR.in.SV.T_K = 1473 * ones(sz); % temperature [K]
+  [VBR_vs_sig] = VBR_spine(VBR) ;
 
+%% Plot strain rates, viscosity %%
+  figure()
+  for imeth=1:numel(VBR_vs_dg.in.viscous.methods_list)
+    vmeth=VBR_vs_dg.in.viscous.methods_list{imeth};
+    subplot(2,2,1)
+    hold all
+    plot(log10(VBR_vs_dg.in.SV.dg_um),log10(VBR_vs_dg.out.viscous.(vmeth).sr_tot))
 
-%% ====================================================
-%% CALL THE VBR CALCULATOR ============================
-%% ====================================================
+    subplot(2,2,2)
+    hold all
+    plot(log10(VBR_vs_dg.in.SV.dg_um),log10(VBR_vs_dg.out.viscous.(vmeth).eta_total))
 
-   [VBR] = VBR_spine(VBR) ;
+    subplot(2,2,3)
+    hold all
+    plot(log10(VBR_vs_sig.in.SV.sig_MPa),log10(VBR_vs_sig.out.viscous.(vmeth).sr_tot))
+
+    subplot(2,2,4)
+    hold all
+    plot(log10(VBR_vs_sig.in.SV.sig_MPa),log10(VBR_vs_sig.out.viscous.(vmeth).eta_total))
+  end
+
+  subplot(2,2,1)
+  box on; xlabel('log10 d [um]'); ylabel('log10 total strain rate [s]')
+
+  subplot(2,2,2)
+  box on; xlabel('log10 d [um]'); ylabel('log10 effective viscosity [Pa s]')
+
+  subplot(2,2,3)
+  box on; xlabel('log10 \sigma [MPa]'); ylabel('log10 total strain rate [s]')
+
+  subplot(2,2,4)
+  box on; xlabel('log10 \sigma [MPa]'); ylabel('log10 effective viscosity [Pa s]')
 ```
