@@ -91,8 +91,24 @@ class CBwalker(object):
         self.CB0=CBexample() # pulls in default paths
         return
 
-    def walkDir(self):
+    def clearTargetDir(self):
+        print("clearing out target "+self.CB0.examplePath+" of CB's")
+
+        fis2rm = [f for f in os.listdir(self.CB0.examplePath)
+                        if os.path.isfile(os.path.join(self.CB0.examplePath,f))]
+
+        for f in fis2rm:
+            if 'CB_' in f or f=='vbrcore.md':
+                print("  removing "+f)
+                fullfi=os.path.join(self.CB0.examplePath,f)
+                os.remove(fullfi)
+        return
+    def walkDir(self,clearTargetDir=True):
         ''' walks the mfile directory, builds markdown file for each mfile '''
+
+        if clearTargetDir:
+            self.clearTargetDir()
+
         mFiles = [f for f in os.listdir(self.CB0.mfile_dir)
                         if os.path.isfile(os.path.join(self.CB0.mfile_dir, f))]
 
