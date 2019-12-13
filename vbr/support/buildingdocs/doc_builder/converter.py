@@ -46,6 +46,7 @@ class CBexample(VBRinit):
             self.mfile=mfile.split('.')[0]
             self.mfile_fullpath=os.path.join(self.mfile_dir,mfile)
             self.permalinkpath='/examples/'+self.mfile+'/'
+            self.checkForImages()
 
         self.examplePath=os.path.join(self.DocsPath,'_pages','examples')
         if mfile is not None:
@@ -55,12 +56,21 @@ class CBexample(VBRinit):
         if mfile is not None:
             self.md_rows=self.build_md()
 
-        self.HasImageFiles=False
+
         return
 
     def build_md(self):
         ''' builds the markdown text '''
         rows=self.header(self.permalinkpath)
+        rows.append('# '+self.mfile + '.m\n')
+        # add the figures if there
+        if self.HasImageFiles:
+            rows.append('## output figures\n')
+            for f in self.ImFiles:
+                ImLink='/vbr/assets/images/CBs/'+f
+                ImName=f.split('.')[0]
+                rows.append("\n!['"+ImName+"']("+ImLink+'){:class="img-responsive"}\n')
+
 
         # parse the mfile into matlab code block
         mfile_text=None
@@ -68,7 +78,6 @@ class CBexample(VBRinit):
             mfile_text=mfile.readlines()
 
         if mfile_text is not None:
-            rows.append('# '+self.mfile + '.m\n')
             rows.append('## contents\n')
             rows.append('```matlab\n')
             for ln in mfile_text:
@@ -89,18 +98,29 @@ class CBexample(VBRinit):
                 mdfile.write(ln)
         return
 
+    def checkForImages(self):
+
+        self.HasImageFiles=False
+        self.ImDir=os.path.join(self.mfile_dir,'figures')
+
+        self.ImFiles = [f for f in os.listdir(self.ImDir)
+                if os.path.isfile(os.path.join(self.ImDir, f)) and self.mfile in f]
+
+        if len(self.ImFiles)>0:
+           self.HasImageFiles=True
+
+        self.ImTargDir=os.path.join(self.DocsPath,'assets','images','CBs')
+        return
+
     def copyImages(self):
 
-        ImDir=os.path.join(self.mfile_dir,'figures')
-        ImFi=os.path.join(ImDir,self.mfile+'.png')
-
-        Targ=os.path.join(self.DocsPath,'assets','images','CBs')
-
-        if os.path.isfile(ImFi):
-            print("Copying "+ImFi +" to "+Targ)
-            TargFi=os.path.join(Targ,self.mfile+'.png')
-            copyfile(ImFi,TargFi)
-            self.HasImageFiles=True
+        if self.HasImageFiles:
+            for ImFi in self.ImFiles:
+                Targ=os.path.join(self.ImTargDir,ImFi)
+                TargFi=os.path.join(self.ImTargDir,ImFi)
+                FullFi=os.path.join(self.ImDir,ImFi)
+                print("    copying "+ImFi +" to "+self.ImTargDir)
+                copyfile(FullFi,TargFi)
 
         return
 
