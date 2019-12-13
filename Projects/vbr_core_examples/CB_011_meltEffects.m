@@ -1,12 +1,16 @@
 function Results = CB_011_meltEffects(case2run)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  % Results = CB_011_meltEffects()
+  % Results = CB_011_meltEffects(case2run)
   %
   %   VBR Calculations illustrating melt dependence of various methods.
   %
   %   Parameters
   %   ----------
   %   case2run   string, can be 'all','case1' or 'case2'
+  %              'case1' : demonstrates poroelastic effect, compares to
+  %                        anelastic dependence on melt fraction
+  %              'case2' : demonstrates small-melt effect on anelastic
+  %                        properties and compares to pre-melting method
   %
   %   Output
   %   ------
@@ -205,7 +209,7 @@ function case2out =case2()
   VBR_3 = VBR_spine(VBR);
 
   % figure: phi, M and V vs T
-  case2out.fig2=figure('Position', [30 30 1000 500]);
+  case2out.fig2=figure('Position', [30 30 1000 500],'PaperPosition',[0,0,12,4],'PaperPositionMode','manual');
   meth_colors=getMethodColors();
   phi_range=VBR.in.SV.phi;
   Trange=VBR_3.in.SV.T_K-273;
@@ -276,6 +280,7 @@ function case2out =case2()
   box on; xlabel('T [C]'); ylabel('Vs_R [km/s]');xlim([Tmin2,Tmax])
   subplot(2,4,8)
   box on; xlabel('T [C]'); ylabel('Q');xlim([Tmin2,Tmax])
+  saveas(gcf,'./figures/CB_011_meltEffects_case2_fig2.png')
 
   case2out.VBR_1=VBR_1;
   case2out.VBR_2=VBR_2;

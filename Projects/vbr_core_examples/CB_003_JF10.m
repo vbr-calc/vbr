@@ -64,7 +64,7 @@
   [VBR_with_peak] = VBR_spine(VBR) ;
 
 %% build figure %%
-  figure;
+  figure('PaperPosition',[0,0,7,7],'PaperPositionMode','manual');
 
   for iTemp = 1:numel(VBR.in.SV.T_K)
 
@@ -103,3 +103,4 @@
   for ip = 1:4
     subplot(2,2,ip); box on;
   end
+  saveas(gcf,'./figures/CB_003_JF10.png')
