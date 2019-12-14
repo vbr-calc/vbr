@@ -1,3 +1,14 @@
+---
+permalink: /examples/CB_005_grainsize_melt/
+title: ""
+---
+
+# CB_005_grainsize_melt.m
+## output figures
+
+!['CB_005_grainsize_melt'](/vbr/assets/images/CBs/CB_005_grainsize_melt.png){:class="img-responsive"}
+## contents
+```matlab
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CB_005_grainsize_melt.m
 %
@@ -90,3 +101,4 @@
   subplot(2,2,1)
   legend('location','southwest')
   saveas(gcf,'./figures/CB_005_grainsize_melt.png')
+```

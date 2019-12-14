@@ -1,3 +1,11 @@
+---
+permalink: /examples/CB_008_anharmonic_Guo/
+title: ""
+---
+
+# CB_008_anharmonic_Guo.m
+## contents
+```matlab
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CB_008_anharmonic_Gu0.m
 %
@@ -69,3 +77,4 @@
     ylim([0,150])
     set(gca,'ydir','reverse')
   end
+```

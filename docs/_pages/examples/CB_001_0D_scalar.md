@@ -1,3 +1,14 @@
+---
+permalink: /examples/CB_001_0D_scalar/
+title: ""
+---
+
+# CB_001_0D_scalar.m
+## output figures
+
+!['CB_001_0D_scalar'](/vbr/assets/images/CBs/CB_001_0D_scalar.png){:class="img-responsive"}
+## contents
+```matlab
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CB_001_0D_scalar.m
 %
@@ -74,3 +85,4 @@
   xlabel('Frequency [Hz]'); ylabel('Q'); box on
 
   saveas(gcf,'./figures/CB_001_0D_scalar.png')
+```

@@ -1,14 +1,16 @@
-function params = Params_Anelastic(method)
+function params = Params_Anelastic(method,GlobalParams)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %
   % params = Params_Anelastic(method)
   %
-  % loads the parameters for an anelastic method
+  % loads the parameters for an anelastic method.
   %
   % Parameters:
   % ----------
   % method    the method to load parameters for. If set to '', will return
   %           limited information
+  % GlobalParams   the Global Parameters structure, not required. Only used to
+  %                set the small-melt fraction effect.
   %
   % Output:
   % ------
@@ -122,13 +124,17 @@ function params = Params_Anelastic(method)
     params.description='pre-melting scaling';
   end
 
-  % melt enhancement effects, used by multiple of the above methods
-  % set VBR.in.GlobalSettings.melt_enhancement=0 to turn off
-  % see Holtzman, G-cubed, 2016 http://dx.doi.org/10.1002/2015GC006102
+  % set steady-state melt dependence for diff. creep (i.e., exp(-alpha * phi))
   HK2003 = Params_Viscous('HK2003'); % viscous parameters
-  params.melt_alpha = HK2003.diff.alf ; % steady state melt dependence (exp(-alf*phi))
-  params.phi_c = HK2003.diff.phi_c ; % critical melt fraction
-  params.x_phi_c = HK2003.diff.x_phi_c ; % melt effect factor
+  params.melt_alpha = HK2003.diff.alf ;
+
+  % pull in the small melt effect parameter values -- use diffusion creep value
+  if ~exist('GlobalParams')
+    GlobalParams = Params_Global();
+  end
+  [phi_c,x_phi_c]=setGlobalMeltEffects(GlobalParams);
+  params.phi_c=phi_c(1);
+  params.x_phi_c=x_phi_c(1);
 end
 
 

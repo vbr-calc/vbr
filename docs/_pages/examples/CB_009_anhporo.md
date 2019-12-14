@@ -1,3 +1,11 @@
+---
+permalink: /examples/CB_009_anhporo/
+title: ""
+---
+
+# CB_009_anhporo.m
+## contents
+```matlab
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CB_009_anhporo.m
 %
@@ -34,3 +42,4 @@
   semilogx(VBR.in.SV.phi,VBR.out.elastic.anh_poro.Vsu/1e3,'k','linewidth',1.5)
   xlabel('\phi'); ylabel('Vsu(P,T,\phi) [km/s]')
   set(gca,'linewidth',1.5)
+```

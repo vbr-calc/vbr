@@ -1,3 +1,11 @@
+---
+permalink: /examples/CB_006_viscosity/
+title: ""
+---
+
+# CB_006_viscosity.m
+## contents
+```matlab
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CB_006_viscosity.m
 %
@@ -68,3 +76,4 @@
 
   subplot(2,2,4)
   box on; xlabel('log10 \sigma [MPa]'); ylabel('log10 effective viscosity [Pa s]')
+```

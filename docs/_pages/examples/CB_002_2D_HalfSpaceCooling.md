@@ -1,3 +1,11 @@
+---
+permalink: /examples/CB_002_2D_HalfSpaceCooling/
+title: ""
+---
+
+# CB_002_2D_HalfSpaceCooling.m
+## contents
+```matlab
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CB_002_2D_HalfSpaceCooling.m
 %
@@ -104,3 +112,4 @@
      title([num2str(VBR.in.SV.f(i_f)),' Hz, max(dV)=',num2str(maxval),' percent'])
      colorbar()
   end
+```

@@ -1,6 +1,7 @@
 ---
 permalink: /about/relatedpubs/
 title: "Publications Related to the VBR Calculator"
+toc: false 
 ---
 
 The following publications have either used a version of the VBR Calculator or contributed directly towards writing the code:
