@@ -49,7 +49,11 @@ function meth_params = loadTheParams(VBR,property,param_func,meth)
   % ------
   %  meth_params: the parameter structure
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  meth_params=feval(param_func,meth); % the default values for this property and method
+
+  % load the the default values for this property and method
+  meth_params=feval(param_func,meth,VBR.in.GlobalSettings);
+
+  % loop over all fields and save those defined by user 
   if isfield(VBR.in.(property),meth)
     % user set parameters, check which they set
     fldz=fieldnames(meth_params); % only propagate param-defined fields

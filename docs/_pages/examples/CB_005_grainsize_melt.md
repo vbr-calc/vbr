@@ -4,87 +4,101 @@ title: ""
 ---
 
 # CB_005_grainsize_melt.m
+## output figures
+
+!['CB_005_grainsize_melt'](/vbr/assets/images/CBs/CB_005_grainsize_melt.png){:class="img-responsive"}
 ## contents
 ```matlab
-%% ===================================================================== %%
-%%                     CB_005_grainsize_melt.m
-%% ===================================================================== %%
-%  Compares xfit_premelt and AndradePsp at a range of grain size and
-%  melt fractions for a single period (100s) at astheno conditions.
-%% ===================================================================== %%
-   clear
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CB_005_grainsize_melt.m
+%
+%  Calculates anelastic properties for all methods and a range of grain
+%  size and melt fraction.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% ====================================================
-%% Load and set VBR parameters ========================
-%% ====================================================
-
-% put VBR in the path
+%% put VBR in the path %%
+  clear
   path_to_top_level_vbr='../../';
   addpath(path_to_top_level_vbr)
   vbr_init
 
-%  write method list (these are the things to calculate)
-   VBR.in.elastic.methods_list={'anharmonic'};
-   VBR.in.anelastic.methods_list={'andrade_psp','xfit_premelt'};
+%% write method lists, adjust parameters %%
+  VBR.in.elastic.methods_list={'anharmonic';'anh_poro'};
+  VBR.in.viscous.methods_list={'HZK2011'};
+  VBR.in.anelastic.methods_list={'eburgers_psp';'andrade_psp';'xfit_premelt';'xfit_mxw'};
+  VBR.in.anelastic.eburgers_psp.eBurgerFit='bg_peak';
 
-%  frequencies to calculate at
-   VBR.in.SV.f = 0.01;
+%% Define the Thermodynamic State %%
+  % build grid of dg and phi
+  dg_um=logspace(-3,-1.3,90)*1e6; % grain size [um] (1 mm to 5 cm)
+  phi = logspace(-8,-1,100);
+  [VBR.in.SV.dg_um,VBR.in.SV.phi]=meshgrid(dg_um,phi);
 
-%% ====================================================
-%% Define the Thermodynamic State =====================
-%% ====================================================
+  % size of the state variable arrays to initialize remainign state variables
+  sz=size(VBR.in.SV.dg_um);
 
-%  grid of dg and phi
-   dg_m=logspace(-3,-1.3,50); % grain size [m] (1 mm to 5 cm)
-   phi = logspace(-8,-1,20);
-   [VBR.in.SV.dg_um,VBR.in.SV.phi]=meshgrid(dg_m*1e6,phi);
+  % remaining state variables
+  VBR.in.SV.T_K=(1350+273) * ones(sz); % temperature [K]
+  VBR.in.SV.P_GPa = 3.2 * ones(sz); % pressure [GPa]
+  VBR.in.SV.rho = 3300 * ones(sz); % density [kg m^-3]
+  VBR.in.SV.sig_MPa = 0.1 * ones(sz); % differential stress [MPa]
+  VBR.in.SV.Tsolidus_K=1200+273*ones(sz);
+  Thomol=VBR.in.SV.T_K ./ VBR.in.SV.Tsolidus_K;
+  Thomol=Thomol(1); % for reference for later...
+  VBR.in.SV.f = 0.01; %  frequencies to calculate at
 
-%  size of the state variable arrays. arrays can be any shape
-%  but all arays must be the same shape.
-   sz=size(VBR.in.SV.dg_um);
+%% CALL THE VBR CALCULATOR %%
+  [VBR] = VBR_spine(VBR) ;
 
-%  remaining state variables (ISV)
-   VBR.in.SV.T_K=(1350+273) * ones(sz); % temperature [K]
-   VBR.in.SV.P_GPa = 3.2 * ones(sz); % pressure [GPa]
-   VBR.in.SV.rho = 3300 * ones(sz); % density [kg m^-3]
-   VBR.in.SV.sig_MPa = 0.1 * ones(sz); % differential stress [MPa]
+%% Build Plots %%
+  close all;
+  figure('Position', [10 10 650 650],'PaperPosition',[0,0,7,7],'PaperPositionMode','manual');
+  fixed_dg=.01 * 1e6; % 1 cm grain size
+  fixed_phi=.001; % melt fraction
+  [val,iphi]=min(abs(phi-fixed_phi));
+  [val,idg]=min(abs(dg_um-fixed_dg));
+  for imeth=1:numel(VBR.in.anelastic.methods_list)
+    meth=VBR.in.anelastic.methods_list{imeth};
+    V=VBR.out.anelastic.(meth).V/1e3;
+    Q=VBR.out.anelastic.(meth).Q;
+    subplot(2,2,1)
+    hold all
+    methname=strrep(meth,'_','\_');
+    semilogx(phi,V(:,idg),'DisplayName',methname,'linewidth',2)
+    box on
+    xlabel('\phi')
+    ylabel(['V at ',num2str(VBR.in.SV.f),' Hz'])
+    title(['T/T_{sol}=',num2str(Thomol),', d [um] = ',num2str(dg_um(idg))])
 
-%  this method requires the solidus
-%  you should write your own function for the solidus that takes all the other
-%  state variables as input. This is just for illustration
-   dTdz=0.5 ; % solidus slope [C/km]
-   dTdP=dTdz / 3300 / 9.8 / 1000 * 1e9; % [C/GPa ]
-   VBR.in.SV.Tsolidus_K=1000+dTdP*VBR.in.SV.P_GPa;
+    subplot(2,2,2)
+    hold all
+    methname=strrep(meth,'_','\_');
+    semilogx(dg_um,V(iphi,:),'DisplayName',methname,'linewidth',2)
+    box on
+    xlabel('d [um]')
+    ylabel(['V [km/s] at ',num2str(VBR.in.SV.f),' Hz'])
+    title(['T/T_{sol}=',num2str(Thomol),' \phi = ',num2str(phi(iphi))])
 
-%% ====================================================
-%% CALL THE VBR CALCULATOR ============================
-%% ====================================================
+    subplot(2,2,3)
+    hold all
+    methname=strrep(meth,'_','\_');
+    loglog(phi,Q(:,idg),'DisplayName',methname,'linewidth',2)
+    box on
+    xlabel('\phi')
+    ylabel(['Q at ',num2str(VBR.in.SV.f),' Hz'])
+    title(['T/T_{sol}=',num2str(Thomol),' d [um] = ',num2str(dg_um(idg))])
 
-   [VBR] = VBR_spine(VBR) ;
+    subplot(2,2,4)
+    hold all
+    methname=strrep(meth,'_','\_');
+    loglog(dg_um,Q(iphi,:),'DisplayName',methname,'linewidth',2)
+    box on
+    xlabel('d [um]')
+    ylabel(['Q at ',num2str(VBR.in.SV.f),' Hz'])
+    title(['T/T_{sol}=',num2str(Thomol),' \phi = ',num2str(phi(iphi))])
+  end
 
-%% ====================================================
-%% Display some things ================================
-%% ====================================================
-
-close all;
-figure;
-subplot(1,3,1)
-contourf(log10(dg_m),log10(phi),VBR.out.anelastic.xfit_premelt.V/1e3,100,'LineStyle','none');
-colorbar
-title('Vs [km/s], xfit_premelt')
-xlabel('d [um]'); ylabel('log10(phi)')
-
-subplot(1,3,2)
-contourf(log10(dg_m),log10(phi),VBR.out.anelastic.andrade_psp.V/1e3,100,'LineStyle','none');
-colorbar
-title('Vs [km/s], andrade_psp')
-xlabel('log10(d [um])');
-
-subplot(1,3,3)
-dV=(VBR.out.anelastic.xfit_premelt.V-VBR.out.anelastic.andrade_psp.V) ./ ...
-     VBR.out.anelastic.andrade_psp.V;
-contourf(log10(dg_m),log10(phi),dV,100,'LineStyle','none');
-colorbar
-title('( xfit_premelt - andrade_psp ) / andrade_psp')
-xlabel('log10(d [um])');
+  subplot(2,2,1)
+  legend('location','southwest')
+  saveas(gcf,'./figures/CB_005_grainsize_melt.png')
 ```
