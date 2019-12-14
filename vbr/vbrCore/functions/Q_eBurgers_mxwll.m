@@ -87,11 +87,8 @@ function scaleMat=addMeltEffects(phi,scaleMat,GlobalSettings,Burger_params)
   x_phi_c = Burger_params.x_phi_c ;% melt enhancement factor
 
   % x_phi_c adjustment ("nominally melt free" to truly melt free)
-  if GlobalSettings.melt_enhancement==0
-    x_phi_c=1;
-  else
-    scaleMat = scaleMat.* x_phi_c ;
-  end
+  % x_phi_c will be 1 if melt_enhancement is turned off (set to 0)
+  scaleMat = scaleMat.* x_phi_c ;
 
   % add melt effects
   [scale_mat_prime] = sr_melt_enhancement(phi,alpha,x_phi_c,phi_c) ;

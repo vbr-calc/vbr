@@ -1,4 +1,4 @@
-function [params] = Params_Elastic(method)
+function [params] = Params_Elastic(method,GlobalParams)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %
   % params = Params_Elastic(method)
@@ -9,6 +9,7 @@ function [params] = Params_Elastic(method)
   % ----------
   % method    the method to load parameters for. If set to '', will return
   %           limited information
+  % GlobalParams   option GlobalParams flag, not required and not currently used
   %
   % Output:
   % ------
@@ -16,6 +17,10 @@ function [params] = Params_Elastic(method)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   params.possible_methods={'anharmonic','anh_poro','SLB2005'};
 
+  if ~exist('GlobalParams')
+    GlobalParams = Params_Global();
+  end
+  
   if strcmp(method,'anharmonic')
     params.func_name='el_anharmonic'; % the name of the matlab function
     params.anharm_scale_mthd = 'Isaak' ; % Isaak or Cammarano ;

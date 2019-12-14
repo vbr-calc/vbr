@@ -37,8 +37,9 @@ function [VBR]=checkInput(VBR)
         'null'} ;
 
   % defaults for GlobalSettings
-  GlobalDefaults.melt_enhancement=0; % global melt enhacement flag on/off.
-
+  % GlobalDefaults.melt_enhancement=0; % global melt enhacement flag on/off.
+  GlobalDefaults=Params_Global();
+  
   % loop over requirements, check them.
   for ri = 1:size(Reqs,1)
       typ=Reqs{ri,1}; % general method field
