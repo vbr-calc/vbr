@@ -1,4 +1,4 @@
-function params = Params_Viscous(method)
+function params = Params_Viscous(method,GlobalParams)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %
   % params = Params_Viscous(method)
@@ -10,16 +10,19 @@ function params = Params_Viscous(method)
   % method    the method to load parameters for. If set to '', will return
   %           limited information
   %
+  % GlobalParams   the Global Parameters structure, not required.
+  %
   % Output:
   % ------
   % params    the parameter structure for the viscous method
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   params.possible_methods={'HK2003','HZK2011','xfit_premelt'};
 
-  % small-melt effect, Holtzman (these values get passed to the current paramter
-  % structure for the current method)
-  phi_c = [1e-5 1e-5 1e-5];
-  x_phi_c = [5 1 5/2];
+  % pull in the small melt effect parameter values
+  if ~exist('GlobalParams')
+    GlobalParams = Params_Global();
+  end
+  [phi_c,x_phi_c]=setGlobalMeltEffects(GlobalParams);
 
   if strcmp(method,'HK2003')
     % hirth and kohlstedt 2003
