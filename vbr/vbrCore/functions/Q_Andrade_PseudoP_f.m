@@ -36,9 +36,9 @@ function [VBR] = Q_Andrade_PseudoP_f(VBR)
   Beta = VBR.in.anelastic.(andrade_nm).Beta ; %
 
   % Elastic-GBS relaxation peak parameters, set in params file
-  Te = VBR.in.anelastic.(andrade_nm).Te ; %
-  Tgbs = VBR.in.anelastic.(andrade_nm).Tgbs ; % sec
-  Delta = VBR.in.anelastic.(andrade_nm).Delta ;% relaxation strength
+  % Te = VBR.in.anelastic.(andrade_nm).Te ; %
+  % Tgbs = VBR.in.anelastic.(andrade_nm).Tgbs ; % sec
+  % Delta = VBR.in.anelastic.(andrade_nm).Delta ;% relaxation strength
 
   % pseudo-period master variable independent of period/freqency
   Xtilde = calculateXtilde(VBR);

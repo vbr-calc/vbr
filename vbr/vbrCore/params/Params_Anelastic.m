@@ -54,11 +54,10 @@ function params = Params_Anelastic(method,GlobalParams)
     params.Vstar = 10e-6 ; % m^3/mol (Activation Volume? or molar volume?)
     params.m = 1 ;
 
-    % the GBS relaxation peak (experimental... set params.Delta to near zero,
-    % e.g., params.Delta=1e-30 to turn off)
-    params.Te = 0.1 ;
-    params.Tgbs = 0.0833 ;% sec
-    params.Delta = 0.3 ; % Relaxation strength
+    % the GBS relaxation peak (experimental... leave commented until further notice)
+    % params.Te = 0.1 ;
+    % params.Tgbs = 0.0833 ;% sec
+    % params.Delta = 0.3 ; % Relaxation strength
   end
 
   if strcmp(method,'andrade_mxw')
