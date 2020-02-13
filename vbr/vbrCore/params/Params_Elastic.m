@@ -20,7 +20,7 @@ function [params] = Params_Elastic(method,GlobalParams)
   if ~exist('GlobalParams')
     GlobalParams = Params_Global();
   end
-  
+
   if strcmp(method,'anharmonic')
     params.func_name='el_anharmonic'; % the name of the matlab function
     params.anharm_scale_mthd = 'Isaak' ; % Isaak or Cammarano ;
@@ -28,7 +28,6 @@ function [params] = Params_Elastic(method,GlobalParams)
     params.T_K_ref = 300 ;% room temp [K] (THIS WAS AT 1173!!)
     params.P_Pa_ref = 1e5;% 1 atm [Pa]
     params.Gu_0_ol = 81; % olivine reference shear modulus [GPa]
-    params.Gu_0_crust = 30; % effective reference shear modulus for crust [GPa]
 
     if strcmp(params.anharm_scale_mthd,'Isaak')
       % Isaak, 1992
@@ -45,6 +44,11 @@ function [params] = Params_Elastic(method,GlobalParams)
     params.citations={'Cammarano et al. (2003), "Inferring upper-mantle temperatures from seismic velocities", Physics of the Earth and Planetary Interiors, Volume 138, Issues 3–4, https://doi.org/10.1016/S0031-9201(03)00156-0 '; ...
                       'Isaak, D. G. (1992), "High‐temperature elasticity of iron‐bearing olivines", J. Geophys. Res., 97( B2), 1871– 1885, https://doi.org/10.1029/91JB02675'};
     params.description='anharmonic scaling from STP to VBR.in.SV.T_K and VBR.in.SV.P_GPa';
+
+    % crustal values (approximate anorthite values calculated using Abers and Hacker 2016)
+    params.Gu_0_crust = 40; % effective reference shear modulus for crust [GPa]
+    params.dG_dT_crust = -3.0e6 ; % Pa/K
+    params.dG_dP_crust = 3.5 ; % unitless, Pa/Pa
 
   elseif strcmp(method,'anh_poro')
     params.func_name='el_ModUnrlx_MELT_f'; % the name of the matlab function
