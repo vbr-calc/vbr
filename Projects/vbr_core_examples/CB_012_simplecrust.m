@@ -60,21 +60,23 @@
   [VBR] = VBR_spine(VBR) ;
 
 %% build figures
-  figure
+  figure('PaperPosition',[0,0,10,4],'PaperPositionMode','manual')
   subplot(1,4,4)
   plot(VBR.out.anelastic.andrade_psp.Vave/1e3,z_km,'k')
-  xlabel('Vs')
+  xlabel('Vs [km/s]')
   set(gca,'ydir','reverse')
   subplot(1,4,2)
   plot(VBR.in.SV.T_K-273,z_km,'k')
-  xlabel('T')
+  xlabel('T [C]')
   set(gca,'ydir','reverse')
   subplot(1,4,3)
   plot(VBR.in.SV.P_GPa,z_km,'k')
-  xlabel('P')
+  xlabel('P [GPa]')
   set(gca,'ydir','reverse')
   subplot(1,4,1)
   plot(VBR.in.SV.chi,z_km,'k')
+  ylabel('depth [km]')
   xlabel('composition factor')
   xlim([-.01,1.01])
   set(gca,'ydir','reverse')
+  saveas(gcf,'./figures/CB_012_simplecrust.png')
