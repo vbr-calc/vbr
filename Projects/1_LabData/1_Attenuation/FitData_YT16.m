@@ -51,7 +51,7 @@ function plot_Q()
       VBR.in.anelastic.methods_list={'xfit_premelt'};
 
       % pull this sample's viscData
-      dg=viscData.visc.dg_um(viscData.visc.sample==samp)(1);
+      dg=min(viscData.visc.dg_um(viscData.visc.sample==samp));
       T_Cvisc=viscData.visc.T_C(viscData.visc.sample==samp);
       eta=viscData.visc.eta(viscData.visc.sample==samp);
       [T_Cvisc,I]=sort(T_Cvisc); eta=eta(I);
@@ -161,7 +161,7 @@ function plot_visc()
 
       % pull this sample's data
       samp=data.visc.sample_list(isamp);
-      dg=data.visc.dg_um(data.visc.sample==samp)(1);
+      dg=min(data.visc.dg_um(data.visc.sample==samp));
       T_C=data.visc.T_C(data.visc.sample==samp);
       eta=data.visc.eta(data.visc.sample==samp);
 
