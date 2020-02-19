@@ -51,7 +51,7 @@ function plot_Q()
       VBR.in.anelastic.methods_list={'xfit_premelt'};
 
       % pull this sample's viscData
-      dg=viscData.visc.dg_um(viscData.visc.sample==samp)(1);
+      dg=min(viscData.visc.dg_um(viscData.visc.sample==samp));
       T_Cvisc=viscData.visc.T_C(viscData.visc.sample==samp);
       eta=viscData.visc.eta(viscData.visc.sample==samp);
       [T_Cvisc,I]=sort(T_Cvisc); eta=eta(I);
@@ -161,7 +161,7 @@ function plot_visc()
 
       % pull this sample's data
       samp=data.visc.sample_list(isamp);
-      dg=data.visc.dg_um(data.visc.sample==samp)(1);
+      dg=min(data.visc.dg_um(data.visc.sample==samp));
       T_C=data.visc.T_C(data.visc.sample==samp);
       eta=data.visc.eta(data.visc.sample==samp);
 
@@ -235,12 +235,12 @@ function data = loadYT2016visc()
   if exist([dataDir,'table3.mat'],'file')
     disp('loading')
     load([dataDir,'table3.mat'])
-    data.table3_H=table3_H;
+    data.table3_H=table3_H.table3_H;
   end
 
   if exist([dataDir,'viscosity_table2subset.csv'],'file')
-    d=csvread([dataDir,'viscosity_table2subset.csv']);
-    d=d(2:end,:);
+    d=csvread([dataDir,'viscosity_table2subset.csv'],1,0);
+    %d=d(2:end,:);
     data.visc=struct();
     data.visc.sample=d(:,1);
     data.visc.dg_um=d(:,2);
@@ -263,8 +263,8 @@ function data = loadYT2016Q()
   data=struct();
 
   if exist([dataDir,'YT16_41_fQinv_allT.csv'],'file')
-    d=csvread([dataDir,'YT16_41_fQinv_allT.csv']);
-    d=d(2:end,:);
+    d=csvread([dataDir,'YT16_41_fQinv_allT.csv'],1,0);
+    %d=d(2:end,:);
     data.Qinv=struct();
     data.Qinv.sample=d(:,1);
     data.Qinv.T_C=d(:,2);
@@ -278,7 +278,7 @@ function data = loadYT2016Q()
 
 
   if exist([dataDir,'YT16_41_fE_allT.csv'],'file')
-    d=csvread([dataDir,'YT16_41_fE_allT.csv']);
+    d=csvread([dataDir,'YT16_41_fE_allT.csv'],1,0);
     d=d(2:end,:);
     data.E=struct();
     data.E.sample=d(:,1);
