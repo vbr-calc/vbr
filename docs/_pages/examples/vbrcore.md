@@ -16,3 +16,4 @@ Simple "Cookbook" (CB) scripts demonstrating various use cases of the VBR Calcul
 * `CB_009_anhporo.m` [link](/vbr/examples/CB_009_anhporo/)
 * `CB_010_depthProfiles.m` [link](/vbr/examples/CB_010_depthProfiles/)
 * `CB_011_meltEffects.m` [link](/vbr/examples/CB_011_meltEffects/)
+* `CB_012_simplecrust.m` [link](/vbr/examples/CB_012_simplecrust/)
