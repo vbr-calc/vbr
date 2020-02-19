@@ -239,7 +239,7 @@ function data = loadYT2016visc()
   end
 
   if exist([dataDir,'viscosity_table2subset.csv'],'file')
-    d=csvread([dataDir,'viscosity_table2subset.csv'],1);
+    d=csvread([dataDir,'viscosity_table2subset.csv'],1,0);
     %d=d(2:end,:);
     data.visc=struct();
     data.visc.sample=d(:,1);
@@ -263,7 +263,7 @@ function data = loadYT2016Q()
   data=struct();
 
   if exist([dataDir,'YT16_41_fQinv_allT.csv'],'file')
-    d=csvread([dataDir,'YT16_41_fQinv_allT.csv'],1);
+    d=csvread([dataDir,'YT16_41_fQinv_allT.csv'],1,0);
     %d=d(2:end,:);
     data.Qinv=struct();
     data.Qinv.sample=d(:,1);
@@ -278,7 +278,7 @@ function data = loadYT2016Q()
 
 
   if exist([dataDir,'YT16_41_fE_allT.csv'],'file')
-    d=csvread([dataDir,'YT16_41_fE_allT.csv'],1);
+    d=csvread([dataDir,'YT16_41_fE_allT.csv'],1,0);
     d=d(2:end,:);
     data.E=struct();
     data.E.sample=d(:,1);
