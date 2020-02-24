@@ -123,7 +123,7 @@ params = make_param_grid(sweep.state_names, sweep);
 params.gs_mean = 1e4; params.gs_std = 1e3;
 
 % Calculate the prior for either a normal or uniform distribution
-pdf_type = {'uniform', 'uniform', 'uniform'};
+pdf_type = {'uniform', 'uniform', 'normal'};
 prior_statevars = priorModelProbs(params, sweep.state_names, pdf_type);
 
 
