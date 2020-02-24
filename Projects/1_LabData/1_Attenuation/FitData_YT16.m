@@ -279,7 +279,7 @@ function data = loadYT2016Q()
 
   if exist([dataDir,'YT16_41_fE_allT.csv'],'file')
     d=csvread([dataDir,'YT16_41_fE_allT.csv'],1,0);
-    d=d(2:end,:);
+    %d=d(2:end,:);
     data.E=struct();
     data.E.sample=d(:,1);
     data.E.T_C=d(:,2);

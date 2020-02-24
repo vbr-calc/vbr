@@ -645,7 +645,6 @@ function data = tryDataLoadVisc()
   data=struct();
   if exist([dataDir,'McCT11_table1.csv'],'file')
     d=csvread([dataDir,'McCT11_table1.csv'],1,0);
-    d=d(2:end,:);
     % sample	dg_um	T_C	eta_Pas_a	eta_Pas_b	eta_ave_Pas	tau_m_s	strain	GU_at_T_Gpa
     flds={'sample';'dg_um';'T_C';'eta_a';'eta_b';'eta_Pas';'tau_m_s';'strain';'GU_at_T_GPa'};
     for ifld=1:numel(flds)
@@ -676,7 +675,7 @@ function data = tryDataLoadRelax();
   for ifi=1:numel(fi_list)
     fl=fi_list{ifi};
     if exist([dataDir,fl,'.csv'])
-      d=csvread([dataDir,fl,'.csv']);
+      d=csvread([dataDir,fl,'.csv'],1,0);
       if numel(strfind(fl,'relax')>0)
         data.(fl).tau_norm=d(:,1);
         data.(fl).(fl)=d(:,2);
@@ -701,7 +700,6 @@ function data = tryDataLoadFig9()
   data=struct();
   if exist([dataDir,'sample_15_Tdependence_fig9.csv'],'file')
     d=csvread([dataDir,'sample_15_Tdependence_fig9.csv'],1,0);
-    d=d(2:end,:);
     data.T_C=d(:,1);
     data.f_Hz=d(:,4);
     data.Qinv=d(:,5);

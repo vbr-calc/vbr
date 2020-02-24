@@ -120,8 +120,7 @@ function data = tryDataLoad()
   data=struct();
   if exist([dataDir,'andrade_organized.csv'],'file')
     disp('loading')
-    d=csvread([dataDir,'andrade_organized.csv']);
-    d=d(2:end,:);
+    d=csvread([dataDir,'andrade_organized.csv'],1,0);
     data.T_K=d(:,1)+273;
     data.period_s=d(:,5);
     data.G=d(:,6);
