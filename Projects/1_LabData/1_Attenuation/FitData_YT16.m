@@ -153,7 +153,7 @@ function plot_visc()
     N=numel(data.visc.sample_list);
     dg_range=max(data.visc.dg_um)-min(data.visc.dg_um);
 
-    clrs={'k','r','b','c','m','g','p'}
+    clrs={'k','r','b','c','m','g','p'};
     for isamp=1:N
 
       VBR.in=struct();
