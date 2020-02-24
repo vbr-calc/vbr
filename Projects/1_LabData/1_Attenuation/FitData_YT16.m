@@ -128,10 +128,12 @@ function plot_Q()
     end
     subplot(1,2,2)
     xlabel('f [Hz]'); ylabel('Q^{-1}')
+    set(gca,'yscale','log','xscale','log')
     box on
 
     subplot(1,2,1)
     xlabel('f [Hz]'); ylabel('M [GPa]')
+    set(gca,'yscale','log','xscale','log')
     box on
 
     saveas(gcf,'./figures/YT16_MQ.eps','epsc')
@@ -213,11 +215,13 @@ function plot_visc()
     xlabel('T [C]'); ylabel('eta [Pa s]')
     legend('location','southwest')
     box on
+    set(gca,'yscale','log')
 
     subplot(1,2,2)
     title('H=147 kJ/mol, dg\_ref=34.2 um, T\_ref=23 C, eta\_r=7e13 Pas')
     xlabel('T [C]'); ylabel('eta [Pa s]')
     box on
+    set(gca,'yscale','log')
 
     saveas(gcf,'./figures/YT16_visc.eps','epsc')
   else
