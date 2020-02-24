@@ -143,14 +143,14 @@ function fig = plot_MQ_T_Fits(fit1_fit2,out_dir)
     xlabel('f [Hz]'); ylabel('E [GPa]')
     ylim([.5,3])
     xlim([1e-4,10])
-    set(gca,'XMinorTick','on')
+    set(gca,'XMinorTick','on','xscale','log')
 
     set(fig,'CurrentAxes',ax_E_norm)
     box on
     xlabel('f_N'); ylabel('E / E_U')
     ylim([0,1])
     xlim([1e-1,1e5])
-    set(gca,'XMinorTick','on')
+    set(gca,'XMinorTick','on','xscale','log')
   end
 
   set(fig,'CurrentAxes',ax_Qinv)
@@ -158,14 +158,14 @@ function fig = plot_MQ_T_Fits(fit1_fit2,out_dir)
   xlabel('f [Hz]'); ylabel('Qinv')
   xlim([1e-4,10])
   ylim([1e-2,2])
-  set(gca,'XMinorTick','on','YMinorTick','on')
+  set(gca,'XMinorTick','on','YMinorTick','on','xscale','log','yscale','log')
 
   set(fig,'CurrentAxes',ax_Qinv_norm)
   box on
   xlabel('f_N'); ylabel('Qinv')
   xlim([1e-1,1e5])
   ylim([1e-2,2])
-  set(gca,'XMinorTick','on','YMinorTick','on')
+  set(gca,'XMinorTick','on','YMinorTick','on','xscale','log','yscale','log')
 
   saveas(gcf,[out_dir,'/McCT11_MQ_v_T_',fit1_fit2,'.eps'],'epsc')
 end
@@ -278,12 +278,12 @@ function fig = plot_relaxSpectrum(out_dir)
   % plot the relexation spectrum
   params=Params_Anelastic('xfit_mxw');
   [X_tau] = Q_xfit_mxw_xfunc(tau_norm,params);
+  loglog(tau_norm,X_tau,'LineWidth',1.5,'color','r');
   hold all
-  loglog(tau_norm,X_tau,'LineWidth',1.5,'r');
 
   params.fit='fit2';
   [X_tau] = Q_xfit_mxw_xfunc(tau_norm,params);
-  loglog(tau_norm,X_tau,'LineWidth',1.5,'b');
+  loglog(tau_norm,X_tau,'LineWidth',1.5,'color','b');
 
   relaxData=tryDataLoadRelax();
   if relaxData.has_data
@@ -325,7 +325,7 @@ function fig = plot_MQ_dg_Fits(fit1_fit2,out_dir)
   end
 
   clrs={'k';'r';'b';'c';'m';'y';'g'};
-
+  firstplot=1;
   % plot the VBR
   for idg=1:numel(VBR.in.SV.dg_um)
 
@@ -342,6 +342,7 @@ function fig = plot_MQ_dg_Fits(fit1_fit2,out_dir)
 
     if include_E==1
       set(fig,'CurrentAxes',ax_E)
+      firstplot=firstplot+1;
       hold on
       semilogx(fd,M,clr,'linewidth',1.5);
 
@@ -403,6 +404,7 @@ function fig = plot_MQ_dg_Fits(fit1_fit2,out_dir)
     ylim([.5,3])
     xlim([1e-4,10])
     set(gca,'XMinorTick','on')
+    set(gca, 'xscale', 'log');
 
     set(fig,'CurrentAxes',ax_E_norm)
     box on
@@ -410,6 +412,7 @@ function fig = plot_MQ_dg_Fits(fit1_fit2,out_dir)
     ylim([.5,3])
     xlim([1e-1,1e5])
     set(gca,'XMinorTick','on')
+    set(gca, 'xscale', 'log');
   end
 
   set(fig,'CurrentAxes',ax_Qinv)
@@ -418,6 +421,7 @@ function fig = plot_MQ_dg_Fits(fit1_fit2,out_dir)
   xlim([1e-4,10])
   ylim([1e-2,2])
   set(gca,'XMinorTick','on','YMinorTick','on')
+  set(gca, 'xscale', 'log','yscale','log');
 
   set(fig,'CurrentAxes',ax_Qinv_norm)
   box on
@@ -425,6 +429,7 @@ function fig = plot_MQ_dg_Fits(fit1_fit2,out_dir)
   xlim([1e-1,1e5])
   ylim([1e-2,2])
   set(gca,'XMinorTick','on','YMinorTick','on')
+  set(gca, 'xscale', 'log','yscale','log');
 
   saveas(gcf,[out_dir,'/McCT11_MQ_v_dg_',fit1_fit2,'.eps'],'epsc')
 
@@ -544,6 +549,7 @@ function fig = plot_J1J2(out_dir)
   xlim([1e-1,1e11])
   ylim([1,3])
   set(gca,'XMinorTick','on','YMinorTick','on','xticklabel',xlabs)
+  set(gca,'xscale','log')
 
   set(gcf,'CurrentAxes',ax_j2)
   xlabel('normalized frequency')
@@ -551,6 +557,7 @@ function fig = plot_J1J2(out_dir)
   xlim([1e-1,1e11])
   ylim([1e-4,2])
   set(gca,'XMinorTick','on','YMinorTick','on','xticklabel',xlabs)
+  set(gca,'xscale','log')
 
   saveas(gcf,[out_dir,'/McCT11_normalized_J1J2.eps'],'epsc')
 
@@ -637,8 +644,7 @@ function data = tryDataLoadVisc()
   dataDir='../../../../vbrWork/expt_data/3_attenuation/McCT11/McCT11_new/';
   data=struct();
   if exist([dataDir,'McCT11_table1.csv'],'file')
-    d=csvread([dataDir,'McCT11_table1.csv']);
-    d=d(2:end,:);
+    d=csvread([dataDir,'McCT11_table1.csv'],1,0);
     % sample	dg_um	T_C	eta_Pas_a	eta_Pas_b	eta_ave_Pas	tau_m_s	strain	GU_at_T_Gpa
     flds={'sample';'dg_um';'T_C';'eta_a';'eta_b';'eta_Pas';'tau_m_s';'strain';'GU_at_T_GPa'};
     for ifld=1:numel(flds)
@@ -669,7 +675,7 @@ function data = tryDataLoadRelax();
   for ifi=1:numel(fi_list)
     fl=fi_list{ifi};
     if exist([dataDir,fl,'.csv'])
-      d=csvread([dataDir,fl,'.csv']);
+      d=csvread([dataDir,fl,'.csv'],1,0);
       if numel(strfind(fl,'relax')>0)
         data.(fl).tau_norm=d(:,1);
         data.(fl).(fl)=d(:,2);
@@ -693,8 +699,7 @@ function data = tryDataLoadFig9()
   dataDir='../../../../vbrWork/expt_data/3_attenuation/McCT11/McCT11_new/';
   data=struct();
   if exist([dataDir,'sample_15_Tdependence_fig9.csv'],'file')
-    d=csvread([dataDir,'sample_15_Tdependence_fig9.csv']);
-    d=d(2:end,:);
+    d=csvread([dataDir,'sample_15_Tdependence_fig9.csv'],1,0);
     data.T_C=d(:,1);
     data.f_Hz=d(:,4);
     data.Qinv=d(:,5);

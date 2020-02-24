@@ -128,10 +128,12 @@ function plot_Q()
     end
     subplot(1,2,2)
     xlabel('f [Hz]'); ylabel('Q^{-1}')
+    set(gca,'yscale','log','xscale','log')
     box on
 
     subplot(1,2,1)
     xlabel('f [Hz]'); ylabel('M [GPa]')
+    set(gca,'yscale','log','xscale','log')
     box on
 
     saveas(gcf,'./figures/YT16_MQ.eps','epsc')
@@ -153,7 +155,7 @@ function plot_visc()
     N=numel(data.visc.sample_list);
     dg_range=max(data.visc.dg_um)-min(data.visc.dg_um);
 
-    clrs={'k','r','b','c','m','g','p'}
+    clrs={'k','r','b','c','m','g','p'};
     for isamp=1:N
 
       VBR.in=struct();
@@ -213,11 +215,13 @@ function plot_visc()
     xlabel('T [C]'); ylabel('eta [Pa s]')
     legend('location','southwest')
     box on
+    set(gca,'yscale','log')
 
     subplot(1,2,2)
     title('H=147 kJ/mol, dg\_ref=34.2 um, T\_ref=23 C, eta\_r=7e13 Pas')
     xlabel('T [C]'); ylabel('eta [Pa s]')
     box on
+    set(gca,'yscale','log')
 
     saveas(gcf,'./figures/YT16_visc.eps','epsc')
   else
@@ -279,7 +283,7 @@ function data = loadYT2016Q()
 
   if exist([dataDir,'YT16_41_fE_allT.csv'],'file')
     d=csvread([dataDir,'YT16_41_fE_allT.csv'],1,0);
-    d=d(2:end,:);
+    %d=d(2:end,:);
     data.E=struct();
     data.E.sample=d(:,1);
     data.E.T_C=d(:,2);
