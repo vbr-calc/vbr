@@ -20,6 +20,7 @@ close all; clc
 locs = [45, -111; 40.7, -117.5; 39, -109.8; 37.2, -100.9];
 names = {'Yellowstone', 'BasinRange', 'ColoradoPlateau', 'Interior'};
 zrange = [75, 105; 75, 105; 120, 150; 120, 150];
+location_colors={'k';'r';'b';'m'};
 
 % Extract the relevant values for the input depth range.
 % Need to choose the attenuation method used for anelastic calculations
@@ -69,14 +70,16 @@ for il = 1:length(locs)
     p_marginal = sum(sum(posterior, 1), 2);
     p_marginal_box = repmat(p_marginal, sh(1), sh(2), 1);
     p_joint = sum(posterior .* p_marginal_box, 3);
-    p_joint(p_joint > cutoff) = il;
-    p_joint(p_joint <= cutoff) = il - 0.5;
-    contour(posterior_A.phi, posterior_A.T, p_joint, [1, 2, 3, 4], 'linewidth', 2)
+
+    levs=[cutoff,cutoff]
+    this_clr=location_colors{il};
+    contour(posterior_A.phi, posterior_A.T, p_joint, levs, 'linewidth', 2,'color',this_clr)
+    levs=[cutoff*2,cutoff*2]
+    contour(posterior_A.phi, posterior_A.T, p_joint, levs, 'linewidth', 2,'color',this_clr,'linestyle','--')
 
     
 end
 
-colormap(flipud(jet))
 xlabel('Melt Fraction \phi');
 ylabel('Temperature (\circC)');
 title(strrep(q_method, '_', ' '));
