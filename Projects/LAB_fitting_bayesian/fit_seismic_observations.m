@@ -100,6 +100,9 @@ if ~exist(fname, 'file')
     sweep_params.per_bw_max = 150; % max period of range of mask (s)
     sweep_params.per_bw_min = 50; % min period of range of mask (s)
 
+    % load('data/plate_VBR/PREMfit.mat');
+    % sweep_params.prem_fit=prem_fit;
+
     sweep = generate_parameter_sweep(sweep_params);
     clear sweep_params
     save(fname, 'sweep')
