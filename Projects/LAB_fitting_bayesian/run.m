@@ -35,8 +35,8 @@ filenames.LAB = './data/LAB_models/HopperFischer2018.mat';
 q_methods = {'eburgers_psp', 'xfit_mxw', 'xfit_premelt', 'andrade_psp'};
 for iq = 1:length(q_methods)
     q_method = q_methods{iq};
-    
-f = figure('color', 'w'); 
+
+f = figure('color', 'w');
 a = axes('position', [0.15, 0.15, 0.75, 0.75]); box on; hold on;
 
 for il = 1:length(locs)
@@ -46,7 +46,7 @@ for il = 1:length(locs)
     location.z_max= zrange(il, 2); % averaging max depth for asth.
     location.smooth_rad = 0.5;
     locname = names{il};
-   
+
     posterior_A = fit_seismic_observations(filenames, location, q_method);
 
     saveas(gcf, ['plots/output_plots/', names{il}, '_VQ_', q_method, '.png']);
@@ -59,6 +59,7 @@ for il = 1:length(locs)
 
     % Plot
     figure(f)
+
     cutoff = 0.0025;
     %if iq == 2
     %    cutoff = cutoff / 2;
@@ -72,15 +73,16 @@ for il = 1:length(locs)
     p_joint = sum(posterior .* p_marginal_box, 3);
     p_joint = sum(posterior,3);
 
-    %levs = calculate2DIntervals(p_joint);
+    [targ_cutoffs,confs,cutoffs] = calculateLevels(p_joint,[0.9,0.95])
 
-    levs=[cutoff,cutoff]
+
+    levs=[cutoffs(1),cutoffs(1)];
     this_clr=location_colors{il};
     contour(posterior_A.phi, posterior_A.T, p_joint, levs, 'linewidth', 2,'color',this_clr)
-    levs=[cutoff*2,cutoff*2]
+    levs=[cutoffs(2),cutoffs(2)];
     contour(posterior_A.phi, posterior_A.T, p_joint, levs, 'linewidth', 2,'color',this_clr,'linestyle','--')
 
-    
+
 end
 
 xlabel('Melt Fraction \phi');
@@ -89,5 +91,3 @@ title(strrep(q_method, '_', ' '));
 saveas(gcf, ['plots/', q_method, '.png']);
 close
 end
-
-
