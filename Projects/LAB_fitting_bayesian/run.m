@@ -60,9 +60,9 @@ for il = 1:length(locs)
     % Plot
     figure(f)
     cutoff = 0.0025;
-    if iq == 2
-        cutoff = cutoff / 2;
-    end
+    %if iq == 2
+    %    cutoff = cutoff / 2;
+    %end
 
     posterior = posterior_A.pS;
     posterior = posterior ./ sum(posterior(:));
@@ -70,6 +70,9 @@ for il = 1:length(locs)
     p_marginal = sum(sum(posterior, 1), 2);
     p_marginal_box = repmat(p_marginal, sh(1), sh(2), 1);
     p_joint = sum(posterior .* p_marginal_box, 3);
+    p_joint = sum(posterior,3);
+
+    %levs = calculate2DIntervals(p_joint);
 
     levs=[cutoff,cutoff]
     this_clr=location_colors{il};

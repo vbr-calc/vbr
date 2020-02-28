@@ -101,24 +101,33 @@ joint_sc = max([...
     max(median(sum(posterior, 2))), ...
     max(median(sum(posterior, 3))), ...
     ]) * marg_sc;
-joint_sc = 0.01;
+
+p_joint_1=sum(posterior,i1);
+p_joint_2=sum(posterior,i2);
+p_joint_3=sum(posterior,i3);
+joint_sc = max([max(p_joint_1(:)),max(p_joint_2(:)),max(p_joint_3(:))]);
 
 % For each pair of parameters, plot the joint probability
 % i.e. p(T, phi) = sum_over_g(p(T, phi | g) p(g))
 p_marginal = sum(sum(posterior, i1), i2);
+disp(['sum of p_marginal:',num2str(sum(p_marginal(:)))])
 p_marginal_box = repmat(p_marginal, sh(1), sh(2), sh(3));
 p_joint = sum(posterior .* p_marginal_box, i3);
+
+p_joint=sum(posterior,i3);
+disp(['sum of p_joint after marginal:',num2str(sum(p_joint(:)))])
 imagesc(sweep.(sweep.state_names{i2}), sweep.(sweep.state_names{i1}), ...
     reshape(p_joint, sh(i1), sh(i2)));
 xlabel(sweep.fnames{i2})
 ylabel(sweep.fnames{i1});
 set(ax, 'ydir', 'normal')
 caxis([0, joint_sc])
+colorbar
 
 ax2 = axes('position', [xpos, 0.375, 0.225, 0.05]);
 plot(reshape(sweep.(sweep.state_names{i3}), 1, []), ...
     reshape(p_marginal, 1, []))
-set(ax2, 'color', 'none', 'ycolor', 'none', 'box', 'off');
+%set(ax2, 'color', 'none', 'ycolor', 'none', 'box', 'off');
 xlabel(sweep.fnames{i3});
 ylim([0, marg_sc])
 

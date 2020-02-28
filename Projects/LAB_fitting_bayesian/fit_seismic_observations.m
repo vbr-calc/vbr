@@ -123,7 +123,7 @@ end
 params = make_param_grid(sweep.state_names, sweep);
 % Note - can manually set the expected value and standard deviation for
 % each of your variables, e.g. params.T_mean = 1500; params.gs_std = 300;
-params.gs_mean = 1e4; params.gs_std = 1e3;
+% params.gs_mean = 1e4; params.gs_std = 1e3;
 
 % Calculate the prior for either a normal or uniform distribution
 pdf_type = {'uniform', 'uniform', 'normal'};
