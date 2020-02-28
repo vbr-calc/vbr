@@ -242,7 +242,7 @@ end
 end
 
 
-function sweepBox = calculate_sweep_w_varrho(VBR, sweep_params)
+function sweepBox = calculate_sweep_w_varrho(VBR_init, sweep_params)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %
   % sweepBox = calculate_sweep_w_varrho(sweep_params);
@@ -277,6 +277,7 @@ function sweepBox = calculate_sweep_w_varrho(VBR, sweep_params)
   %                               within the given frequency range)
   %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  disp('generating param sweep with density correction')
 
   % Define values for masking
   freq_range = sort([1./sweep_params.per_bw_max 1./sweep_params.per_bw_min]);
@@ -303,11 +304,14 @@ function sweepBox = calculate_sweep_w_varrho(VBR, sweep_params)
               T_ref=interp1(premfit.zref,premfit.Tref,z_km);
               rho_ref=interp1(premfit.zref,premfit.rhoref,z_km);
               dT=T_ref-sweep_params.T(i_T);
-              VBR.in.SV.rho=rho_ref*(1-(dT*alpha);
 
-              [T_fit,rho_fit]=pullPREM(z_m);
               VBR.in.SV.phi = sweep_params.phi(i_phi) ...
                   * ones(size(VBR.in.z));
+              %VBR.in.SV.rho=rho_ref.*(1-(dT*alpha));
+              VBR.in.SV.rho=rho_ref.*(1-(dT*alpha))-500*sweep_params.phi(i_phi);
+              P=cumtrapz(VBR.in.SV.rho,VBR.in.z)*9.8; 
+              VBR.in.SV.P_GPa=P/1e9;
+              
               VBR.in.SV.dg_um = sweep_params.gs(i_gs) ...
                   * ones(size(VBR.in.z));
               VBR.in.SV.T_K = sweep_params.T(i_T) + 273 ...
