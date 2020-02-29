@@ -20,7 +20,7 @@ close all; clc
 locs = [45, -111; 40.7, -117.5; 39, -109.8; 37.2, -100.9];
 names = {'Yellowstone', 'BasinRange', 'ColoradoPlateau', 'Interior'};
 zrange = [75, 105; 75, 105; 120, 150; 120, 150];
-location_colors={'k';'r';'b';'m'};
+location_colors={[1,0,0];[1,0.6,0];[0,0.8,0];[0,0.3,0]};
 
 % Extract the relevant values for the input depth range.
 % Need to choose the attenuation method used for anelastic calculations
@@ -33,61 +33,74 @@ filenames.LAB = './data/LAB_models/HopperFischer2018.mat';
 
 
 q_methods = {'eburgers_psp', 'xfit_mxw', 'xfit_premelt', 'andrade_psp'};
+
+f = figure('color', 'w');
+axStruct.andrade_psp=subplot(2,2,1);
+ set(gca,'xticklabels',{},'box','on')
+ ylabel('Temperature (^\circC)');
+axStruct.eburgers_psp=subplot(2,2,2);
+ set(gca,'xticklabels',{},'box','on')
+ set(gca,'yticklabels',{})
+axStruct.xfit_mxw=subplot(2,2,3);
+ ylabel('Temperature (^\circC)');
+ xlabel('Melt Fraction \phi');
+ set(gca,'box','on')
+axStruct.xfit_premelt=subplot(2,2,4);
+ ylabel('Temperature (^\circC)');
+ xlabel('Melt Fraction \phi');
+ set(gca,'yticklabels',{})
+ set(gca,'box','on')
+
 for iq = 1:length(q_methods)
     q_method = q_methods{iq};
 
-f = figure('color', 'w');
-a = axes('position', [0.15, 0.15, 0.75, 0.75]); box on; hold on;
 
-for il = 1:length(locs)
-    location.lat = locs(il, 1); % degrees North\
-    location.lon = locs(il, 2) + 360; % degrees East
-    location.z_min = zrange(il, 1); % averaging min depth for asth.
-    location.z_max= zrange(il, 2); % averaging max depth for asth.
-    location.smooth_rad = 0.5;
-    locname = names{il};
-
-    posterior_A = fit_seismic_observations(filenames, location, q_method);
-
-    saveas(gcf, ['plots/output_plots/', names{il}, '_VQ_', q_method, '.png']);
-    close
-    saveas(gcf, ['plots/output_plots/', names{il}, '_Q_', q_method, '.png']);
-    close
-    saveas(gcf, ['plots/output_plots/', names{il}, '_V_', q_method, '.png']);
-    close
-%     close; close; close;
-
-    % Plot
-    figure(f)
-
-    cutoff = 0.0025;
-    %if iq == 2
-    %    cutoff = cutoff / 2;
-    %end
-
-    posterior = posterior_A.pS;
-    posterior = posterior ./ sum(posterior(:));
-    sh = size(posterior);
-    p_marginal = sum(sum(posterior, 1), 2);
-    p_marginal_box = repmat(p_marginal, sh(1), sh(2), 1);
-    p_joint = sum(posterior .* p_marginal_box, 3);
-    p_joint = sum(posterior,3);
-
-    [targ_cutoffs,confs,cutoffs] = calculateLevels(p_joint,[0.9,0.95])
-
-
-    levs=[cutoffs(1),cutoffs(1)];
-    this_clr=location_colors{il};
-    contour(posterior_A.phi, posterior_A.T, p_joint, levs, 'linewidth', 2,'color',this_clr)
-    levs=[cutoffs(2),cutoffs(2)];
-    contour(posterior_A.phi, posterior_A.T, p_joint, levs, 'linewidth', 2,'color',this_clr,'linestyle','--')
-
-
+    for il = 1:length(locs)
+        location.lat = locs(il, 1); % degrees North\
+        location.lon = locs(il, 2) + 360; % degrees East
+        location.z_min = zrange(il, 1); % averaging min depth for asth.
+        location.z_max= zrange(il, 2); % averaging max depth for asth.
+        location.smooth_rad = 0.5;
+        locname = names{il};
+    
+        posterior_A = fit_seismic_observations(filenames, location, q_method);
+    
+        saveas(gcf, ['plots/output_plots/', names{il}, '_VQ_', q_method, '.png']);
+        close
+        saveas(gcf, ['plots/output_plots/', names{il}, '_Q_', q_method, '.png']);
+        close
+        saveas(gcf, ['plots/output_plots/', names{il}, '_V_', q_method, '.png']);
+        close
+    
+        % calculate marginal P(phi,T|S)
+        posterior = posterior_A.pS;
+        posterior = posterior ./ sum(posterior(:));
+        sh = size(posterior);
+        p_marginal = sum(sum(posterior, 1), 2);
+        p_marginal_box = repmat(p_marginal, sh(1), sh(2), 1);
+        p_joint = sum(posterior .* p_marginal_box, 3);
+        p_joint=p_joint/sum(p_joint(:));
+        %p_joint = sum(posterior,3);
+    
+        figure(f)
+        axes(axStruct.(q_method)); hold on
+        [targ_cutoffs,confs,cutoffs] = calculateLevels(p_joint,[0.7,0.8,0.9,0.95]);
+        szs=fliplr([.75,1.,1.5,2,2.5]);
+        for icutoff=1:numel(targ_cutoffs)
+          levs=[targ_cutoffs(icutoff),targ_cutoffs(icutoff)];
+          sz=szs(icutoff);
+          hold all 
+          this_clr=location_colors{il};
+          contour(posterior_A.phi, posterior_A.T, p_joint, levs, 'linewidth', sz,'color',this_clr,'displayname',locname)
+        end 
+    
+    
+    end
+    
+    axes(axStruct.(q_method)); 
+    title(strrep(q_method, '_', ' '));
+    %legend('location','southoutside')
 end
-
-xlabel('Melt Fraction \phi');
-ylabel('Temperature (\circC)');
-title(strrep(q_method, '_', ' '));
-saveas(gcf, ['plots/', q_method, '.png']);
-close
-end
+saveas(f, ['plots/regional_fits.eps'],'epsc');
+saveas(f, ['plots/regional_fits.png'],'png');
+close all
