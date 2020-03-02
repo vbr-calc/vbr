@@ -89,7 +89,7 @@ function plot_box(posterior, sweep, i1, i2, i3)
     sh = size(posterior);
     sh(i3) = 1;
     
-    method=3; 
+    method=2; 
  
     % Calculate limits for the color scales so all subplots will be on 
     % the same scale

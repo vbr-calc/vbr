@@ -51,6 +51,8 @@ axStruct.xfit_premelt=subplot(2,2,4);
  set(gca,'yticklabels',{})
  set(gca,'box','on')
 
+EnsemblePDF=struct();
+N_models=0;
 for iq = 1:length(q_methods)
     q_method = q_methods{iq};
 
@@ -80,7 +82,20 @@ for iq = 1:length(q_methods)
         p_marginal_box = repmat(p_marginal, sh(1), sh(2), 1);
         p_joint = sum(posterior .* p_marginal_box, 3);
         p_joint=p_joint/sum(p_joint(:));
-        %p_joint = sum(posterior,3);
+        p_joint = sum(posterior,3);
+
+        if ~strcmp(q_method,'xfit_mxw')
+        disp(['adding ',q_method,' to ensemble average for ',locname])
+        if ~isfield(EnsemblePDF,locname)
+          disp('initialize ensemble ave')
+          EnsemblePDF.(locname)=p_joint;
+        else
+          disp('add to ensemble ave')
+          EnsemblePDF.(locname)=EnsemblePDF.(locname)+p_joint;
+        end
+        N_models=N_models+1;
+        end
+        
     
         figure(f)
         axes(axStruct.(q_method)); hold on
@@ -103,4 +118,29 @@ for iq = 1:length(q_methods)
 end
 saveas(f, ['plots/regional_fits.eps'],'epsc');
 saveas(f, ['plots/regional_fits.png'],'png');
+close all
+
+% plot ensemble PDFs
+f_en = figure('color', 'w');
+ax = axes();
+set(gca,'box','on')
+hold on
+ylabel('Temperature (^\circC)');
+xlabel('Melt Fraction \phi');
+
+for il = 1:length(locs)
+   locname = names{il};
+   PDF=EnsemblePDF.(locname) / N_models; % equal weighting 
+   [targ_cutoffs,confs,cutoffs] = calculateLevels(PDF,[0.7,0.8,0.9,0.95]);
+   szs=fliplr([.75,1.,1.5,2,2.5]);
+   for icutoff=1:numel(targ_cutoffs)
+     levs=[targ_cutoffs(icutoff),targ_cutoffs(icutoff)];
+     sz=szs(icutoff);
+     this_clr=location_colors{il};
+     contour(posterior_A.phi, posterior_A.T, PDF, levs, 'linewidth', sz,'color',this_clr,'displayname',locname)
+   end 
+end         
+
+saveas(f_en, ['plots/ensemble_fits.eps'],'epsc');
+saveas(f_en, ['plots/ensemble_fits.png'],'png');
 close all
