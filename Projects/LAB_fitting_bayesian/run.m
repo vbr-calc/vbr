@@ -26,7 +26,7 @@ location_colors={[1,0,0];[1,0.6,0];[0,0.8,0];[0,0.3,0]};
 % Need to choose the attenuation method used for anelastic calculations
 %       see possible methods by running vbrListMethods()
 q_method = 'xfit_premelt'; %'eburgers_psp' 'xfit_mxw', 'xfit_premelt' 'andrade_psp'
-
+fetch_data('./'); % builds data directories and fetches data 
 filenames.Vs = './data/vel_models/Shen_Ritzwoller_2016.mat';
 filenames.Q = './data/Q_models/Dalton_Ekstrom_2008.mat';
 filenames.LAB = './data/LAB_models/HopperFischer2018.mat';
@@ -64,16 +64,16 @@ for iq = 1:length(q_methods)
         location.z_max= zrange(il, 2); % averaging max depth for asth.
         location.smooth_rad = 0.5;
         locname = names{il};
-    
+
         posterior_A = fit_seismic_observations(filenames, location, q_method);
-    
+
         saveas(gcf, ['plots/output_plots/', names{il}, '_VQ_', q_method, '.png']);
         close
         saveas(gcf, ['plots/output_plots/', names{il}, '_Q_', q_method, '.png']);
         close
         saveas(gcf, ['plots/output_plots/', names{il}, '_V_', q_method, '.png']);
         close
-    
+
         % calculate marginal P(phi,T|S)
         posterior = posterior_A.pS;
         posterior = posterior ./ sum(posterior(:));
@@ -95,8 +95,8 @@ for iq = 1:length(q_methods)
         end
         N_models=N_models+1;
         end
-        
-    
+
+
         figure(f)
         axes(axStruct.(q_method)); hold on
         [targ_cutoffs,confs,cutoffs] = calculateLevels(p_joint,[0.7,0.8,0.9,0.95]);
@@ -104,15 +104,15 @@ for iq = 1:length(q_methods)
         for icutoff=1:numel(targ_cutoffs)
           levs=[targ_cutoffs(icutoff),targ_cutoffs(icutoff)];
           sz=szs(icutoff);
-          hold all 
+          hold all
           this_clr=location_colors{il};
           contour(posterior_A.phi, posterior_A.T, p_joint, levs, 'linewidth', sz,'color',this_clr,'displayname',locname)
-        end 
-    
-    
+        end
+
+
     end
-    
-    axes(axStruct.(q_method)); 
+
+    axes(axStruct.(q_method));
     title(strrep(q_method, '_', ' '));
     %legend('location','southoutside')
 end
@@ -130,7 +130,7 @@ xlabel('Melt Fraction \phi');
 
 for il = 1:length(locs)
    locname = names{il};
-   PDF=EnsemblePDF.(locname) / N_models; % equal weighting 
+   PDF=EnsemblePDF.(locname) / N_models; % equal weighting
    [targ_cutoffs,confs,cutoffs] = calculateLevels(PDF,[0.7,0.8,0.9,0.95]);
    szs=fliplr([.75,1.,1.5,2,2.5]);
    for icutoff=1:numel(targ_cutoffs)
@@ -138,8 +138,8 @@ for il = 1:length(locs)
      sz=szs(icutoff);
      this_clr=location_colors{il};
      contour(posterior_A.phi, posterior_A.T, PDF, levs, 'linewidth', sz,'color',this_clr,'displayname',locname)
-   end 
-end         
+   end
+end
 
 saveas(f_en, ['plots/ensemble_fits.eps'],'epsc');
 saveas(f_en, ['plots/ensemble_fits.png'],'png');

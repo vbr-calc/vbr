@@ -1,0 +1,225 @@
+Just a copy of the original readme. 
+
+
+# How to fit your seismic observables:
+This doc describes an example workflow of a Bayesian inference following Havlin, Holtzman and Hopper (2020, in review). The code  requires MATLAB (not Octave compatible yet).
+
+This doc contains more detail and pulls information from various comments together, though just stepping section-by-section through the codes `fit_seismic_observations.m` and `fit_plate.m` should be pretty self-explanatory.
+
+At present, `run.m` runs separate and joint Bayesian inferences of state variables beneath 4 representative locations in the U.S. The primary function, `fit_seismic_observations.m`, is described below. See above reference for more background (contact authors for a pre-print if the paper is not yet in press by the time you're reading this).
+
+# Start of `fit_seismic_observations.m`
+
+## 1. Get data for Vs(x, f) and Q(x, f)
+This section loads in the seismic observations, and extracts the observed data point and its standard deviation.
+
+The seismic observations are assumed to be saved in some file, `xxxx.mat`, that contains a single variable (name irrelevant, as it is renamed to Model)
+
+```matlab
+[obs_name]_Model  % structure with the following fields
+  Latitude        % n_lat vector of latitude points [degrees N]
+  Longitude       % n_lon vector of longitude points [degrees E].
+                  % (can be negative - code will add 360 degrees  to negative values)
+  Depth           % n_dep vector of depth points [km]
+  [obs_name]      % (n_lat, n_lon, n_dep) matrix of values of this
+                  % seismic property based on observations
+  Error           % (n_lat, n_lon, n_dep) matrix of uncertainty of this seismic property based on observations.
+```
+Note that the error is often not reported and released with seismic observations! As such, if there is no such field in the saved `.mat` file, a default value is assumed, with a message printed to screen.
+
+To help get you started, you can use the python script, `fetch_IRIS_data.py` to fetch some Q and velocity models from IRIS:
+
+```
+python fetch_IRIS_data.py
+```
+### Things you should change
+
+* location.lat, location.lon - (lat, lon) of your desired point
+* location.z_min, location.z_max - depth range from which to extract the observed data, i.e. asthenospheric depth range. This is currently just set up front, though we could go back to plotting the Vs or Q profile and picking the depth range on the figure
+* filenames.Vs, filenames.Q - the filenames of the saved seismic observations in the format described above
+* If you only want to fit Vs or Q, delete the innapropriate fieldname from the filenames structure.
+
+### Functions called
+`functions/process_SeismicModels()`: This returns the prior pdf, observed value and standard deviation given an input location and model file
+
+### Returns
+* `obs_[Vs|Q]`: value of seismic observation at location
+* `sigma_[Vs|Q]`: standard deviation of seismic observation at location
+
+
+## 2. Get prior for State Variables
+This section preferably loads in a previously calculated sweep across a range of values of T, phi, gs and calculates the average Vs and Q across all depths (well, 0-300 km) for the given frequency range.  If no such sweep has been saved, it will calculate a fresh one.  It then calculates a prior probability for each variable, assuming some form of pdf across the range of each of the state variables.
+
+At the moment, the only option is to give a vector of values (though could be of length 1) for each of T, phi, gs - and there is no possibility to vary any other parameter.  Could update this to be more flexible.
+
+### Things you should change:
+* `fname`: the file name of your previously calculated sweep
+* If you want to recalculate, alter the variables in the if statement:
+  * `sweep_params.T`: vector of possible temperatures, [deg C] (note not potential temperature)
+  * `sweep_params.phi`: vector of possible melt fractions
+  * `sweep_params.gs`: vector of possible grain sizes [μm]
+  * `sweep_params.per_bw_max`, `per_bw_min`: the period range of interest [s]
+* `qmethod`: attenuation method for anelastic calculations
+* `pdf_type`: set to `{'uniform'}` or `{'normal'}` (or with a cell of length 3, you could set different pdf types for each of T, phi, gs)
+
+### Functions called:
+* `functions/generate_parameter_sweep()`: Calculate a big parameter sweep if you don't already have one saved
+* `functions/extract_values_in_depth_range()`: This pulls the VBR calculated values from the parameter sweep given some Q method and a depth range.
+* `functions/make_param_grid()`: This reformats the structure 'sweep' into something easier to work with for calculating the prior pdf - grids the vectors of parameters and calculates a mean and standard deviation for the parameter range. Note that if your p`df_type = {'uniform'}`, this mean and std will not be used. You can also manually change these after calling this function and before calling `priorModelProbs()`
+* `../vbr/fitting/priorModelProbs()`: This calculates the joint prior pdf of the state variables according to the input pdf_type and assuming that all of the state variables are independent of each other, i.e.:
+  ```
+  p(T=T0, phi=phi0, gs=gs0) = p(T=T0) * p(phi=phi0) * p(gs = gs0)
+  ```
+  We are working on making dependent priors, i.e. `p(phi | T) =\= p(phi)`.
+
+### Returns:
+* `prior_statevars`: prior probability of the state variables assuming the distribution given in pdf_type
+
+## 3. Get likelihood for Vs, Q
+Likelihood is the probability of getting the observed Vs or Q given the assumed state variable values. The likelihood `p(D|A)`, e.g., `P(Vs | T, phi, gs)`, is calculated using
+the residual (See manual, Menke book Ch 11):
+```matlab
+p(D|A) = 1 / sqrt(2 * pi * residual) * exp(-residual / 2)
+```
+`residual(k)` here is a chi-squared residual. Given chi-square, the PDF of data with a normal distribution:
+```matlab
+P = 1 / sqrt(2 * pi * sigma^2) * exp(-0.5 * chi-square)
+```
+where `sigma = std` of data, `chi-square=sum((x_obs - x_preds)^2 / sigma^2)`, e.g., [www-cdf.fnal.gov/physics/statistics/recommendations/modeling.html](www-cdf.fnal.gov/physics/statistics/recommendations/modeling.html).
+
+### Functions called
+* `../vbr/fitting/probability_distributions()`: This takes the observed value and standard deviation of the seismic property and compares it to the calculated value across all the combinations of the state variables that have been calculated to return the likelihood based on the formula described above.
+
+### Returns
+* `likelihood_[Vs|Q]`:  (n_T, n_phi, n_gs) matrix of the likelihood of Vs or Q given the relevant combination of the state variables
+
+## 4. Get posterior for State Variables
+Calculate the posterior probablity in a Bayesian way, `p(S|D) = p(D|S)p(S)/p(D)`, and then plot it.  This is for Q and Vs individually.  Note that we discard
+the normalising factor, `p(D)`.
+
+### Functions called:
+* `../vbr/fitting/probability_distributions()`: This is being used to calculate the posterior distribution
+* `plot_Bayes()`: Plot the posterior pdf
+* `plot_tradeoffs_posterior()`: Plot the posterior as a function of two of the three state Variables so the tradeoffs can be visualised easily
+
+### Returns:
+* `posterior_S_given_[Vs|Q]`: (n_T, n_phi, n_gs) matrix of the posterior probability of the state variables given Vs or Q
+* Figures showing the posterior pdf given Vs or Q
+
+## 5. Get posterior for State Variables given both Vs and Q
+Calculate the posterior in a joint sense given constraints from both Vs and Q. We cannot calculate the absolute probability because we do not know `p(Vs, Q)`. However, for a given location (i.e. fixed Vs and Q), we can assume that this is a constant scaling and just remove it from our calculation.  In which case,
+```matlab
+    p(S | (Vs, Q)) ∝ p(Vs | S) * p(Q | S) * p(S)
+```    
+(see Manual).
+
+### Functions called
+* `plot_Bayes()`: Plot the posterior pdf
+* `plot_tradeoffs_posterior()`: Plot the posterior as a function of two of the three state Variables so the tradeoffs can be visualised easily
+
+### Returns
+* `posterior_S_given_Vs_and_Q`   (n_T, n_phi, n_gs) matrix of the posterior probability of the state variables given both Vs and Q
+
+## End of `fit_seismic_observations`
+If calling this as a function rather than section by section,Returns:
+* `posterior`: structure containing the best posterior distribution that you calculated and details of the state variables you tested.
+
+# Start of `fit_plate`
+
+## 1. Load 1D Thermal models
+The thermal modelling takes quite a long time, so it is recommended that you load in a previously calculated box.  However, if you want to test a different range of potential temperatures and thermal plate thicknesses, you will need to have a different SV_Box.
+
+### Things you should change
+* `Files.SV_Box`: the file name of your previously calculated 1D models
+* If you want to recalculate, alter the variables in the if statement:
+  * `LABsweep.TpC`: vector of possible potential temperatures, [degrees C]
+  * `LABsweep.zPlatekm`: vector of possible thermal plate thicknesses [km]
+
+### Functions called
+* `generate_boxes_ThermalEvolution()`: Calculates a suite of 1D thermal models based on your input potential temperature and thermal plate thicknesses
+
+### Returns
+* `Box`: Box of 1D plate models, output of 1D thermal modelling
+* `LABsweep`: Structure with fields recording the potential temperature and thermal plate thickness ranges (`TpC`, `zPlatekm`)
+
+## 2. Get the prior for Potential Temperature
+
+Based on the Bayesian analysis done above, we can find the marginal probability of each of our input potential temperatures.
+
+### Things you should change
+This assumes you are using asthenospheric Vs and/or Q constraints. If you have other constraints of Tp (e.g. geothermobarometry), then you can replace `p_Tp` with your other constraints.
+
+### Functions called
+N/A
+
+### Returns
+* `Tp_vals` vector of potential temperature values
+* `p_Tp` estimated probability of each of those values
+
+## 3. Calculate seismic LAB depth (zLAB)
+Based on your sweep of potential temperature and thermal plate thickness, you can calculate an estimate for the depth of the seismic LAB. (It is hardwired
+in `calc_LAB_Vs` that you are setting the seismic LAB to the point where the Q is 10 times higher than the average in the adiabatic region of the model).
+
+### Things you should change
+* `LAB_settings` structure containing parameters for the LAB calculation, e.g. appropriate period band, `q_method`
+
+### Functions called
+* `calc_LAB_Vs()`: Calculates the LAB for every Q profile in a given VBR Box
+
+### Returns
+* `zLAB_grid`: a grid of calculated zLAB for a sweep in `Tp` and `zPlate`
+* A figure showing `zLAB_grid`
+
+## 4. Get prior on seismic LAB depth from observations
+
+This section loads in the seismic LAB observations, and extracts the observed data point and its standard deviation. It calculates a prior probability on
+this data assuming a normal distribution.
+
+The seismic observations are assumed to be saved in some file, `xxxx.mat`, that contains a single variable (name irrelevant, as it is renamed to Model):
+
+```
+[obs_name]_Model  % structure with the following fields
+  Latitude        % n_lat vector of latitude points [degrees N]
+  Longitude       % n_lon vector of longitude points [degrees E] (can be negative)
+  Depth           % n_dep vector of depth points [km]
+  [obs_name]      % (n_lat, n_lon, n_dep) matrix of values of this seismic property based on observations
+  Error           % (n_lat, n_lon, n_dep) matrix of uncertainty of this seismic property based on observations.
+```
+Note that the `Error` is often not reported! As such, if there is no such field in the saved `.mat` file, a default value is assumed, with a message printed to screen.
+
+### Things you should change
+* `location.lat`,` location.lon`: (lat, lon) of your desired point. This should be the same as the location your asthenospheric Vs and/or Q observations were taken from
+* `filenames.LAB`: the filenames of the saved seismic observations in the format described above
+
+### Functions called
+* `functions/process_SeismicModels()`: This returns the observed value and standard deviation given an input location and model file
+* `../vbr/fitting/probability_distributions()`: This is used to calculate a normal distribution
+
+### Returns
+* `obs_LAB`: value of seismic observation at location
+* `sigma_LAB`: standard deviation of seismic observation at location
+* `zLAB_vals`: vector of possible zLAB values
+* `p_zLAB`: probabability of zLAB_vals assuming a normal distribution
+
+## 5. Monte Carlo analysis
+Calculates a cumulative distribution function (cdf) for both `zLAB` and `Tp`. These two distributions are independently constrained, so we can sample random values from each, using this cdf.  For some large number of trials, find the `zPlate` value that corresponds to the randomly selected `zLAB` and `Tp` - this will tend to approximate the true distribution of `zPlate` for large N.
+
+**This currently uses scatteredInterpolant, a built in MATLAB function that is not available in Octave.**
+
+### Things you should change
+* `n_MC_trials`: if this is running slowly, you could make this smaller
+
+### Functions called
+* `plot_plates()`: This returns various plots:
+  * the estimated probability distributions
+  for zPlate, zLAB and Tp
+  * the geotherms and their corresponding Vs and
+  Q profiles where opacity is scaled by the estimated probability of that geotherm given the Monte Carlo analysis - black squares on these profiles mark the depth of the calculated seismic LAB.
+
+### Returns
+* `posterior`: strucutre containing the estimated distribution and results of the Monte Carlo analysis
+* Plots showing the estimated pdfs and likeliest T, Vs, and Q profiles
+
+## End of `fit_plate`
+If calling this as a function rather than section by section,returns:
+* `posterior`: structure containing the best posterior distribution that you calculated and details of the variables you tested.
