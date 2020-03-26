@@ -32,14 +32,20 @@ function plot_Q()
   viscData = loadYT2016visc();
   Qdata=loadYT2016Q();
 
-  figure('DefaultAxesFontSize',12,'PaperPosition',[0,0,12,6],'PaperPositionMode','manual')
+  %figure('DefaultAxesFontSize',12,'PaperPosition',[0,0,6,2.5],'PaperPositionMode','manual')
+  fig=figure('Position', [10 10 600 300],'PaperPosition',[0,0,6,2.5],'PaperPositionMode','manual');
   OutVBR=struct();
   if viscData.has_data && Qdata.Qinv.has_data
 
     experimental_Ts=unique(Qdata.Qinv.T_C); % the temp conditions at which f was varied
     N=numel(experimental_Ts); % number of experimental P/T conditions
-    clrs={'k','r','b','c','m','g','y'};
+    %clrs={'k','r','b','c','m','g','y'};
     samp=41;
+  
+    % find min, max T of experiments 
+    Tmax=max(experimental_Ts);
+    Tmin=min(experimental_Ts);
+     
 
     % loop over exp. conditions (T is varied only), calculate Q
     for iexp=1:N
@@ -106,36 +112,34 @@ function plot_Q()
       E_obs=Qdata.E.E(Qdata.E.T_C==This_T_C);
       E_obs_f=Qdata.E.f(Qdata.E.T_C==This_T_C);
 
-      if iexp > numel(clrs)
-        icolor=iexp-numel(clrs);
-        lnsty='--';
-      else
-        icolor=iexp;
-        lnsty='';
-      end
-      clr=clrs{icolor};
-
-      subplot(1,2,2)
-      hold on
-      loglog(Q_obs_f,Q_obs,'.','color',clr,'displayname',[num2str(dg),',',num2str(samp)],'MarkerSize',12)
-      loglog(VBR.in.SV.f,VBR_Q_samp,[lnsty,clr],'displayname',[num2str(dg),',',num2str(samp)],'LineWidth',1.5)
+      Tscl=(This_T_C-Tmin)/(Tmax-Tmin);
+      clr=[Tscl,0,1-Tscl];
 
       subplot(1,2,1)
       hold on
-      semilogx(E_obs_f,E_obs,'.','color',clr,'displayname',[num2str(dg),',',num2str(samp)],'MarkerSize',12)
-      semilogx(VBR.in.SV.f,VBR_G_samp,[lnsty,clr],'displayname',[num2str(dg),',',num2str(samp)],'LineWidth',1.5)
+      plot(log10(Q_obs_f),log10(Q_obs),'.','color',clr,'displayname',[num2str(dg),',',num2str(samp)],'MarkerSize',12)
+      plot(log10(VBR.in.SV.f),log10(VBR_Q_samp),'color',clr,'displayname',[num2str(dg),',',num2str(samp)],'LineWidth',1.5)
+
+      subplot(1,2,2)
+      hold on
+      plot(log10(E_obs_f),E_obs,'.','color',clr,'displayname',[num2str(dg),',',num2str(samp)],'MarkerSize',12)
+      plot(log10(VBR.in.SV.f),VBR_G_samp,'color',clr,'displayname',[num2str(dg),',',num2str(samp)],'LineWidth',1.5)
 
     end
-    subplot(1,2,2)
-    xlabel('f [Hz]'); ylabel('Q^{-1}')
-    set(gca,'yscale','log','xscale','log')
-    box on
-
     subplot(1,2,1)
-    xlabel('f [Hz]'); ylabel('M [GPa]')
-    set(gca,'yscale','log','xscale','log')
+    xlabel('f [Hz]'); ylabel('Q^{-1}')
+    xlim([-4,2])
+    set(gca,'xminortick','on','yminortick','on')
+    xlabel('log($f$), frequency [Hz]'); ylabel('log(Q$^{-1}$), attenuation')
     box on
 
+    subplot(1,2,2)
+    ylabel('Modulus, $M$ [GPa]'); xlabel('log($f$), frequency [Hz]');
+    xlim([-4,2])
+    ylim([0,3])
+    set(gca,'xminortick','on','yminortick','on')
+    box on
+    set(findall(gcf,'-property','Interpreter'),'Interpreter','latex') ;
     saveas(gcf,'./figures/YT16_MQ.eps','epsc')
   else
     disp('This function requires data!')

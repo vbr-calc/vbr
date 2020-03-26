@@ -120,20 +120,20 @@ function fig = plot_MQ_T_Fits(fit1_fit2,out_dir)
       if include_E==1
         set(fig,'CurrentAxes',ax_E)
         hold on
-        semilogx(fd,M,['.',clr],'displayname','none','MarkerSize',10);
+        semilogx(fd,M,['.',clr],'displayname','none','MarkerSize',12);
 
         set(fig,'CurrentAxes',ax_E_norm)
         hold on
-        semilogx(fd/fnorm,M*Gfac,['.',clr],'displayname','none','MarkerSize',10);
+        semilogx(fd/fnorm,M*Gfac,['.',clr],'displayname','none','MarkerSize',12);
       end
 
       set(fig,'CurrentAxes',ax_Qinv)
       hold on
-      loglog(fd,Qinv,['.',clr],'MarkerSize',10);
+      loglog(fd,Qinv,['.',clr],'MarkerSize',12);
 
       set(fig,'CurrentAxes',ax_Qinv_norm)
       hold on
-      loglog(fd/fnorm,Qinv,['.',clr],'MarkerSize',10);
+      loglog(fd/fnorm,Qinv,['.',clr],'MarkerSize',12);
     end
   end
 
@@ -291,7 +291,7 @@ function fig = plot_relaxSpectrum(out_dir)
     loglog(relaxData.relax_fit2_pts.tau_norm,relaxData.relax_fit2_pts.relax_fit2_pts,'.b')
     p1=relaxData.relax_PREM_pts.relax_PREM_pts(1);
     loglog(relaxData.relax_PREM_pts.tau_norm,[p1,p1],'k','linewidth',5)
-    loglog(relaxData.relax_data_dg3to8.tau_norm,relaxData.relax_data_dg3to8.relax_data_dg3to8,'.k','MarkerSize',10)
+    loglog(relaxData.relax_data_dg3to8.tau_norm,relaxData.relax_data_dg3to8.relax_data_dg3to8,'.k','MarkerSize',12)
   end
 
   xlabel('normalized time scale')
@@ -380,20 +380,20 @@ function fig = plot_MQ_dg_Fits(fit1_fit2,out_dir)
       if include_E==1
         set(fig,'CurrentAxes',ax_E)
         hold on
-        semilogx(fd,M,['.',clr],'displayname','none','MarkerSize',10);
+        semilogx(fd,M,['.',clr],'displayname','none','MarkerSize',12);
 
         set(fig,'CurrentAxes',ax_E_norm)
         hold on
-        semilogx(fd/fnorm,M*Gfac,['.',clr],'displayname','none','MarkerSize',10);
+        semilogx(fd/fnorm,M*Gfac,['.',clr],'displayname','none','MarkerSize',12);
       end
 
       set(fig,'CurrentAxes',ax_Qinv)
       hold on
-      loglog(fd,Qinv,['.',clr],'MarkerSize',10);
+      loglog(fd,Qinv,['.',clr],'MarkerSize',12);
 
       set(fig,'CurrentAxes',ax_Qinv_norm)
       hold on
-      loglog(fd/fnorm,Qinv,['.',clr],'MarkerSize',10);
+      loglog(fd/fnorm,Qinv,['.',clr],'MarkerSize',12);
     end
   end
 
@@ -505,60 +505,65 @@ function fig = plot_J1J2(out_dir)
   data=tryDataLoadRelax();
 
   % plotting
-  fig=figure('Position', [10 10 600 300],'PaperPosition',[0,0,6,3],'PaperPositionMode','manual');
+  fig=figure('Position', [10 10 600 300],'PaperPosition',[0,0,6,2.5],'PaperPositionMode','manual');
   ax_j1=subplot(1,2,1);
   ax_j2=subplot(1,2,2);
 
+  Tclr=[153/255, 0, 51/255];
+  lw=2;
   set(gcf,'CurrentAxes',ax_j1)
   JU=1./VBRs.fit1.VBR.out.elastic.anharmonic.Gu;
   Fn=VBRs.fit1.VBR.out.anelastic.xfit_mxw.f_norm;
-  semilogx(Fn,VBRs.fit1.VBR.out.anelastic.xfit_mxw.J1/JU,'r','linewidth',1.5)
+  semilogx(Fn,VBRs.fit1.VBR.out.anelastic.xfit_mxw.J1/JU,'color',Tclr,'linewidth',lw)
 
   hold on;
-  semilogx(Fn,VBRs.fit2.VBR.out.anelastic.xfit_mxw.J1/JU,'--r','linewidth',1.5)
+  semilogx(Fn,VBRs.fit2.VBR.out.anelastic.xfit_mxw.J1/JU,'--','color',Tclr,'linewidth',lw)
 
   set(gcf,'CurrentAxes',ax_j2)
-  loglog(Fn,VBRs.fit1.VBR.out.anelastic.xfit_mxw.J2/JU,'b','linewidth',1.5)
+  loglog(Fn,VBRs.fit1.VBR.out.anelastic.xfit_mxw.J2/JU,'color',Tclr,'linewidth',lw)
   hold on
-  loglog(Fn,VBRs.fit2.VBR.out.anelastic.xfit_mxw.J2/JU,'--b','linewidth',1.5)
+  loglog(Fn,VBRs.fit2.VBR.out.anelastic.xfit_mxw.J2/JU,'--','color',Tclr,'linewidth',lw)
 
 
   if data.has_data
     set(gcf,'CurrentAxes',ax_j1)
     hold on;
-    semilogx(data.j1_data.fnorm,data.j1_data.j1_data,'.k','MarkerSize',10)
+    semilogx(data.j1_data.fnorm,data.j1_data.j1_data,'.k','MarkerSize',12)
 
     set(gcf,'CurrentAxes',ax_j2)
     hold on
-    loglog(data.j2_data.fnorm,data.j2_data.j2_data,'.k','MarkerSize',10)
+    loglog(data.j2_data.fnorm,data.j2_data.j2_data,'.k','MarkerSize',12)
   end
 
-  xticks=-1:1:11;
-  xlabs={};
-  for ix = 1:numel(xticks);
-    if mod(xticks(ix),2)~=0
-      xlabs{ix}=['1e',num2str(xticks(ix))];
-    else
-      xlabs{ix}='';
-    end
-  end
+  xticks=10.^(-1:1:11);
+  xlg=log10(xticks);
+  xlab={};
+  for ix = 1:numel(xticks) 
+      xlab{ix}=['10^{',num2str(xlg(ix)),'}'];
+      if mod(xlg(ix),2)==0 
+         xlab{ix}=''; 
+      end 
+      print(xlab{ix})
+  end 
+
 
   set(gcf,'CurrentAxes',ax_j1)
-  xlabel('normalized frequency')
-  ylabel('J1 / Ju')
+  xlabel('$f_N$')
+  ylabel('$J_1/J_u$')
   xlim([1e-1,1e11])
   ylim([1,3])
-  set(gca,'XMinorTick','on','YMinorTick','on','xticklabel',xlabs)
+  set(gca,'XMinorTick','on','YMinorTick','on','xtick',xticks,'xticklabels',xlab)
   set(gca,'xscale','log')
 
   set(gcf,'CurrentAxes',ax_j2)
-  xlabel('normalized frequency')
-  ylabel('J2 / Ju')
+  xlabel('$f_N$')
+  ylabel('$J_2/J_u$')
   xlim([1e-1,1e11])
   ylim([1e-4,2])
-  set(gca,'XMinorTick','on','YMinorTick','on','xticklabel',xlabs)
+  set(gca,'XMinorTick','on','YMinorTick','on','xtick',xticks,'xticklabels',xlab)
   set(gca,'xscale','log')
 
+  set(findall(gcf,'-property','Interpreter'),'Interpreter','latex') ;
   saveas(gcf,[out_dir,'/McCT11_normalized_J1J2.eps'],'epsc')
 
 end
@@ -605,8 +610,8 @@ function fig = compare_viscosity(out_dir)
   hold on
   loglog(VBR.in.SV.dg_um,VBR.out.viscous.xfit_premelt.diff.eta,'r','LineWidth',1.5)
   if data.has_data
-    loglog(dgb(dgb>=7),etab(dgb>=7),'.b','MarkerSize',10);
-    loglog(dgb(dgb<7),etab(dgb<7),'.r','MarkerSize',10);
+    loglog(dgb(dgb>=7),etab(dgb>=7),'.b','MarkerSize',12);
+    loglog(dgb(dgb<7),etab(dgb<7),'.r','MarkerSize',12);
   end
 
   ylim([1e12,1e15])
