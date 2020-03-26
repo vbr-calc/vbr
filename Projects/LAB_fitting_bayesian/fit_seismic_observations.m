@@ -71,7 +71,7 @@ QExists=checkFileNames(filenames,'Q');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-ifplot = 1;
+ifplot = 0;
 if VsExists
     [obs_Vs, sigma_Vs] = process_SeismicModels('Vs', ...
         location, filenames.Vs, ifplot);
@@ -90,15 +90,18 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Preferably, load in a large, pre-calculated box
-fname = 'data/plate_VBR/sweep_longperiod.mat';
+fname = 'data/plate_VBR/sweep_more.mat';
 if ~exist(fname, 'file')
-    sweep_params.T = 1000:50:1700; %[degrees C]
-    sweep_params.phi = (0.0:0.005:0.03); % melt fraction
+    sweep_params.T = 1200:10:1800; %[degrees C]
+    sweep_params.phi = (0.0:0.0025:0.05); % melt fraction
     sweep_params.gs = linspace(0.001,0.03,10)*1e6; % grain size [micrometres]
     % Set period range for the mask - used to define which calculated
     % velocities go into the returned average Vs for those conditions
     sweep_params.per_bw_max = 150; % max period of range of mask (s)
     sweep_params.per_bw_min = 50; % min period of range of mask (s)
+
+    % load('data/plate_VBR/PREMfit.mat');
+    % sweep_params.prem_fit=prem_fit;
 
     sweep = generate_parameter_sweep(sweep_params);
     clear sweep_params
@@ -120,9 +123,10 @@ end
 params = make_param_grid(sweep.state_names, sweep);
 % Note - can manually set the expected value and standard deviation for
 % each of your variables, e.g. params.T_mean = 1500; params.gs_std = 300;
+% params.gs_mean = 1e4; params.gs_std = 1e3;
 
 % Calculate the prior for either a normal or uniform distribution
-pdf_type = {'uniform'};
+pdf_type = {'uniform', 'uniform', 'normal'};
 prior_statevars = priorModelProbs(params, sweep.state_names, pdf_type);
 
 
@@ -159,16 +163,17 @@ if VsExists
     posterior_S_given_Vs = probability_distributions('A|B', ...
         likelihood_Vs, prior_statevars, 1);
     vs_str = sprintf(['Vs = %.3g ', 177, ' %.2g km/s'], obs_Vs, sigma_Vs);
-    plot_Bayes(posterior_S_given_Vs, sweep, vs_str, q_method)
+%     plot_Bayes(posterior_S_given_Vs, sweep, vs_str, q_method)
     plot_tradeoffs_posterior(posterior_S_given_Vs, sweep, vs_str, q_method)
     posterior.pS = posterior_S_given_Vs;
+    disp(sweep.VBR.in.SV.Tsolidus_K(1) - 273);
 end
 
 if QExists
     posterior_S_given_Q =  probability_distributions('A|B', ...
         likelihood_Q, prior_statevars, 1);
     q_str = sprintf(['Q = %.2g ', 177, ' %.2g '], obs_Q, sigma_Q);
-    plot_Bayes(posterior_S_given_Q, sweep, q_str, q_method)
+%     plot_Bayes(posterior_S_given_Q, sweep, q_str, q_method)
     plot_tradeoffs_posterior(posterior_S_given_Q, sweep, q_str, q_method)
     posterior.pS = posterior_S_given_Q;
 end
@@ -189,7 +194,7 @@ if VsExists && isfield(filenames, 'Q')
         prior_statevars, 1);
 
     vs_q_str = [vs_str, ', ', q_str];
-    plot_Bayes(posterior_S_given_Vs_and_Q, sweep, vs_q_str, q_method)
+%     plot_Bayes(posterior_S_given_Vs_and_Q, sweep, vs_q_str, q_method)
 
     plot_tradeoffs_posterior(posterior_S_given_Vs_and_Q, sweep, ...
         vs_q_str, q_method)
