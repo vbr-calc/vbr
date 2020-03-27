@@ -50,17 +50,52 @@ function fetch_data(datadirparent)
       pause(1)
       if fs(iD).zipped==0
         urlname=[baseurl,'/',fS(iD).dir,'/',fS(iD).fname];
-        urlwrite(urlname,destFl);
+        status=fetchOneFile(urlname,destFl);
       else
         [dir,nm,ext]=fileparts(destFl);
         urlname=[baseurl,'/',fS(iD).dir,'/',nm,'.zip'];
         tmpfil=fullfile(dir,[nm,'.zip']);
-        urlwrite(urlname,tmpfil);
+        status=fetchOneFile(urlname,tmpfil);
         unzip(tmpfil);
         delete(tmpfil);
     end
 
   end
 
+
+end
+
+function status=fetchOneFile(urlname,locfile)
+  % attempts to fetch a file from a url
+  status=0;
+  try
+  % first try with native matlab
+    urlwrite(urlname,locfile);
+  catch exception
+    urlerror=exception;
+    status=1;
+  end
+
+  if status==1
+    % native matlab failed, try some other methods
+    [locdir,nm,ext]=fileparts(locfile);
+    wgetc=['wget --no-check-certificate -P ',locdir,' ',urlname];
+    [status,results]=system(wgetc);
+
+    if status>0
+      msg=['Failed to fetch data for bayesian_fitting Project.\n\n'...
+           'Native matlab command failed with: \n',
+           urlerror.message, '\n',
+           'Attempted to fetch data with wget, which failed with \n',
+           results,'\n',
+           'To get the data, you can \n ',
+           '1. visit https://github.com/vbr-calc/vbrPublicData ',
+           'and click "Clone or download"-> "Download zip".',
+           '2. unpack the zip and move the contents of LAB_fitting_bayesian/data to ',
+           'vbr/Projects/bayesian_fitting/data/'];
+      urlerror.message=msg ;
+      rethrow(urlerror);
+    end
+  end
 
 end
