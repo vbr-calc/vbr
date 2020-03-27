@@ -58,7 +58,7 @@ function fetch_data(datadirparent)
         status=fetchOneFile(urlname,tmpfil);
         disp(['fetched ',urlname])
         disp(['unzipping ',tmpfil])
-        unzip(tmpfil);
+        unzip(tmpfil,[baseurl,'/',fS(iD).dir]);
         % delete(tmpfil);
       end
     end
