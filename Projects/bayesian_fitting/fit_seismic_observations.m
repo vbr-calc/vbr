@@ -166,7 +166,7 @@ if VsExists
 %     plot_Bayes(posterior_S_given_Vs, sweep, vs_str, q_method)
     plot_tradeoffs_posterior(posterior_S_given_Vs, sweep, vs_str, q_method)
     posterior.pS = posterior_S_given_Vs;
-    disp(sweep.VBR.in.SV.Tsolidus_K(1) - 273);
+    % disp(sweep.VBR.in.SV.Tsolidus_K(1) - 273);
 end
 
 if QExists
@@ -227,7 +227,6 @@ function FileExists = checkFileNames(filenames,field)
     else
       fn=filenames.(field);
       disp([fn,' does not exist.'])
-      disp('Check path, or download an example using fetch_IRIS_data.py')
     end
   end
 end

@@ -21,7 +21,7 @@ function plot_tradeoffs_posterior(posterior, sweep, obs_name, q_method)
 %
 %       obs_name            string of the observation name, e.g. Vs, Qinv
 %                           Only used to label the figure.
-%       
+%
 %       q_method            string of the method to use for calculating
 %                           the anelastic effects on seismic properties.
 %                           Only used to label the figure.
@@ -81,17 +81,17 @@ text(0.37 - length(obs_name)/300, 0.95,...
 end
 
 function plot_box(posterior, sweep, i1, i2, i3)
-    
-    
+
+
     xpos = 0.1 + 0.3 * (i3 - 1);
     ax = axes('position', [xpos, 0.5, 0.225, 0.4]);
-    
+
     sh = size(posterior);
     sh(i3) = 1;
-    
-    method=2; 
- 
-    % Calculate limits for the color scales so all subplots will be on 
+
+    method=2;
+
+    % Calculate limits for the color scales so all subplots will be on
     % the same scale
     marg_sc = max([...
         max(sum(sum(posterior, 1), 2)), ...
@@ -103,11 +103,11 @@ function plot_box(posterior, sweep, i1, i2, i3)
         max(median(sum(posterior, 2))), ...
         max(median(sum(posterior, 3))), ...
         ]);
-    
 
-    % the marginal of the var not plotted    
+
+    % the marginal of the var not plotted
     p_marginal = sum(sum(posterior, i1), i2);
-    disp(['sum of p_marginal:',num2str(sum(p_marginal(:)))])
+    % disp(['sum of p_marginal:',num2str(sum(p_marginal(:)))])
 
     if method==1
        % For each pair of parameters, plot the joint probability
@@ -115,8 +115,8 @@ function plot_box(posterior, sweep, i1, i2, i3)
        p_marginal_box = repmat(p_marginal, sh(1), sh(2), sh(3));
        p_joint = sum(posterior .* p_marginal_box, i3);
        joint_sc=max(p_joint(:));
-    elseif method==2    
-       p_joint=sum(posterior,i3); % naive marginal 
+    elseif method==2
+       p_joint=sum(posterior,i3); % naive marginal
        p_joint_1=sum(posterior,i1);
        p_joint_2=sum(posterior,i2);
        %joint_sc = max([max(p_joint_1(:)),max(p_joint_2(:)),max(p_joint(:))]);
@@ -127,7 +127,7 @@ function plot_box(posterior, sweep, i1, i2, i3)
        p_joint = p_joint / sum(p_joint(:));
        joint_sc=max(p_joint(:));
     end
-    disp(['sum of p_joint after marginal:',num2str(sum(p_joint(:)))])
+    % disp(['sum of p_joint after marginal:',num2str(sum(p_joint(:)))])
 
     % 2D plot of p(var1,var2|measurement)
     imagesc(sweep.(sweep.state_names{i2}), sweep.(sweep.state_names{i1}), ...
@@ -137,15 +137,15 @@ function plot_box(posterior, sweep, i1, i2, i3)
     set(ax, 'ydir', 'normal')
     caxis([0, joint_sc])
     colorbar
-    
-    % 1D marginal 
+
+    % 1D marginal
     ax2 = axes('position', [xpos, 0.375, 0.225, 0.05]);
     plot(reshape(sweep.(sweep.state_names{i3}), 1, []), ...
         reshape(p_marginal, 1, []))
     %set(ax2, 'color', 'none', 'ycolor', 'none', 'box', 'off');
     xlabel(sweep.fnames{i3});
     ylim([0, marg_sc])
-    
+
 
     % the depth plot
     ax3 = axes('position', [xpos, 0.15, 0.225, 0.05]);
@@ -159,6 +159,6 @@ function plot_box(posterior, sweep, i1, i2, i3)
     plot(sweep.z./1000, plot_z, 'linestyle', 'none')
     set(ax4, 'color', 'none', 'ycolor', 'none', 'box', 'off');
     xlabel('Depth (km)')
-    
-    
+
+
 end
