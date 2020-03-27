@@ -56,8 +56,10 @@ function fetch_data(datadirparent)
         urlname=[baseurl,'/',fS(iD).dir,'/',nm,'.zip'];
         tmpfil=fullfile(dir,[nm,'.zip']);
         status=fetchOneFile(urlname,tmpfil);
+        disp(['fetched ',urlname])
+        disp(['unzipping ',tmpfil])
         unzip(tmpfil);
-        delete(tmpfil);
+        % delete(tmpfil);
       end
     end
 
@@ -66,7 +68,7 @@ function fetch_data(datadirparent)
 
 end
 
-function status=fetchOneFile(urlname,locfile)
+function status = fetchOneFile(urlname,locfile)
   % attempts to fetch a file from a url
   status=0;
   try
