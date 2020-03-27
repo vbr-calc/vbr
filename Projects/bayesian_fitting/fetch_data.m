@@ -58,6 +58,7 @@ function fetch_data(datadirparent)
         status=fetchOneFile(urlname,tmpfil);
         unzip(tmpfil);
         delete(tmpfil);
+      end
     end
 
   end
