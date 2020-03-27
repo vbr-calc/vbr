@@ -26,7 +26,7 @@ location_colors={[1,0,0];[1,0.6,0];[0,0.8,0];[0,0.3,0]};
 % Need to choose the attenuation method used for anelastic calculations
 %       see possible methods by running vbrListMethods()
 q_method = 'xfit_premelt'; %'eburgers_psp' 'xfit_mxw', 'xfit_premelt' 'andrade_psp'
-fetch_data('./'); % builds data directories and fetches data 
+fetch_data('./'); % builds data directories and fetches data
 filenames.Vs = './data/vel_models/Shen_Ritzwoller_2016.mat';
 filenames.Q = './data/Q_models/Dalton_Ekstrom_2008.mat';
 filenames.LAB = './data/LAB_models/HopperFischer2018.mat';
@@ -85,15 +85,15 @@ for iq = 1:length(q_methods)
         p_joint = sum(posterior,3);
 
         if ~strcmp(q_method,'xfit_mxw')
-        disp(['adding ',q_method,' to ensemble average for ',locname])
-        if ~isfield(EnsemblePDF,locname)
-          disp('initialize ensemble ave')
-          EnsemblePDF.(locname)=p_joint;
-        else
-          disp('add to ensemble ave')
-          EnsemblePDF.(locname)=EnsemblePDF.(locname)+p_joint;
-        end
-        N_models=N_models+1;
+          % disp(['adding ',q_method,' to ensemble average for ',locname])
+          if ~isfield(EnsemblePDF,locname)
+            % disp('initialize ensemble ave')
+            EnsemblePDF.(locname)=p_joint;
+          else
+            % disp('add to ensemble ave')
+            EnsemblePDF.(locname)=EnsemblePDF.(locname)+p_joint;
+          end
+          N_models=N_models+1;
         end
 
 
