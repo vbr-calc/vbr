@@ -105,4 +105,4 @@ for il = 1:length(locs)
 end
 
 plot_RegionalFits(RegionalFits,locs,names,location_colors);
-plot_EnsemblePDFs(EnsemblePDF,locs,names,location_colors,3)
+plot_EnsemblePDFs(EnsemblePDF,locs,names,location_colors)
