@@ -153,11 +153,12 @@ function case2out =case2()
 
   VBR.in.SV.phi=logspace(-8,-1.5,100);
   VBR = appendFixedSVs(VBR,size(VBR.in.SV.phi));
-  VBR.in.SV.T_K=1200+273*ones(size(VBR.in.SV.phi));
+  T_solidus_C=1300;
+  VBR.in.SV.T_K=T_solidus_C+273*ones(size(VBR.in.SV.phi));
   T_N=1.01;
   VBR.in.SV.Tsolidus_K=VBR.in.SV.T_K/T_N;
   VBR_1 = VBR_spine(VBR);
-
+  phi_c=VBR_1.in.GlobalSettings.phi_c(1);
   VBR.in.GlobalSettings.melt_enhancement=1;
   VBR_2 = VBR_spine(VBR);
   case2out.VBR_1=VBR_1;
@@ -211,7 +212,7 @@ function case2out =case2()
   VBR.in.SV=struct(); % clear it out, size will be changing...
   Tmax=1400; Tmin=800;
   VBR.in.SV.T_K=[linspace(Tmin,999,20),linspace(1000,Tmax,500)]+273;
-  VBR.in.SV.Tsolidus_K=1300+273;
+  VBR.in.SV.Tsolidus_K=T_solidus_C+273;
   VBR.in.SV.phi=1e-4*((VBR.in.SV.T_K-VBR.in.SV.Tsolidus_K));
   VBR.in.SV.phi(VBR.in.SV.phi<0)=1e-16;
   VBR.in.SV.phi(VBR.in.SV.phi>1)=1;
@@ -227,6 +228,12 @@ function case2out =case2()
 
   subplot(2,4,1)
   semilogy(Trange,phi_range,'k','linewidth',2)
+  hold on
+  phiminax=[min(phi_range),max(phi_range)];
+  Tminmax=[min(Trange),max(Trange)];
+  semilogy([T_solidus_C,T_solidus_C],phiminax,'--k','linewidth',1.5)
+  semilogy(Tminmax,[phi_c,phi_c],'--k','linewidth',2)
+
   ylabel('\phi'); xlabel('T [C]');
   xlim([Tmin,Tmax])
   ylim([1e-6,1e-2])
@@ -235,6 +242,11 @@ function case2out =case2()
   Tmin2=1200;
   Tmask=(Trange>=Tmin2);
   semilogy(Trange(Tmask),phi_range(Tmask),'k','linewidth',2)
+  hold on
+  phiminax=[min(phi_range),max(phi_range)];
+  Tminmax=[min(Trange(Tmask)),max(Trange(Tmask))];
+  semilogy([T_solidus_C,T_solidus_C],phiminax,'--k','linewidth',1.5)
+  semilogy(Tminmax,[phi_c,phi_c],'--k','linewidth',2)
   ylabel('\phi'); xlabel('T [C]');
   xlim([Tmin2,Tmax])
   ylim([1e-6,1e-2])
@@ -278,18 +290,32 @@ function case2out =case2()
   end
 
   subplot(2,4,2)
-  box on; xlabel('T [C]'); ylabel('M [GPa]'); legend('location','southwest');
-  xlim([Tmin,Tmax])
+  legend('location','southwest');
+  hold on
+  plot([T_solidus_C,T_solidus_C],[60,75],'--k','linewidth',1.5,'DisplayName','T_{sol}')
+  box on; xlabel('T [C]'); ylabel('M [GPa]');
+  xlim([Tmin,Tmax]); ylim([60,75])
   subplot(2,4,3)
-  box on; xlabel('T [C]'); ylabel('Vs_R [km/s]');xlim([Tmin,Tmax])
+  hold on
+  plot([T_solidus_C,T_solidus_C],[4.2,4.9],'--k','linewidth',1.5,'DisplayName','T_{sol}')
+  box on; xlabel('T [C]'); ylabel('Vs_R [km/s]');xlim([Tmin,Tmax]); ylim([4.3,4.8])
   subplot(2,4,4)
+  hold on
+  semilogy([T_solidus_C,T_solidus_C],[1e-2,1e4],'--k','linewidth',1.5,'DisplayName','T_{sol}')
   box on; xlabel('T [C]'); ylabel('Q');xlim([Tmin,Tmax])
 
+
   subplot(2,4,6)
-  box on; xlabel('T [C]'); ylabel('M [GPa]');xlim([Tmin2,Tmax])
+  hold on
+  plot([T_solidus_C,T_solidus_C],[60,70],'--k','linewidth',1.5,'DisplayName','T_{sol}')
+  box on; xlabel('T [C]'); ylabel('M [GPa]');xlim([Tmin2,Tmax]); ylim([62,69])
   subplot(2,4,7)
-  box on; xlabel('T [C]'); ylabel('Vs_R [km/s]');xlim([Tmin2,Tmax])
+  hold on
+  plot([T_solidus_C,T_solidus_C],[4.3,4.9],'--k','linewidth',1.5,'DisplayName','T_{sol}')
+  box on; xlabel('T [C]'); ylabel('Vs_R [km/s]');xlim([Tmin2,Tmax]); ylim([4.3,4.6])
   subplot(2,4,8)
+  hold on
+  semilogy([T_solidus_C,T_solidus_C],[1e-2,1e1],'--k','linewidth',1.5,'DisplayName','T_{sol}')
   box on; xlabel('T [C]'); ylabel('Q');xlim([Tmin2,Tmax])
   saveas(gcf,'./figures/CB_011_meltEffects_case2_fig2.png')
 

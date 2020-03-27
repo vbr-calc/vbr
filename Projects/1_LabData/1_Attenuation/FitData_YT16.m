@@ -32,14 +32,20 @@ function plot_Q()
   viscData = loadYT2016visc();
   Qdata=loadYT2016Q();
 
-  figure('DefaultAxesFontSize',12,'PaperPosition',[0,0,12,6],'PaperPositionMode','manual')
+  %figure('DefaultAxesFontSize',12,'PaperPosition',[0,0,6,2.5],'PaperPositionMode','manual')
+  fig=figure('Position', [10 10 600 300],'PaperPosition',[0,0,6,2.5],'PaperPositionMode','manual');
   OutVBR=struct();
   if viscData.has_data && Qdata.Qinv.has_data
 
     experimental_Ts=unique(Qdata.Qinv.T_C); % the temp conditions at which f was varied
     N=numel(experimental_Ts); % number of experimental P/T conditions
-    clrs={'k','r','b','c','m','g','y'};
+    %clrs={'k','r','b','c','m','g','y'};
     samp=41;
+  
+    % find min, max T of experiments 
+    Tmax=max(experimental_Ts);
+    Tmin=min(experimental_Ts);
+     
 
     % loop over exp. conditions (T is varied only), calculate Q
     for iexp=1:N
@@ -51,7 +57,7 @@ function plot_Q()
       VBR.in.anelastic.methods_list={'xfit_premelt'};
 
       % pull this sample's viscData
-      dg=viscData.visc.dg_um(viscData.visc.sample==samp)(1);
+      dg=min(viscData.visc.dg_um(viscData.visc.sample==samp));
       T_Cvisc=viscData.visc.T_C(viscData.visc.sample==samp);
       eta=viscData.visc.eta(viscData.visc.sample==samp);
       [T_Cvisc,I]=sort(T_Cvisc); eta=eta(I);
@@ -106,34 +112,34 @@ function plot_Q()
       E_obs=Qdata.E.E(Qdata.E.T_C==This_T_C);
       E_obs_f=Qdata.E.f(Qdata.E.T_C==This_T_C);
 
-      if iexp > numel(clrs)
-        icolor=iexp-numel(clrs);
-        lnsty='--';
-      else
-        icolor=iexp;
-        lnsty='';
-      end
-      clr=clrs{icolor};
-
-      subplot(1,2,2)
-      hold on
-      loglog(Q_obs_f,Q_obs,'.','color',clr,'displayname',[num2str(dg),',',num2str(samp)],'MarkerSize',12)
-      loglog(VBR.in.SV.f,VBR_Q_samp,[lnsty,clr],'displayname',[num2str(dg),',',num2str(samp)],'LineWidth',1.5)
+      Tscl=(This_T_C-Tmin)/(Tmax-Tmin);
+      clr=[Tscl,0,1-Tscl];
 
       subplot(1,2,1)
       hold on
-      semilogx(E_obs_f,E_obs,'.','color',clr,'displayname',[num2str(dg),',',num2str(samp)],'MarkerSize',12)
-      semilogx(VBR.in.SV.f,VBR_G_samp,[lnsty,clr],'displayname',[num2str(dg),',',num2str(samp)],'LineWidth',1.5)
+      plot(log10(Q_obs_f),log10(Q_obs),'.','color',clr,'displayname',[num2str(dg),',',num2str(samp)],'MarkerSize',12)
+      plot(log10(VBR.in.SV.f),log10(VBR_Q_samp),'color',clr,'displayname',[num2str(dg),',',num2str(samp)],'LineWidth',1.5)
+
+      subplot(1,2,2)
+      hold on
+      plot(log10(E_obs_f),E_obs,'.','color',clr,'displayname',[num2str(dg),',',num2str(samp)],'MarkerSize',12)
+      plot(log10(VBR.in.SV.f),VBR_G_samp,'color',clr,'displayname',[num2str(dg),',',num2str(samp)],'LineWidth',1.5)
 
     end
-    subplot(1,2,2)
-    xlabel('f [Hz]'); ylabel('Q^{-1}')
-    box on
-
     subplot(1,2,1)
-    xlabel('f [Hz]'); ylabel('M [GPa]')
+    xlabel('f [Hz]'); ylabel('Q^{-1}')
+    xlim([-4,2])
+    set(gca,'xminortick','on','yminortick','on')
+    xlabel('log($f$), frequency [Hz]'); ylabel('log(Q$^{-1}$), attenuation')
     box on
 
+    subplot(1,2,2)
+    ylabel('Modulus, $M$ [GPa]'); xlabel('log($f$), frequency [Hz]');
+    xlim([-4,2])
+    ylim([0,3])
+    set(gca,'xminortick','on','yminortick','on')
+    box on
+    set(findall(gcf,'-property','Interpreter'),'Interpreter','latex') ;
     saveas(gcf,'./figures/YT16_MQ.eps','epsc')
   else
     disp('This function requires data!')
@@ -153,7 +159,7 @@ function plot_visc()
     N=numel(data.visc.sample_list);
     dg_range=max(data.visc.dg_um)-min(data.visc.dg_um);
 
-    clrs={'k','r','b','c','m','g','p'}
+    clrs={'k','r','b','c','m','g','p'};
     for isamp=1:N
 
       VBR.in=struct();
@@ -161,7 +167,7 @@ function plot_visc()
 
       % pull this sample's data
       samp=data.visc.sample_list(isamp);
-      dg=data.visc.dg_um(data.visc.sample==samp)(1);
+      dg=min(data.visc.dg_um(data.visc.sample==samp));
       T_C=data.visc.T_C(data.visc.sample==samp);
       eta=data.visc.eta(data.visc.sample==samp);
 
@@ -213,11 +219,13 @@ function plot_visc()
     xlabel('T [C]'); ylabel('eta [Pa s]')
     legend('location','southwest')
     box on
+    set(gca,'yscale','log')
 
     subplot(1,2,2)
     title('H=147 kJ/mol, dg\_ref=34.2 um, T\_ref=23 C, eta\_r=7e13 Pas')
     xlabel('T [C]'); ylabel('eta [Pa s]')
     box on
+    set(gca,'yscale','log')
 
     saveas(gcf,'./figures/YT16_visc.eps','epsc')
   else
@@ -235,12 +243,12 @@ function data = loadYT2016visc()
   if exist([dataDir,'table3.mat'],'file')
     disp('loading')
     load([dataDir,'table3.mat'])
-    data.table3_H=table3_H;
+    data.table3_H=table3_H.table3_H;
   end
 
   if exist([dataDir,'viscosity_table2subset.csv'],'file')
-    d=csvread([dataDir,'viscosity_table2subset.csv']);
-    d=d(2:end,:);
+    d=csvread([dataDir,'viscosity_table2subset.csv'],1,0);
+    %d=d(2:end,:);
     data.visc=struct();
     data.visc.sample=d(:,1);
     data.visc.dg_um=d(:,2);
@@ -263,8 +271,8 @@ function data = loadYT2016Q()
   data=struct();
 
   if exist([dataDir,'YT16_41_fQinv_allT.csv'],'file')
-    d=csvread([dataDir,'YT16_41_fQinv_allT.csv']);
-    d=d(2:end,:);
+    d=csvread([dataDir,'YT16_41_fQinv_allT.csv'],1,0);
+    %d=d(2:end,:);
     data.Qinv=struct();
     data.Qinv.sample=d(:,1);
     data.Qinv.T_C=d(:,2);
@@ -278,8 +286,8 @@ function data = loadYT2016Q()
 
 
   if exist([dataDir,'YT16_41_fE_allT.csv'],'file')
-    d=csvread([dataDir,'YT16_41_fE_allT.csv']);
-    d=d(2:end,:);
+    d=csvread([dataDir,'YT16_41_fE_allT.csv'],1,0);
+    %d=d(2:end,:);
     data.E=struct();
     data.E.sample=d(:,1);
     data.E.T_C=d(:,2);

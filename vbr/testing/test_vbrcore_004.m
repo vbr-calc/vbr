@@ -19,7 +19,7 @@ function TestResult = test_vbrcore_004()
   % melt enhacement = 0 (default)
   VBR = initVBR();
   VBR_1=VBR_spine(VBR);
-  if VBR_1.in.GlobalSettings.melt_enhancement!=0
+  if VBR_1.in.GlobalSettings.melt_enhancement ~=0
     TestResult=false;
     disp('      WARNING: melt_enhancement not properly set!!! Should be 0.')
   end
@@ -28,7 +28,7 @@ function TestResult = test_vbrcore_004()
   VBR = initVBR();
   VBR.in.GlobalSettings.melt_enhancement=1;
   VBR_2=VBR_spine(VBR);
-  if VBR_2.in.GlobalSettings.melt_enhancement!=1
+  if VBR_2.in.GlobalSettings.melt_enhancement ~=1
     TestResult=false;
     disp('      WARNING: melt_enhancement not properly set!!! Should be 1.')
   end

@@ -18,8 +18,10 @@ function [ VBR ] = el_ModUnrlx_dTdP_f( VBR )
   % read in elastic parameters
   ela = VBR.in.elastic.anharmonic;
   nu = ela.nu ;
-  dG_dT0 = ela.dG_dT ; % Pa/K
-  dG_dP0 = ela.dG_dP  ; % dimensionless
+  % dG_dT0 = ela.dG_dT ; % Pa/K
+  % dG_dP0 = ela.dG_dP  ; % dimensionless
+  dG_dT0 = VBR.out.elastic.dG_dT ; % Pa/K
+  dG_dP0 = VBR.out.elastic.dG_dP  ; % dimensionless
   T_K_ref = ela.T_K_ref ;
   P_Pa_ref = ela.P_Pa_ref ;
   Gu_0=VBR.out.elastic.Gu_0; % Pa

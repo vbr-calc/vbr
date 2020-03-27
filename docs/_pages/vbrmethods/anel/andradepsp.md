@@ -65,20 +65,11 @@ Output is stored in `VBR.out.anelastic.andrade_psp`:
   [4,1] = Qinv
   [5,1] = M
   [6,1] = V
-  [7,1] = J1_gbs
-  [8,1] = J2_gbs
-  [9,1] = Q_gbs
-  [10,1] = M_gbs
-  [11,1] = J1_comp
-  [12,1] = J2_comp
-  [13,1] = Q_comp
-  [14,1] = M_comp
-  [15,1] = Va_comp
-  [16,1] = Vave
+  [7,1] = Vave
 }
 ```
 
-The following fields are frequency dependent: `J1`,`J2`,`Q`,`Qinv`,`M` and `V`. The fields noted by `*_gbs` are a grain boundary sliding dissipation peak and when added to the background values gives the `*_comp` values, but these are experimental and should generally be ignored at present (i.e., only use `J1`,`J2`,`Q`,`Qinv`,`M`,`V`,`Vave` for now).
+The following fields are frequency dependent: `J1`,`J2`,`Q`,`Qinv`,`M` and `V`. 
 
 ## Parameters
 

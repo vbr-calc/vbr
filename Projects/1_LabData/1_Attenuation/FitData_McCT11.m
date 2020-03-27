@@ -120,20 +120,20 @@ function fig = plot_MQ_T_Fits(fit1_fit2,out_dir)
       if include_E==1
         set(fig,'CurrentAxes',ax_E)
         hold on
-        semilogx(fd,M,['.',clr],'displayname','none','MarkerSize',10);
+        semilogx(fd,M,['.',clr],'displayname','none','MarkerSize',12);
 
         set(fig,'CurrentAxes',ax_E_norm)
         hold on
-        semilogx(fd/fnorm,M*Gfac,['.',clr],'displayname','none','MarkerSize',10);
+        semilogx(fd/fnorm,M*Gfac,['.',clr],'displayname','none','MarkerSize',12);
       end
 
       set(fig,'CurrentAxes',ax_Qinv)
       hold on
-      loglog(fd,Qinv,['.',clr],'MarkerSize',10);
+      loglog(fd,Qinv,['.',clr],'MarkerSize',12);
 
       set(fig,'CurrentAxes',ax_Qinv_norm)
       hold on
-      loglog(fd/fnorm,Qinv,['.',clr],'MarkerSize',10);
+      loglog(fd/fnorm,Qinv,['.',clr],'MarkerSize',12);
     end
   end
 
@@ -143,14 +143,14 @@ function fig = plot_MQ_T_Fits(fit1_fit2,out_dir)
     xlabel('f [Hz]'); ylabel('E [GPa]')
     ylim([.5,3])
     xlim([1e-4,10])
-    set(gca,'XMinorTick','on')
+    set(gca,'XMinorTick','on','xscale','log')
 
     set(fig,'CurrentAxes',ax_E_norm)
     box on
     xlabel('f_N'); ylabel('E / E_U')
     ylim([0,1])
     xlim([1e-1,1e5])
-    set(gca,'XMinorTick','on')
+    set(gca,'XMinorTick','on','xscale','log')
   end
 
   set(fig,'CurrentAxes',ax_Qinv)
@@ -158,14 +158,14 @@ function fig = plot_MQ_T_Fits(fit1_fit2,out_dir)
   xlabel('f [Hz]'); ylabel('Qinv')
   xlim([1e-4,10])
   ylim([1e-2,2])
-  set(gca,'XMinorTick','on','YMinorTick','on')
+  set(gca,'XMinorTick','on','YMinorTick','on','xscale','log','yscale','log')
 
   set(fig,'CurrentAxes',ax_Qinv_norm)
   box on
   xlabel('f_N'); ylabel('Qinv')
   xlim([1e-1,1e5])
   ylim([1e-2,2])
-  set(gca,'XMinorTick','on','YMinorTick','on')
+  set(gca,'XMinorTick','on','YMinorTick','on','xscale','log','yscale','log')
 
   saveas(gcf,[out_dir,'/McCT11_MQ_v_T_',fit1_fit2,'.eps'],'epsc')
 end
@@ -278,12 +278,12 @@ function fig = plot_relaxSpectrum(out_dir)
   % plot the relexation spectrum
   params=Params_Anelastic('xfit_mxw');
   [X_tau] = Q_xfit_mxw_xfunc(tau_norm,params);
+  loglog(tau_norm,X_tau,'LineWidth',1.5,'color','r');
   hold all
-  loglog(tau_norm,X_tau,'LineWidth',1.5,'r');
 
   params.fit='fit2';
   [X_tau] = Q_xfit_mxw_xfunc(tau_norm,params);
-  loglog(tau_norm,X_tau,'LineWidth',1.5,'b');
+  loglog(tau_norm,X_tau,'LineWidth',1.5,'color','b');
 
   relaxData=tryDataLoadRelax();
   if relaxData.has_data
@@ -291,7 +291,7 @@ function fig = plot_relaxSpectrum(out_dir)
     loglog(relaxData.relax_fit2_pts.tau_norm,relaxData.relax_fit2_pts.relax_fit2_pts,'.b')
     p1=relaxData.relax_PREM_pts.relax_PREM_pts(1);
     loglog(relaxData.relax_PREM_pts.tau_norm,[p1,p1],'k','linewidth',5)
-    loglog(relaxData.relax_data_dg3to8.tau_norm,relaxData.relax_data_dg3to8.relax_data_dg3to8,'.k','MarkerSize',10)
+    loglog(relaxData.relax_data_dg3to8.tau_norm,relaxData.relax_data_dg3to8.relax_data_dg3to8,'.k','MarkerSize',12)
   end
 
   xlabel('normalized time scale')
@@ -325,7 +325,7 @@ function fig = plot_MQ_dg_Fits(fit1_fit2,out_dir)
   end
 
   clrs={'k';'r';'b';'c';'m';'y';'g'};
-
+  firstplot=1;
   % plot the VBR
   for idg=1:numel(VBR.in.SV.dg_um)
 
@@ -342,6 +342,7 @@ function fig = plot_MQ_dg_Fits(fit1_fit2,out_dir)
 
     if include_E==1
       set(fig,'CurrentAxes',ax_E)
+      firstplot=firstplot+1;
       hold on
       semilogx(fd,M,clr,'linewidth',1.5);
 
@@ -379,20 +380,20 @@ function fig = plot_MQ_dg_Fits(fit1_fit2,out_dir)
       if include_E==1
         set(fig,'CurrentAxes',ax_E)
         hold on
-        semilogx(fd,M,['.',clr],'displayname','none','MarkerSize',10);
+        semilogx(fd,M,['.',clr],'displayname','none','MarkerSize',12);
 
         set(fig,'CurrentAxes',ax_E_norm)
         hold on
-        semilogx(fd/fnorm,M*Gfac,['.',clr],'displayname','none','MarkerSize',10);
+        semilogx(fd/fnorm,M*Gfac,['.',clr],'displayname','none','MarkerSize',12);
       end
 
       set(fig,'CurrentAxes',ax_Qinv)
       hold on
-      loglog(fd,Qinv,['.',clr],'MarkerSize',10);
+      loglog(fd,Qinv,['.',clr],'MarkerSize',12);
 
       set(fig,'CurrentAxes',ax_Qinv_norm)
       hold on
-      loglog(fd/fnorm,Qinv,['.',clr],'MarkerSize',10);
+      loglog(fd/fnorm,Qinv,['.',clr],'MarkerSize',12);
     end
   end
 
@@ -403,6 +404,7 @@ function fig = plot_MQ_dg_Fits(fit1_fit2,out_dir)
     ylim([.5,3])
     xlim([1e-4,10])
     set(gca,'XMinorTick','on')
+    set(gca, 'xscale', 'log');
 
     set(fig,'CurrentAxes',ax_E_norm)
     box on
@@ -410,6 +412,7 @@ function fig = plot_MQ_dg_Fits(fit1_fit2,out_dir)
     ylim([.5,3])
     xlim([1e-1,1e5])
     set(gca,'XMinorTick','on')
+    set(gca, 'xscale', 'log');
   end
 
   set(fig,'CurrentAxes',ax_Qinv)
@@ -418,6 +421,7 @@ function fig = plot_MQ_dg_Fits(fit1_fit2,out_dir)
   xlim([1e-4,10])
   ylim([1e-2,2])
   set(gca,'XMinorTick','on','YMinorTick','on')
+  set(gca, 'xscale', 'log','yscale','log');
 
   set(fig,'CurrentAxes',ax_Qinv_norm)
   box on
@@ -425,6 +429,7 @@ function fig = plot_MQ_dg_Fits(fit1_fit2,out_dir)
   xlim([1e-1,1e5])
   ylim([1e-2,2])
   set(gca,'XMinorTick','on','YMinorTick','on')
+  set(gca, 'xscale', 'log','yscale','log');
 
   saveas(gcf,[out_dir,'/McCT11_MQ_v_dg_',fit1_fit2,'.eps'],'epsc')
 
@@ -500,58 +505,65 @@ function fig = plot_J1J2(out_dir)
   data=tryDataLoadRelax();
 
   % plotting
-  fig=figure('Position', [10 10 600 300],'PaperPosition',[0,0,6,3],'PaperPositionMode','manual');
+  fig=figure('Position', [10 10 600 300],'PaperPosition',[0,0,6,2.5],'PaperPositionMode','manual');
   ax_j1=subplot(1,2,1);
   ax_j2=subplot(1,2,2);
 
+  Tclr=[153/255, 0, 51/255];
+  lw=2;
   set(gcf,'CurrentAxes',ax_j1)
   JU=1./VBRs.fit1.VBR.out.elastic.anharmonic.Gu;
   Fn=VBRs.fit1.VBR.out.anelastic.xfit_mxw.f_norm;
-  semilogx(Fn,VBRs.fit1.VBR.out.anelastic.xfit_mxw.J1/JU,'r','linewidth',1.5)
+  semilogx(Fn,VBRs.fit1.VBR.out.anelastic.xfit_mxw.J1/JU,'color',Tclr,'linewidth',lw)
 
   hold on;
-  semilogx(Fn,VBRs.fit2.VBR.out.anelastic.xfit_mxw.J1/JU,'--r','linewidth',1.5)
+  semilogx(Fn,VBRs.fit2.VBR.out.anelastic.xfit_mxw.J1/JU,'--','color',Tclr,'linewidth',lw)
 
   set(gcf,'CurrentAxes',ax_j2)
-  loglog(Fn,VBRs.fit1.VBR.out.anelastic.xfit_mxw.J2/JU,'b','linewidth',1.5)
+  loglog(Fn,VBRs.fit1.VBR.out.anelastic.xfit_mxw.J2/JU,'color',Tclr,'linewidth',lw)
   hold on
-  loglog(Fn,VBRs.fit2.VBR.out.anelastic.xfit_mxw.J2/JU,'--b','linewidth',1.5)
+  loglog(Fn,VBRs.fit2.VBR.out.anelastic.xfit_mxw.J2/JU,'--','color',Tclr,'linewidth',lw)
 
 
   if data.has_data
     set(gcf,'CurrentAxes',ax_j1)
     hold on;
-    semilogx(data.j1_data.fnorm,data.j1_data.j1_data,'.k','MarkerSize',10)
+    semilogx(data.j1_data.fnorm,data.j1_data.j1_data,'.k','MarkerSize',12)
 
     set(gcf,'CurrentAxes',ax_j2)
     hold on
-    loglog(data.j2_data.fnorm,data.j2_data.j2_data,'.k','MarkerSize',10)
+    loglog(data.j2_data.fnorm,data.j2_data.j2_data,'.k','MarkerSize',12)
   end
 
-  xticks=-1:1:11;
-  xlabs={};
-  for ix = 1:numel(xticks);
-    if mod(xticks(ix),2)~=0
-      xlabs{ix}=['1e',num2str(xticks(ix))];
-    else
-      xlabs{ix}='';
-    end
-  end
+  xticks=10.^(-1:1:11);
+  xlg=log10(xticks);
+  xlab={};
+  for ix = 1:numel(xticks) 
+      xlab{ix}=['10^{',num2str(xlg(ix)),'}'];
+      if mod(xlg(ix),2)==0 
+         xlab{ix}=''; 
+      end 
+      print(xlab{ix})
+  end 
+
 
   set(gcf,'CurrentAxes',ax_j1)
-  xlabel('normalized frequency')
-  ylabel('J1 / Ju')
+  xlabel('$f_N$')
+  ylabel('$J_1/J_u$')
   xlim([1e-1,1e11])
   ylim([1,3])
-  set(gca,'XMinorTick','on','YMinorTick','on','xticklabel',xlabs)
+  set(gca,'XMinorTick','on','YMinorTick','on','xtick',xticks,'xticklabels',xlab)
+  set(gca,'xscale','log')
 
   set(gcf,'CurrentAxes',ax_j2)
-  xlabel('normalized frequency')
-  ylabel('J2 / Ju')
+  xlabel('$f_N$')
+  ylabel('$J_2/J_u$')
   xlim([1e-1,1e11])
   ylim([1e-4,2])
-  set(gca,'XMinorTick','on','YMinorTick','on','xticklabel',xlabs)
+  set(gca,'XMinorTick','on','YMinorTick','on','xtick',xticks,'xticklabels',xlab)
+  set(gca,'xscale','log')
 
+  set(findall(gcf,'-property','Interpreter'),'Interpreter','latex') ;
   saveas(gcf,[out_dir,'/McCT11_normalized_J1J2.eps'],'epsc')
 
 end
@@ -598,8 +610,8 @@ function fig = compare_viscosity(out_dir)
   hold on
   loglog(VBR.in.SV.dg_um,VBR.out.viscous.xfit_premelt.diff.eta,'r','LineWidth',1.5)
   if data.has_data
-    loglog(dgb(dgb>=7),etab(dgb>=7),'.b','MarkerSize',10);
-    loglog(dgb(dgb<7),etab(dgb<7),'.r','MarkerSize',10);
+    loglog(dgb(dgb>=7),etab(dgb>=7),'.b','MarkerSize',12);
+    loglog(dgb(dgb<7),etab(dgb<7),'.r','MarkerSize',12);
   end
 
   ylim([1e12,1e15])
@@ -637,8 +649,7 @@ function data = tryDataLoadVisc()
   dataDir='../../../../vbrWork/expt_data/3_attenuation/McCT11/McCT11_new/';
   data=struct();
   if exist([dataDir,'McCT11_table1.csv'],'file')
-    d=csvread([dataDir,'McCT11_table1.csv']);
-    d=d(2:end,:);
+    d=csvread([dataDir,'McCT11_table1.csv'],1,0);
     % sample	dg_um	T_C	eta_Pas_a	eta_Pas_b	eta_ave_Pas	tau_m_s	strain	GU_at_T_Gpa
     flds={'sample';'dg_um';'T_C';'eta_a';'eta_b';'eta_Pas';'tau_m_s';'strain';'GU_at_T_GPa'};
     for ifld=1:numel(flds)
@@ -669,7 +680,7 @@ function data = tryDataLoadRelax();
   for ifi=1:numel(fi_list)
     fl=fi_list{ifi};
     if exist([dataDir,fl,'.csv'])
-      d=csvread([dataDir,fl,'.csv']);
+      d=csvread([dataDir,fl,'.csv'],1,0);
       if numel(strfind(fl,'relax')>0)
         data.(fl).tau_norm=d(:,1);
         data.(fl).(fl)=d(:,2);
@@ -693,8 +704,7 @@ function data = tryDataLoadFig9()
   dataDir='../../../../vbrWork/expt_data/3_attenuation/McCT11/McCT11_new/';
   data=struct();
   if exist([dataDir,'sample_15_Tdependence_fig9.csv'],'file')
-    d=csvread([dataDir,'sample_15_Tdependence_fig9.csv']);
-    d=d(2:end,:);
+    d=csvread([dataDir,'sample_15_Tdependence_fig9.csv'],1,0);
     data.T_C=d(:,1);
     data.f_Hz=d(:,4);
     data.Qinv=d(:,5);

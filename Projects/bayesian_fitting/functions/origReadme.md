@@ -1,11 +1,14 @@
+Just a copy of the original readme. 
+
+
 # How to fit your seismic observables:
-This doc describes the current workflow.
+This doc describes an example workflow of a Bayesian inference following Havlin, Holtzman and Hopper (2020, in review). The code  requires MATLAB (not Octave compatible yet).
 
 This doc contains more detail and pulls information from various comments together, though just stepping section-by-section through the codes `fit_seismic_observations.m` and `fit_plate.m` should be pretty self-explanatory.
 
-`run.m` will run both of these codes, and pulls out the most important variables.
+At present, `run.m` runs separate and joint Bayesian inferences of state variables beneath 4 representative locations in the U.S. The primary function, `fit_seismic_observations.m`, is described below. See above reference for more background (contact authors for a pre-print if the paper is not yet in press by the time you're reading this).
 
-# Start of `fit_seismic_observations`
+# Start of `fit_seismic_observations.m`
 
 ## 1. Get data for Vs(x, f) and Q(x, f)
 This section loads in the seismic observations, and extracts the observed data point and its standard deviation.

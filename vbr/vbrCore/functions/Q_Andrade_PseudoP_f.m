@@ -36,9 +36,9 @@ function [VBR] = Q_Andrade_PseudoP_f(VBR)
   Beta = VBR.in.anelastic.(andrade_nm).Beta ; %
 
   % Elastic-GBS relaxation peak parameters, set in params file
-  Te = VBR.in.anelastic.(andrade_nm).Te ; %
-  Tgbs = VBR.in.anelastic.(andrade_nm).Tgbs ; % sec
-  Delta = VBR.in.anelastic.(andrade_nm).Delta ;% relaxation strength
+  % Te = VBR.in.anelastic.(andrade_nm).Te ; %
+  % Tgbs = VBR.in.anelastic.(andrade_nm).Tgbs ; % sec
+  % Delta = VBR.in.anelastic.(andrade_nm).Delta ;% relaxation strength
 
   % pseudo-period master variable independent of period/freqency
   Xtilde = calculateXtilde(VBR);
@@ -83,20 +83,20 @@ function [VBR] = Q_Andrade_PseudoP_f(VBR)
     Ma(ig1:ig2) = (J1(ig1:ig2).^2 + J2(ig1:ig2).^2).^(-1/2) ;
 
     % gbs relaxation bump
-    J1_gbs(ig1:ig2) = Ju_in.*Delta./(1+Tgbs.^2.*w.^2) ;
-    J2_gbs(ig1:ig2) = Ju_in.*Delta.*(w.*Te)./(1+Tgbs.^2.*w.^2) ;
-    Q_gbs(ig1:ig2) = J1_gbs(ig1:ig2)./J2_gbs(ig1:ig2) ;
-    M_gbs(ig1:ig2) = (J1_gbs(ig1:ig2).^2 + J2_gbs(ig1:ig2).^2).^(-1/2) ;
+    % J1_gbs(ig1:ig2) = Ju_in.*Delta./(1+Tgbs.^2.*w.^2) ;
+    % J2_gbs(ig1:ig2) = Ju_in.*Delta.*(w.*Te)./(1+Tgbs.^2.*w.^2) ;
+    % Q_gbs(ig1:ig2) = J1_gbs(ig1:ig2)./J2_gbs(ig1:ig2) ;
+    % M_gbs(ig1:ig2) = (J1_gbs(ig1:ig2).^2 + J2_gbs(ig1:ig2).^2).^(-1/2) ;
 
     % composite
-    J1_comp(ig1:ig2) = J1(ig1:ig2) + J1_gbs(ig1:ig2) ;
-    J2_comp(ig1:ig2) = J2(ig1:ig2) + J2_gbs(ig1:ig2) ;
-    Q_comp(ig1:ig2) = J1_comp(ig1:ig2)./J2_comp(ig1:ig2) ;
-    M_comp(ig1:ig2) = (J1_comp(ig1:ig2).^2 + J2_comp(ig1:ig2).^2).^(-1/2);
+    % J1_comp(ig1:ig2) = J1(ig1:ig2) + J1_gbs(ig1:ig2) ;
+    % J2_comp(ig1:ig2) = J2(ig1:ig2) + J2_gbs(ig1:ig2) ;
+    % Q_comp(ig1:ig2) = J1_comp(ig1:ig2)./J2_comp(ig1:ig2) ;
+    % M_comp(ig1:ig2) = (J1_comp(ig1:ig2).^2 + J2_comp(ig1:ig2).^2).^(-1/2);
 
     % velocities [m/s]
     Va(ig1:ig2) = sqrt(Ma(ig1:ig2)./rho_vec) ; % andrade Vs [m/s]
-    Va_comp(ig1:ig2) = sqrt(M_comp(ig1:ig2)./rho_vec) ; % composite Vs [m/s]
+    % Va_comp(ig1:ig2) = sqrt(M_comp(ig1:ig2)./rho_vec) ; % composite Vs [m/s]
   end
 
   % Store output in VBR structure
@@ -106,15 +106,15 @@ function [VBR] = Q_Andrade_PseudoP_f(VBR)
   VBR.out.anelastic.(andrade_nm).Qinv = Qinv;
   VBR.out.anelastic.(andrade_nm).M=Ma;
   VBR.out.anelastic.(andrade_nm).V=Va;
-  VBR.out.anelastic.(andrade_nm).J1_gbs = J1_gbs;
-  VBR.out.anelastic.(andrade_nm).J2_gbs = J2_gbs;
-  VBR.out.anelastic.(andrade_nm).Q_gbs = Q_gbs;
-  VBR.out.anelastic.(andrade_nm).M_gbs=M_gbs;
-  VBR.out.anelastic.(andrade_nm).J1_comp = J1_comp;
-  VBR.out.anelastic.(andrade_nm).J2_comp = J2_comp;
-  VBR.out.anelastic.(andrade_nm).Q_comp = Q_comp;
-  VBR.out.anelastic.(andrade_nm).M_comp=M_comp;
-  VBR.out.anelastic.(andrade_nm).Va_comp=Va_comp;
+  % VBR.out.anelastic.(andrade_nm).J1_gbs = J1_gbs;
+  % VBR.out.anelastic.(andrade_nm).J2_gbs = J2_gbs;
+  % VBR.out.anelastic.(andrade_nm).Q_gbs = Q_gbs;
+  % VBR.out.anelastic.(andrade_nm).M_gbs=M_gbs;
+  % VBR.out.anelastic.(andrade_nm).J1_comp = J1_comp;
+  % VBR.out.anelastic.(andrade_nm).J2_comp = J2_comp;
+  % VBR.out.anelastic.(andrade_nm).Q_comp = Q_comp;
+  % VBR.out.anelastic.(andrade_nm).M_comp=M_comp;
+  % VBR.out.anelastic.(andrade_nm).Va_comp=Va_comp;
 
   % calculate mean velocity along frequency dimension
   VBR.out.anelastic.(andrade_nm).Vave = Q_aveVoverf(Va,f_vec);

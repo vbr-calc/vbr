@@ -2,7 +2,7 @@
 
 **Licensing**: MIT License (see end of this document)
 
-**Citing**: Manuscript in prep., please email vbrcalc@gmail.com before using for publishable research. The VBR calculator has been developed with funding from the following NSF grants (PI Holtzman unless otherwise noted): EAR 1736165 (Earthscope, co-PI C. Havlin), EAR 13-15254 (Geophysics, PI J. Davis), EAR 1056332 (Geophysics- CAREER).  
+**Citing**: Manuscript in review. Until published, please email vbrcalc@gmail.com before publishing your own results using the VBR calculator. The VBR calculator has been developed with funding from the following NSF grants (PI Holtzman unless otherwise noted): EAR 1736165 (Earthscope, co-PI C. Havlin), EAR 13-15254 (Geophysics, PI J. Davis), EAR 1056332 (Geophysics- CAREER).  
 
 Further documentation available at [https://vbr-calc.github.io/vbr/](https://vbr-calc.github.io/vbr/). 
 

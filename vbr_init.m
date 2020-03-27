@@ -27,6 +27,8 @@ function vbr_init(varargin)
   ValidOpts=struct();
   ValidOpts.forwardModel={'ThermalEvolution_1d','none'};
   Options=struct('forwardModel',ValidOpts.forwardModel{1});
+  ValidOpts.quiet={};
+  Options.quiet=0;  
 
 % get full path to vbr, regardless of where vbr_init is called from
   p=mfilename('fullpath'); % full path of vbr_init without extension
@@ -35,7 +37,7 @@ function vbr_init(varargin)
 
 % add the vbr/support directory and validate input options
   addpath(genpath(fullfile(vbr_dir,'vbr','support')));
-  Options=validateStructOpts('vbr_init',varargin,Options,ValidOpts);
+  Options=validateStructOpts('vbr_init',varargin,Options,ValidOpts,1);
 
 % collect all the subdirectories under ./vbr/ to add
   subDirs2add={'vbrCore';'fitting'};
@@ -53,7 +55,9 @@ function vbr_init(varargin)
   end
 
   if success
-   disp('VBR calculator added to working path');
+    if Options.quiet==0
+     disp('VBR calculator added to working path');
+   end
   else
    disp('WARNING: VBR calculator (or its components) is not in path')
   end
