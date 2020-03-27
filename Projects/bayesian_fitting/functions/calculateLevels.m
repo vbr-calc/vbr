@@ -12,8 +12,13 @@ function [targ_cutoffs,confs,cutoffs] = calculateLevels(field,targets)
   for it = 1:numel(targets)
     targ=targets(it);
     c=cutoffs(confs>=targ);
-    targ_cutoffs(it)=max(c(:));
-    disp([it,targ,targ_cutoffs(it)])
+    max_c=max(c(:));
+    if isempty(max_c) 
+        targ_cutoffs(it)=0;
+    else
+        targ_cutoffs(it)=max_c;
+    end
+    %disp([it,targ,targ_cutoffs(it)])
   end
 
 

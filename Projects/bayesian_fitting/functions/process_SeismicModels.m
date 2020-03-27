@@ -44,7 +44,7 @@ function [obs_value, obs_error] = process_SeismicModels( ...
 %                           a default value is assumed, with a message
 %                           printed to the command line.
 %
-%       ifplot      set to True if want to plot the observation as a 
+%       ifplot      set to True if want to plot the observation as a
 %                   function of depth
 %
 %
@@ -87,10 +87,10 @@ obs_error_z = max(median_error_z, lateral_error_z);
 
 
 % Find the average value in depth
-if isfield(Model, 'Depth')    
+if isfield(Model, 'Depth')
     [obs_value, obs_error] = limit_by_depth(obs_value_z, obs_error_z,...
         Model.Depth, location);
-    
+
     if ifplot
         plot_seismic_obs(obs_value_z, obs_error_z, obs_name,...
             Model.Depth, location, obs_value, obs_error)
@@ -152,8 +152,8 @@ switch field_name
         constant_error = 10;
 end
 
-fprintf(['\nError field does not exist for %s - \n\t\t', ...
-    'using a constant value of %g\n'], field_name, constant_error)
+%fprintf(['\n        Error field does not exist for %s - \n\t\t', ...
+%    'using a constant value of %g\n'], field_name, constant_error)
 
 Model.Error = constant_error * ones(size(Model.(field_name)));
 
@@ -165,7 +165,7 @@ function [Model, returnCode] = check_overlap(Model, location)
 % [Model, returnCode] = check_overlap(Model, location)
 %
 % Check to see if the Model actually contains the location specified in
-% 'location'.  Also, if the longitude values in Model are given as 
+% 'location'.  Also, if the longitude values in Model are given as
 % negative numbers, add 360 degrees to them.
 %
 % Parameters:
@@ -229,7 +229,7 @@ if isfield(Model, 'Depth')
         returnCode=0;
         return
     end
-    
+
 end
 
 end
@@ -273,7 +273,7 @@ function Model = limit_by_coords(Model, field_name, location)
 % Output:
 % -------
 %       Model       as input structure, but with only values retained
-%                   in the box defined by 
+%                   in the box defined by
 %                       location.lat +- location.smooth_rad
 %                       location.lon +- location.smooth_rad
 %                       location.z_min to location.z_max
@@ -318,8 +318,8 @@ function [obs_value, obs_error] = limit_by_depth(obs_value, obs_error,...
 %       obs_value   value of observation at the input location as a
 %                   function of depth
 %
-%       obs_error   standard deviation of the observation as a 
-%                   function of depth 
+%       obs_error   standard deviation of the observation as a
+%                   function of depth
 %
 %        depth     n_dep vector of depth points [km] for observeable
 %
@@ -330,23 +330,31 @@ function [obs_value, obs_error] = limit_by_depth(obs_value, obs_error,...
 %
 % Output:
 % -------
-%       obs_value   value of observation at the input location at a 
+%       obs_value   value of observation at the input location at a
 %                   given depth
 %
-%       obs_error   standard deviation of the observation at a given 
+%       obs_error   standard deviation of the observation at a given
 %                   depth
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-depth_mask = (depth >= location.z_min & depth <= location.z_max);
-obs_value = median(obs_value(depth_mask), 'omitnan');
-obs_error = median(obs_error(depth_mask), 'omitnan');
+  depth_mask = (depth >= location.z_min & depth <= location.z_max);
 
+  try
+    obs_value = median(obs_value(depth_mask), 'omitnan');
+    obs_error = median(obs_error(depth_mask), 'omitnan');
+  catch
+    obs_vals=obs_value(depth_mask);
+    obs_vals=obs_vals(:);
+    obs_value=median(obs_vals(~isnan(obs_vals)));
+
+    obs_vals=obs_error(depth_mask);
+    obs_vals=obs_vals(:);
+    obs_error=median(obs_vals(~isnan(obs_vals)));
+  end
 
 
 end
-
-
 
 function medianVal = find_median(Model, field_name)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -386,11 +394,25 @@ function medianVal = find_median(Model, field_name)
 allVals=Model.(field_name);
 if isfield(Model, 'Depth')
     n_z = length(Model.Depth);
-    medianVal = median(...
-        reshape(allVals, numel(allVals) / n_z, n_z), 1, 'omitnan');
+    try
+      medianVal = median(...
+          reshape(allVals, numel(allVals) / n_z, n_z), 1, 'omitnan');
+    catch
+      vals=reshape(allVals, numel(allVals) / n_z, n_z);
+      medianVal=nan*ones(size(Model.Depth));
+      for i_z = 1:n_z
+        depvals=vals(:,i_z);
+        medianVal(i_z)=median(depvals(~isnan(depvals)));
+      end
+    end
 else
-    medianVal = median( ...
-        reshape(allVals, numel(allVals), 1), 1, 'omitnan');
+    try
+      medianVal = median( ...
+          reshape(allVals, numel(allVals), 1), 1, 'omitnan');
+    catch
+      vals = allVals(:);
+      medianVal=median(vals(~isnan(vals)));
+    end
 end
 
 end
@@ -431,11 +453,25 @@ function lateral_error = find_lateral_error(Model, field_name)
 allVals = Model.(field_name);
 if isfield(Model, 'Depth')
     n_z = length(Model.Depth);
-    lateral_error = std(...
-        reshape(allVals, numel(allVals) / n_z, n_z), 0, 1, 'omitnan');
+    try
+      lateral_error = std(...
+          reshape(allVals, numel(allVals) / n_z, n_z), 0, 1, 'omitnan');
+    catch
+      vals=reshape(allVals, numel(allVals) / n_z, n_z);
+      lateral_error=nan*ones(size(Model.Depth));
+      for i_z = 1:n_z
+        depvals=vals(:,i_z);
+        lateral_error(i_z)=std(depvals(~isnan(depvals)));
+      end
+    end
 else
-    lateral_error = std( ...
-        reshape(allVals, numel(allVals), 1), 0, 1, 'omitnan');
+    try
+      lateral_error = std( ...
+          reshape(allVals, numel(allVals), 1), 0, 1, 'omitnan');
+    catch
+      vals=allVals(:);
+      lateral_error=std(vals(~isnan(vals)),0,1);
+    end
 end
 
 end
