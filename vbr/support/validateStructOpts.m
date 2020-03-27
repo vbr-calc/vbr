@@ -9,6 +9,9 @@ function Options=validateStructOpts(func_name,func_varargin,Options,ValidOpts,Vb
 %              if valid options is empty cell {}, will allow any option values
 %  VbLvL = verbocity level. 0 to silence warnings.
 
+  if ~exist('VbLvL','var')
+    VbLvL=0;
+  end
 
 % handle the input arguments
   optionNames=fieldnames(Options);

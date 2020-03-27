@@ -54,7 +54,7 @@ function [posterior,sweep] = fit_seismic_observations(filenames, location, q_met
 
 %% Setup path structure
 % put top level of VBR in the path
-addpath('../../'); vbr_init
+addpath('../../'); vbr_init('quiet','1')
 
 % put Project-specific paths in the path
 addpath(genpath('./functions'))
@@ -110,7 +110,7 @@ if ~exist(fname, 'file')
 end
 
 load(fname, 'sweep');
-end 
+end
 if VsExists
     disp('        extracting Vs')
     [sweep.meanVs, sweep.z_inds] = extract_calculated_values_in_depth_range(...
