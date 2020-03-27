@@ -151,13 +151,21 @@ function plot_box(posterior, sweep, i1, i2, i3)
     ax3 = axes('position', [xpos, 0.15, 0.225, 0.05]);
     patch(sweep.P_GPa(sweep.z_inds([1, end, end, 1, 1])), [0, 0, 1, 1, 0], 'b');
     xlim(sweep.P_GPa([1, end]))
-    set(ax3, 'color', 'none', 'ycolor', 'none', 'box', 'off', ...
-        'xaxislocation', 'top');
+    try
+      set(ax3, 'color', 'none', 'ycolor', 'none', 'box', 'off', ...
+          'xaxislocation', 'top');
+    catch
+      set(ax3, 'box', 'off','xaxislocation', 'top');
+    end
     xlabel('Pressure (GPa)');
     ax4 = axes('position', [xpos, 0.15, 0.225, 0.01]);
     plot_z = zeros(size(sweep.P_GPa));
     plot(sweep.z./1000, plot_z, 'linestyle', 'none')
-    set(ax4, 'color', 'none', 'ycolor', 'none', 'box', 'off');
+    try
+      set(ax4, 'color', 'none', 'ycolor', 'none', 'box', 'off');
+    catch
+      set(ax4, 'box', 'off');
+    end
     xlabel('Depth (km)')
 
 

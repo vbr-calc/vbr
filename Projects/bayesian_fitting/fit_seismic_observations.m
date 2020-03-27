@@ -167,7 +167,7 @@ if VsExists
     disp('        building p(S|Vs) plots')
     posterior_S_given_Vs = probability_distributions('A|B', ...
         likelihood_Vs, prior_statevars, 1);
-    vs_str = sprintf(['Vs = %.3g ', 177, ' %.2g km/s'], obs_Vs, sigma_Vs);
+    vs_str = sprintf(['Vs = %.3g +/- %.2g km/s'], obs_Vs, sigma_Vs);
 %     plot_Bayes(posterior_S_given_Vs, sweep, vs_str, q_method)
     plot_tradeoffs_posterior(posterior_S_given_Vs, sweep, vs_str, q_method)
     posterior.pS = posterior_S_given_Vs;
@@ -178,7 +178,7 @@ if QExists
     disp('        building p(S|Q) plots')
     posterior_S_given_Q =  probability_distributions('A|B', ...
         likelihood_Q, prior_statevars, 1);
-    q_str = sprintf(['Q = %.2g ', 177, ' %.2g '], obs_Q, sigma_Q);
+    q_str = sprintf(['Q = %.2g +/- %.2g '], obs_Q, sigma_Q);
 %     plot_Bayes(posterior_S_given_Q, sweep, q_str, q_method)
     plot_tradeoffs_posterior(posterior_S_given_Q, sweep, q_str, q_method)
     posterior.pS = posterior_S_given_Q;

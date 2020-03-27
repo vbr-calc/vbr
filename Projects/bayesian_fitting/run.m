@@ -34,28 +34,14 @@ filenames.LAB = './data/LAB_models/HopperFischer2018.mat';
 
 q_methods = {'eburgers_psp', 'xfit_mxw', 'xfit_premelt', 'andrade_psp'};
 
-f = figure('color', 'w');
-axStruct.andrade_psp=subplot(2,2,1);
- set(gca,'xticklabels',{},'box','on')
- ylabel('Temperature (^\circC)');
-axStruct.eburgers_psp=subplot(2,2,2);
- set(gca,'xticklabels',{},'box','on')
- set(gca,'yticklabels',{})
-axStruct.xfit_mxw=subplot(2,2,3);
- ylabel('Temperature (^\circC)');
- xlabel('Melt Fraction \phi');
- set(gca,'box','on')
-axStruct.xfit_premelt=subplot(2,2,4);
- ylabel('Temperature (^\circC)');
- xlabel('Melt Fraction \phi');
- set(gca,'yticklabels',{})
- set(gca,'box','on')
 
+RegionalFits=struct();
 EnsemblePDF=struct();
-firstRun=1; 
+firstRun=1;
 for iq = 1:length(q_methods)
     q_method = q_methods{iq};
     disp(['Calculating inference for ',q_method])
+    RegionalFits.(q_method)=struct();
 
     for il = 1:length(locs)
         location.lat = locs(il, 1); % degrees North\
@@ -68,7 +54,7 @@ for iq = 1:length(q_methods)
 
         if firstRun==1
           [posterior_A,sweep] = fit_seismic_observations(filenames, location, q_method);
-          firstRun=0; 
+          firstRun=0;
         else
           [posterior_A,sweep] = fit_seismic_observations(filenames, location, q_method, sweep);
         end
@@ -93,61 +79,30 @@ for iq = 1:length(q_methods)
         p_joint = sum(posterior,3);
         if ~strcmp(q_method,'xfit_mxw')
           if ~isfield(EnsemblePDF,locname)
-            EnsemblePDF.(locname)=p_joint;
+            EnsemblePDF.(locname).p_joint=p_joint;
+            EnsemblePDF.(locname).post_T=posterior_A.T;
+            EnsemblePDF.(locname).post_phi=posterior_A.phi;
           else
-            EnsemblePDF.(locname)=EnsemblePDF.(locname)+p_joint;
+            EnsemblePDF.(locname).p_joint=EnsemblePDF.(locname).p_joint+p_joint;
           end
         end
 
-
-        figure(f)
-        axes(axStruct.(q_method)); hold on
-        [targ_cutoffs,confs,cutoffs] = calculateLevels(p_joint,[0.7,0.8,0.9,0.95]);
-        szs=fliplr([.75,1.,1.5,2,2.5]);
-        for icutoff=1:numel(targ_cutoffs)
-          levs=[targ_cutoffs(icutoff),targ_cutoffs(icutoff)];
-          sz=szs(icutoff);
-          hold all
-          this_clr=location_colors{il};
-          contour(posterior_A.phi, posterior_A.T, p_joint, levs, 'linewidth', sz,'color',this_clr,'displayname',locname)
-        end
-
+        % store regional fits for combo plot
+        RegionalFits.(q_method).(locname)=struct();
+        RegionalFits.(q_method).(locname).p_joint=p_joint;
+        RegionalFits.(q_method).(locname).phi_post=posterior_A.phi;
+        RegionalFits.(q_method).(locname).T_post=posterior_A.T;
 
     end
 
-    axes(axStruct.(q_method));
-    title(strrep(q_method, '_', ' '));
-    %legend('location','southoutside')
 end
 
-disp('    saving regional fits to plots/')
-saveas(f, ['plots/regional_fits.eps'],'epsc');
-saveas(f, ['plots/regional_fits.png'],'png');
-close all
 
-% plot ensemble PDFs
-f_en = figure('color', 'w');
-ax = axes();
-set(gca,'box','on')
-hold on
-ylabel('Temperature (^\circC)');
-xlabel('Melt Fraction \phi');
-disp('building ensemble plots')
-N_models=3;
+N_models = 3; % (not including xfit_mxw)
 for il = 1:length(locs)
-   locname = names{il};
-   PDF=EnsemblePDF.(locname) / N_models; % equal weighting
-   [targ_cutoffs,confs,cutoffs] = calculateLevels(PDF,[0.7,0.8,0.9,0.95]);
-   szs=fliplr([.75,1.,1.5,2,2.5]);
-   for icutoff=1:numel(targ_cutoffs)
-     levs=[targ_cutoffs(icutoff),targ_cutoffs(icutoff)];
-     sz=szs(icutoff);
-     this_clr=location_colors{il};
-     contour(posterior_A.phi, posterior_A.T, PDF, levs, 'linewidth', sz,'color',this_clr,'displayname',locname)
-   end
+  locname = names{il};
+  EnsemblePDF.(locname).p_joint=EnsemblePDF.(locname).p_joint/ N_models; % equal weighting
 end
 
-disp('    saving ensemble plots to plots/')
-saveas(f_en, ['plots/ensemble_fits.eps'],'epsc');
-saveas(f_en, ['plots/ensemble_fits.png'],'png');
-close all
+plot_RegionalFits(RegionalFits,locs,names,location_colors);
+plot_EnsemblePDFs(EnsemblePDF,locs,names,location_colors,3)
