@@ -152,8 +152,8 @@ switch field_name
         constant_error = 10;
 end
 
-fprintf(['\nError field does not exist for %s - \n\t\t', ...
-    'using a constant value of %g\n'], field_name, constant_error)
+%fprintf(['\n        Error field does not exist for %s - \n\t\t', ...
+%    'using a constant value of %g\n'], field_name, constant_error)
 
 Model.Error = constant_error * ones(size(Model.(field_name)));
 

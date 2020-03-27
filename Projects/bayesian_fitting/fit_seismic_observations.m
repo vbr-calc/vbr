@@ -1,4 +1,4 @@
-function posterior = fit_seismic_observations(filenames, location, q_method)
+function [posterior,sweep] = fit_seismic_observations(filenames, location, q_method,sweep)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % fit_seismic_observations
@@ -90,6 +90,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Preferably, load in a large, pre-calculated box
+if ~exist('sweep','var')
 fname = 'data/plate_VBR/sweep_more.mat';
 if ~exist(fname, 'file')
     sweep_params.T = 1200:10:1800; %[degrees C]
@@ -109,11 +110,14 @@ if ~exist(fname, 'file')
 end
 
 load(fname, 'sweep');
+end 
 if VsExists
+    disp('        extracting Vs')
     [sweep.meanVs, sweep.z_inds] = extract_calculated_values_in_depth_range(...
         sweep, 'Vs', q_method, [location.z_min, location.z_max]);
 end
 if QExists
+    disp('        extracting Q')
     sweep.meanQ = extract_calculated_values_in_depth_range(sweep, ...
         'Q', q_method, [location.z_min, location.z_max]);
 end
@@ -160,6 +164,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if VsExists
+    disp('        building p(S|Vs) plots')
     posterior_S_given_Vs = probability_distributions('A|B', ...
         likelihood_Vs, prior_statevars, 1);
     vs_str = sprintf(['Vs = %.3g ', 177, ' %.2g km/s'], obs_Vs, sigma_Vs);
@@ -170,6 +175,7 @@ if VsExists
 end
 
 if QExists
+    disp('        building p(S|Q) plots')
     posterior_S_given_Q =  probability_distributions('A|B', ...
         likelihood_Q, prior_statevars, 1);
     q_str = sprintf(['Q = %.2g ', 177, ' %.2g '], obs_Q, sigma_Q);
@@ -189,6 +195,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 if VsExists && isfield(filenames, 'Q')
+    disp('        building p(S|Vs,Q) plots')
     posterior_S_given_Vs_and_Q = probability_distributions(...
         'C|A,B conditionally independent', likelihood_Vs, likelihood_Q, ...
         prior_statevars, 1);

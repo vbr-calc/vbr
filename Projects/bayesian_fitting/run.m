@@ -52,10 +52,10 @@ axStruct.xfit_premelt=subplot(2,2,4);
  set(gca,'box','on')
 
 EnsemblePDF=struct();
-N_models=0;
+firstRun=1; 
 for iq = 1:length(q_methods)
     q_method = q_methods{iq};
-
+    disp(['Calculating inference for ',q_method])
 
     for il = 1:length(locs)
         location.lat = locs(il, 1); % degrees North\
@@ -64,36 +64,39 @@ for iq = 1:length(q_methods)
         location.z_max= zrange(il, 2); % averaging max depth for asth.
         location.smooth_rad = 0.5;
         locname = names{il};
+        disp(['     fitting ',locname])
 
-        posterior_A = fit_seismic_observations(filenames, location, q_method);
+        if firstRun==1
+          [posterior_A,sweep] = fit_seismic_observations(filenames, location, q_method);
+          firstRun=0; 
+        else
+          [posterior_A,sweep] = fit_seismic_observations(filenames, location, q_method, sweep);
+        end
 
+        disp('        saving plots...')
         saveas(gcf, ['plots/output_plots/', names{il}, '_VQ_', q_method, '.png']);
         close
         saveas(gcf, ['plots/output_plots/', names{il}, '_Q_', q_method, '.png']);
         close
         saveas(gcf, ['plots/output_plots/', names{il}, '_V_', q_method, '.png']);
         close
+        disp('        plots saved to plots/output_plots/')
 
         % calculate marginal P(phi,T|S)
         posterior = posterior_A.pS;
         posterior = posterior ./ sum(posterior(:));
-        sh = size(posterior);
-        p_marginal = sum(sum(posterior, 1), 2);
-        p_marginal_box = repmat(p_marginal, sh(1), sh(2), 1);
-        p_joint = sum(posterior .* p_marginal_box, 3);
-        p_joint=p_joint/sum(p_joint(:));
+        %sh = size(posterior);
+        %p_marginal = sum(sum(posterior, 1), 2);
+        %p_marginal_box = repmat(p_marginal, sh(1), sh(2), 1);
+        %p_joint = sum(posterior .* p_marginal_box, 3);
+        %p_joint=p_joint/sum(p_joint(:));
         p_joint = sum(posterior,3);
-
         if ~strcmp(q_method,'xfit_mxw')
-          % disp(['adding ',q_method,' to ensemble average for ',locname])
           if ~isfield(EnsemblePDF,locname)
-            % disp('initialize ensemble ave')
             EnsemblePDF.(locname)=p_joint;
           else
-            % disp('add to ensemble ave')
             EnsemblePDF.(locname)=EnsemblePDF.(locname)+p_joint;
           end
-          N_models=N_models+1;
         end
 
 
@@ -116,6 +119,8 @@ for iq = 1:length(q_methods)
     title(strrep(q_method, '_', ' '));
     %legend('location','southoutside')
 end
+
+disp('    saving regional fits to plots/')
 saveas(f, ['plots/regional_fits.eps'],'epsc');
 saveas(f, ['plots/regional_fits.png'],'png');
 close all
@@ -127,7 +132,8 @@ set(gca,'box','on')
 hold on
 ylabel('Temperature (^\circC)');
 xlabel('Melt Fraction \phi');
-
+disp('building ensemble plots')
+N_models=3;
 for il = 1:length(locs)
    locname = names{il};
    PDF=EnsemblePDF.(locname) / N_models; % equal weighting
@@ -141,6 +147,7 @@ for il = 1:length(locs)
    end
 end
 
+disp('    saving ensemble plots to plots/')
 saveas(f_en, ['plots/ensemble_fits.eps'],'epsc');
 saveas(f_en, ['plots/ensemble_fits.png'],'png');
 close all
