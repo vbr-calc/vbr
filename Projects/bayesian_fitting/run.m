@@ -17,10 +17,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 close all; clc
 
-locs = [45, -111; 40.7, -117.5; 39, -109.8; 37.2, -100.9];
-names = {'Yellowstone', 'BasinRange', 'ColoradoPlateau', 'Interior'};
-zrange = [75, 105; 75, 105; 120, 150; 120, 150];
-location_colors={[1,0,0];[1,0.6,0];[0,0.8,0];[0,0.3,0]};
+locs = [40.7, -117.5; 39, -109.8; 37.2, -100.9];
+names = {'BasinRange', 'ColoradoPlateau', 'Interior'};
+zrange = [75, 105; 120, 150; 120, 150];
+location_colors={[1,0.6,0];[0,0.8,0];[0,0.3,0]};
+% Yellowstone, [45,-111], [75,105], [1,0,0]
 
 % Extract the relevant values for the input depth range.
 % Need to choose the attenuation method used for anelastic calculations
