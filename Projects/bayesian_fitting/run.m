@@ -38,6 +38,7 @@ q_methods = {'eburgers_psp', 'xfit_mxw', 'xfit_premelt', 'andrade_psp'};
 
 RegionalFits=struct();
 EnsemblePDF=struct();
+EnsemblePDF_no_mxw=struct();
 firstRun=1;
 for iq = 1:length(q_methods)
     q_method = q_methods{iq};
@@ -78,15 +79,18 @@ for iq = 1:length(q_methods)
         %p_joint = sum(posterior .* p_marginal_box, 3);
         %p_joint=p_joint/sum(p_joint(:));
         p_joint = sum(posterior,3);
-        if ~strcmp(q_method,'xfit_mxw')
-          if ~isfield(EnsemblePDF,locname)
-            EnsemblePDF.(locname).p_joint=p_joint;
-            EnsemblePDF.(locname).post_T=posterior_A.T;
-            EnsemblePDF.(locname).post_phi=posterior_A.phi;
-          else
-            EnsemblePDF.(locname).p_joint=EnsemblePDF.(locname).p_joint+p_joint;
-          end
-        end
+        EnsemblePDF = storeEnsemble(EnsemblePDF,locname,q_method,p_joint,posterior_A,1);
+        EnsemblePDF_no_mxw = storeEnsemble(EnsemblePDF,locname,q_method,p_joint,posterior_A,0);
+          
+        % if ~strcmp(q_method,'xfit_mxw')
+        %   if ~isfield(EnsemblePDF,locname)
+        %     EnsemblePDF.(locname).p_joint=p_joint;
+        %     EnsemblePDF.(locname).post_T=posterior_A.T;
+        %     EnsemblePDF.(locname).post_phi=posterior_A.phi;
+        %   else
+        %     EnsemblePDF.(locname).p_joint=EnsemblePDF.(locname).p_joint+p_joint;
+        %   end
+        % end
 
         % store regional fits for combo plot
         RegionalFits.(q_method).(locname)=struct();
@@ -98,12 +102,11 @@ for iq = 1:length(q_methods)
 
 end
 
-
-N_models = 3; % (not including xfit_mxw)
 for il = 1:length(locs)
   locname = names{il};
-  EnsemblePDF.(locname).p_joint=EnsemblePDF.(locname).p_joint/ N_models; % equal weighting
+  EnsemblePDF.(locname).p_joint=EnsemblePDF.(locname).p_joint/ 4; % equal weighting
+  EnsemblePDF_no_mxw.(locname).p_joint=EnsemblePDF_no_mxw.(locname).p_joint/ 3; % equal weighting
 end
 
 plot_RegionalFits(RegionalFits,locs,names,location_colors);
-plot_EnsemblePDFs(EnsemblePDF,locs,names,location_colors)
+plot_EnsemblePDFs(EnsemblePDF,EnsemblePDF_no_mxw,locs,names,location_colors)

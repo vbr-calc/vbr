@@ -1,8 +1,20 @@
-function plot_EnsemblePDFs(EnsemblePDF,locs,names,location_colors)
+function plot_EnsemblePDFs(EnsemblePDF,EnsemblePDF_no_mxw,locs,names,location_colors)
 
   % plot ensemble PDFs
-  f_en = figure('color', 'w');
-  ax = axes();
+  f_en = figure('color', 'w','paperunits','inches','paperposition',[0,0,6,3]);  
+  ax1 = plot_panel(EnsemblePDF,locs,names,location_colors,1,'Full Ensemble');
+  ax2 = plot_panel(EnsemblePDF_no_mxw,locs,names,location_colors,2,'Excluding xfit\_mxw');
+
+  disp('    saving ensemble plots to plots/')
+  saveas(f_en, ['plots/ensemble_fits.eps'],'epsc');
+  saveas(f_en, ['plots/ensemble_fits.png'],'png');
+  close all
+
+end
+
+function ax = plot_panel(EnsemblePDF,locs,names,location_colors,iplt,titlename)
+  ax = subplot(1,2,iplt)
+  title(titlename)
   set(gca,'box','on')
   hold on
   ylabel('Temperature (^\circC)');
@@ -20,17 +32,11 @@ function plot_EnsemblePDFs(EnsemblePDF,locs,names,location_colors)
        levs=[targ_cutoffs(icutoff),targ_cutoffs(icutoff)];
        sz=szs(icutoff);
        this_clr=location_colors{il};
-       try
+       try         
          contour(phi_ax, T_ax, PDF, levs, 'linewidth', sz,'color',this_clr,'displayname',locname)
        catch
          contour(phi_ax, T_ax, PDF, levs, 'linewidth', sz,'linecolor',this_clr,'displayname',locname)
        end
      end
   end
-
-  disp('    saving ensemble plots to plots/')
-  saveas(f_en, ['plots/ensemble_fits.eps'],'epsc');
-  saveas(f_en, ['plots/ensemble_fits.png'],'png');
-  close all
-
-end
+end 
