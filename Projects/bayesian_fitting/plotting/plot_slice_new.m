@@ -63,12 +63,15 @@ sweep = apply_limits(sweep);
     for nm = 1:length(fnames_short)
         titstr = [titstr, fnames_short{nm}, ', '];
     end
-    titstr = sprintf('%s as a function of %s  (%.1g GPa, %.0f - %.0f s)', ...
-        fieldname, titstr(1:end-2), mean(sweep.P_GPa(sweep.z_inds)), ...
-        sweep.per_bw_min, sweep.per_bw_max);
-    axes('position', [0, 0, 1, 1], 'visible', 'off');
-    text(0.37, 0.95 -   0.5 * (ifld -1), titstr, 'fontsize', 20, 'fontweight', 'bold')
+    
+    
   end
+  
+  titstr = sprintf('Vs, Q as a function of %s  (%.1g GPa, %.0f - %.0f s)', ...
+      titstr(1:end-2), mean(sweep.P_GPa(sweep.z_inds)), ...
+      sweep.per_bw_min, sweep.per_bw_max);
+  axes('position', [0, 0, 1, 1], 'visible', 'off');
+  text(0.4, 0.93, titstr, 'fontsize', 14, 'fontweight', 'bold')
 
 saveas(f,[fnameout,'.png'])
 saveas(f,[fnameout,'.eps'],'epsc')
@@ -78,7 +81,7 @@ function ax = plot_panel(value, sweep, order, fixed_vals,ifld)
 
     i1 = order(1); i2 = order(2); i3 = order(3);
     xpos = 0.1 + 0.3 * (i3 - 1);
-    ypos = 0.55 - 0.5 * (ifld -1);
+    ypos = 0.55 - 0.35 * (ifld -1);
     % disp(ypos)
     ax = axes('position', [xpos, ypos, .225, 0.3]);
     % [left bottom width height]
@@ -87,34 +90,46 @@ function ax = plot_panel(value, sweep, order, fixed_vals,ifld)
     % For each pair of parameters, plot the tradeoff in the seismic
     % property
     fields = sweep.state_names;
-    imagesc(sweep.(fields{i2}), sweep.(fields{i1}), value);
-    % contourf(sweep.(fields{i2}), sweep.(fields{i1}), value,'linestyle','none');
+    % imagesc(sweep.(fields{i2}), sweep.(fields{i1}), value);
+    contourf(sweep.(fields{i2}), sweep.(fields{i1}), value,'linestyle','none');
     hold on 
     contour(sweep.(fields{i2}), sweep.(fields{i1}), value,'--k');
     hold off
-    xlabel(sweep.fnames{i2})
+    if ifld == 1
+      xlabel('')
+    else 
+      xlabel(sweep.fnames{i2})
+    end 
     ylabel(sweep.fnames{i1});
-    set(ax, 'ydir', 'normal', 'fontsize', 18)
-    titstr = strsplit(sweep.fnames{order(end)}, '(');
-    if length(titstr) > 1
-        title(sprintf('%s fixed at %g %s', titstr{1}, ...
-            fixed_vals(order(end)), titstr{2}(1:end-1)));
-    else
-        title(sprintf('%s fixed at %g', titstr{1}, ...
-            fixed_vals(order(end))));
-    end
+    set(ax, 'ydir', 'normal', 'fontsize', 12)
+    
+    if ifld == 1
+      titstr = strsplit(sweep.fnames{order(end)}, '(');
+      if length(titstr) > 1
+          title(sprintf('%s fixed at %g %s', titstr{1}, ...
+              fixed_vals(order(end)), titstr{2}(1:end-1)));
+      else
+          title(sprintf('%s fixed at %g', titstr{1}, ...
+              fixed_vals(order(end))));
+      end
+    end 
 
 end
 
 function make_colourbars_uniform(ax_handles, c_label, cl)
+  
+    column_num = 1;
     for ax = ax_handles
         axes(ax)
-        c = colorbar;    
-        ylabel(c, c_label);
-        set(ax, 'CLim', cl)
+        if column_num < 4
+            c = colorbar;    
+            ylabel(c, c_label)
+        end 
+        set(ax, 'CLim', cl,'fontsize',14)
         colormap([linspace(220, 0, 25)' ./ 255, ...
             linspace(50, 90, 25)' ./ 255, ...
             linspace(32, 181, 25)' ./ 255]);
+        column_num = column_num + 1; 
     end
 end
 
