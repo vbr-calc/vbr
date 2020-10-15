@@ -80,7 +80,7 @@ for iq = 1:length(q_methods)
         %p_joint=p_joint/sum(p_joint(:));
         p_joint = sum(posterior,3);
         EnsemblePDF = storeEnsemble(EnsemblePDF,locname,q_method,p_joint,posterior_A,1);
-        EnsemblePDF_no_mxw = storeEnsemble(EnsemblePDF,locname,q_method,p_joint,posterior_A,0);
+        EnsemblePDF_no_mxw = storeEnsemble(EnsemblePDF_no_mxw,locname,q_method,p_joint,posterior_A,0);
           
         % if ~strcmp(q_method,'xfit_mxw')
         %   if ~isfield(EnsemblePDF,locname)
