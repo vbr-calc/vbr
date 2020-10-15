@@ -64,7 +64,7 @@ function [VBR]=checkInput(VBR)
             if strcmp(Defs{ri},'null')==0
               VBR.in.(fieldvars{1}).methods_list={Defs{ri}};
               msg=['VBR.in.',typ,'.',method,' does not have a required method set, setting:'];
-              msg_2=["\n   VBR.in.",fieldvars{1},'.methods_list={''',Defs{ri},'''}',"\n"];
+              msg_2=['\n   VBR.in.',fieldvars{1},'.methods_list={''',Defs{ri},'''}','\n'];
               msg=strcat(msg,msg_2);
               fprintf(msg)
             else
@@ -81,8 +81,8 @@ function [VBR]=checkInput(VBR)
           % save the message & exit if error caught
           if VBR.status==0
             msg=Msgs{ri};
-            msg=strcat("\n!!! VBR FAILURE !!!\n",msg);
-            msg=strcat(msg,"\n!!! VBR FAILURE !!!\n");
+            msg=strcat('\n!!! VBR FAILURE !!!\n',msg);
+            msg=strcat(msg,'\n!!! VBR FAILURE !!!\n');
             VBR.error_message=msg;
             return;
           end
