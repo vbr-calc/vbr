@@ -88,17 +88,25 @@ function status = fetchOneFile(urlname,locfile)
 
     if status>0
       msg=['Failed to fetch data for bayesian_fitting Project.\n\n'...
-           'Native matlab command failed with: \n',
-           urlerror.message, '\n',
-           'Attempted to fetch data with wget, which failed with \n',
-           results,'\n',
-           'To get the data, you can \n ',
-           '1. visit https://github.com/vbr-calc/vbrPublicData ',
-           'and click "Clone or download"-> "Download zip".',
-           '2. unpack the zip and move the contents of LAB_fitting_bayesian/data to ',
+           'Native matlab command failed with: \n' ...
+           urlerror.message, '\n' ...
+           'Attempted to fetch data with wget, which failed with \n'...
+           results,'\n' ...
+           'To get the data, you can \n ' ...
+           '1. visit https://github.com/vbr-calc/vbrPublicData ' ...
+           'and click "Clone or download"-> "Download zip".' ...
+           '2. unpack the zip and move the contents of ' ...
+           'LAB_fitting_bayesian/data to ' ...
            'vbr/Projects/bayesian_fitting/data/'];
-      urlerror.message=msg ;
-      rethrow(urlerror);
+      try
+          % octave friendly, fails for matlab (urlerror is read only)
+          urlerror.message=msg ;
+          rethrow(urlerror);
+      catch
+          % matlab friendly
+          newErr=MException(urlerror.identifier,msg);
+          newErr.throw()
+      end
     end
   end
 
