@@ -91,9 +91,9 @@ function ax = plot_panel(value, sweep, order, fixed_vals,ifld)
     % property
     fields = sweep.state_names;
     % imagesc(sweep.(fields{i2}), sweep.(fields{i1}), value);
-    contourf(sweep.(fields{i2}), sweep.(fields{i1}), value,'linestyle','none',bins = 100);
+    contourf(sweep.(fields{i2}), sweep.(fields{i1}), value,100,'linestyle','none');
     hold on 
-    contour(sweep.(fields{i2}), sweep.(fields{i1}), value,'--k',bins = 10);
+    contour(sweep.(fields{i2}), sweep.(fields{i1}), value,'--k');
     hold off
     if ifld == 1
       xlabel('')
