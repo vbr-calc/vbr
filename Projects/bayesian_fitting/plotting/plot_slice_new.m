@@ -1,6 +1,7 @@
 function plot_slice_new(sweep, fixed_vals, fnameout)
 
-f = figure('position', [400, 400, 2050, 1200], 'color', 'w');
+f = figure('position', [400, 400, 2050, 1200], 'color', 'w',...
+    'paperorientation','landscape','paperunits','inches','paperposition',[0,0,18,10]);
 
 % Write out names and units
 fields = sweep.state_names;
@@ -70,7 +71,7 @@ sweep = apply_limits(sweep);
   end
 
 saveas(f,[fnameout,'.png'])
-saveas(f,[fnameout,'.eps'])
+saveas(f,[fnameout,'.eps'],'epsc')
 end
 
 function ax = plot_panel(value, sweep, order, fixed_vals,ifld)
