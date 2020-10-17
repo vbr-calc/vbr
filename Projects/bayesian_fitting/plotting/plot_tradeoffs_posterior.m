@@ -35,7 +35,8 @@ function plot_tradeoffs_posterior(posterior, sweep, obs_name, q_method)
 q_method = strrep(q_method, '_', '\_');
 
 
-f = figure('position', [400, 200, 1300, 700], 'color', 'w');
+f = figure('position', [400, 200, 1300, 700], 'color', 'w','paperunits','inches',...
+           'paperposition',[0,0,14,6.5]);
 posterior = posterior ./ sum(posterior(:));
 
 % Write out names and units
@@ -71,7 +72,7 @@ for nm = 1:length(fnames_short)
 end
 titstr = [titstr(1:end-2), ' | ', obs_name];
 tax = axes('position', [0, 0, 1, 1], 'visible', 'off');
-text(0.37 - length(obs_name)/300, 0.95,...
+text(0.37 - length(obs_name)/300, 0.96,...
     ['p(', titstr, '), using ', q_method], 'fontsize', 16, 'fontweight', 'bold')
 
 
