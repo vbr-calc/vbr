@@ -91,22 +91,25 @@ end
 
 % Preferably, load in a large, pre-calculated box
 if ~exist('sweep','var')
-fname = 'data/plate_VBR/sweep_more.mat';
+fname = 'data/plate_VBR/sweep_more_pt1mm.mat';
 if ~exist(fname, 'file')
     sweep_params.T = 1200:10:1800; %[degrees C]
     sweep_params.phi = (0.0:0.0025:0.05); % melt fraction
-    sweep_params.gs = linspace(0.001,0.03,10)*1e6; % grain size [micrometres]
-    % Set period range for the mask - used to define which calculated
-    % velocities go into the returned average Vs for those conditions
-    sweep_params.per_bw_max = 150; % max period of range of mask (s)
-    sweep_params.per_bw_min = 50; % min period of range of mask (s)
-
-    % load('data/plate_VBR/PREMfit.mat');
-    % sweep_params.prem_fit=prem_fit;
+    sweep_params.gs = linspace(0.0001,0.03,20)*1e6; % grain size [micrometres]
+    sweep_params.per_bw_max = 150; % max period (s)
+    sweep_params.per_bw_min = 50; % min period (s)
 
     sweep = generate_parameter_sweep(sweep_params);
     clear sweep_params
-    save(fname, 'sweep')
+    try
+        save(fname, 'sweep','-mat7-binary')
+    catch ME
+        if strcmp(ME.identifier,'MATLAB:badopt')
+            save(fname, 'sweep')
+        else
+            rethrow(ME)
+        end
+    end 
 end
 
 load(fname, 'sweep');

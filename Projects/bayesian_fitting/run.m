@@ -35,10 +35,10 @@ filenames.LAB = './data/LAB_models/HopperFischer2018.mat';
 
 q_methods = {'eburgers_psp', 'xfit_mxw', 'xfit_premelt', 'andrade_psp'};
 
-fig_prefix_dir = 'gsNormal_1cm_2mm';
+fig_prefix_dir = 'gsNormal_5cm_5mm';
 grain_size_prior = struct(); 
-grain_size_prior.gs_mean = 10 * 1e3; 
-grain_size_prior.gs_std = 2 * 1e3;
+grain_size_prior.gs_mean = 20 * 1e3; 
+grain_size_prior.gs_std = 5 * 1e3;
 grain_size_prior.gs_pdf_type = 'normal'; 
 
 RegionalFits=struct();

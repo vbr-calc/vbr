@@ -41,29 +41,29 @@ function sweep = generate_parameter_sweep(sweep_params)
 %                           structure with the following fields
 %               meanVs          vector of calculated Vs (mean within the
 %                               given frequency range) [km/s]
-%               meanQinv        vector of calculated attentuation (mean
+%               meanQ           vector of calculated Q (mean
 %                               within the given frequency range)
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 % construct state variable fields
-z = linspace(0,300,150)*1e3; z= z';
+z = linspace(30,200,100)*1e3; z= z';
 VBR.in.z = z;
-VBR.in.SV.P_GPa = z * 3300 * 9.8 /1e9;
-VBR.in.SV.sig_MPa = 0.1*ones(size(z));
-VBR.in.SV.Ch2o = zeros(size(z)); % in PPM!
-VBR.in.SV.rho = 3300 * ones(size(z)); % [Pa]
-VBR.in.SV.chi = ones(size(z));
+sweep_params.P_GPa = z * 3300 * 9.8 /1e9;
 VBR.in.SV.f = logspace(-2.2,-1.3,10);
-VBR.in.SV.T_K = (1450 + 273) * ones(size(z));
-VBR.in.SV.phi = zeros(size(z));
-VBR.in.SV.dg_um = 1000 * ones(size(z));
-solidus_C = SoLiquidus(VBR.in.SV.P_GPa, zeros(size(z)),zeros(size(z)),...
-    'hirschmann');
-VBR.in.SV.Tsolidus_K = solidus_C.Tsol + 273;
-% Note, the parameters that we are sweeping through will be
-% overwritten in calculate_sweep()!
+
+[T,phi,gs] = ndgrid(sweep_params.T,sweep_params.phi,sweep_params.gs);
+VBR.in.SV.T_K = T + 273;
+VBR.in.SV.phi = phi;
+VBR.in.SV.dg_um = gs;
+
+Tshp = size(T);
+VBR.in.SV.sig_MPa = 0.1*ones(Tshp);
+VBR.in.SV.Ch2o = zeros(Tshp); % in PPM!
+VBR.in.SV.rho = 3300 * ones(Tshp); % [Pa]
+VBR.in.SV.chi = ones(Tshp);
+VBR.in.SV.phi = zeros(Tshp);
 
 % write method list (these are the things to calculate)
 % Use all available methods except xfit_premelt
@@ -73,22 +73,11 @@ viscous = feval(fetchParamFunction('viscous'), '');
 VBR.in.viscous.methods_list = viscous.possible_methods;
 anelastic = feval(fetchParamFunction('anelastic'), '');
 VBR.in.anelastic.methods_list = anelastic.possible_methods;
-
-% load in settings that you might want to overwrite (optional)
-%  (each will be called internally if you don't call them here)
-% VBR.in.elastic.anharmonic=Params_Elastic('anharmonic'); % unrelaxed elasticity
-% VBR.in.elastic.poro_Takei=Params_Elastic('poro_Takei'); % unrelaxed poro-elasticity
-% VBR.in.viscous.HK2003 = Params_Viscous('HK2003'); % viscous parameters
-% VBR.in.viscous.LH2012 = Params_Viscous('LH2012'); % viscous parameters
-% VBR.in.anelastic.eBurgers = Params_Anelastic('eBurgers'); % anelasticity
-% VBR.in.anelastic.AndradePsP = Params_Anelastic('AndradePsP'); % anelasticity
+VBR.in.anelastic.eburgers_psp = Params_Anelastic('eburgers_psp');
+VBR.in.anelastic.eburgers_psp.method = 'FastBurger';
 
 % Generate parameter sweep and calculate VBR at each combination
-if isfield(sweep_params,'prem_fit')
-  sweepBox = calculate_sweep_w_varrho(VBR, sweep_params);
-else
-  sweepBox = calculate_sweep(VBR, sweep_params);
-end
+sweepBox = calculate_sweep(VBR, sweep_params);
 
 sweep = sweep_params;
 sweep.z = VBR.in.z;
@@ -98,235 +87,98 @@ sweep.P_GPa = VBR.in.SV.P_GPa;
 sweep.cH2O = VBR.in.SV.Ch2o;
 sweep.state_names = {'T', 'phi', 'gs'};
 
-
-
-
 end
-
 
 function [sweepBox] = calculate_sweep(VBR_init, sweep_params)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% sweepBox = calculate_sweep(sweep_params);
-%
-% Calls extract_meanVs_Q() to calculate mean Vs and Q values given the
-% fixed parameters given in VBR_init and across all combinations of the
-% parameters given in sweep_params (T, phi, gs) for the frequency range
-% given in sweep_params.
-%
-% Parameters:
-% -----------
-%       sweep_params       structure with the following required fields
-%               T               vector of temperature values [deg C]
-%               phi             vector of melt fractions [vol (?) fraction]
-%               gs              vector of grain sizes [micrometres]
-%               per_bw_max      maximum period (min. freq.) considered [s]
-%               per_bw_min      minimum period (max. freq.) considered [s]
-%
-%       VBR                 structure of fixed values for the VBR input
-%                           including information on assumed pressure,
-%                           stress, water content, density
-%
-% Output:
-% -------
-%       sweepBox          (numel(sweep_params.T) x numel(sweep_params.phi)
-%                           x numel(sweep_params.gs)) structure.  Each
-%                          element contains a field for each of the
-%                          anelastic methods in given in
-%                          VBR.in.anelastic.methods_list
-%       sweep.Box.[anelastic method name]
-%                           structure with the following fields
-%               meanVs          vector of calculated Vs (mean within the
-%                               given frequency range) [km/s]
-%               meanQinv        vector of calculated attentuation (mean
-%                               within the given frequency range)
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % sweepBox = calculate_sweep(sweep_params);
+    %
+    % Calls extract_meanVs_Q() to calculate mean Vs and Q values given the
+    % fixed parameters given in VBR_init and across all combinations of the
+    % parameters given in sweep_params (T, phi, gs) for the frequency range
+    % given in sweep_params.
+    %
+    % Parameters:
+    % -----------
+    %       sweep_params       structure with the following required fields
+    %               T               vector of temperature values [deg C]
+    %               phi             vector of melt fractions [vol (?) fraction]
+    %               gs              vector of grain sizes [micrometres]
+    %               per_bw_max      maximum period (min. freq.) considered [s]
+    %               per_bw_min      minimum period (max. freq.) considered [s]
+    %
+    %       VBR                 structure of fixed values for the VBR input
+    %                           including information on assumed pressure,
+    %                           stress, water content, density
+    %
+    % Output:
+    % -------
+    %       sweepBox          (numel(sweep_params.T) x numel(sweep_params.phi)
+    %                           x numel(sweep_params.gs)) structure.  Each
+    %                          element contains a field for each of the
+    %                          anelastic methods in given in
+    %                          VBR.in.anelastic.methods_list
+    %       sweep.Box.[anelastic method name]
+    %                           structure with the following fields
+    %               meanVs          vector of calculated Vs (mean within the
+    %                               given frequency range) [km/s]
+    %               meanQinv        vector of calculated attentuation (mean
+    %                               within the given frequency range)
+    %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Define values for masking
-freq_range = sort([1./sweep_params.per_bw_max 1./sweep_params.per_bw_min]);
-min_freq = freq_range(1);
-max_freq = freq_range(2);
+    VBR = VBR_init; 
+    P_GPa0 = sweep_params.P_GPa; 
+    n_T   = numel(sweep_params.T);
+    n_phi    = numel(sweep_params.phi);
+    n_gs     = numel(sweep_params.gs);
+    nZ = numel(P_GPa0);
+    nP = numel(P_GPa0);
 
-n_T   = numel(sweep_params.T);
-n_phi    = numel(sweep_params.phi);
-n_gs     = numel(sweep_params.gs);
-N_TOT = n_T*n_phi*n_gs;
+    VBRBox(numel(P_GPa0)) = struct();
+    % now loop it, store the mean value arrays
+    disp('    generating parameter sweep')
+    Tshp = size(VBR.in.SV.T_K);
+    for i_P = 1:nP
+      tic()
+      disp(['    calculating step ',num2str(i_P),' of ',num2str(nP)])
+      VBR.in.SV.P_GPa = P_GPa0(i_P) * ones(Tshp);
+      solidus_C = SoLiquidus(VBR.in.SV.P_GPa, zeros(Tshp), zeros(Tshp), 'hirschmann');
+      VBR.in.SV.Tsolidus_K = solidus_C.Tsol + 273;
+      VBR = VBR_spine(VBR);
+      telapsed = toc() ;
+      disp(['         step complete after ',num2str(telapsed/60),' mins, storing result.'])
+      % get averages over frequencies at this pressure/depth 
+      anelastic_methods = fieldnames(VBR.out.anelastic);
+      for i_an = 1:length(anelastic_methods)
+        ameth = anelastic_methods{i_an};
+        Q = VBR.out.anelastic.(ameth).Q;
+        V = VBR.out.anelastic.(ameth).V/1e3;
+        VBRBox(i_P).(ameth).Qmean = mean(Q,4); # size is (T,phi,gs)
+        VBRBox(i_P).(ameth).Vsmean = mean(V,4); # size is (T,phi,gs)
+      end 
+      
+    end 
 
-i_state=1;
-for i_T = n_T:-1:1  % run backwards so structure is preallocated
-    for i_phi = n_phi:-1:1
-        for i_gs = n_gs:-1:1
-            disp([num2str(i_state),' of ',num2str(N_TOT)])
-            % copy initial VBR structure and overwrite input state
-            % variables for asthenospheric depth
-            VBR = VBR_init;
-            VBR.in.SV.phi = sweep_params.phi(i_phi) ...
-                * ones(size(VBR.in.z));
-            VBR.in.SV.dg_um = sweep_params.gs(i_gs) ...
-                * ones(size(VBR.in.z));
-            VBR.in.SV.T_K = sweep_params.T(i_T) + 273 ...
-                * ones(size(VBR.in.z));
-
-            % run VBR for asthenospheric depths (and current phi, gs, T)
-            VBR = VBR_spine(VBR);
-
-            sweepBox(i_T, i_phi, i_gs) = ...
-                extract_meanVs_Q(VBR, min_freq, max_freq);
-
-
-            i_state=i_state+1;
+    disp('    sweep complete: rearranging structure...')
+    % re-arrange it all to match what's expected later
+    sweepBox(n_T,n_phi,n_gs) = struct();
+    for i_state=1:n_T*n_phi*n_gs
+        anelastic_methods = VBR.in.anelastic.methods_list;
+        for i_an = 1:length(anelastic_methods)
+           ameth = anelastic_methods{i_an};
+           if isfield(sweepBox(i_state),ameth)==0
+               sweepBox(i_state).(ameth) = struct();
+           end
+           if isfield(sweepBox(i_state).(ameth),'Qmean')
+              sweepBox(i_state).(ameth).Qmean(i_P)=VBRBox(i_P).(ameth).Qmean(i_state);
+              sweepBox(i_state).(ameth).Vsmean(i_P)=VBRBox(i_P).(ameth).Vsmean(i_state);
+           else
+              sweepBox(i_state).(ameth).Qmean=zeros(nZ,1);
+              sweepBox(i_state).(ameth).Vsmean=zeros(nZ,1);
+           end
         end
     end
-end
-
-end
-
-function calculated_vals = extract_meanVs_Q(VBR, min_freq, max_freq)
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% sweepBox = extract_meanVs_Q(VBR, min_freq, max_freq);
-%
-% Calculates the mean Vs and Q at a range of depths for the initial VBR
-% values given
-%
-% Parameters:
-% -----------
-%       VBR                 structure of fixed values for the VBR input
-%                           including information on assumed pressure,
-%                           stress, water content, density, temperature,
-%                           grain size, and melt fraction.
-%
-% Output:
-% -------
-%       calculated_vals    Structure contains a field for each of the
-%                          anelastic methods in given in
-%                          VBR.in.anelastic.methods_list
-%       calculated_vals.[anelastic method name]
-%                           structure with the following fields
-%               meanVs          vector of calculated Vs (mean within the
-%                               given frequency range) [km/s]
-%               meanQinv        vector of calculated attentuation (mean
-%                               within the given frequency range)
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-anelastic_methods = fieldnames(VBR.out.anelastic);
-freq = VBR.in.SV.f;
-nn_pts = 1000; % number of points to interpolate frequency axis
-
-for i_an = 1:length(anelastic_methods)
-    Q_zf = VBR.out.anelastic.(anelastic_methods{i_an}).Q;
-    Vs_zf = VBR.out.anelastic.(anelastic_methods{i_an}).V/1000; % m/s to km/s
-
-    % 2D interplations of Qinv(z,f) and Vs(z,f) over frequency only
-    [Vs_zf, ~, ~] = interp_FreqZ(Vs_zf, freq, nn_pts,...
-        VBR.in.z, length(VBR.in.z));
-    [Q_zf, freq_interp, ~] = interp_FreqZ(Q_zf, freq, nn_pts,...
-        VBR.in.z, length(VBR.in.z));
-
-    % Mask Vs and Q in frequency and depth
-    f_mask = ((freq_interp >= min_freq) & (freq_interp <= max_freq));
-    Vs_zf_mask = Vs_zf(:, f_mask);
-    Q_zf_mask = Q_zf(:, f_mask);
-
-    % Calculate mean Vs and Q of mask
-    meanVs = mean(Vs_zf_mask, 2);
-    meanQ = mean(Q_zf_mask, 2);
-    calculated_vals.(anelastic_methods{i_an}).meanVs = meanVs;
-    calculated_vals.(anelastic_methods{i_an}).meanQ = meanQ;
-
-end
-
-end
-
-
-function sweepBox = calculate_sweep_w_varrho(VBR_init, sweep_params)
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %
-  % sweepBox = calculate_sweep_w_varrho(sweep_params);
-  %
-  % same as calculate_sweep, but with a density.
-  %
-  % Parameters:
-  % -----------
-  %       sweep_params       structure with the following required fields
-  %               T               vector of temperature values [deg C]
-  %               phi             vector of melt fractions [vol (?) fraction]
-  %               gs              vector of grain sizes [micrometres]
-  %               per_bw_max      maximum period (min. freq.) considered [s]
-  %               per_bw_min      minimum period (max. freq.) considered [s]
-  %
-  %       VBR                 structure of fixed values for the VBR input
-  %                           including information on assumed pressure,
-  %                           stress, water content, density
-  %
-  % Output:
-  % -------
-  %       sweepBox          (numel(sweep_params.T) x numel(sweep_params.phi)
-  %                           x numel(sweep_params.gs)) structure.  Each
-  %                          element contains a field for each of the
-  %                          anelastic methods in given in
-  %                          VBR.in.anelastic.methods_list
-  %       sweep.Box.[anelastic method name]
-  %                           structure with the following fields
-  %               meanVs          vector of calculated Vs (mean within the
-  %                               given frequency range) [km/s]
-  %               meanQinv        vector of calculated attentuation (mean
-  %                               within the given frequency range)
-  %
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  disp('generating param sweep with density correction')
-
-  % Define values for masking
-  freq_range = sort([1./sweep_params.per_bw_max 1./sweep_params.per_bw_min]);
-  min_freq = freq_range(1);
-  max_freq = freq_range(2);
-
-  n_T   = numel(sweep_params.T);
-  n_phi    = numel(sweep_params.phi);
-  n_gs     = numel(sweep_params.gs);
-  N_TOT = n_T*n_phi*n_gs;
-
-  premfit=sweep_params.prem_fit;
-  alpha=3*1e-5; % thermal expansion coeff
-  i_state=1;
-  for i_T = n_T:-1:1  % run backwards so structure is preallocated
-      for i_phi = n_phi:-1:1
-          for i_gs = n_gs:-1:1
-              disp([num2str(i_state),' of ',num2str(N_TOT)])
-              % copy initial VBR structure and overwrite input state
-              % variables for asthenospheric depth
-              VBR = VBR_init;
-
-              z_km=VBR.in.z/1e3;
-              T_ref=interp1(premfit.zref,premfit.Tref,z_km);
-              rho_ref=interp1(premfit.zref,premfit.rhoref,z_km);
-              dT=T_ref-sweep_params.T(i_T);
-
-              VBR.in.SV.phi = sweep_params.phi(i_phi) ...
-                  * ones(size(VBR.in.z));
-              %VBR.in.SV.rho=rho_ref.*(1-(dT*alpha));
-              VBR.in.SV.rho=rho_ref.*(1-(dT*alpha))-500*sweep_params.phi(i_phi);
-              P=cumtrapz(VBR.in.SV.rho,VBR.in.z)*9.8; 
-              VBR.in.SV.P_GPa=P/1e9;
-              
-              VBR.in.SV.dg_um = sweep_params.gs(i_gs) ...
-                  * ones(size(VBR.in.z));
-              VBR.in.SV.T_K = sweep_params.T(i_T) + 273 ...
-                  * ones(size(VBR.in.z));
-
-              % run VBR for asthenospheric depths (and current phi, gs, T)
-              VBR = VBR_spine(VBR);
-
-              sweepBox(i_T, i_phi, i_gs) = ...
-                  extract_meanVs_Q(VBR, min_freq, max_freq);
-
-
-              i_state=i_state+1;
-          end
-      end
-  end
-
+    disp('sweep complete!')
 end
