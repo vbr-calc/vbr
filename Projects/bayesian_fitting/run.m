@@ -35,10 +35,19 @@ filenames.LAB = './data/LAB_models/HopperFischer2018.mat';
 
 q_methods = {'eburgers_psp', 'xfit_mxw', 'xfit_premelt', 'andrade_psp'};
 
+fig_prefix_dir = 'gsNormal_1cm_2mm';
+grain_size_prior = struct(); 
+grain_size_prior.gs_mean = 10 * 1e3; 
+grain_size_prior.gs_std = 2 * 1e3;
+grain_size_prior.gs_pdf_type = 'normal'; 
 
 RegionalFits=struct();
 EnsemblePDF=struct();
 EnsemblePDF_no_mxw=struct();
+tradeoffDir = ['plots','/','output_plots','/',fig_prefix_dir];
+if isdir(tradeoffDir) == 0 
+    mkdir(tradeoffDir);
+end 
 firstRun=1;
 for iq = 1:length(q_methods)
     q_method = q_methods{iq};
@@ -55,18 +64,18 @@ for iq = 1:length(q_methods)
         disp(['     fitting ',locname])
 
         if firstRun==1
-          [posterior_A,sweep] = fit_seismic_observations(filenames, location, q_method);
+          [posterior_A,sweep] = fit_seismic_observations(filenames, location, q_method, grain_size_prior);
           firstRun=0;
         else
-          [posterior_A,sweep] = fit_seismic_observations(filenames, location, q_method, sweep);
+          [posterior_A,sweep] = fit_seismic_observations(filenames, location, q_method, grain_size_prior, sweep);
         end
 
         disp('        saving plots...')
-        saveas(gcf, ['plots/output_plots/', names{il}, '_VQ_', q_method, '.png']);
+        saveas(gcf, [tradeoffDir,'/', names{il}, '_VQ_', q_method, '.png']);
         close
-        saveas(gcf, ['plots/output_plots/', names{il}, '_Q_', q_method, '.png']);
+        saveas(gcf, [tradeoffDir,'/', names{il}, '_Q_', q_method, '.png']);
         close
-        saveas(gcf, ['plots/output_plots/', names{il}, '_V_', q_method, '.png']);
+        saveas(gcf, [tradeoffDir,'/', names{il}, '_V_', q_method, '.png']);
         close
         disp('        plots saved to plots/output_plots/')
 
@@ -108,5 +117,5 @@ for il = 1:length(locs)
   EnsemblePDF_no_mxw.(locname).p_joint=EnsemblePDF_no_mxw.(locname).p_joint/ 3; % equal weighting
 end
 
-plot_RegionalFits(RegionalFits,locs,names,location_colors);
-plot_EnsemblePDFs(EnsemblePDF,EnsemblePDF_no_mxw,locs,names,location_colors)
+plot_RegionalFits(RegionalFits,locs,names,location_colors,fig_prefix_dir);
+plot_EnsemblePDFs(EnsemblePDF,EnsemblePDF_no_mxw,locs,names,location_colors,fig_prefix_dir);

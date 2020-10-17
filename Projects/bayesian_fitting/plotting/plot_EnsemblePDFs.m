@@ -1,25 +1,25 @@
-function plot_EnsemblePDFs(EnsemblePDF,EnsemblePDF_no_mxw,locs,names,location_colors)
+function plot_EnsemblePDFs(EnsemblePDF,EnsemblePDF_no_mxw,locs,names,location_colors,fname_prefix)
 
   % plot ensemble PDFs
+  disp('building ensemble plots')
   f_en = figure('color', 'w','paperunits','inches','paperposition',[0,0,6,3]);  
   ax1 = plot_panel(EnsemblePDF,locs,names,location_colors,1,'Full Ensemble');
   ax2 = plot_panel(EnsemblePDF_no_mxw,locs,names,location_colors,2,'Excluding xfit\_mxw');
 
   disp('    saving ensemble plots to plots/')
-  saveas(f_en, ['plots/ensemble_fits.eps'],'epsc');
-  saveas(f_en, ['plots/ensemble_fits.png'],'png');
+  saveas(f_en, ['plots/',fname_prefix,'_ensemble_fits.eps'],'epsc');
+  saveas(f_en, ['plots/',fname_prefix,'_ensemble_fits.png'],'png');
   close all
 
 end
 
 function ax = plot_panel(EnsemblePDF,locs,names,location_colors,iplt,titlename)
-  ax = subplot(1,2,iplt)
+  ax = subplot(1,2,iplt);
   title(titlename)
   set(gca,'box','on')
   hold on
   ylabel('Temperature (^\circC)');
-  xlabel('Melt Fraction \phi');
-  disp('building ensemble plots')
+  xlabel('Melt Fraction \phi');  
   for il = 1:length(locs)
      locname = names{il};
      PDF=EnsemblePDF.(locname).p_joint;

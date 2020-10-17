@@ -1,4 +1,4 @@
-function [posterior,sweep] = fit_seismic_observations(filenames, location, q_method,sweep)
+function [posterior,sweep] = fit_seismic_observations(filenames, location, q_method, grain_size_prior, sweep)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % fit_seismic_observations
@@ -84,7 +84,7 @@ end
 
 
 %% %%%%%%%%%%%%%%%%%% Get prior for State Variables %%%%%%%%%%%%%%%%%%% %%
-% The prior probability distribution for the state variables can be      %
+% The prior probability distribution for the state variablegrain_size_priors can be      %
 % assumed to be either uniform or normal across the input range given.   %
 % The probability that the given state variable is actually correct.     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -126,13 +126,22 @@ end
 % Default is to calculate these based on the ranges set in sweep_params
 params = make_param_grid(sweep.state_names, sweep);
 % Note - can manually set the expected value and standard deviation for
-% each of your variables, e.g. params.T_mean = 1500; params.gs_std = 300;
-% params.gs_mean = 1e4; params.gs_std = 1e3;
+% each of your variables, e.g. params.T_mean = 1500; 
+
+% now reading in optional grain size prior to override 
+if isfield(grain_size_prior,'gs_mean')
+    fields2check = {'gs_mean';'gs_std';'gs_pdf_type';'gs_pdf'};
+    for ifdl = 1:numel(fields2check) 
+      thisfld = fields2check{ifdl}; 
+      if isfield(grain_size_prior,thisfld)
+          params.(thisfld) = grain_size_prior.(thisfld);
+      end 
+    end 
+end 
 
 % Calculate the prior for either a normal or uniform distribution
-pdf_type = {'uniform', 'uniform', 'normal'};
-prior_statevars = priorModelProbs(params, sweep.state_names, pdf_type);
-
+prior_statevars = priorModelProbs(params, sweep.state_names);
+sweep.prior_model_params = params; % store it so we have it. 
 
 %% %%%%%%%%%%%%%%%%%%%%% Get likelihood for Vs, Q %%%%%%%%%%%%%%%%%%%%%% %%
 % The likelihood p(D|A), e.g., P(Vs | T, phi, gs), is calculated using    %

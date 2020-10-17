@@ -1,4 +1,4 @@
-function plot_RegionalFits(RegionalFits,locs,names,location_colors)
+function plot_RegionalFits(RegionalFits,locs,names,location_colors,fname_prefix)
 
   f = figure('color', 'w');
 
@@ -61,8 +61,8 @@ function plot_RegionalFits(RegionalFits,locs,names,location_colors)
     set(gca,ylabelname,{},'box','on')
 
   disp('    saving regional fits to plots/')
-  saveas(f, ['plots/regional_fits.eps'],'epsc');
-  saveas(f, ['plots/regional_fits.png'],'png');
+  saveas(f, ['plots/',fname_prefix,'_regional_fits.eps'],'epsc');
+  saveas(f, ['plots/',fname_prefix,'_regional_fits.png'],'png');
   close all
 
 end
