@@ -91,11 +91,23 @@ end
 
 % Preferably, load in a large, pre-calculated box
 if ~exist('sweep','var')
-fname = 'data/plate_VBR/sweep_more_pt1mm.mat';
+fname = 'data/plate_VBR/sweep_more_fine.mat';
 if ~exist(fname, 'file')
-    sweep_params.T = 1200:10:1800; %[degrees C]
+    % production case (takes some hours)
+    sweep_params.T = 1100:10:1800; %[degrees C]
     sweep_params.phi = (0.0:0.0025:0.05); % melt fraction
     sweep_params.gs = linspace(0.0001,0.03,20)*1e6; % grain size [micrometres]
+    
+    % moderate test case (10ish mins)
+    % sweep_params.T = 1200:50:1800; %[degrees C]
+    % sweep_params.phi = (0.0:0.005:0.05); % melt fraction
+    % sweep_params.gs = linspace(0.001,0.01,10)*1e6; % grain size [micrometres]
+    
+    % quick test case 
+    % sweep_params.T = 1200:100:1800; %[degrees C]
+    % sweep_params.phi = (0.0:0.01:0.05); % melt fraction
+    % sweep_params.gs = linspace(0.0001,0.03,5)*1e6; % grain size [micrometres]
+    
     sweep_params.per_bw_max = 150; % max period (s)
     sweep_params.per_bw_min = 50; % min period (s)
 
@@ -132,15 +144,14 @@ params = make_param_grid(sweep.state_names, sweep);
 % each of your variables, e.g. params.T_mean = 1500; 
 
 % now reading in optional grain size prior to override 
-if isfield(grain_size_prior,'gs_mean')
-    fields2check = {'gs_mean';'gs_std';'gs_pdf_type';'gs_pdf'};
-    for ifdl = 1:numel(fields2check) 
+fields2check = {'gs_mean';'gs_std';'gs_pdf_type';'gs_pdf'};
+for ifdl = 1:numel(fields2check) 
       thisfld = fields2check{ifdl}; 
       if isfield(grain_size_prior,thisfld)
           params.(thisfld) = grain_size_prior.(thisfld);
       end 
-    end 
 end 
+
 
 % Calculate the prior for either a normal or uniform distribution
 prior_statevars = priorModelProbs(params, sweep.state_names);

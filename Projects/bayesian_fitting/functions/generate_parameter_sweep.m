@@ -48,7 +48,7 @@ function sweep = generate_parameter_sweep(sweep_params)
 
 
 % construct state variable fields
-z = linspace(30,200,100)*1e3; z= z';
+z = linspace(50,170,120)*1e3; z= z';
 VBR.in.z = z;
 sweep_params.P_GPa = z * 3300 * 9.8 /1e9;
 VBR.in.SV.f = logspace(-2.2,-1.3,10);
@@ -63,7 +63,6 @@ VBR.in.SV.sig_MPa = 0.1*ones(Tshp);
 VBR.in.SV.Ch2o = zeros(Tshp); % in PPM!
 VBR.in.SV.rho = 3300 * ones(Tshp); % [Pa]
 VBR.in.SV.chi = ones(Tshp);
-VBR.in.SV.phi = zeros(Tshp);
 
 % write method list (these are the things to calculate)
 % Use all available methods except xfit_premelt
@@ -80,11 +79,11 @@ VBR.in.anelastic.eburgers_psp.method = 'FastBurger';
 sweepBox = calculate_sweep(VBR, sweep_params);
 
 sweep = sweep_params;
-sweep.z = VBR.in.z;
+sweep.z = z;
 sweep.Box = sweepBox;
 sweep.VBR = VBR;
-sweep.P_GPa = VBR.in.SV.P_GPa;
-sweep.cH2O = VBR.in.SV.Ch2o;
+sweep.P_GPa = sweep_params.P_GPa;
+% sweep.cH2O = VBR.in.SV.Ch2o;
 sweep.state_names = {'T', 'phi', 'gs'};
 
 end
@@ -140,6 +139,7 @@ function [sweepBox] = calculate_sweep(VBR_init, sweep_params)
     % now loop it, store the mean value arrays
     disp('    generating parameter sweep')
     Tshp = size(VBR.in.SV.T_K);
+    
     for i_P = 1:nP
       tic()
       disp(['    calculating step ',num2str(i_P),' of ',num2str(nP)])
@@ -153,10 +153,17 @@ function [sweepBox] = calculate_sweep(VBR_init, sweep_params)
       anelastic_methods = fieldnames(VBR.out.anelastic);
       for i_an = 1:length(anelastic_methods)
         ameth = anelastic_methods{i_an};
+        % disp(ameth)
         Q = VBR.out.anelastic.(ameth).Q;
         V = VBR.out.anelastic.(ameth).V/1e3;
+        % disp(size(V))
+        
         VBRBox(i_P).(ameth).Qmean = mean(Q,4); # size is (T,phi,gs)
         VBRBox(i_P).(ameth).Vsmean = mean(V,4); # size is (T,phi,gs)
+        % disp(size(VBRBox(i_P).(ameth).Qmean))
+        % disp(VBRBox(i_P).(ameth).Qmean(1:5))
+        % disp(VBRBox(i_P).(ameth).Vsmean(1:5))
+        % pause(5.)
       end 
       
     end 
@@ -171,14 +178,15 @@ function [sweepBox] = calculate_sweep(VBR_init, sweep_params)
            if isfield(sweepBox(i_state),ameth)==0
                sweepBox(i_state).(ameth) = struct();
            end
-           if isfield(sweepBox(i_state).(ameth),'Qmean')
-              sweepBox(i_state).(ameth).Qmean(i_P)=VBRBox(i_P).(ameth).Qmean(i_state);
-              sweepBox(i_state).(ameth).Vsmean(i_P)=VBRBox(i_P).(ameth).Vsmean(i_state);
-           else
-              sweepBox(i_state).(ameth).Qmean=zeros(nZ,1);
-              sweepBox(i_state).(ameth).Vsmean=zeros(nZ,1);
+           if isfield(sweepBox(i_state).(ameth),'meanQ') == 0 
+             sweepBox(i_state).(ameth).meanQ=zeros(nZ,1);
+             sweepBox(i_state).(ameth).meanVs=zeros(nZ,1);              
+           end
+           for i_P = 1:nP
+               sweepBox(i_state).(ameth).meanQ(i_P)=VBRBox(i_P).(ameth).Qmean(i_state);
+               sweepBox(i_state).(ameth).meanVs(i_P)=VBRBox(i_P).(ameth).Vsmean(i_state);
            end
         end
     end
-    disp('sweep complete!')
+    disp('    sweep complete!')
 end

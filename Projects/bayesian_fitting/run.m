@@ -33,13 +33,27 @@ filenames.Q = './data/Q_models/Dalton_Ekstrom_2008.mat';
 filenames.LAB = './data/LAB_models/HopperFischer2018.mat';
 
 
-q_methods = {'eburgers_psp', 'xfit_mxw', 'xfit_premelt', 'andrade_psp'};
+q_methods = {'eburgers_psp'; 'xfit_mxw'; 'xfit_premelt'; 'andrade_psp'};
 
-fig_prefix_dir = 'gsNormal_5cm_5mm';
-grain_size_prior = struct(); 
-grain_size_prior.gs_mean = 20 * 1e3; 
-grain_size_prior.gs_std = 5 * 1e3;
-grain_size_prior.gs_pdf_type = 'normal'; 
+% case 1: uniform 
+fig_prefix_dir = 'gsUniform'; 
+grain_size_prior.gs_pdf_type = 'uniform'; 
+
+% case 1a: default normal 
+% fig_prefix_dir = 'gsNormalDefault'; 
+% grain_size_prior.gs_pdf_type = 'normal'; 
+
+% case 2: prior on grain size 
+% fig_prefix_dir = 'gsNormal_1cm_2pt5mm';
+% grain_size_prior.gs_mean = 10 * 1e3; 
+% grain_size_prior.gs_std = 2.5 * 1e3;
+% grain_size_prior.gs_pdf_type = 'normal'; 
+
+% case 2: prior on subgrain size 
+% fig_prefix_dir = 'gsNormal_1mm_pt25mm';
+% grain_size_prior.gs_mean = 1 * 1e3; 
+% grain_size_prior.gs_std = .25 * 1e3;
+% grain_size_prior.gs_pdf_type = 'normal'; 
 
 RegionalFits=struct();
 EnsemblePDF=struct();
@@ -89,17 +103,7 @@ for iq = 1:length(q_methods)
         %p_joint=p_joint/sum(p_joint(:));
         p_joint = sum(posterior,3);
         EnsemblePDF = storeEnsemble(EnsemblePDF,locname,q_method,p_joint,posterior_A,1);
-        EnsemblePDF_no_mxw = storeEnsemble(EnsemblePDF_no_mxw,locname,q_method,p_joint,posterior_A,0);
-          
-        % if ~strcmp(q_method,'xfit_mxw')
-        %   if ~isfield(EnsemblePDF,locname)
-        %     EnsemblePDF.(locname).p_joint=p_joint;
-        %     EnsemblePDF.(locname).post_T=posterior_A.T;
-        %     EnsemblePDF.(locname).post_phi=posterior_A.phi;
-        %   else
-        %     EnsemblePDF.(locname).p_joint=EnsemblePDF.(locname).p_joint+p_joint;
-        %   end
-        % end
+        EnsemblePDF_no_mxw = storeEnsemble(EnsemblePDF_no_mxw,locname,q_method,p_joint,posterior_A,0);          
 
         % store regional fits for combo plot
         RegionalFits.(q_method).(locname)=struct();
