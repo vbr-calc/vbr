@@ -90,7 +90,7 @@ end
 function plot_box(posterior, sweep, i1, i2, i3)
 
 
-    xpos = 0.1 + 0.3 * (i3 - 1);
+    xpos = 0.09 + 0.31 * (i3 - 1);
     ax = axes('position', [xpos, 0.5, 0.225, 0.4]);
 
     sh = size(posterior);
@@ -161,10 +161,11 @@ function plot_box(posterior, sweep, i1, i2, i3)
     xlabel(sweep.fnames{i2})
     ylabel(sweep.fnames{i1});
     set(ax, 'ydir', 'normal')
+    originalSize1 = get(ax,'Position'); 
     caxis([0, joint_sc])
     colorbar
     
-    
+    set(ax, 'Position', originalSize1); 
     if log_the_x || log_the_y 
       ax_extra= axes('Position', get(ax, 'Position'),'Color', 'none');
       set(ax,'Box','off')
@@ -172,14 +173,21 @@ function plot_box(posterior, sweep, i1, i2, i3)
       set(ax_extra, 'XLim', get(ax, 'XLim'),'YLim', get(ax, 'YLim'));          
       if log_the_x
       % add second axis on top 
-        set(ax_extra,'Xtick',gs_logged,'XtickLabel',gs_unlogged,'XLabel',gs_label)      
+        set(ax_extra,'Xtick',gs_logged,'XtickLabel',gs_unlogged)      
         set(ax_extra,'Ytick',[],'YtickLabel',[])
+        axes(ax_extra);
+        xlabel(gs_label)
       elseif log_the_y
       % add second axis on right
-        set(ax_extra,'Ytick',gs_logged,'YtickLabel',gs_unlogged,'YLabel',gs_label)
+        set(ax_extra,'Ytick',gs_logged,'YtickLabel',gs_unlogged)
         set(ax_extra,'Xtick',[],'XtickLabel',[])
+        axes(ax_extra);
+        ylabel(gs_label)
       end 
+      set(ax_extra, 'Position', originalSize1); 
     end 
+    
+ 
 
     % 1D marginal
     ax2 = axes('position', [xpos, 0.35, 0.225, 0.05]);
@@ -196,8 +204,10 @@ function plot_box(posterior, sweep, i1, i2, i3)
       set(ax2,'Box','off')
       set(ax_extra2, 'XAxisLocation', 'top','YAxisLocation','Right');
       set(ax_extra2, 'XLim', get(ax2, 'XLim'),'YLim', get(ax2, 'YLim'));  
-      set(ax_extra2,'Xtick',gs_logged,'XtickLabel',gs_unlogged,'XLabel',gs_label)        
-      set(ax_extra2, 'Ytick', get(ax2, 'Ytick'),'YtickLabel',[]);  
+      set(ax_extra2,'Xtick',gs_logged,'XtickLabel',gs_unlogged)        
+      set(ax_extra2, 'Ytick', get(ax2, 'Ytick'),'YtickLabel',[]);
+      axes(ax_extra2)
+      xlabel(gs_label);
     end 
 
 
