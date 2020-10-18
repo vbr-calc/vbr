@@ -91,12 +91,19 @@ end
 
 % Preferably, load in a large, pre-calculated box
 if ~exist('sweep','var')
-fname = 'data/plate_VBR/sweep_more_fine.mat';
+fname = 'data/plate_VBR/sweep_log_gs.mat'; % the fine res one 
+%fname = 'data/plate_VBR/sweep_loggs1.mat'; % a coarse one
 if ~exist(fname, 'file')
     % production case (takes some hours)
-    sweep_params.T = 1100:10:1800; %[degrees C]
+    sweep_params.T = 1100:20:1800; %[degrees C]
     sweep_params.phi = (0.0:0.0025:0.05); % melt fraction
-    sweep_params.gs = linspace(0.0001,0.03,20)*1e6; % grain size [micrometres]
+    % sweep_params.gs = linspace(0.0001,0.03,5)*1e6; % grain size [micrometres]
+    % sweep_params.gs_params = struct('type','linear'); 
+    
+    % natural log grain size discretization 
+    gsmin = 0.0001*1e6; gsmax = 0.03*1e6; gsref = 0.001*1e6; 
+    sweep_params.gs = gsref * exp(linspace(log(gsmin/gsref),log(gsmax/gsref),25));
+    sweep_params.gs_params = struct('type','log','gsmin',gsmin,'gsmax',gsmax,'gsref',gsref);
     
     % moderate test case (10ish mins)
     % sweep_params.T = 1200:50:1800; %[degrees C]
@@ -152,9 +159,31 @@ for ifdl = 1:numel(fields2check)
       end 
 end 
 
+gslognormal = 0; 
+if isfield(params,'gs_pdf_type')
+  if strcmp(params.gs_pdf_type,'lognormal')
+    disp('prepping model params')
+    gslognormal = 1; 
+    params = prep_gs_lognormal(params,sweep);
+    sweep.gs = sweep.gs / sweep.gs_params.gsref; 
+    params.gs = params.gs / sweep.gs_params.gsref; 
+  elseif strcmp(grain_size_prior.gs_pdf_type,'uniform_log')
+    gslognormal = 1; 
+    sweep.gs = sweep.gs / sweep.gs_params.gsref; 
+    params.gs = params.gs / sweep.gs_params.gsref; 
+  end 
+end 
+
+
+
 
 % Calculate the prior for either a normal or uniform distribution
 prior_statevars = priorModelProbs(params, sweep.state_names);
+
+if gslognormal 
+  sweep.gs =  sweep.gs *  sweep.gs_params.gsref; 
+  params.gs =  params.gs *  sweep.gs_params.gsref; 
+end 
 sweep.prior_model_params = params; % store it so we have it. 
 
 %% %%%%%%%%%%%%%%%%%%%%% Get likelihood for Vs, Q %%%%%%%%%%%%%%%%%%%%%% %%

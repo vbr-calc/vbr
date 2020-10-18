@@ -36,8 +36,20 @@ filenames.LAB = './data/LAB_models/HopperFischer2018.mat';
 q_methods = {'eburgers_psp'; 'xfit_mxw'; 'xfit_premelt'; 'andrade_psp'};
 
 % case 1: uniform 
-fig_prefix_dir = 'gsUniform'; 
-grain_size_prior.gs_pdf_type = 'uniform'; 
+fig_prefix_dir = 'gsLogUniform'; 
+grain_size_prior.gs_pdf_type = 'uniform_log'; 
+
+% fig_prefix_dir = 'gsLogNormal_1mm';
+% grain_size_prior.gs_mean = .001 * 1e6; % [micrometres]
+% grain_size_prior.gs_std = .25;% dimensionless (in log-space!)
+% grain_size_prior.gs_pdf_type = 'lognormal'; 
+
+%fig_prefix_dir = 'gsLogNormal_1mm';
+%grain_size_prior.gs_mean = .001 * 1e6; % [micrometres]
+%grain_size_prior.gs_std = .5;% dimensionless (in log-space!)
+%grain_size_prior.gs_pdf_type = 'lognormal'; 
+
+
 
 % case 1a: default normal 
 % fig_prefix_dir = 'gsNormalDefault'; 

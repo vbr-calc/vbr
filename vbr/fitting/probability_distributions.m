@@ -56,6 +56,12 @@ switch distribution_flag
         sigma = varargin{3};
         pdf = normal_probability(x, mu, sigma);
         
+    case 'lognormal' 
+        x = varargin{1};
+        mu = varargin{2};
+        sigma = varargin{3};
+        pdf = lognormal_probability(x, mu, sigma);
+        
     case 'likelihood from residuals'
         obs_val = varargin{1};
         obs_std = varargin{2};
@@ -112,6 +118,33 @@ function uniform_pdf = uniform_probability(x, min_val, max_val)
 
 
 uniform_pdf = ones(size(x)) ./ (max_val - min_val);
+
+end
+
+function lognormal_pdf = lognormal_probability(x, mu, sigma)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% lognormal_pdf = lognormal_probability(x, mu, sigma)
+%
+% Calculate the probability of having an observed value x given 
+% a log normal distribution with mean mu and standard deviation sigma.
+% 
+%
+%
+% Parameters:
+% -----------
+%       x       observed value(s), must be dimensionless and > 0. 
+%       mu      mean value of distribution in log-space 
+%       sigma   standard deviation of the distribution in log-space 
+%
+% Output:
+% -------
+%       lognormal_pdf  prior probability of being at the observed value
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+denom = x .* sigma * sqrt(2*pi); 
+lognormal_pdf = exp(-(log(x)-mu).^2 ./ (2 * sigma.^2)) ./ denom; 
 
 end
 

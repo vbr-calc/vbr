@@ -48,7 +48,7 @@ function sweep = generate_parameter_sweep(sweep_params)
 
 
 % construct state variable fields
-z = linspace(50,170,120)*1e3; z= z';
+z = linspace(50,170,100)*1e3; z= z';
 VBR.in.z = z;
 sweep_params.P_GPa = z * 3300 * 9.8 /1e9;
 VBR.in.SV.f = logspace(-2.2,-1.3,10);

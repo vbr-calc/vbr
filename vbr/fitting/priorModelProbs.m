@@ -72,6 +72,21 @@ function [Prior_mod, sigmaPreds] = priorModelProbs( ...
             x      = states.(this_field); % measurements
             marginals{i_field} = probability_distributions(...
                 'normal', x, mu, sigma);
+        case 'lognormal'
+            % assume a log normal distribution (assumes everything is properly normalized)
+            sigma =  states.(std_field); % standard deviation
+            mu     = states.(mn_field); % mean value
+            x      = states.(this_field); % measurements
+            marginals{i_field} = probability_distributions(...
+                'lognormal', x, mu, sigma);
+        case 'uniformlog' 
+            % uniform probability over natural log space 
+            x = log(states.(this_field));
+            minv = min(x(:));
+            maxv = max(x(:)); 
+            sigma = 1; 
+            marginals{i_field} = probability_distributions(...
+                'uniform', x, minv, maxv);
         otherwise
             % uniform PDF over total range
             sigma = 1;

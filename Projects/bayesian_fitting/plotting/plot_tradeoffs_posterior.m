@@ -1,4 +1,4 @@
-function plot_tradeoffs_posterior(posterior, sweep, obs_name, q_method)
+function plot_tradeoffs_posterior(posterior, sweep_in, obs_name, q_method)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % plot_tradeoffs_posterior(posterior, sweep, obs_name)
@@ -40,6 +40,7 @@ f = figure('position', [400, 200, 1300, 700], 'color', 'w','paperunits','inches'
 posterior = posterior ./ sum(posterior(:));
 
 % Write out names and units
+sweep = sweep_in; 
 fields = sweep.state_names;
 fnames{length(fields)} = '';
 fnames_short{length(fields)} = '';
@@ -51,10 +52,15 @@ for n = 1:length(fields)
         case 'phi'
             fnames{n} = 'Melt Fraction, \phi';
             fnames_short{n} = '\phi';
-        case 'gs'
-            fnames{n} = 'Grain Size (mm)';
+        case 'gs'            
             fnames_short{n} = 'd';
-            sweep.(fields{n}) = sweep.(fields{n}) ./ 1e3; % convert to mm
+            if strcmp(sweep.gs_params.type,'log')
+                sweep.(fields{n}) = log(sweep.(fields{n})/sweep.gs_params.gsref);
+                fnames{n} = 'log(Grain Size)';
+            else 
+                fnames{n} = 'Grain Size (mm)';
+                sweep.(fields{n}) = sweep.(fields{n}) ./ 1e3; % convert to mm
+            end 
     end
 end
 
@@ -130,22 +136,69 @@ function plot_box(posterior, sweep, i1, i2, i3)
     end
     % disp(['sum of p_joint after marginal:',num2str(sum(p_joint(:)))])
 
+    % check if grain size is one and if we are logging it 
+    if strcmp(sweep.gs_params.type,'log') 
+      gs_unlogged = [0.0001, 0.001, 0.01]*1e6;% labels we want 
+      gs_logged = log(gs_unlogged/sweep.gs_params.gsref); % where we want them 
+      gs_unlogged = gs_unlogged/1e6*1e3; % the labels we want in mm
+      gs_label = 'Grain Size (mm)'; 
+      log_the_x = 0 ;
+      log_the_y = 0 ;
+      log_the_x2 = 0;
+      if strcmp(sweep.state_names{i2},'gs') 
+            log_the_x = 1 ;
+      elseif strcmp(sweep.state_names{i1},'gs')             
+            log_the_y = 1;    
+      elseif strcmp(sweep.state_names{i3},'gs')
+            log_the_x2 = 1;    
+      end
+    end 
+    
     % 2D plot of p(var1,var2|measurement)
     imagesc(sweep.(sweep.state_names{i2}), sweep.(sweep.state_names{i1}), ...
         reshape(p_joint, sh(i1), sh(i2)));
+ 
     xlabel(sweep.fnames{i2})
     ylabel(sweep.fnames{i1});
     set(ax, 'ydir', 'normal')
     caxis([0, joint_sc])
     colorbar
+    
+    
+    if log_the_x || log_the_y 
+      ax_extra= axes('Position', get(ax, 'Position'),'Color', 'none');
+      set(ax,'Box','off')
+      set(ax_extra, 'XAxisLocation', 'top','YAxisLocation','Right');
+      set(ax_extra, 'XLim', get(ax, 'XLim'),'YLim', get(ax, 'YLim'));          
+      if log_the_x
+      % add second axis on top 
+        set(ax_extra,'Xtick',gs_logged,'XtickLabel',gs_unlogged,'XLabel',gs_label)      
+        set(ax_extra,'Ytick',[],'YtickLabel',[])
+      elseif log_the_y
+      % add second axis on right
+        set(ax_extra,'Ytick',gs_logged,'YtickLabel',gs_unlogged,'YLabel',gs_label)
+        set(ax_extra,'Xtick',[],'XtickLabel',[])
+      end 
+    end 
 
     % 1D marginal
-    ax2 = axes('position', [xpos, 0.375, 0.225, 0.05]);
+    ax2 = axes('position', [xpos, 0.35, 0.225, 0.05]);
     plot(reshape(sweep.(sweep.state_names{i3}), 1, []), ...
         reshape(p_marginal, 1, []))
+   
     %set(ax2, 'color', 'none', 'ycolor', 'none', 'box', 'off');
     xlabel(sweep.fnames{i3});
     ylim([0, marg_sc])
+    
+     if log_the_x2 
+       % add the second x axis on top         
+      ax_extra2= axes('Position', get(ax2, 'Position'),'Color', 'none');
+      set(ax2,'Box','off')
+      set(ax_extra2, 'XAxisLocation', 'top','YAxisLocation','Right');
+      set(ax_extra2, 'XLim', get(ax2, 'XLim'),'YLim', get(ax2, 'YLim'));  
+      set(ax_extra2,'Xtick',gs_logged,'XtickLabel',gs_unlogged,'XLabel',gs_label)        
+      set(ax_extra2, 'Ytick', get(ax2, 'Ytick'),'YtickLabel',[]);  
+    end 
 
 
     % the depth plot
