@@ -91,7 +91,7 @@ function plot_box(posterior, sweep, i1, i2, i3)
 
 
     xpos = 0.09 + 0.31 * (i3 - 1);
-    ax = axes('position', [xpos, 0.5, 0.225, 0.4]);
+    ax = axes('position', [xpos, 0.47, 0.225, 0.4]);
 
     sh = size(posterior);
     sh(i3) = 1;
@@ -190,7 +190,7 @@ function plot_box(posterior, sweep, i1, i2, i3)
  
 
     % 1D marginal
-    ax2 = axes('position', [xpos, 0.35, 0.225, 0.05]);
+    ax2 = axes('position', [xpos, 0.3, 0.225, 0.05]);
     plot(reshape(sweep.(sweep.state_names{i3}), 1, []), ...
         reshape(p_marginal, 1, []))
    
@@ -212,7 +212,7 @@ function plot_box(posterior, sweep, i1, i2, i3)
 
 
     % the depth plot
-    ax3 = axes('position', [xpos, 0.15, 0.225, 0.05]);
+    ax3 = axes('position', [xpos, 0.1, 0.225, 0.05]);
     patch(sweep.P_GPa(sweep.z_inds([1, end, end, 1, 1])), [0, 0, 1, 1, 0], 'b');
     xlim(sweep.P_GPa([1, end]))
     try
@@ -222,7 +222,7 @@ function plot_box(posterior, sweep, i1, i2, i3)
       set(ax3, 'box', 'off','xaxislocation', 'top');
     end
     xlabel('Pressure (GPa)');
-    ax4 = axes('position', [xpos, 0.15, 0.225, 0.01]);
+    ax4 = axes('position', [xpos, 0.1, 0.225, 0.01]);
     plot_z = zeros(size(sweep.P_GPa));
     plot(sweep.z./1000, plot_z, 'linestyle', 'none')
     try

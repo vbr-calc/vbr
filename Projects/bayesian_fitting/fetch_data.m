@@ -1,7 +1,7 @@
 function fetch_data(datadirparent)
 % sets up data directory and fetches all data for example
-  fpath=what(datadirparent);
-  datadir=fullfile(fpath.path,'data');
+%   fpath=what(datadirparent);
+  datadir=fullfile(datadirparent,'data');
   if exist(datadir)==0
     mkdir(datadir);
   end
@@ -26,7 +26,7 @@ function fetch_data(datadirparent)
   fs(3).zipped=0;
   fS(4).dir='LAB_models'; fS(4).fname='HopperFischer2018.mat';
   fs(4).zipped=0;
-  fS(5).dir='plate_VBR'; fS(5).fname='sweep_more.mat';
+  fS(5).dir='plate_VBR'; fS(5).fname='sweep_log_gs.mat';
   fs(5).zipped=0;
 
   fetch_id=[];
@@ -98,15 +98,7 @@ function status = fetchOneFile(urlname,locfile)
            '2. unpack the zip and move the contents of ' ...
            'LAB_fitting_bayesian/data to ' ...
            'vbr/Projects/bayesian_fitting/data/'];
-      try
-          % octave friendly, fails for matlab (urlerror is read only)
-          urlerror.message=msg ;
-          rethrow(urlerror);
-      catch
-          % matlab friendly
-          newErr=MException(urlerror.identifier,msg);
-          newErr.throw()
-      end
+      warning(msg)
     end
   end
 

@@ -35,7 +35,7 @@ filenames.LAB = './data/LAB_models/HopperFischer2018.mat';
 
 q_methods = {'eburgers_psp'; 'xfit_mxw'; 'xfit_premelt'; 'andrade_psp'};
 
-gs_prior_case = 'log_uniform';
+gs_prior_case = 'log_normal_1cm';
 switch gs_prior_case
   case 'log_uniform'  
     % uniform probability in log-space 
