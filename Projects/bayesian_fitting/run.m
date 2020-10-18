@@ -35,38 +35,28 @@ filenames.LAB = './data/LAB_models/HopperFischer2018.mat';
 
 q_methods = {'eburgers_psp'; 'xfit_mxw'; 'xfit_premelt'; 'andrade_psp'};
 
-% case 1: uniform 
-fig_prefix_dir = 'gsLogUniform'; 
-grain_size_prior.gs_pdf_type = 'uniform_log'; 
-
-% fig_prefix_dir = 'gsLogNormal_1mm';
-% grain_size_prior.gs_mean = .001 * 1e6; % [micrometres]
-% grain_size_prior.gs_std = .25;% dimensionless (in log-space!)
-% grain_size_prior.gs_pdf_type = 'lognormal'; 
-
-%fig_prefix_dir = 'gsLogNormal_1mm';
-%grain_size_prior.gs_mean = .001 * 1e6; % [micrometres]
-%grain_size_prior.gs_std = .5;% dimensionless (in log-space!)
-%grain_size_prior.gs_pdf_type = 'lognormal'; 
-
-
-
-% case 1a: default normal 
-% fig_prefix_dir = 'gsNormalDefault'; 
-% grain_size_prior.gs_pdf_type = 'normal'; 
-
-% case 2: prior on grain size 
-% fig_prefix_dir = 'gsNormal_1cm_2pt5mm';
-% grain_size_prior.gs_mean = 10 * 1e3; 
-% grain_size_prior.gs_std = 2.5 * 1e3;
-% grain_size_prior.gs_pdf_type = 'normal'; 
-
-% case 2: prior on subgrain size 
-% fig_prefix_dir = 'gsNormal_1mm_pt25mm';
-% grain_size_prior.gs_mean = 1 * 1e3; 
-% grain_size_prior.gs_std = .25 * 1e3;
-% grain_size_prior.gs_pdf_type = 'normal'; 
-
+gs_prior_case = 'log_normal_1cm';
+switch gs_prior_case
+  case 'log_uniform'  
+    % uniform probability in log-space 
+    fig_prefix_dir = 'gsLogUniform'; 
+    grain_size_prior.gs_pdf_type = 'uniform_log'; 
+  case 'log_normal_1mm'
+    % 1 mm prior, lognormal distribution 
+    fig_prefix_dir = 'gsLogNormal_1mm';
+    grain_size_prior.gs_mean = .001 * 1e6; % [micrometres]
+    grain_size_prior.gs_std = .25;% dimensionless (in log-space!)
+    grain_size_prior.gs_pdf_type = 'lognormal';
+  case 'log_normal_1cm'  
+    % 1 cm prior, lognormal distribution; 
+    fig_prefix_dir = 'gsLogNormal_1cm';
+    grain_size_prior.gs_mean = .01 * 1e6; % [micrometres]
+    grain_size_prior.gs_std = .25;% dimensionless (in log-space!)
+    grain_size_prior.gs_pdf_type = 'lognormal';
+  otherwise
+    warning("unexpected gs_prior_case")
+end 
+  
 RegionalFits=struct();
 EnsemblePDF=struct();
 EnsemblePDF_no_mxw=struct();
@@ -133,5 +123,10 @@ for il = 1:length(locs)
   EnsemblePDF_no_mxw.(locname).p_joint=EnsemblePDF_no_mxw.(locname).p_joint/ 3; % equal weighting
 end
 
-plot_RegionalFits(RegionalFits,locs,names,location_colors,fig_prefix_dir);
-plot_EnsemblePDFs(EnsemblePDF,EnsemblePDF_no_mxw,locs,names,location_colors,fig_prefix_dir);
+plot_RegionalFits(RegionalFits,locs,names,location_colors,fig_prefix_dir,0,0,0);
+plot_EnsemblePDFs(EnsemblePDF,EnsemblePDF_no_mxw,locs,names,location_colors,fig_prefix_dir,0,0,0,0,0);
+
+AllEnsemble.RegionalFits  = RegionalFits;
+AllEnsemble.EnsemblePDF  = EnsemblePDF;
+AllEnsemble.EnsemblePDF_no_mxw  = EnsemblePDF_no_mxw;
+save_ensembles(fig_prefix_dir,AllEnsemble);
