@@ -90,7 +90,7 @@ end
 function plot_box(posterior, sweep, i1, i2, i3)
 
 
-    xpos = 0.09 + 0.31 * (i3 - 1);
+    xpos = 0.05 + 0.325 * (i3 - 1);
     ax = axes('position', [xpos, 0.47, 0.225, 0.4]);
 
     sh = size(posterior);
