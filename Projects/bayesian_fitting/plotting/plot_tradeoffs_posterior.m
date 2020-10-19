@@ -56,7 +56,7 @@ for n = 1:length(fields)
             fnames_short{n} = 'd';
             if strcmp(sweep.gs_params.type,'log')
                 sweep.(fields{n}) = log(sweep.(fields{n})/sweep.gs_params.gsref);
-                fnames{n} = 'log(Grain Size)';
+                fnames{n} = 'ln(Grain Size)';
             else 
                 fnames{n} = 'Grain Size (mm)';
                 sweep.(fields{n}) = sweep.(fields{n}) ./ 1e3; % convert to mm
@@ -191,8 +191,9 @@ function plot_box(posterior, sweep, i1, i2, i3)
 
     % 1D marginal
     ax2 = axes('position', [xpos, 0.3, 0.225, 0.05]);
-    plot(reshape(sweep.(sweep.state_names{i3}), 1, []), ...
-        reshape(p_marginal, 1, []))
+    x_vals = reshape(sweep.(sweep.state_names{i3}), 1, []);
+    plot(x_vals,reshape(p_marginal, 1, []))
+    set(ax2,'Xlim',[min(x_vals),max(x_vals)]); 
    
     %set(ax2, 'color', 'none', 'ycolor', 'none', 'box', 'off');
     xlabel(sweep.fnames{i3});
