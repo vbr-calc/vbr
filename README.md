@@ -2,7 +2,10 @@
 
 **Licensing**: MIT License (see end of this document)
 
-**Citing**: Manuscript in review, preprint (and publication) soon! 
+**Citing**: Manuscript in review soon! Until published, you can cite the our zenodo DOI:
+
+[![DOI](https://zenodo.org/badge/225459902.svg)](https://zenodo.org/badge/latestdoi/225459902)
+
 
 **Funding**: The VBR calculator has been developed with funding from the following NSF grants (PI Holtzman unless otherwise noted): EAR 1736165 (Earthscope, co-PI C. Havlin), EAR 13-15254 (Geophysics, PI J. Davis), EAR 1056332 (Geophysics- CAREER).
 
