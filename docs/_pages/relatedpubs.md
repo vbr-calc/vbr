@@ -1,5 +1,5 @@
 ---
-permalink: /about/relatedpubs/
+permalink: /relatedpubs/
 title: "Publications Related to the VBR Calculator"
 toc: false 
 ---
