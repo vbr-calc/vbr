@@ -30,6 +30,8 @@ docs:
         url: /examples/
       - title: "Simple Examples"
         url: /examples/vbrcore/
+      - title: "VBR in the wild"
+        url: /relatedpubs/
 
   - title: Contributing
     children:
