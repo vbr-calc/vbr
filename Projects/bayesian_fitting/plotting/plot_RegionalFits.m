@@ -1,12 +1,23 @@
-function plot_RegionalFits(RegionalFits,locs,names,location_colors)
+function [f,ax_struct] = plot_RegionalFits(RegionalFits,locs,names,location_colors,fname_prefix,f,ax_struct,linesty)
 
-  f = figure('color', 'w');
+  if f == 0
+    f = figure('color', 'w');
+    ax_struct = struct() ;
+  end 
+  
+  if linesty == 0 
+    linesty = '-';
+  end 
 
   % initial plots
   meth_order={'andrade_psp';'eburgers_psp';'xfit_mxw';'xfit_premelt'};
   for i_meth = 1:numel(meth_order);
     q_method=meth_order{i_meth};
-    subplot(2,2,i_meth)
+    
+    if isfield(ax_struct,q_method) == 0 
+      ax_struct.(q_method) = subplot(2,2,i_meth);
+    end 
+    axes(ax_struct.(q_method))
     hold on
     for il = 1:length(locs)
       locname = names{il};
@@ -22,9 +33,9 @@ function plot_RegionalFits(RegionalFits,locs,names,location_colors)
         hold all
         this_clr=location_colors{il};
         try
-          contour(post_phi,post_T, p_joint, levs, 'linewidth', sz,'color',this_clr,'displayname',locname)
+          contour(post_phi,post_T, p_joint, levs, 'linewidth', sz,'color',this_clr,'displayname',locname,'linestyle',linesty)
         catch
-          contour(post_phi,post_T, p_joint, levs, 'linewidth', sz,'linecolor',this_clr,'displayname',locname)
+          contour(post_phi,post_T, p_joint, levs, 'linewidth', sz,'linecolor',this_clr,'displayname',locname,'linestyle',linesty)
         end
       end
     end
@@ -33,36 +44,35 @@ function plot_RegionalFits(RegionalFits,locs,names,location_colors)
 
   end
 
-  % pretty them up
-  subplot(2,2,1);
-    xlabelname='xticklabels';
-    ylabelname='yticklabels';
-    try
-      set(gca,xlabelname,{},'box','on')
-    catch
-      xlabelname='xticklabel';
-      ylabelname='yticklabel';
-      set(gca,xlabelname,{},'box','on')
-    end
-    ylabel('Temperature (^\circC)');
+  % pretty them up  
+  axes(ax_struct.(meth_order{1}))  
+  xlabelname='xticklabels';
+  ylabelname='yticklabels';
+  try
+    set(gca,xlabelname,{},'box','on')
+  catch
+    xlabelname='xticklabel';
+    ylabelname='yticklabel';
+    set(gca,xlabelname,{},'box','on')
+  end
+  ylabel('Temperature (^\circC)');
 
+  axes(ax_struct.(meth_order{2}))
+  set(gca,xlabelname,{},ylabelname,{},'box','on')
 
-  subplot(2,2,2);
-    set(gca,xlabelname,{},ylabelname,{},'box','on')
+  axes(ax_struct.(meth_order{3}))
+  ylabel('Temperature (^\circC)');
+  xlabel('Melt Fraction \phi');
+  set(gca,'box','on')
 
-  subplot(2,2,3);
-    ylabel('Temperature (^\circC)');
-    xlabel('Melt Fraction \phi');
-    set(gca,'box','on')
-
-  subplot(2,2,4);
-    ylabel('Temperature (^\circC)');
-    xlabel('Melt Fraction \phi');
-    set(gca,ylabelname,{},'box','on')
+  axes(ax_struct.(meth_order{4}))
+  ylabel('Temperature (^\circC)');
+  xlabel('Melt Fraction \phi');
+  set(gca,ylabelname,{},'box','on')
 
   disp('    saving regional fits to plots/')
-  saveas(f, ['plots/regional_fits.eps'],'epsc');
-  saveas(f, ['plots/regional_fits.png'],'png');
-  close all
+  saveas(f, ['plots/',fname_prefix,'_regional_fits.eps'],'epsc');
+  saveas(f, ['plots/',fname_prefix,'_regional_fits.png'],'png');
+  % close all
 
 end

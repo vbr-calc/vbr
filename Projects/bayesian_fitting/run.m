@@ -17,10 +17,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 close all; clc
 
-locs = [45, -111; 40.7, -117.5; 39, -109.8; 37.2, -100.9];
-names = {'Yellowstone', 'BasinRange', 'ColoradoPlateau', 'Interior'};
-zrange = [75, 105; 75, 105; 120, 150; 120, 150];
-location_colors={[1,0,0];[1,0.6,0];[0,0.8,0];[0,0.3,0]};
+locs = [40.7, -117.5; 39, -109.8; 37.2, -100.9];
+names = {'BasinRange', 'ColoradoPlateau', 'Interior'};
+zrange = [75, 105; 120, 150; 120, 150];
+location_colors={[1,0.6,0];[0,0.8,0];[0,0.3,0]};
+% Yellowstone, [45,-111], [75,105], [1,0,0]
 
 % Extract the relevant values for the input depth range.
 % Need to choose the attenuation method used for anelastic calculations
@@ -32,11 +33,37 @@ filenames.Q = './data/Q_models/Dalton_Ekstrom_2008.mat';
 filenames.LAB = './data/LAB_models/HopperFischer2018.mat';
 
 
-q_methods = {'eburgers_psp', 'xfit_mxw', 'xfit_premelt', 'andrade_psp'};
+q_methods = {'eburgers_psp'; 'xfit_mxw'; 'xfit_premelt'; 'andrade_psp'};
 
-
+gs_prior_case = 'log_uniform';
+switch gs_prior_case
+  case 'log_uniform'  
+    % uniform probability in log-space 
+    fig_prefix_dir = 'gsLogUniform'; 
+    grain_size_prior.gs_pdf_type = 'uniform_log'; 
+  case 'log_normal_1mm'
+    % 1 mm prior, lognormal distribution 
+    fig_prefix_dir = 'gsLogNormal_1mm';
+    grain_size_prior.gs_mean = .001 * 1e6; % [micrometres]
+    grain_size_prior.gs_std = .25;% dimensionless (in log-space!)
+    grain_size_prior.gs_pdf_type = 'lognormal';
+  case 'log_normal_1cm'  
+    % 1 cm prior, lognormal distribution; 
+    fig_prefix_dir = 'gsLogNormal_1cm';
+    grain_size_prior.gs_mean = .01 * 1e6; % [micrometres]
+    grain_size_prior.gs_std = .25;% dimensionless (in log-space!)
+    grain_size_prior.gs_pdf_type = 'lognormal';
+  otherwise
+    warning('unexpected gs_prior_case')
+end 
+  
 RegionalFits=struct();
 EnsemblePDF=struct();
+EnsemblePDF_no_mxw=struct();
+tradeoffDir = ['plots','/','output_plots','/',fig_prefix_dir];
+if isdir(tradeoffDir) == 0 
+    mkdir(tradeoffDir);
+end 
 firstRun=1;
 for iq = 1:length(q_methods)
     q_method = q_methods{iq};
@@ -53,18 +80,18 @@ for iq = 1:length(q_methods)
         disp(['     fitting ',locname])
 
         if firstRun==1
-          [posterior_A,sweep] = fit_seismic_observations(filenames, location, q_method);
+          [posterior_A,sweep] = fit_seismic_observations(filenames, location, q_method, grain_size_prior);
           firstRun=0;
         else
-          [posterior_A,sweep] = fit_seismic_observations(filenames, location, q_method, sweep);
+          [posterior_A,sweep] = fit_seismic_observations(filenames, location, q_method, grain_size_prior, sweep);
         end
 
         disp('        saving plots...')
-        saveas(gcf, ['plots/output_plots/', names{il}, '_VQ_', q_method, '.png']);
+        saveas(gcf, [tradeoffDir,'/', names{il}, '_VQ_', q_method, '.png']);
         close
-        saveas(gcf, ['plots/output_plots/', names{il}, '_Q_', q_method, '.png']);
+        saveas(gcf, [tradeoffDir,'/', names{il}, '_Q_', q_method, '.png']);
         close
-        saveas(gcf, ['plots/output_plots/', names{il}, '_V_', q_method, '.png']);
+        saveas(gcf, [tradeoffDir,'/', names{il}, '_V_', q_method, '.png']);
         close
         disp('        plots saved to plots/output_plots/')
 
@@ -77,15 +104,8 @@ for iq = 1:length(q_methods)
         %p_joint = sum(posterior .* p_marginal_box, 3);
         %p_joint=p_joint/sum(p_joint(:));
         p_joint = sum(posterior,3);
-        if ~strcmp(q_method,'xfit_mxw')
-          if ~isfield(EnsemblePDF,locname)
-            EnsemblePDF.(locname).p_joint=p_joint;
-            EnsemblePDF.(locname).post_T=posterior_A.T;
-            EnsemblePDF.(locname).post_phi=posterior_A.phi;
-          else
-            EnsemblePDF.(locname).p_joint=EnsemblePDF.(locname).p_joint+p_joint;
-          end
-        end
+        EnsemblePDF = storeEnsemble(EnsemblePDF,locname,q_method,p_joint,posterior_A,1);
+        EnsemblePDF_no_mxw = storeEnsemble(EnsemblePDF_no_mxw,locname,q_method,p_joint,posterior_A,0);          
 
         % store regional fits for combo plot
         RegionalFits.(q_method).(locname)=struct();
@@ -97,12 +117,16 @@ for iq = 1:length(q_methods)
 
 end
 
-
-N_models = 3; % (not including xfit_mxw)
 for il = 1:length(locs)
   locname = names{il};
-  EnsemblePDF.(locname).p_joint=EnsemblePDF.(locname).p_joint/ N_models; % equal weighting
+  EnsemblePDF.(locname).p_joint=EnsemblePDF.(locname).p_joint/ 4; % equal weighting
+  EnsemblePDF_no_mxw.(locname).p_joint=EnsemblePDF_no_mxw.(locname).p_joint/ 3; % equal weighting
 end
 
-plot_RegionalFits(RegionalFits,locs,names,location_colors);
-plot_EnsemblePDFs(EnsemblePDF,locs,names,location_colors)
+plot_RegionalFits(RegionalFits,locs,names,location_colors,fig_prefix_dir,0,0,0);
+plot_EnsemblePDFs(EnsemblePDF,EnsemblePDF_no_mxw,locs,names,location_colors,fig_prefix_dir,0,0,0,0,0);
+
+AllEnsemble.RegionalFits  = RegionalFits;
+AllEnsemble.EnsemblePDF  = EnsemblePDF;
+AllEnsemble.EnsemblePDF_no_mxw  = EnsemblePDF_no_mxw;
+save_ensembles(fig_prefix_dir,AllEnsemble);

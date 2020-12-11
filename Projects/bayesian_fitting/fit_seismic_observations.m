@@ -1,4 +1,4 @@
-function [posterior,sweep] = fit_seismic_observations(filenames, location, q_method,sweep)
+function [posterior,sweep] = fit_seismic_observations(filenames, location, q_method, grain_size_prior, sweep)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % fit_seismic_observations
@@ -84,29 +84,51 @@ end
 
 
 %% %%%%%%%%%%%%%%%%%% Get prior for State Variables %%%%%%%%%%%%%%%%%%% %%
-% The prior probability distribution for the state variables can be      %
+% The prior probability distribution for the state variablegrain_size_priors can be      %
 % assumed to be either uniform or normal across the input range given.   %
 % The probability that the given state variable is actually correct.     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Preferably, load in a large, pre-calculated box
 if ~exist('sweep','var')
-fname = 'data/plate_VBR/sweep_more.mat';
+fname = 'data/plate_VBR/sweep_log_gs.mat'; % the fine res one 
+%fname = 'data/plate_VBR/sweep_loggs1.mat'; % a coarse one
 if ~exist(fname, 'file')
-    sweep_params.T = 1200:10:1800; %[degrees C]
+    % production case (takes some hours)
+    sweep_params.T = 1100:20:1800; %[degrees C]
     sweep_params.phi = (0.0:0.0025:0.05); % melt fraction
-    sweep_params.gs = linspace(0.001,0.03,10)*1e6; % grain size [micrometres]
-    % Set period range for the mask - used to define which calculated
-    % velocities go into the returned average Vs for those conditions
-    sweep_params.per_bw_max = 150; % max period of range of mask (s)
-    sweep_params.per_bw_min = 50; % min period of range of mask (s)
-
-    % load('data/plate_VBR/PREMfit.mat');
-    % sweep_params.prem_fit=prem_fit;
+    % sweep_params.gs = linspace(0.0001,0.03,5)*1e6; % grain size [micrometres]
+    % sweep_params.gs_params = struct('type','linear'); 
+    
+    % natural log grain size discretization 
+    gsmin = 0.0001*1e6; gsmax = 0.03*1e6; gsref = 0.001*1e6; 
+    sweep_params.gs = gsref * exp(linspace(log(gsmin/gsref),log(gsmax/gsref),25));
+    sweep_params.gs_params = struct('type','log','gsmin',gsmin,'gsmax',gsmax,'gsref',gsref);
+    
+    % moderate test case (10ish mins)
+    % sweep_params.T = 1200:50:1800; %[degrees C]
+    % sweep_params.phi = (0.0:0.005:0.05); % melt fraction
+    % sweep_params.gs = linspace(0.001,0.01,10)*1e6; % grain size [micrometres]
+    
+    % quick test case 
+    % sweep_params.T = 1200:100:1800; %[degrees C]
+    % sweep_params.phi = (0.0:0.01:0.05); % melt fraction
+    % sweep_params.gs = linspace(0.0001,0.03,5)*1e6; % grain size [micrometres]
+    
+    sweep_params.per_bw_max = 150; % max period (s)
+    sweep_params.per_bw_min = 50; % min period (s)
 
     sweep = generate_parameter_sweep(sweep_params);
     clear sweep_params
-    save(fname, 'sweep')
+    try
+        save(fname, 'sweep','-mat7-binary')
+    catch ME
+        if strcmp(ME.identifier,'MATLAB:badopt')
+            save(fname, 'sweep')
+        else
+            rethrow(ME)
+        end
+    end 
 end
 
 load(fname, 'sweep');
@@ -126,13 +148,43 @@ end
 % Default is to calculate these based on the ranges set in sweep_params
 params = make_param_grid(sweep.state_names, sweep);
 % Note - can manually set the expected value and standard deviation for
-% each of your variables, e.g. params.T_mean = 1500; params.gs_std = 300;
-% params.gs_mean = 1e4; params.gs_std = 1e3;
+% each of your variables, e.g. params.T_mean = 1500; 
+
+% now reading in optional grain size prior to override 
+fields2check = {'gs_mean';'gs_std';'gs_pdf_type';'gs_pdf'};
+for ifdl = 1:numel(fields2check) 
+      thisfld = fields2check{ifdl}; 
+      if isfield(grain_size_prior,thisfld)
+          params.(thisfld) = grain_size_prior.(thisfld);
+      end 
+end 
+
+gslognormal = 0; 
+if isfield(params,'gs_pdf_type')
+  if strcmp(params.gs_pdf_type,'lognormal')
+    disp('prepping model params')
+    gslognormal = 1; 
+    params = prep_gs_lognormal(params,sweep);
+    sweep.gs = sweep.gs / sweep.gs_params.gsref; 
+    params.gs = params.gs / sweep.gs_params.gsref; 
+  elseif strcmp(grain_size_prior.gs_pdf_type,'uniform_log')
+    gslognormal = 1; 
+    sweep.gs = sweep.gs / sweep.gs_params.gsref; 
+    params.gs = params.gs / sweep.gs_params.gsref; 
+  end 
+end 
+
+
+
 
 % Calculate the prior for either a normal or uniform distribution
-pdf_type = {'uniform', 'uniform', 'normal'};
-prior_statevars = priorModelProbs(params, sweep.state_names, pdf_type);
+prior_statevars = priorModelProbs(params, sweep.state_names);
 
+if gslognormal 
+  sweep.gs =  sweep.gs *  sweep.gs_params.gsref; 
+  params.gs =  params.gs *  sweep.gs_params.gsref; 
+end 
+sweep.prior_model_params = params; % store it so we have it. 
 
 %% %%%%%%%%%%%%%%%%%%%%% Get likelihood for Vs, Q %%%%%%%%%%%%%%%%%%%%%% %%
 % The likelihood p(D|A), e.g., P(Vs | T, phi, gs), is calculated using    %

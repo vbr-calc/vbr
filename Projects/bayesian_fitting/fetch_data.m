@@ -1,7 +1,7 @@
 function fetch_data(datadirparent)
 % sets up data directory and fetches all data for example
-  fpath=what(datadirparent);
-  datadir=fullfile(fpath.path,'data');
+%   fpath=what(datadirparent);
+  datadir=fullfile(datadirparent,'data');
   if exist(datadir)==0
     mkdir(datadir);
   end
@@ -26,7 +26,7 @@ function fetch_data(datadirparent)
   fs(3).zipped=0;
   fS(4).dir='LAB_models'; fS(4).fname='HopperFischer2018.mat';
   fs(4).zipped=0;
-  fS(5).dir='plate_VBR'; fS(5).fname='sweep_more.mat';
+  fS(5).dir='plate_VBR'; fS(5).fname='sweep_log_gs.mat';
   fs(5).zipped=0;
 
   fetch_id=[];
@@ -88,17 +88,17 @@ function status = fetchOneFile(urlname,locfile)
 
     if status>0
       msg=['Failed to fetch data for bayesian_fitting Project.\n\n'...
-           'Native matlab command failed with: \n',
-           urlerror.message, '\n',
-           'Attempted to fetch data with wget, which failed with \n',
-           results,'\n',
-           'To get the data, you can \n ',
-           '1. visit https://github.com/vbr-calc/vbrPublicData ',
-           'and click "Clone or download"-> "Download zip".',
-           '2. unpack the zip and move the contents of LAB_fitting_bayesian/data to ',
+           'Native matlab command failed with: \n' ...
+           urlerror.message, '\n' ...
+           'Attempted to fetch data with wget, which failed with \n'...
+           results,'\n' ...
+           'To get the data, you can \n ' ...
+           '1. visit https://github.com/vbr-calc/vbrPublicData ' ...
+           'and click "Clone or download"-> "Download zip".' ...
+           '2. unpack the zip and move the contents of ' ...
+           'LAB_fitting_bayesian/data to ' ...
            'vbr/Projects/bayesian_fitting/data/'];
-      urlerror.message=msg ;
-      rethrow(urlerror);
+      warning(msg)
     end
   end
 

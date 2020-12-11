@@ -1,5 +1,5 @@
 function [Prior_mod, sigmaPreds] = priorModelProbs( ...
-    states, states_fields, pdf_types)
+    states, states_fields)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % [Prior_mod, sigmaPreds] = priodModelProbs( ...
@@ -21,17 +21,15 @@ function [Prior_mod, sigmaPreds] = priorModelProbs( ...
 %           [field]_mean    mean (expected value) for that variable
 %           [field]_std     standard deviation for that variable
 %
+%           [field]_pdf_type the PDF type to use (optional). If set, will use this pdf 
+%                            type: 'normal' or 'uniform'. Defaults to 'uniform'. This 
+%                            option is overridden by the following field if it exists. 
 %           ([field]_pdf)   If there is a field [var_name]_pdf, then use
 %                           that probability as the prior for that variable
 %                           instead of assuming a normal or uniform pdf.
 %
 %       states_fields   names of all of the state varaibles we are varying
 %
-%       pdf_type        cell array of strings set to either
-%                           'input' - use states.[var]_pdf
-%                           'normal' - assume a Gaussian distribution
-%                           anything else - uniform distribution
-%                       If of length 1, will assume the same for all vars.
 %
 % Output:
 % -------
@@ -52,11 +50,16 @@ function [Prior_mod, sigmaPreds] = priorModelProbs( ...
     std_field=[this_field,'_std']; % e.g., Tpot_std
     mn_field=[this_field,'_mean']; % e.g., Tpot_mean
     
-    if length(pdf_types) > 1
-        pdf_type = pdf_types{i_field};
-    else
-        pdf_type = pdf_types{1};
-    end
+    if isfield(states,[this_field,'_pdf_type'])
+        pdf_type = states.([this_field,'_pdf_type']);
+    else 
+        pdf_type = 'uniform';
+    end 
+
+    % always override pdf_type if we have an input pdf 
+    if isfield(states,[this_field,'_pdf'])
+        pdf_type = 'input';
+    end 
     
     switch pdf_type
         case 'input'
@@ -69,6 +72,21 @@ function [Prior_mod, sigmaPreds] = priorModelProbs( ...
             x      = states.(this_field); % measurements
             marginals{i_field} = probability_distributions(...
                 'normal', x, mu, sigma);
+        case 'lognormal'
+            % assume a log normal distribution (assumes everything is properly normalized)
+            sigma =  states.(std_field); % standard deviation
+            mu     = states.(mn_field); % mean value
+            x      = states.(this_field); % measurements
+            marginals{i_field} = probability_distributions(...
+                'lognormal', x, mu, sigma);
+        case 'uniformlog' 
+            % uniform probability over natural log space 
+            x = log(states.(this_field));
+            minv = min(x(:));
+            maxv = max(x(:)); 
+            sigma = 1; 
+            marginals{i_field} = probability_distributions(...
+                'uniform', x, minv, maxv);
         otherwise
             % uniform PDF over total range
             sigma = 1;
