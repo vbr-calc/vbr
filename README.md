@@ -2,7 +2,9 @@
 
 **Licensing**: MIT License (see end of this document)
 
-**Citing**: Manuscript in review. Until published, please email vbrcalc@gmail.com before publishing your own results using the VBR calculator. The VBR calculator has been developed with funding from the following NSF grants (PI Holtzman unless otherwise noted): EAR 1736165 (Earthscope, co-PI C. Havlin), EAR 13-15254 (Geophysics, PI J. Davis), EAR 1056332 (Geophysics- CAREER).  
+**Citing**: Manuscript in review, preprint (and publication) soon! 
+
+**Funding**: The VBR calculator has been developed with funding from the following NSF grants (PI Holtzman unless otherwise noted): EAR 1736165 (Earthscope, co-PI C. Havlin), EAR 13-15254 (Geophysics, PI J. Davis), EAR 1056332 (Geophysics- CAREER).
 
 Further documentation available at [https://vbr-calc.github.io/vbr/](https://vbr-calc.github.io/vbr/). 
 
@@ -11,6 +13,11 @@ Further documentation available at [https://vbr-calc.github.io/vbr/](https://vbr
 The Very Broadband Rheology (VBR) Calculator provides a useful framework for calculating material properties from thermodynamic state variables (e.g., temperature, pressure, melt fraction, grain size) using a wide range of experimental scalings. The VBR Calculator at present contains constitutive models only for olivine, but may be applied to other compositions (at your own risk). The main goal is to allow easy comparison between methods for calculating anelastic-dependent seismic properties, but the VBR Calculator can also be used for calculating steady state viscosity, pure elastic (anharmonic) seismic properties and more. It can be used to fit and analyze experimental data, infer thermodynamic state from seismic measurements, predict measurable properties from geodynamic models, for example.  
 
 At present, the code is in Matlab, but it is functional in [GNU Octave](https://www.gnu.org/software/octave/). There are plans for a python release, pending funding.
+
+The remainder of this README contains information on:
+1. [Bug Reporting and User Support](#bug-reporting-and-user-support)
+2. [Basic Usage](#basic-usage)
+3. [Contributing to the VBRc](#contributing-to-the-vbrc)
 
 ## Bug Reporting and User Support
 
@@ -136,6 +143,22 @@ The VBR Calculator nominally works in GNU Octave, but you may find that you need
 https://octave.sourceforge.io/io/index.html
 https://octave.sourceforge.io/statistics/index.html
 https://octave.org/doc/interpreter/Installing-and-Removing-Packages.html
+
+# Contributing to the VBRc
+
+The VBRc is open to community contributions! New methods, new examples, documentation fixes, bug fixes! 
+
+We follow a typical open source workflow. To submit new features: 
+
+* create your fork of the VBRc repo
+* checkout a new branch 
+* do work on your new branch 
+* push those changes to your fork on github 
+* submit a pull request back to the main VBRc repo 
+
+If you're new to git, github or contributing to open source projects, the following article has a nice overview with sample git commands: [GitHub Standard Fork & Pull Request Workflow](https://gist.github.com/Chaser324/ce0505fbed06b947d962).
+
+Please contact us with any questions on how to get involved!
 
 ## MIT License ##
 
