@@ -7,7 +7,17 @@ You are welcome to extend the VBR calculator in any way you see fit. This guide 
 
 # git & github workflow
 
-The github repository follows a stable - master - feature branch framework. The master branch is considered the development branch. Modifications to master branch are made through feature branches. The following workflow outlines the steps for creating and developing a feature branch that eventually merges with master. Only feature branches that are nominally working should be merged into the master branch.
+The VBRc is open to community contributions! New methods, new examples, documentation fixes, bug fixes!
+
+We follow a typical open source workflow. To submit changes:
+
+* create your fork of the VBRc repo
+* checkout a new branch
+* do work on your new branch
+* push those changes to your fork on github
+* submit a pull request back to the main VBRc repo
+
+If you're new to git, github or contributing to open source projects, the following article has a nice overview with sample git commands: [GitHub Standard Fork & Pull Request Workflow](https://gist.github.com/Chaser324/ce0505fbed06b947d962).
 
 ## scope of feature branches
 
