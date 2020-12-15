@@ -2,7 +2,7 @@
 
 **Licensing**: MIT License (see end of this document)
 
-**Citing**: Manuscript in review soon! Until published, you can cite the our zenodo DOI:
+**Citing**: Manuscript in review! EarthArXiv preprint [here](https://doi.org/10.31223/X5C59Z). You can also cite the software DOI directly:
 
 [![DOI](https://zenodo.org/badge/225459902.svg)](https://zenodo.org/badge/latestdoi/225459902)
 
