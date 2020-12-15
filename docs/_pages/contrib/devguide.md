@@ -7,17 +7,21 @@ You are welcome to extend the VBR calculator in any way you see fit. This guide 
 
 # git & github workflow
 
-The github repository follows a stable - master - feature branch framework. The master branch is considered the development branch. Modifications to master branch are made through feature branches. The following workflow outlines the steps for creating and developing a feature branch that eventually merges with master. Only feature branches that are nominally working should be merged into the master branch.
+The VBRc is open to community contributions! New methods, new examples, documentation fixes, bug fixes!
 
-## scope of feature branches
+We follow a typical open source workflow. To submit changes:
 
-In general, you should make a new branch for all code modifications. If the feature you're developing has many components then it may be better to divide your feature into successive stages that can be merged back to master as each stage is completed. The shorter time you spend within each branch, the easier the merge back to master will be.
+* create your fork of the VBRc repo
+* checkout a new branch
+* do work on your new branch
+* push those changes to your fork on github
+* submit a pull request back to the main VBRc repo
 
-If you have merged a branch back into master and then decide that additional development is needed, create a new branch from master after the merge and continue development in the new branch.
+If you're new to git, github or contributing to open source projects, the following article has a nice overview with sample git commands: [GitHub Standard Fork & Pull Request Workflow](https://gist.github.com/Chaser324/ce0505fbed06b947d962), but we outline the steps below:
 
 ## developing a feature branch
 
-This sections outlines the git commands for creating and using a feature branch. The following assumes that you have already cloned the VBR repository and have a terminal open in the VBR repository's directory `vbr/`
+This sections outlines the git commands for creating and using a feature branch. The following assumes that you have already forked and cloned the VBR repository and have a terminal open in the VBR repository's directory `vbr/`
 
 1. **Initial State**: make sure you are on master branch and up to date:
   ```
@@ -28,47 +32,25 @@ This sections outlines the git commands for creating and using a feature branch.
   ```
   git checkout -b new_branch
   ```
-where `new_branch` is the name of your branch. Keep branch names as short and as descriptive as possible.
+where `new_branch` is the name of your branch. Keep branch names as short but as descriptive as possible.
 
 3. **Push to remote (optional)**: If your branch will take a while to develop, if you want others to be able to view or contribute to your branch, or if you want to use multiple computers to develop your branch, push your branch to the remote repository with `--set-upstream` :
   ```
   git push --set-upstream origin new_branch
   ```
-This command sets the remote branch that your local `new_branch` will track. Any `git push` or `pull` will now automatically sync with the remote `new_branch` on github. After this step, you will be able to see your branch on the github page of the VBR repository.
+This command sets the remote branch that your local `new_branch` will track. Any `git push` or `pull` will now automatically sync with the remote `new_branch` on github. After this step, you will be able to see your branch on your fork of the VBR on github (but it has not been submitted to the main VBR repository).
 
 4. **Develop your branch**: develop as normal on the new branch, adding commits as you see fit.
 
-5. **Test your branch**: If your feature branch adds new functionality to the `vbr` directory, you should add new test functions for your new features in `vbr/testing` (see the README there, `vbr/testing/README.md`) and occasionally run the existing test functions during development. If your new feature branch is a self contained project in `Projects`, new test functions are not required (as running your project is its own test). In either case, before merging back to master, please run the full test.
+5. **Test your branch**: If your feature branch adds new functionality to the `vbr` directory, you should add new test functions for your new features in `vbr/testing` (see the README there, `vbr/testing/README.md`) and occasionally run the existing test functions during development. If your new feature is a self contained project in `Projects`, new test functions are not required (as running your project is its own test). In either case, before submitting a pull request back to master, please run the full test (we don't have any automated testing from within github... yet?).
 
-6. **merge**: Your branch is complete and runs the tests successfully, merge your branch back into master (see section on merging).
+6. **Final push and pull request**: Your branch is ready! The tests run successfully and you want to submit your great new feature back into the main VBR repository so that other people can use your great work! So push up any remaining commits to github and then visit your github page for your vbr fork. There should be a notice up top saying something to the effect of "YOUR_NEW_BRANCH had recent pushes 11 minutes ago (Compare & pull request)". Click the button to "Compare & pull request". If it's not visible, you can select your branch from the dropdown menu and then the button should appear. To submit the pull request: hit the button and then enter a sensible title and a description of what you've done, and click "Create pull request". 
 
-7. **delete branch**: After merging with master, delete the feature branchw ith `git branch -d new_branch`. If you need to modify your new developments or add new features, create new branches for those modifications.
-
-## merging your new feature branch back into master
-
-Once your branch is ready to merge back to master, submit a pull request (PR) on github. See here (link) for general instructions. If you have developer privileges for the VBR repository and are confident of your changes, feel free to complete the PR and merge to master. Note that if you make changes to your new branch and push those changes, your pull request automatically updates. If there are non-trival conflicts, please cancel the PR and deal with conflicts within your branch by merging master into your feature branch (see below), correcting conflicts, and submitting a new PR.
-
-## merging latest master branch into your feature branch
-
-If your feature branch needs to use updates from other feature branches that have been merged into the master branch, or you anticipate a complex merge with many conflicts, please merge master into your feature branch before submitting a pull request. To do this, on command line:
-
-1. **make sure master and your branch are up to date**:
-  ```
-  git checkout master && git pull
-  git checkout new_branch && git pull
-  git branch
-  ```
-  (make sure the output from `git branch` shows you on `new_branch`)
-
-2. **merge master into `new_branch`**:  
-  ```
-  git merge master
-  ```
-  If all goes well, that's it. If there are conflicts, resolve them and the commit/push the resolution to your new branch. At this point, the latest changes from master will be in your branch and you can continue development or merge your branch back to master if you're done.
+7. **Pull request review**: so you've created a pull request! What happens now? Well the core VBRc developers will get a notice of your pull request and they will look it over (hopefully in a timely fashion). They may request code changes or more information or may merge it into the VBRc repository directly! If your branch cannot be automatically merged due to conflicts and you need help rebasing or merging, we'll help! 
 
 ## style guide & helpful git tips:
 
-In case you're new to git or developing VBR, here are some helpful tips!
+In case you're new to git or developing the VBRc, here are some helpful tips!
 
 **frequent fetches**: To keep your local version of the repository up to date, get in the habit of frequently running a `git fetch` to update your local repository (start of your coding day, before switching branches, end of the day, etc.). If you then switch branches, you will know if you need to run `git pull` to update that branch.
 
@@ -76,8 +58,6 @@ In case you're new to git or developing VBR, here are some helpful tips!
 
 **stashing**: If you need to switch branches but aren't ready to commit changes to your code, you can stash your uncommitted changes. `git stash` will store uncommitted changes on current branch, `git stash apply` will restore those uncommitted changes on your current branch.
 
-**hot fixes**: for very quick bug fixes (typos, etc.), editing on the master branch is OK. If you're not sure whether you need a new branch, you probably need a new branch.
-
-**conflict resolution**: there are a number of tools to aid in conflict resolution. `git mergetool` will pull up a 3-way diff of your local file, the remote file and the most recent common ancestor base file and most editors will let you step through successive conflicts and choose which version to use for the conflict. If resolving conflicts for which there is a Pull Request, you can use github's online conflict resolution editor. If you use the atom editor with github integration, you can use the built in mergetool. Whatever tool you use, if you are unsure of how to resolve the conflict, you can check the commit history to find who made the changes causing you trouble and contact them (in general you shouldn't delete others changes without talking to them).
+**conflict resolution**: there are a number of tools to aid in conflict resolution. `git mergetool` will pull up a 3-way diff of your local file, the remote file and the most recent common ancestor base file and most editors will let you step through successive conflicts and choose which version to use for the conflict. If resolving conflicts for which there is a Pull Request, you can use github's online conflict resolution editor. If you use the atom editor with github integration, you can use the built in mergetool. Whatever tool you use, if you are unsure of how to resolve the conflict, get in touch and we'll try to help!
 
 **commit history**: `git log` will print a list of all the commits on your branch, `git log --pretty=format:"%h %s" --graph` will print the commit history in a pretty way. You can then pull up the details of a single commit with `git show commit_id` where `commit_id` is the ID of the commit. If you want less detail, you can also check a single `commit_id` with `git log --name-status --diff-filter="ACDMRT" -1 -U commit_id`.
