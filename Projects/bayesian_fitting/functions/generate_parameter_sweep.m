@@ -144,7 +144,7 @@ function [sweepBox] = calculate_sweep(VBR_init, sweep_params)
       tic()
       disp(['    calculating step ',num2str(i_P),' of ',num2str(nP)])
       VBR.in.SV.P_GPa = P_GPa0(i_P) * ones(Tshp);
-      solidus_C = SoLiquidus(VBR.in.SV.P_GPa*1e-9, zeros(Tshp), zeros(Tshp), 'hirschmann');
+      solidus_C = SoLiquidus(VBR.in.SV.P_GPa*1e9, zeros(Tshp), zeros(Tshp), 'hirschmann');
       VBR.in.SV.Tsolidus_K = solidus_C.Tsol + 273;
       VBR = VBR_spine(VBR);
       telapsed = toc() ;
