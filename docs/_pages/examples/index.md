@@ -1,6 +1,7 @@
 ---
 permalink: /examples/
 title: "VBR Calculator examples"
+toc: false
 ---
 
 The `vbr/Projects/` folder contains a number of "Projects", each of which is a self contained example of using the VBR Calculator in various ways.
