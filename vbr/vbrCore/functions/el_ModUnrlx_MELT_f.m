@@ -104,7 +104,7 @@ function [Kb_eff,Gamma_k]=melt_bulk_moduli(k,phi,A,Km,nu)
   end
 
   % eqns A5, A6, Takei 2002
-  n_k = a_vec(1).*Psi + a_vec(2).*(1-Psi) + a_vec(3).*(1-Psi).^1.5 ;
+  n_k = a_vec(1) .* Psi + a_vec(2) .* (1-Psi) + a_vec(3) .* Psi .* (1-Psi).^1.5;
 
   % normalized skeleton properties as functions of Psi
   Gamma_k = (1-phi).*(1-(1-Psi).^n_k).*ones(size(k));
@@ -146,7 +146,7 @@ function [Mu_eff,Gamma_Mu]=melt_shear_moduli(mu,phi,A,nu)
   end
 
   % eqns A6, Takei 2002
-  n_mu = b_vec(1).*Psi + b_vec(2).*(1-Psi) + b_vec(3).*(1-Psi).^2 ;
+  n_mu = b_vec(1) .* Psi + b_vec(2) .* (1-Psi) + b_vec(3) .* Psi .* (1-Psi).^2;
 
   % normalized skeleton properties as functions of Psi
   Gamma_Mu=(1-phi).*(1-(1-Psi).^n_mu).*ones(size(mu));
