@@ -1,5 +1,11 @@
 name: MATLAB Build
-on: [push]
+
+on:
+  pull_request:
+    paths:
+    - "**.m"
+    - ".github/workflows/build-test-matlab.yaml"
+
 jobs:
   matlab-build:
     name: MATLAB build
