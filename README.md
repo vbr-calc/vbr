@@ -8,11 +8,15 @@
 
 Further documentation available at [https://vbr-calc.github.io/vbr/](https://vbr-calc.github.io/vbr/). 
 
+[![MATLAB Build](https://github.com/vbr-calc/vbr/actions/workflows/build-test-matlab.yaml/badge.svg)](https://github.com/vbr-calc/vbr/actions/workflows/build-test-matlab.yaml)
+[![Octave Build](https://github.com/vbr-calc/vbr/actions/workflows/build-test-octave.yaml/badge.svg)](https://github.com/vbr-calc/vbr/actions/workflows/build-test-octave.yaml)
+
+
 ## Overview
 
 The Very Broadband Rheology (VBR) Calculator provides a useful framework for calculating material properties from thermodynamic state variables (e.g., temperature, pressure, melt fraction, grain size) using a wide range of experimental scalings. The VBR Calculator at present contains constitutive models only for olivine, but may be applied to other compositions (at your own risk). The main goal is to allow easy comparison between methods for calculating anelastic-dependent seismic properties, but the VBR Calculator can also be used for calculating steady state viscosity, pure elastic (anharmonic) seismic properties and more. It can be used to fit and analyze experimental data, infer thermodynamic state from seismic measurements, predict measurable properties from geodynamic models, for example.  
 
-At present, the code is in Matlab, but it is functional in [GNU Octave](https://www.gnu.org/software/octave/). There are plans for a python release, pending funding.
+At present, the code is in MATLAB, but it is functional in [GNU Octave](https://www.gnu.org/software/octave/). There are plans for a python release, pending funding.
 
 The remainder of this README contains information on:
 1. [Bug Reporting and User Support](#bug-reporting-and-user-support)
@@ -157,6 +161,10 @@ We follow a typical open source workflow. To submit new features:
 * submit a pull request back to the main VBRc repo 
 
 If you're new to git, github or contributing to open source projects, the following article has a nice overview with sample git commands: [GitHub Standard Fork & Pull Request Workflow](https://gist.github.com/Chaser324/ce0505fbed06b947d962).
+
+## Test Suite 
+
+When you submit a pull request, a suite of tests will run via github actions. You can run the full test suite locally by running the `run_all_tests.m` script in the top level of the repository. See `vbr/testing/README.md` for details on adding new tests and running subsets of tests.
 
 Please contact us with any questions on how to get involved!
 

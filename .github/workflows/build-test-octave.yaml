@@ -1,0 +1,20 @@
+name: Octave Build
+
+on:
+  pull_request:
+    paths:
+    - "**.m"
+    - ".github/workflows/build-test-octave.yaml"
+
+jobs:
+  test-on-octave:
+    name: Octave build
+    runs-on: ubuntu-latest
+    container:
+      image: gnuoctave/octave
+    steps:    
+    - uses: actions/checkout@v3
+    - name: Check octave installation
+      run: octave --eval "disp(version)"
+    - name: Run tests
+      run: octave --eval "run_all_tests"

@@ -1,4 +1,4 @@
-## 0_tests
+## testing
 
 This directory contains test scripts that should be run periodically when making changes.
 
@@ -11,7 +11,7 @@ When creating new code functionality, add a test function here.
 To run all tests:
 
 ```
-cd vbr/0_tests
+cd vbr/testsing
 test_results=run_tests;
 ```
 
