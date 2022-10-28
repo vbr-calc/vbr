@@ -21,4 +21,4 @@ jobs:
     - name: Check octave installation
       run: octave --eval "disp(version)"
     - name: Run tests
-      run: octave --eval "cd vbr/testing; run_tests;"
+      run: octave --eval "run_all_tests"
