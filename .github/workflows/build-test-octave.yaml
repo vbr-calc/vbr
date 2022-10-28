@@ -12,8 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: gnuoctave/octave
-    steps:
-    - name: Check out repository
+    steps:    
     - uses: actions/checkout@v3
     - name: Check octave installation
       run: octave --eval "disp(version)"
