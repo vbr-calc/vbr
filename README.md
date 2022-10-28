@@ -8,9 +8,6 @@
 
 Further documentation available at [https://vbr-calc.github.io/vbr/](https://vbr-calc.github.io/vbr/). 
 
-[![MATLAB Build](https://github.com/vbr-calc/vbr/actions/workflows/build-test-matlab.yaml/badge.svg)](https://github.com/vbr-calc/vbr/actions/workflows/build-test-matlab.yaml)
-[![Octave Build](https://github.com/vbr-calc/vbr/actions/workflows/build-test-octave.yaml/badge.svg)](https://github.com/vbr-calc/vbr/actions/workflows/build-test-octave.yaml)
-
 
 ## Overview
 
