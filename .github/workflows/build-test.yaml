@@ -6,7 +6,7 @@ on:
   pull_request:
     paths:
     - "**.m"
-    - ".github/workflows/build-test-octave.yml"
+    - ".github/workflows/build-test.yaml"
 
 jobs:
 
