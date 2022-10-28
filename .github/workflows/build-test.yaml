@@ -3,7 +3,7 @@ name: Run tests
 # look into a docker image to avoid the octave install...
 
 on:
-  push:
+  pull_request:
     paths:
     - "**.m"
     - ".github/workflows/build-test-octave.yml"
@@ -22,4 +22,3 @@ jobs:
       run: octave --eval "disp(version)"
     - name: Run tests
       run: octave --eval "cd vbr/testing; run_tests;"
-
