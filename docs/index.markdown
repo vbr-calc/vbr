@@ -13,6 +13,8 @@ The **Very Broadband Rheology (VBR)** Calculator is a **very** flexible framewor
 
 The code is free to use and expand. Read more about the background of the VBR Calculator [here](/vbr/about/), or dive into using it with the [installation](/vbr/gettingstarted/installation/) and [quick start](/vbr/gettingstarted/) guides or [example usage](/vbr/examples/).
 
+For information on the experimental Python wrapper, check out [pyVBRc](https://github.com/vbr-calc/pyVBRc).
+
 **Citing**: 
 
 If using the VBRc in your research, please cite the primary VBRc "methods paper":
