@@ -1,6 +1,4 @@
 name: Octave Build
-# modified from https://www.scivision.dev/windows-matlab-octave-continuous-integration/
-# look into a docker image to avoid the octave install...
 
 on:
   pull_request:
@@ -9,13 +7,14 @@ on:
     - ".github/workflows/build-test-octave.yaml"
 
 jobs:
-
-  build:
+  test-on-octave:
+    name: Octave build
     runs-on: ubuntu-latest
     container:
       image: gnuoctave/octave
     steps:
-    - uses: actions/checkout@v2      
+    - name: Check out repository
+    - uses: actions/checkout@v3
     - name: Check octave installation
       run: octave --eval "disp(version)"
     - name: Run tests

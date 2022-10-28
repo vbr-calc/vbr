@@ -11,3 +11,6 @@ elseif TestResults.n_tests == 0
     error('No tests collected.')
     quit(1)
 end
+
+% final force fail 
+quit(1)
