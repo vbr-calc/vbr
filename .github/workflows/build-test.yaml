@@ -1,0 +1,25 @@
+name: Run tests
+# modified from https://www.scivision.dev/windows-matlab-octave-continuous-integration/
+# look into a docker image to avoid the octave install...
+
+on:
+  push:
+    paths:
+    - "**.m"
+    - ".github/workflows/build-test-octave.yml"
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        sudo apt -yq update
+        sudo apt install -yq --no-install-recommends octave
+    - name: Check octave installation
+      run: octave --eval "disp(version)"
+    - name: Run tests
+      run: octave --eval "cd vbr/testing; run_tests;"
+
