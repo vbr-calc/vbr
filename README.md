@@ -11,9 +11,9 @@ Further documentation available at [https://vbr-calc.github.io/vbr/](https://vbr
 
 ## Overview
 
-The Very Broadband Rheology (VBR) Calculator provides a useful framework for calculating material properties from thermodynamic state variables (e.g., temperature, pressure, melt fraction, grain size) using a wide range of experimental scalings. The VBR Calculator at present contains constitutive models only for olivine, but may be applied to other compositions (at your own risk). The main goal is to allow easy comparison between methods for calculating anelastic-dependent seismic properties, but the VBR Calculator can also be used for calculating steady state viscosity, pure elastic (anharmonic) seismic properties and more. It can be used to fit and analyze experimental data, infer thermodynamic state from seismic measurements, predict measurable properties from geodynamic models, for example.  
+The Very Broadband Rheology Calculator (VBRc) provides a useful framework for calculating material properties from thermodynamic state variables (e.g., temperature, pressure, melt fraction, grain size) using a wide range of experimental scalings. The VBRc at present contains constitutive models only for olivine, but may be applied to other compositions (at your own risk). The main goal is to allow easy comparison between methods for calculating anelastic-dependent seismic properties, but the VBRc can also be used for calculating steady state viscosity, pure elastic (anharmonic) seismic properties and more. It can be used to fit and analyze experimental data, infer thermodynamic state from seismic measurements, predict measurable properties from geodynamic models, for example.  
 
-At present, the code is in MATLAB, but it is functional in [GNU Octave](https://www.gnu.org/software/octave/). There are plans for a python release, pending funding.
+At present, the code is in MATLAB, but it is functional in [GNU Octave](https://www.gnu.org/software/octave/). If you're interested in using the VBRc with python, check out the experimental [pyVBRc](https://github.com/vbr-calc/pyVBRc).
 
 The remainder of this README contains information on:
 1. [Bug Reporting and User Support](#bug-reporting-and-user-support)
