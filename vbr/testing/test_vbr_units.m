@@ -1,7 +1,9 @@
 function TestResult = test_vbr_units()
-    ################################################################
-    # check that attach_input_metadata works as expected
-    ################################################################
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % check that attach_input_metadata works as expected
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    disp('    **** Running test_vbr_units ****')
     
     units = SV_input_units(); # check that it runs
     
@@ -16,11 +18,11 @@ function TestResult = test_vbr_units()
     TestResult = true;
     if isfield(VBR.in, 'sv_metadata')
         if isfield(VBR.in.sv_metadata, "not_a_field")
-            disp("unknown field should not be in sv_metadata")
+            disp("        unknown field should not be in sv_metadata")
             TestResult = false;
         else
             if strcmp(VBR.in.sv_metadata.T_K, "Kelvin") == 0 
-                disp("Incorrect units.")
+                disp("        Incorrect units.")
                 TestResult = false;
             end
         end 
