@@ -157,6 +157,8 @@ We follow a typical open source workflow. To submit new features:
 * push those changes to your fork on github 
 * submit a pull request back to the main VBRc repo 
 
+If you're adding a new method, be sure to add a new test (see the following section) and add a note to the active release notes (`release_notes.md`) with a short summary of your work.
+
 If you're new to git, github or contributing to open source projects, the following article has a nice overview with sample git commands: [GitHub Standard Fork & Pull Request Workflow](https://gist.github.com/Chaser324/ce0505fbed06b947d962).
 
 ## Test Suite 
@@ -164,6 +166,35 @@ If you're new to git, github or contributing to open source projects, the follow
 When you submit a pull request, a suite of tests will run via github actions. You can run the full test suite locally by running the `run_all_tests.m` script in the top level of the repository. See `vbr/testing/README.md` for details on adding new tests and running subsets of tests.
 
 Please contact us with any questions on how to get involved!
+
+## Release Notes
+
+This section contains notes for the VBRc maintainers on creating releases. 
+
+To release, create a new version tag locally: 
+
+```
+$ git tag v0.99.5
+```
+and push it up to gitub 
+
+```
+$ git push upstream v0.99.5
+```
+
+this will trigger a github action that drafts a release based on the current version of `release_notes.md`. Go to github, edit the release and then hit publish when ready. 
+
+### release cleanup:
+
+After publishing, do the following:
+
+- Merge with the relevant stable series branch (`stable_0.x`, etc.)
+
+Then commit and push the following changes to `main`:
+
+- Copy/paste `release_notes.md` into `release_history.md`, reset `release_notes.md` for active development. 
+- Bump the version in `vbr/support/vbr_version.m` appropriately
+
 
 # How to Cite
 
