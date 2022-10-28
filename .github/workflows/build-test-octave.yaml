@@ -12,12 +12,10 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    container:
+      image: gnuoctave/octave
     steps:
-    - uses: actions/checkout@v2
-    - name: Install dependencies
-      run: |
-        sudo apt -yq update
-        sudo apt install -yq --no-install-recommends octave
+    - uses: actions/checkout@v2      
     - name: Check octave installation
       run: octave --eval "disp(version)"
     - name: Run tests
