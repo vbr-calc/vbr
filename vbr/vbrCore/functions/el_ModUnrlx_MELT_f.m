@@ -50,6 +50,10 @@ function [VBR] = el_ModUnrlx_MELT_f(VBR)
   poro.Vpu = Vp;
   poro.Vsu = Vs;
 
+  units.Vpu = 'm/s';
+  units.Vsu = 'm/s';
+  poro.units = units; 
+  
   % save to global VBR structure
   VBR.out.elastic.anh_poro=poro;
 end

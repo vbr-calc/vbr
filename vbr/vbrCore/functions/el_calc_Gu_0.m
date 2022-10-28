@@ -32,5 +32,11 @@ function [VBR] = el_calc_Gu_0(VBR)
   VBR.out.elastic.Gu_0=1e9*Gu; % convert to Pa;
   VBR.out.elastic.dG_dT=dG_dT; % convert to Pa;
   VBR.out.elastic.dG_dP=dG_dP; % convert to Pa;
+  
+  units = struct();
+  units.Gu_0 = "Pa";
+  units.dG_dT = "Pa/K";
+  units.dG_dP = "";
+  VBR.out.elastic.units = units;
 
 end

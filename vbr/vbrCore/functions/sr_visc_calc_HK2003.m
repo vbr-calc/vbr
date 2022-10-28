@@ -64,6 +64,11 @@ function VBR= sr_visc_calc_HK2003(VBR)
   % store total composite strain rate and effective viscosity
   VBR.out.viscous.HK2003.sr_tot=sr_tot; % total strain rate
   VBR.out.viscous.HK2003.eta_total = sig*1e6./sr_tot ; % total viscosity
+  units.sr = "1/s";
+  units.eta = "Pa*s";
+  units.sr_tot = "Pa*s";
+  units.eta_tot = "Pa*s";
+  VBR.out.viscous.HK2003.units = units;
 end
 
 function FLP=prep_constants(fH2O,T_K,params,mech)
