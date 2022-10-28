@@ -5,7 +5,7 @@ function TestResult = test_vbr_units()
     
     disp('    **** Running test_vbr_units ****')
     
-    units = SV_input_units(); # check that it runs
+    units = SV_input_units(); % check that it runs
     
     VBR = struct();
     VBR.in = struct();
