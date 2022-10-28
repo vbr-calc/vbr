@@ -47,7 +47,7 @@ function [ VBR ] = el_ModUnrlx_dTdP_f( VBR )
   units.Ku = 'Pa';
   units.Vpu = 'm/s';
   units.Vsu = 'm/s';
-  anharomic.units = units; 
+  anharmonic.units = units; 
   VBR.out.elastic.anharmonic = anharmonic;
 end
 

@@ -41,11 +41,12 @@ function TestResult = test_vbrcore_001()
   VBR = VBR_spine(VBR);
   
   % check that units are attached to output 
-  methtypes = {'anelastic'; 'viscous'; 'anelastic'};
+  methtypes = {'elastic'; 'viscous'; 'anelastic'};
   for itype = 1:numel(methtypes)
       mtype = methtypes{itype};
       for imeth = 1:numel(VBR.in.(mtype).methods_list)
           mname = VBR.in.(mtype).methods_list{imeth};
+          VBR.out.(mtype).(mname).units;
           if isfield(VBR.out.(mtype).(mname), 'units') == 0
               TestResult = false;
               disp([mname, ' is missing units.'])
