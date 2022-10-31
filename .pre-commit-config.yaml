@@ -1,0 +1,9 @@
+repos:
+- repo: local
+  hooks:
+    - id: oct_mat_compat
+      name: Fails if any pound-comments in .m files
+      files: \.m$ 
+      entry: '#'
+      args: [--multiline]
+      language: pygrep
