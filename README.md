@@ -163,9 +163,19 @@ If you're new to git, github or contributing to open source projects, the follow
 
 ## Test Suite 
 
-When you submit a pull request, a suite of tests will run via github actions. You can run the full test suite locally by running the `run_all_tests.m` script in the top level of the repository. See `vbr/testing/README.md` for details on adding new tests and running subsets of tests.
+When you submit a pull request, a suite of tests will run via github actions. These actions test functionality in both MATLAB and Octave. You can run the full test suite locally by running the `run_all_tests.m` script in the top level of the repository. See `vbr/testing/README.md` for details on adding new tests and running subsets of tests.
 
-Please contact us with any questions on how to get involved!
+## MATLAB and Octave compatibility (and pre-commit)
+
+Ensuring that code runs on both MATLAB and Octave can be tricky. Please avoid using MATLAB Toolboxes or 3rd party Octave packages. If you would like to add functionality that requires either of these, please open a discussion via the Issues page or reach out on Slack and we can figure out ways to minimize impact and properly test new functionality. 
+
+If you use Python for other projects, you can use some pre-commit checks here to help catch some errors. From a fresh environment, run `pip install -r dev_requirements.txt` to install some extra dependencies and then run 
+
+```
+pre-commit install 
+```
+
+After which, any time you run `git commit`, pre-commit will run some simple checks for you. As of now, the only check ensures that `.m` files do not contain the pound/hashtag symbol, which is a valid comment symbol in octave but not matlab and is a common mistake when your other projects are in Python... 
 
 ## Release Notes
 
