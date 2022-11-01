@@ -7,7 +7,7 @@ At present, the VBR Calculator includes methods for pure elastic, viscous and an
 
 ## Listing Methods
 
-To list available methods from a Matlab command window:
+To list available methods from a MATLAB command window:
 
 ```matlab
 >> vbrListMethods

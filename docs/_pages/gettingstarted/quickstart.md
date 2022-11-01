@@ -14,20 +14,20 @@ The following outlines the basic usage for the VBR calculator. Additionally, the
 
 ## 0. The VBR structure
 
-The VBR Calculator is built around Matlab structures. All direction and data is stored in the ```VBR``` structure, which gets passed around to where it needs to go. ```VBR.in``` contains the user's input. ```VBR.out``` contains the results of any calculations.
+The VBR Calculator is built around MATLAB structures. All direction and data is stored in the ```VBR``` structure, which gets passed around to where it needs to go. ```VBR.in``` contains the user's input. ```VBR.out``` contains the results of any calculations.
 
 !['VBRstructure'](/vbr/assets/images/vbrcoreflowchart.png){:class="img-responsive"}
 
 ## 1. Initialize VBR
 
-To start, add the top level directory to your matlab path (relative or absolute path) and run vbr_init to add all the required directories to your path:
+To start, add the top level directory to your MATLAB path (relative or absolute path) and run vbr_init to add all the required directories to your path:
 ```matlab
 vbr_path='~/src/vbr/';
 addpath(vbr_path)
 vbr_init
 ```
 
-If desired, you can permanently add the vbr directory to your path and even call `vbr_init` on opening Matlab by adding the above lines to the `startup.m` file (see [here](https://www.mathworks.com/help/matlab/ref/startup.html?searchHighlight=startup.m) for help).
+If desired, you can permanently add the vbr directory to your path and even call `vbr_init` on opening MATLAB by adding the above lines to the `startup.m` file (see [here](https://www.mathworks.com/help/matlab/ref/startup.html?searchHighlight=startup.m) for help).
 
 ## 2. Set Methods List
 
