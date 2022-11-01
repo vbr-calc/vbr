@@ -44,7 +44,7 @@
 function [VBR] = VBR_spine(VBR)
 
 %% =====================================================================
-%% Check VBR Input
+%% Check VBR Input and add some metadata
 %% =====================================================================
   VBR = checkInput(VBR);
   telapsed=struct();
@@ -53,6 +53,7 @@ function [VBR] = VBR_spine(VBR)
      return
   end
   VBR = attach_input_metadata(VBR);
+  VBR.version_used = vbr_version();
 %% =====================================================================
 %% ELASTIC properties ==================================================
 %% =====================================================================
