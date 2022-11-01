@@ -111,5 +111,10 @@ function [VBR] = Q_xfit_mxw(VBR)
 
   % calculate mean velocity along frequency dimension
   VBR.out.anelastic.(onm).Vave = Q_aveVoverf(V,VBR.in.SV.f);
+  
+  VBR.out.anelastic.(onm).units = Q_method_units();
+  VBR.out.anelastic.(onm).units.tau_M = "s";
+  VBR.out.anelastic.(onm).units.f_norm = '';
+  VBR.out.anelastic.(onm).units.tau_norm = '';
 
 end

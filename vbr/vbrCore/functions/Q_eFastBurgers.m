@@ -159,5 +159,6 @@ function [VBR] = Q_eFastBurgers(VBR)
 
   % calculate mean velocity along frequency dimension
   VBR.out.anelastic.(onm).Vave = Q_aveVoverf(V,f_vec);
+  VBR.out.anelastic.(onm).units = Q_method_units();
 
 end

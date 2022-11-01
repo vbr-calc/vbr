@@ -12,6 +12,7 @@ function TestResult = test_vbr_version()
     % ------
     % TestResult   True if passed, False otherwise.
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    disp('    **** Running test_vbr_version ****')
     version = vbr_version();
     if isfield(version, 'version')
         TestResult = true;

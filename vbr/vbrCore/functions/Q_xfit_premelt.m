@@ -84,6 +84,8 @@ function [VBR] = Q_xfit_premelt(VBR)
     % calculate mean velocity along frequency dimension
     VBRout.Vave = Q_aveVoverf(VBRout.V,VBR.in.SV.f);
 
+    VBRout.units = Q_method_units();
+    
     % store the output structure
     VBR.out.anelastic.xfit_premelt=VBRout;
 

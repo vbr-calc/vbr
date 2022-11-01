@@ -22,4 +22,8 @@ function [VBR] = el_Vs_SnLG_f(VBR)
   dV_P=0.0380.*(VBR.in.SV.P_GPa);
   dV_T=-0.000378.*(VBR.in.SV.T_K-300);
   VBR.out.elastic.SLB2005.Vs = 4.77 +  dV_P + dV_T ;
+  VBR.out.elastic.SLB2005.Vs = VBR.out.elastic.SLB2005.Vs;
+  units = struct();
+  units.Vs = "km/s";
+  VBR.out.elastic.SLB2005.units = units; 
 end

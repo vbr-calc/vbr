@@ -118,6 +118,8 @@ function [VBR] = Q_Andrade_PseudoP_f(VBR)
 
   % calculate mean velocity along frequency dimension
   VBR.out.anelastic.(andrade_nm).Vave = Q_aveVoverf(Va,f_vec);
+  VBR.out.anelastic.(andrade_nm).units = Q_method_units();
+
 
 end
 

@@ -55,6 +55,10 @@ function VBR = visc_calc_xfit_premelt(VBR)
   % calculate full viscosity
   VBR.out.viscous.xfit_premelt.diff.eta=A_n .* eta_dry;
   VBR.out.viscous.xfit_premelt.diff.eta_meltfree=eta_dry;
+  units.eta_dry = 'Pa*s';
+  units.eta = 'Pa*s';
+  units.eta_meltfree = 'Pa*s';
+  VBR.out.viscous.xfit_premelt.units = units;
 end
 
 function eta = YT2016_dryViscosity(VBR,params)
