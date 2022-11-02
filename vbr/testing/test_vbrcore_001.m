@@ -54,9 +54,9 @@ function TestResult = test_vbrcore_001()
       end 
   end 
   
-  if isfield(VBR.in, 'sv_metadata') == 0 
+  if isfield(VBR.in.SV, 'units') == 0 
       TestResult = false;
-      disp('sv_metadata is missing')
+      disp('units for VBR.in.SV are missing')
   end
 
 
