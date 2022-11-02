@@ -38,7 +38,9 @@ function VBR= sr_visc_calc_HK2003(VBR)
 
   % calculate water fugacity
   fH2O=sr_water_fugacity(Ch2o,ch2o,P_Pa,T_K); % [MPa]
+  % Fh2o is really an output: should be moved maybe?
   VBR.in.SV.Fh2o=fH2O;
+  VBR.in.SV.units.Fh2o = 'MPa';
 
   %calculate strain rate [1/s]
   sr_tot = 0;
@@ -67,7 +69,7 @@ function VBR= sr_visc_calc_HK2003(VBR)
   units.sr = "1/s";
   units.eta = "Pa*s";
   units.sr_tot = "Pa*s";
-  units.eta_tot = "Pa*s";
+  units.eta_total = "Pa*s";
   VBR.out.viscous.HK2003.units = units;
 end
 

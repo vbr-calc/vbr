@@ -85,7 +85,8 @@ function [VBR] = Q_xfit_premelt(VBR)
     VBRout.Vave = Q_aveVoverf(VBRout.V,VBR.in.SV.f);
 
     VBRout.units = Q_method_units();
-    
+    VBRout.units.M1 = 'Pa';
+    VBRout.units.M2 = 'Pa';
     % store the output structure
     VBR.out.anelastic.xfit_premelt=VBRout;
 

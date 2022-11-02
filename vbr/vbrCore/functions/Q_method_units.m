@@ -1,6 +1,6 @@
 function units = Q_method_units()
-    units.J1 = '';
-    units.J2 = '';
+    units.J1 = '1/Pa';
+    units.J2 = '1/Pa';
     units.Q = '';
     units.Qinv = '';
     units.M = 'Pa'; 

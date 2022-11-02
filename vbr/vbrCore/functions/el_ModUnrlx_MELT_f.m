@@ -52,6 +52,8 @@ function [VBR] = el_ModUnrlx_MELT_f(VBR)
 
   units.Vpu = 'm/s';
   units.Vsu = 'm/s';
+  units.Ku = 'Pa';
+  units.Gu = 'Pa';
   poro.units = units; 
   
   % save to global VBR structure
