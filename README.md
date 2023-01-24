@@ -6,7 +6,7 @@
 
 **Funding**: The VBR calculator has been developed with funding from the following NSF grants (PI Holtzman unless otherwise noted): EAR 1736165 (Earthscope, co-PI C. Havlin), EAR 13-15254 (Geophysics, PI J. Davis), EAR 1056332 (Geophysics- CAREER).
 
-Further documentation available at [https://vbr-calc.github.io/vbr/](https://vbr-calc.github.io/vbr/). 
+Further documentation available at [https://vbr-calc.github.io/vbr/](https://vbr-calc.github.io/vbr/).
 
 
 ## Overview
@@ -147,54 +147,59 @@ https://octave.sourceforge.io/io/index.html
 https://octave.sourceforge.io/statistics/index.html
 https://octave.org/doc/interpreter/Installing-and-Removing-Packages.html
 
+# Getting Help
+
+See the full documentation page on [Contributing and Getting Help](https://vbr-calc.github.io/vbr/contrib/contributing/)
+for ways to reach out or [post a github issue](https://github.com/vbr-calc/vbr/issues/new)!
+
 # Contributing to the VBRc
 
-The VBRc is open to community contributions! New methods, new examples, documentation fixes, bug fixes! 
+The VBRc is open to community contributions! New methods, new examples, documentation fixes, bug fixes!
 
-We follow a typical open source workflow. To submit new features: 
+We follow a typical open source workflow. To submit new features:
 
 * create your fork of the VBRc repo
-* checkout a new branch 
-* do work on your new branch 
-* push those changes to your fork on github 
-* submit a pull request back to the main VBRc repo 
+* checkout a new branch
+* do work on your new branch
+* push those changes to your fork on github
+* submit a pull request back to the main VBRc repo
 
 If you're adding a new method, be sure to add a new test (see the following section) and add a note to the active release notes (`release_notes.md`) with a short summary of your work.
 
 If you're new to git, github or contributing to open source projects, the following article has a nice overview with sample git commands: [GitHub Standard Fork & Pull Request Workflow](https://gist.github.com/Chaser324/ce0505fbed06b947d962).
 
-## Test Suite 
+## Test Suite
 
 When you submit a pull request, a suite of tests will run via github actions. These actions test functionality in both MATLAB and Octave. You can run the full test suite locally by running the `run_all_tests.m` script in the top level of the repository. See `vbr/testing/README.md` for details on adding new tests and running subsets of tests.
 
 ## MATLAB and Octave compatibility (and pre-commit)
 
-Ensuring that code runs on both MATLAB and Octave can be tricky. Please avoid using MATLAB Toolboxes or 3rd party Octave packages. If you would like to add functionality that requires either of these, please open a discussion via the Issues page or reach out on Slack and we can figure out ways to minimize impact and properly test new functionality. 
+Ensuring that code runs on both MATLAB and Octave can be tricky. Please avoid using MATLAB Toolboxes or 3rd party Octave packages. If you would like to add functionality that requires either of these, please open a discussion via the Issues page or reach out on Slack and we can figure out ways to minimize impact and properly test new functionality.
 
-If you use Python for other projects, you can use some pre-commit checks here to help catch some errors. From a fresh environment, run `pip install -r dev_requirements.txt` to install some extra dependencies and then run 
+If you use Python for other projects, you can use some pre-commit checks here to help catch some errors. From a fresh environment, run `pip install -r dev_requirements.txt` to install some extra dependencies and then run
 
 ```
-pre-commit install 
+pre-commit install
 ```
 
-After which, any time you run `git commit`, pre-commit will run some simple checks for you. As of now, the only check ensures that `.m` files do not contain the pound/hashtag symbol, which is a valid comment symbol in octave but not matlab and is a common mistake when your other projects are in Python... 
+After which, any time you run `git commit`, pre-commit will run some simple checks for you. As of now, the only check ensures that `.m` files do not contain the pound/hashtag symbol, which is a valid comment symbol in octave but not matlab and is a common mistake when your other projects are in Python...
 
 ## Release Notes
 
-This section contains notes for the VBRc maintainers on creating releases. 
+This section contains notes for the VBRc maintainers on creating releases.
 
-To release, create a new version tag locally: 
+To release, create a new version tag locally:
 
 ```
 $ git tag v0.99.5
 ```
-and push it up to gitub 
+and push it up to gitub
 
 ```
 $ git push upstream v0.99.5
 ```
 
-this will trigger a github action that drafts a release based on the current version of `release_notes.md`. Go to github, edit the release and then hit publish when ready. 
+this will trigger a github action that drafts a release based on the current version of `release_notes.md`. Go to github, edit the release and then hit publish when ready.
 
 ### release cleanup:
 
@@ -204,7 +209,7 @@ After publishing, do the following:
 
 Then commit and push the following changes to `main`:
 
-- Copy/paste `release_notes.md` into `release_history.md`, reset `release_notes.md` for active development. 
+- Copy/paste `release_notes.md` into `release_history.md`, reset `release_notes.md` for active development.
 - Bump the version in `vbr/support/vbr_version.m` appropriately
 
 
@@ -218,21 +223,21 @@ Additionally, you're welcome to cite the software DOI directly if you would like
 
 [![DOI](https://zenodo.org/badge/225459902.svg)](https://zenodo.org/badge/latestdoi/225459902)
 
-We also encourage you to cite the underlying primary sources that developed the scaling methods implemented by the VBRc, particularly if comparing results from different methods. Many of the methods actually have citations built into the code! For example, 
+We also encourage you to cite the underlying primary sources that developed the scaling methods implemented by the VBRc, particularly if comparing results from different methods. Many of the methods actually have citations built into the code! For example,
 
 ```
-addpath('path/to/vbrc/'); 
+addpath('path/to/vbrc/');
 vbr_init
 params = Params_Anelastic('eburgers_psp');
 disp(params.citations)
 ```
-will display relevant citations for the `eburgers_psp` method. 
+will display relevant citations for the `eburgers_psp` method.
 
 **If you publish with the VBRc**, please also send us a note and we can add you to our [VBR in the wild](https://vbr-calc.github.io/vbr/relatedpubs/) publication list.
 
 ## MIT License ##
 
-Copyright (c) 2019-2020 Benjamin Holtzman, Christopher Havlin
+Copyright (c) 2019-2023 Benjamin Holtzman, Christopher Havlin
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
