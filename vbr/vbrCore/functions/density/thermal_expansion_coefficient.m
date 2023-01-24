@@ -13,7 +13,7 @@ function al_int = thermal_expansion_coefficient(T_K, FracFo)
     % FracFo : scalar or array
     %     volume fraction of Forsterite
     %
-    % Returns
+    % Output
     % -------
     % Rho : scalar or array
     %     density in same units as input density

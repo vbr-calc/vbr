@@ -66,7 +66,7 @@ end
 
 function [Rho] = Density_NonAdiabatic_Thermal_Expansion(Rho_o,T,Z,dTdz_ad,FracFo)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % corrects density for nonadiabatic thermal expansion 
+    % corrects density for nonadiabatic thermal expansion
     %
     % rho = rho(P)*(1 + drho(T)) where rho(P) is the adiabatic density profile
     % and drho(T) is the nonadiabatic thermal expansion/contraction.
@@ -79,7 +79,7 @@ function [Rho] = Density_NonAdiabatic_Thermal_Expansion(Rho_o,T,Z,dTdz_ad,FracFo
     % dTdz_ad adiabatic temperature gradient [K m^-1]
     % FracFo  volume fraction Forsterite
     %
-    % Returns
+    % Output
     % -------
     % Rho     density [kg m^-3]
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

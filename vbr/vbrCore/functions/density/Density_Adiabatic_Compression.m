@@ -1,29 +1,29 @@
 function [Rho,P] = Density_Adiabatic_Compression(Rho_o,Z,P0)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Adiabatic Compression along a profile following Turcotte and Schubert
-    % should be ok for upper mantle, shallower than the 410 km phase change.        
+    % should be ok for upper mantle, shallower than the 410 km phase change.
     %
     % Parameters
     % ----------
-    % Rho_o 
+    % Rho_o
     %     reference density in kg/m^3
     % Z
     %     depth in m
     % P0
-    %     reference pressure in Pa 
-    % 
-    % Returns 
+    %     reference pressure in Pa
+    %
+    % Output 
     % -------
     % [Rho, P]
     %    Rho : adiabatic-corrected density in kg/m^3
     %    P   : pressure profile in Pa
     % see page ~190 in 1st edition, 185 in 2nd edition.                 %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    Rho = Rho_o.*ones(size(Z)); % make sure Rho is an array    
+    Rho = Rho_o.*ones(size(Z)); % make sure Rho is an array
 
     % integrate the reference density profile
     RhoGZ = cumtrapz(Z,Rho*9.8); % [Pa]
-    
+
     % adiabatic compressibility (values from Turcotte and Schubert)
     Beta_Surf = 8.7*1e-12; % at surface [Pa^-1]
     Beta_CMB = 1.6*1e-12; % at CMB [Pa^-1]

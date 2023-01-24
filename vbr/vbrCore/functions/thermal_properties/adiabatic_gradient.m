@@ -13,7 +13,7 @@ function dTdz_s = adiabatic_gradient(T_K, rho, FracFo)
     % FracFo
     %     volume fraction forsterite
     %
-    % Returns
+    % Output
     % -------
     % dTdz_s
     %     adiabatic gradient in K/m
