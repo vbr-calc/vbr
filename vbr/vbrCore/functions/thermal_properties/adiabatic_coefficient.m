@@ -19,5 +19,5 @@ function dTdP_s = adiabatic_coefficient(T_K, rho, FracFo)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     Cp = SpecificHeat(T_K, FracFo);
     al = thermal_expansion_coefficient(T_K, FracFo);
-    dTdP_s = al. * T_k ./ (rho. * Cp);
+    dTdP_s = al .* T_K ./ (rho .* Cp);
 end 

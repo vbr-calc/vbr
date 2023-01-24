@@ -20,5 +20,5 @@ function dTdz_s = adiabatic_gradient(T_K, rho, FracFo)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     Cp = SpecificHeat(T_K, FracFo);
     al = thermal_expansion_coefficient(T_K, FracFo);
-    dTdz_s = al. * 9.8 * T_k ./ Cp;
+    dTdz_s = al.* 9.8 * T_K ./ Cp;
 end 
