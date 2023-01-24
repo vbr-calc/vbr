@@ -2,7 +2,7 @@ function TestResult = test_vbrcore_005_san_carlos_den()
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TestResult = test_vbrcore_005_san_carlos_den()
 %
-% test the density helper functions
+% test san_carlos_density_from_pressure
 %
 % Parameters
 % ----------
