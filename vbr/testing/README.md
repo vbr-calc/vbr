@@ -2,7 +2,8 @@
 
 This directory contains test scripts that should be run periodically when making changes.
 
-`run_tests.m` is the main driver. The default is to run all `.m` files in this directory.
+`run_tests.m` is the main driver. The default is to run all `.m` files in this directory
+that start with `test_`.
 
 When creating new code functionality, add a test function here.
 
@@ -37,3 +38,15 @@ Displaying failed test functions. Please run each one and debug:
 ```
 
 You would then need to run `test_000_vbrcore()` to debug the problem.
+
+### adding tests
+
+To write a new test, it's easiest to copy one of the existing tests to a new file and
+modify the function name, docstring and messaging. The most important point is that the
+new test function **must** return a boolean value that is `true` if the test ran as expected
+and is `false` if your function did not behave as expected. If your test simply checks
+whether or not some code runs without error, then your function should always return
+`true` as any errors will be caught during execution.
+
+If you are adding a test that is not compatible with octave, add the test function name
+to the test configuration in the `get_config.m` file. 
