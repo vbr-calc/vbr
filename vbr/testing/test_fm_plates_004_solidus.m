@@ -13,6 +13,10 @@ function TestResult = test_fm_plates_004_solidus()
   % TestResult   True if passed, False otherwise.
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   disp('    **** Running test_fm_plates_004_solidus ****')
+  
+  % Note that the SoLiquidus function now lives in the vbrCore/functions/thermal_properties/
+  % directory. 
+  
   TestResult=true;
 
   F = 0.05;
