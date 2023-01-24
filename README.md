@@ -20,7 +20,9 @@ To install, see the [instructions in the main documentation](https://vbr-calc.gi
 The remainder of this README contains information on:
 1. [Bug Reporting and User Support](#bug-reporting-and-user-support)
 2. [Basic Usage](#basic-usage)
-3. [Contributing to the VBRc](#contributing-to-the-vbrc)
+3. [Getting Help](#getting-help)
+4. [Contributing to the VBRc](#contributing-to-the-vbrc)
+5. [How to Cite](#how-to-cite)
 
 ## Bug Reporting and User Support
 
