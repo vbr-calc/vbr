@@ -12,7 +12,7 @@ When creating new code functionality, add a test function here.
 To run all tests:
 
 ```
-cd vbr/testsing
+cd vbr/testing
 test_results=run_tests;
 ```
 
