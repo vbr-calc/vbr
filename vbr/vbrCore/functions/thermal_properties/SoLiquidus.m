@@ -182,7 +182,7 @@ function [dTz] = depression_dasgupta(CO2_z)
      CO2 = CO2_z(iz);
      if CO2 <= 25
          dT = 27.04 * CO2 +  1490.75 * log((100-1.18 * CO2)/100);
-     elseif CO2 > 25 && CO2 < 37;
+     elseif CO2 > 25 && CO2 <= 37
          dTmax = 27.04 * 25 +  1490.75 * log((100-1.18 * 25)/100);
          dT = dTmax +  (160 - dTmax)/(37 - 25) * (CO2-25);
      elseif CO2 > 37
