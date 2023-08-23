@@ -22,22 +22,27 @@ function tau = Q_eBurgers_mxwll(VBR,Gu)
   % read in parameters
   Burger_params=VBR.in.anelastic.eburgers_psp;
   bType=Burger_params.eBurgerFit;
-
+  fit_params = Burger_params.(bType);
   % state variables for either maxwell time or integration limits, peak loc:
   phi =  VBR.in.SV.phi ;
   T_K_mat = VBR.in.SV.T_K ; % temperature [K]
   P_Pa_mat = VBR.in.SV.P_GPa.*1e9 ; % convert pressure GPa to Pa = GPa*1e9
   d_mat = VBR.in.SV.dg_um ; % microns grain size
+  Ch2o_ppm = VBR.in.SV.Ch2o;
 
   % Scaling values from JF10
-  TR = Burger_params.(bType).TR ;% Kelvins
-  PR = Burger_params.(bType).PR *1e9; % convert pressure GPa to Pa = GPa*1e9
-  dR = Burger_params.(bType).dR ; % microns grain size
-  E = Burger_params.(bType).E ; % activation energy J/mol
+  TR = fit_params.TR ;% Kelvins
+  PR = fit_params.PR *1e9; % convert pressure GPa to Pa = GPa*1e9
+  dR = fit_params.dR ; % microns grain size
+  E = fit_params.E ; % activation energy J/mol
+  if strcmp(bType, 'liu_water_2023')
+      % the activation enthalpy depends on water conent
+      E = E - fit_params.k * log(Ch2o_ppm);
+  end
   R = Burger_params.R ; % gas constant
-  Vstar = Burger_params.(bType).Vstar ; % m^3/mol Activation Volume
-  m_a = Burger_params.(bType).m_a ; % grain size exponent (anelastic)
-  m_v = Burger_params.(bType).m_v ; % grain size exponent (viscous)
+  Vstar = fit_params.Vstar ; % m^3/mol Activation Volume
+  m_a = fit_params.m_a ; % grain size exponent (anelastic)
+  m_v = fit_params.m_v ; % grain size exponent (viscous)
 
   % maxwell time calculation
   [visc_exists,missing]=checkStructForField(VBR,{'in','viscous','methods_list'},0);
@@ -45,7 +50,10 @@ function tau = Q_eBurgers_mxwll(VBR,Gu)
     % use JF10's exact relationship
     scale=((d_mat./dR).^m_v).*exp((E/R).*(1./T_K_mat-1/TR)).*exp((Vstar/R).*(P_Pa_mat./T_K_mat-PR/TR));
     scale=addMeltEffects(phi,scale,VBR.in.GlobalSettings,Burger_params);
-    Tau_MR = Burger_params.(bType).Tau_MR ;
+    if strcmp(bType, 'liu_water_2023')
+        scale = addWaterEffects(scale, Ch2o_ppm, fit_params);
+    end
+    Tau_MR = fit_params.Tau_MR ;
     tau.maxwell=Tau_MR .* scale ; % steady state viscous maxwell time
   else
     % use diffusion viscosity from VBR to get maxwell time
@@ -57,9 +65,23 @@ function tau = Q_eBurgers_mxwll(VBR,Gu)
   % integration limits and peak location
   LHP=((d_mat./dR).^m_a).*exp((E/R).*(1./T_K_mat-1/TR)).*exp((Vstar/R).*(P_Pa_mat./T_K_mat-PR/TR));
   LHP=addMeltEffects(phi,LHP,VBR.in.GlobalSettings,Burger_params);
-  tau.L = Burger_params.(bType).Tau_LR * LHP;
-  tau.H = Burger_params.(bType).Tau_HR * LHP;
-  tau.P = Burger_params.(bType).Tau_PR * LHP;
+
+  % note on water effects: Liu et al find no dependence for the peak position
+  % on water content, so here, we calculate tau.P as normal before adding the
+  % water effects.
+  tau.P = fit_params.Tau_PR * LHP;
+  if strcmp(bType, 'liu_water_2023')
+      LHP = addWaterEffects(LHP, Ch2o_ppm , fit_params);
+  end
+  tau.L = fit_params.Tau_LR * LHP;  
+  tau.H = fit_params.Tau_HR * LHP;
+
+end
+
+function scaleMat = addWaterEffects(scaleMat, Ch2o_ppm, liu_params);
+    c_ref = liu_params.c_ref;
+    c_factor = (Ch2o_ppm / c_ref) .^ liu_params.r_m;
+    scaleMat = scaleMat.*c_factor;
 end
 
 function scaleMat=addMeltEffects(phi,scaleMat,GlobalSettings,Burger_params)

@@ -50,12 +50,13 @@ function [VBR] = Q_eBurgers_f(VBR)
   bType=Burger_params.eBurgerFit;
   alf = Burger_params.(bType).alf ;
   DeltaB = Burger_params.(bType).DeltaB ; % relaxation strength of background
-  DeltaP=Burger_params.(bType).DeltaP; % relaxation strength of peak
+  DeltaP0=Burger_params.(bType).DeltaP; % relaxation strength of peak
+  has_peak = DeltaP0 > 0;
   sig=Burger_params.(bType).sig;
   HTB_int_meth=Burger_params.integration_method ; % (trapezoidal, 0; quadrature, 1)
   ntau = Burger_params.tau_integration_points ;
 
-  if DeltaP>0
+  if has_peak
     orig_state = warning;
     warning('off','all'); % suppress quadgk warning
   end
@@ -78,6 +79,9 @@ function [VBR] = Q_eBurgers_f(VBR)
     if HTB_int_meth == 0
       Tau_X_vec = logspace(log10(Tau_L),log10(Tau_H),ntau) ;
     end
+
+    ch2o = VBR.in.SV.Ch2o(x1); % no effect if not the right method
+    DeltaP = Q_eBurgers_modify_peak_strength(DeltaP0, ch2o, Burger_params);
 
     % loop over frequency
     for i=1:nfreq
@@ -105,7 +109,7 @@ function [VBR] = Q_eBurgers_f(VBR)
 
           J1(i_glob) = (1 + int1);
           J2(i_glob) = (int2 + 1./(w.*Tau_M));
-        elseif HTB_int_meth==2 % use quadgk
+      elseif HTB_int_meth==2 % use quadgk
             Tau_fac = alf.*DeltaB./(Tau_H.^alf - Tau_L.^alf);
 
             FINT1 = @(x) (x.^(alf-1))./(1+(w.*x).^2);
@@ -120,7 +124,7 @@ function [VBR] = Q_eBurgers_f(VBR)
 
       % add on peak if it's being used.
       % May trigger warning, this integral is not easy.
-      if DeltaP>0
+      if has_peak
         FINT2 = @(x) (exp(-(log(x./Tau_P)/sig).^2/2)./(1+(w.*x).^2));
         int2a = quadgk(FINT2, 0, inf);
         J2(i_glob)=J2(i_glob)+DeltaP*w*(int2a)/(sig*sqrt(2*pi));
@@ -146,7 +150,7 @@ function [VBR] = Q_eBurgers_f(VBR)
   end % end the loop(s) over spatial dimension(s)
   % ============================================================================
 
-  if DeltaP>0
+  if has_peak
     warning(orig_state);
   end
 
@@ -164,6 +168,6 @@ function [VBR] = Q_eBurgers_f(VBR)
   VBR.out.anelastic.(onm).Vave = Q_aveVoverf(V,f_vec);
   VBR.out.anelastic.(onm).units = Q_method_units();
   VBR.out.anelastic.(onm).units.tau_M = "s";
-  
+
 
 end

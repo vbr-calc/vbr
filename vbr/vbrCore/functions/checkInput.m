@@ -39,7 +39,7 @@ function [VBR]=checkInput(VBR)
   % defaults for GlobalSettings
   % GlobalDefaults.melt_enhancement=0; % global melt enhacement flag on/off.
   GlobalDefaults=Params_Global();
-  
+
   % loop over requirements, check them.
   for ri = 1:size(Reqs,1)
       typ=Reqs{ri,1}; % general method field
@@ -106,6 +106,9 @@ function [VBR]=checkInput(VBR)
 
   % some optional state variable fields
   if ~isfield(VBR.in.SV,'Ch2o')
+    % TODO: this should be adjusted given that Liu eBurgers is undefined for
+    % indentically zero values. should at least catch it and raise a warning
+    % when using that method.
     VBR.in.SV.Ch2o=zeros(size(VBR.in.SV.T_K)); % no effect when at 0
   end
   if ~isfield(VBR.in.SV,'chi')

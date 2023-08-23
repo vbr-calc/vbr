@@ -23,17 +23,15 @@ function params = Params_Anelastic(method,GlobalParams)
   if strcmp(method,'eburgers_psp')
     % extended burgers parameters
     params.func_name='Q_eBurgers_decider'; % the name of the matlab function
-    params.citations={'Faul and Jackson, 2015, Ann. Rev. of Earth and Planetary Sci., https://doi.org/10.1146/annurev-earth-060313-054732',...
-                      'Jackson and Faul, 2010, Phys. Earth Planet. Inter., https://doi.org/10.1016/j.pepi.2010.09.005'};
     params.method='PointWise'; % 'FastBurger' uses look-up table for integration, only works for high temp background
                                % 'PointWise' integrates every frequency and state variable condition
     params.nTauGlob=3000; % points for global Tau discretization ('FastBurger' ONLY)
     params.R = 8.314 ; % gas constant
-    params.eBurgerFit='bg_only'; % 'bg_only' or 'bg_peak' or 's6585_bg_only'
+    params.eBurgerFit='bg_only'; % 'bg_only' or 'bg_peak' or 's6585_bg_only' or 'liu_water_2023'
     params.useJF10visc=1; % if 1, will use the scaling from JF10 for maxwell time. If 0, will calculate
     params.integration_method=0; % 0 for trapezoidal, 1 for quadrature.
     params.tau_integration_points = 500 ; % number of points for integration of high-T background if trapezoidal
-    params=load_JF10_eBurger_params(params);
+    params=load_eBurger_params(params);
   end
 
   if strcmp(method,'andrade_psp')
@@ -137,6 +135,52 @@ function params = Params_Anelastic(method,GlobalParams)
 end
 
 
+function params = load_eBurger_params(params)
+  % loads eBurgers parameter sets
+  params = load_JF10_eBurger_params(params);
+  params = load_eBurgers_Liu(params);
+end
+
+function params = load_eBurgers_Liu(params)
+
+  % note: Liu et al. do not conduct pressure-dependent expereiments, so they
+  % only report an activation enthalpy. So here, we set the activation energy
+  % to their enthalpy value and zero out the activation volume. Mathematically
+  % it works out.
+  params.liu_water_2023.E = 308*1e3;
+  params.liu_water_2023.Vstar = 0;
+
+  params.liu_water_2023.dR = 10; % no value supplied, using a value close to mean of exps
+
+  params.liu_water_2023.r = 0.79; % background strength water exponent
+  params.liu_water_2023.m_a = 1;  % anelastic grain size exponent
+  params.liu_water_2023.m_v = 3 ; % viscous grain size exponent for maxwell time
+  params.liu_water_2023.alf = 0.39; % high temp background exponent
+  params.liu_water_2023.Tau_LR = 0.1; % relaxation time lower limit
+  params.liu_water_2023.Tau_HR = 1e8; % relaxation time upper limit
+  params.liu_water_2023.Tau_MR = 1e4; % maxwell time reference
+  params.liu_water_2023.r_m = 3; % water exponent for relaxation time
+  params.liu_water_2023.G_UR = 62.;
+  params.liu_water_2023.DeltaB = 65; % relaxation strength of background.
+  params.liu_water_2023.Tau_PR = 0.54; % peak location
+
+  params.liu_water_2023.r_p = 0.86; % water exponent for peak
+  params.liu_water_2023.DeltaP = 0.25; % DeltaP_0 in liu et al (the 0 water intercept)
+  params.liu_water_2023.JuT = -0.014; % Ju temp dependence, not used.
+  params.liu_water_2023.c_ref = 200; % reference water content in wt ppm
+  params.liu_water_2023.TR = 1173; % reference temperature, K
+  params.liu_water_2023.PR = 3; % experimental pressure, GPa
+  params.liu_water_2023.k = 6e4; % enthalpy water dependence
+  params.liu_water_2023.sig=.04; % sigma, peak breadth
+
+  citation = ['Liu, Chao, et al. "Effect of water on seismic attenuation ', ...
+              'of the upper mantle: The origin of the sharp ', ...
+              'lithosphere–asthenosphere boundary." Proceedings of the ', ...
+              ' National Academy of Sciences 120.32 (2023): e2221770120. ', ...
+              'https://doi.org/10.1073/pnas.2221770120'];
+  params.liu_water.citation = {citation};
+end
+
 function params=load_JF10_eBurger_params(params)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % loads fitting parameters
@@ -208,6 +252,8 @@ function params=load_JF10_eBurger_params(params)
   params.s6585_bg_peak.Tau_MR = 10^5.4 ; % Reference Maxwell relaxation time
 
   % parameters commmon to all the above
+  JF10citations ={'Faul and Jackson, 2015, Ann. Rev. of Earth and Planetary Sci., https://doi.org/10.1146/annurev-earth-060313-054732',...
+                    'Jackson and Faul, 2010, Phys. Earth Planet. Inter., https://doi.org/10.1016/j.pepi.2010.09.005'};
   meths={'s6585_bg_peak';'s6585_bg_only';'bg_peak';'bg_only'};
   for imeth=1:numel(meths)
     meth=meths{imeth};
@@ -215,6 +261,7 @@ function params=load_JF10_eBurger_params(params)
     params.(meth).PR = 0.2; % ref confining pressure of experiments, GPa
     params.(meth).Vstar = 10e-6 ; % m^3/mol (Activation Volume? or molar volume?)
     params.(meth).m_v = 3 ; % viscous grain size exponent for maxwell time
+    params.(meth).citation = JF10citations;
   end
 
 end
