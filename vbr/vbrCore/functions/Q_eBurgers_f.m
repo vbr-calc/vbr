@@ -49,7 +49,7 @@ function [VBR] = Q_eBurgers_f(VBR)
   Burger_params=VBR.in.anelastic.eburgers_psp;
   bType=Burger_params.eBurgerFit;
   alf = Burger_params.(bType).alf ;
-  DeltaB = Burger_params.(bType).DeltaB ; % relaxation strength of background
+  DeltaB0 = Burger_params.(bType).DeltaB ; % relaxation strength of background
   DeltaP0=Burger_params.(bType).DeltaP; % relaxation strength of peak
   has_peak = DeltaP0 > 0;
   sig=Burger_params.(bType).sig;
@@ -82,6 +82,7 @@ function [VBR] = Q_eBurgers_f(VBR)
 
     ch2o = VBR.in.SV.Ch2o(x1); % no effect if not the right method
     DeltaP = Q_eBurgers_modify_peak_strength(DeltaP0, ch2o, Burger_params);
+    DeltaB = Q_eBurgers_modify_background_strength(DeltaB0, ch2o, Burger_params);
 
     % loop over frequency
     for i=1:nfreq

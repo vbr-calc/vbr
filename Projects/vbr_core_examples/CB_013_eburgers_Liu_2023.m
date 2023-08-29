@@ -23,7 +23,7 @@ Ch2o_ppm = [9, 77, 143];
 
 [VBR.in.SV.T_K, VBR.in.SV.Ch2o] = meshgrid(T_K, Ch2o_ppm);
 sz = size(VBR.in.SV.T_K);
-VBR.in.SV.dg_um = 10 * ones(sz); % close to measured values in experiments
+VBR.in.SV.dg_um = 76 * ones(sz); % close to measured values in experiments
 VBR.in.SV.P_GPa = 3 * ones(sz); % fixed experimetnal condition
 VBR.in.SV.rho = 3300 * ones(sz); % density [kg m^-3]
 VBR.in.SV.sig_MPa = 10 * ones(sz); % differential stress [MPa]

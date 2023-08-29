@@ -150,7 +150,7 @@ function params = load_eBurgers_Liu(params)
   params.liu_water_2023.E = 308*1e3;
   params.liu_water_2023.Vstar = 0;
 
-  params.liu_water_2023.dR = 10; % no value supplied, using a value close to mean of exps
+  params.liu_water_2023.dR = 76; % from code inspection in supplemental
 
   params.liu_water_2023.r = 0.79; % background strength water exponent
   params.liu_water_2023.m_a = 1;  % anelastic grain size exponent
@@ -164,7 +164,7 @@ function params = load_eBurgers_Liu(params)
   params.liu_water_2023.DeltaB = 65; % relaxation strength of background.
   params.liu_water_2023.Tau_PR = 0.54; % peak location
 
-  params.liu_water_2023.r_p = 0.86; % water exponent for peak
+  params.liu_water_2023.r_p = 0.86; % water exponent for peak strength
   params.liu_water_2023.DeltaP = 0.25; % DeltaP_0 in liu et al (the 0 water intercept)
   params.liu_water_2023.JuT = -0.014; % Ju temp dependence, not used.
   params.liu_water_2023.c_ref = 200; % reference water content in wt ppm

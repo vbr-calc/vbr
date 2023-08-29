@@ -37,7 +37,7 @@ function tau = Q_eBurgers_mxwll(VBR,Gu)
   E = fit_params.E ; % activation energy J/mol
   if strcmp(bType, 'liu_water_2023')
       % the activation enthalpy depends on water conent
-      E = E - fit_params.k * log(Ch2o_ppm);
+      E = E - fit_params.k * log(Ch2o_ppm/fit_params.c_ref);
   end
   R = Burger_params.R ; % gas constant
   Vstar = fit_params.Vstar ; % m^3/mol Activation Volume
@@ -47,11 +47,14 @@ function tau = Q_eBurgers_mxwll(VBR,Gu)
   % maxwell time calculation
   [visc_exists,missing]=checkStructForField(VBR,{'in','viscous','methods_list'},0);
   if Burger_params.useJF10visc || visc_exists==0
-    % use JF10's exact relationship
+    % use JF10 exact relationship
     scale=((d_mat./dR).^m_v).*exp((E/R).*(1./T_K_mat-1/TR)).*exp((Vstar/R).*(P_Pa_mat./T_K_mat-PR/TR));
     scale=addMeltEffects(phi,scale,VBR.in.GlobalSettings,Burger_params);
     if strcmp(bType, 'liu_water_2023')
-        scale = addWaterEffects(scale, Ch2o_ppm, fit_params);
+%        scale = addWaterEffects(scale, Ch2o_ppm, fit_params);
+        c_ref = fit_params.c_ref;
+        c_factor = (Ch2o_ppm / c_ref) .^ (-fit_params.r_m);
+        scale = scale.*c_factor;
     end
     Tau_MR = fit_params.Tau_MR ;
     tau.maxwell=Tau_MR .* scale ; % steady state viscous maxwell time
@@ -66,22 +69,16 @@ function tau = Q_eBurgers_mxwll(VBR,Gu)
   LHP=((d_mat./dR).^m_a).*exp((E/R).*(1./T_K_mat-1/TR)).*exp((Vstar/R).*(P_Pa_mat./T_K_mat-PR/TR));
   LHP=addMeltEffects(phi,LHP,VBR.in.GlobalSettings,Burger_params);
 
-  % note on water effects: Liu et al find no dependence for the peak position
-  % on water content, so here, we calculate tau.P as normal before adding the
-  % water effects.
-  tau.P = fit_params.Tau_PR * LHP;
+
   if strcmp(bType, 'liu_water_2023')
-      LHP = addWaterEffects(LHP, Ch2o_ppm , fit_params);
+      % liu et al report a fixed location for the peak
+      tau.P = fit_params.Tau_PR .* ones(size(LHP));
+  else
+      tau.P =  fit_params.Tau_PR * LHP;
   end
-  tau.L = fit_params.Tau_LR * LHP;  
+  tau.L = fit_params.Tau_LR * LHP;
   tau.H = fit_params.Tau_HR * LHP;
 
-end
-
-function scaleMat = addWaterEffects(scaleMat, Ch2o_ppm, liu_params);
-    c_ref = liu_params.c_ref;
-    c_factor = (Ch2o_ppm / c_ref) .^ liu_params.r_m;
-    scaleMat = scaleMat.*c_factor;
 end
 
 function scaleMat=addMeltEffects(phi,scaleMat,GlobalSettings,Burger_params)
