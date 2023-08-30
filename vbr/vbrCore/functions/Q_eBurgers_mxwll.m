@@ -51,7 +51,6 @@ function tau = Q_eBurgers_mxwll(VBR,Gu)
     scale=((d_mat./dR).^m_v).*exp((E/R).*(1./T_K_mat-1/TR)).*exp((Vstar/R).*(P_Pa_mat./T_K_mat-PR/TR));
     scale=addMeltEffects(phi,scale,VBR.in.GlobalSettings,Burger_params);
     if strcmp(bType, 'liu_water_2023')
-%        scale = addWaterEffects(scale, Ch2o_ppm, fit_params);
         c_ref = fit_params.c_ref;
         c_factor = (Ch2o_ppm / c_ref) .^ (-fit_params.r_m);
         scale = scale.*c_factor;
@@ -68,7 +67,6 @@ function tau = Q_eBurgers_mxwll(VBR,Gu)
   % integration limits and peak location
   LHP=((d_mat./dR).^m_a).*exp((E/R).*(1./T_K_mat-1/TR)).*exp((Vstar/R).*(P_Pa_mat./T_K_mat-PR/TR));
   LHP=addMeltEffects(phi,LHP,VBR.in.GlobalSettings,Burger_params);
-
 
   if strcmp(bType, 'liu_water_2023')
       % liu et al report a fixed location for the peak

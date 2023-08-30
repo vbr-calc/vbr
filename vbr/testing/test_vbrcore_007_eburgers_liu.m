@@ -50,7 +50,7 @@ function TestResult = test_vbrcore_007_eburgers_liu()
     % actual dissipation peak location, because Qinv is J1/J2, which
     % include the maxwell term and integrals of the peak. so the
     % final peak shifts a bit. the following number was found
-    % empirically.  
+    % empirically.
     tau_peak = 3.2745;
 
     if abs(tau_peak - tau_peak_actual) > 0.001
