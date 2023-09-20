@@ -30,6 +30,7 @@ function [ VBR ] = el_ModUnrlx_dTdP_f( VBR )
     % Load unrelaxed shear and bulk moduli (at T,P of interest)
     Gu_TP = VBR.in.elastic.Gu_TP; % Pa
     Ku_TP = VBR.in.elastic.Ku_TP; % Pa
+    VBR.out.elastic.Gu_0 = Gu_TP; 
     
   elseif isfield(VBR.in.elastic,'Gu_TP') && ~isfield(VBR.in.elastic,'Ku_TP')
     % Load unrelaxed shear modulus (at T,P of interest)
