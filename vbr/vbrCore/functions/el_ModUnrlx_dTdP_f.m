@@ -37,7 +37,9 @@ function [ VBR ] = el_ModUnrlx_dTdP_f( VBR )
     Gu_TP = VBR.in.elastic.Gu_TP; % Pa
     
     % calculate bulk modulus
-    warning(['No Bulk Modulus found. Calculating assuming nu=',num2str(nu)]);
+disp(['Unrelaxed shear modulus was provided without an unrelaxed bulk modulus.', ...
+          ' Calculating bulk modulus assuming nu=', num2str(nu), ...
+          '. Set VBR.in.elastic.Ku_TP to specify a value.']);
     Ku_TP = calc_Ku(Gu_TP,nu);
   else
       dT = (VBR.in.SV.T_K-T_K_ref);
