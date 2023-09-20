@@ -25,8 +25,6 @@ function [ VBR ] = el_ModUnrlx_dTdP_f( VBR )
   T_K_ref = ela.T_K_ref ;
   P_Pa_ref = ela.P_Pa_ref ;
   Gu_0=VBR.out.elastic.Gu_0; % Pa
-  dT = (VBR.in.SV.T_K-T_K_ref);
-  dP = (VBR.in.SV.P_GPa*1e9 - P_Pa_ref);
 
   if isfield(VBR.in.elastic,'Gu_TP') && isfield(VBR.in.elastic,'Ku_TP')
     % Load unrelaxed shear and bulk moduli (at T,P of interest)
