@@ -39,6 +39,8 @@ function [ VBR ] = el_ModUnrlx_dTdP_f( VBR )
     warning(['No Bulk Modulus found. Calculating assuming nu=',num2str(nu)]);
     Ku_TP = calc_Ku(Gu_TP,nu);
   else
+      dT = (VBR.in.SV.T_K-T_K_ref);
+      dP = (VBR.in.SV.P_GPa*1e9 - P_Pa_ref);
     % calculate shear modulus at T,P of interest
     Gu_TP = calc_Gu(Gu_0,dT,dP,dG_dT0,dG_dP0);
 
