@@ -49,8 +49,7 @@ function TestResult = test_fm_plates_006_thermoprops()
       msg = '        ThermodynamicProps solution contains nans';
       disp(msg)
       TestResult.fail_message = msg;
-    % elseif sum(isnan(P2))>0
-  else 
+    elseif sum(isnan(P2))>0
       TestResult.passed=false;
       msg = '        MaterialProperties solution contains nans';
       disp(msg)
