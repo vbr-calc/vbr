@@ -10,20 +10,26 @@ function TestResult = test_vbr_version()
     %
     % Output
     % ------
-    % TestResult   True if passed, False otherwise.
+    % TestResult  struct with fields:
+    %           .passed         True if passed, False otherwise.
+    %           .fail_message   Message to display if false
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    disp('    **** Running test_vbr_version ****')
+
     version = vbr_version();
+    TestResult.passed = true;
+    TestResult.fail_message = '';
     if isfield(version, 'version')
-        TestResult = true;
+        TestResult.passed = true;
     else
-        disp('         vbr_version output missing version field')
-        TestResult = false;
+        TestResult.passed = false;
+        msg = '         vbr_version output missing version field'
+        disp(msg)
+        TestResult.fail_message = msg;
     end
-    
-    % also check that the version gets attached to the VBR in a call 
+
+    % also check that the version gets attached to the VBR in a call
     VBR.in.elastic.methods_list={'anharmonic'};
-    
+
     % Define the Thermodynamic State
     n1 = 3;
     n2 = 5;
@@ -33,7 +39,9 @@ function TestResult = test_vbr_version()
 
     VBR = VBR_spine(VBR);
     if isfield(VBR, 'version_used') == 0
-        disp('         VBR structure is missing version_used field')
-        TestResult = false;
+        msg = '         VBR structure is missing version_used field'
+        TestResult.passed = false;
+        disp(msg)
+        TestResult.fail_message = msg;
     end
 end

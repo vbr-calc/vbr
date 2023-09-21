@@ -10,17 +10,21 @@ function TestResult = test_matlab_only_test_trigger()
     %
     % Output
     % ------
-    % TestResult   True if passed, False otherwise.
+    % TestResult  struct with fields:
+    %           .passed         True if passed, False otherwise.
+    %           .fail_message   Message to display if false
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    TestResult=true;
-    disp('    **** Running test_matlab_only_test_trigger ****')
+    TestResult.passed =true;
+    TestResult.fail_message = '';    
 
     isOctave = is_octave();
 
     if isOctave
-        TestResult = false;
-        disp("   This test is MATLAB only, but Octave is running it..")
+        TestResult.passed = false;
+        msg = "   This test is MATLAB only, but Octave is running it...";
+        disp(msg);
+        TestResult.fail_message = msg;
     end
 
 

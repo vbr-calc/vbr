@@ -10,10 +10,13 @@ function TestResult = test_fm_plates_006_thermoprops()
   %
   % Output
   % ------
-  % TestResult   True if passed, False otherwise.
+  % TestResult  struct with fields:
+  %           .passed         True if passed, False otherwise.
+  %           .fail_message   Message to display if false
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  disp('    **** Running test_fm_plates_006_thermoprops ****')
-  TestResult=true;
+
+  TestResult.passed =true;
+  TestResult.fail_message = '';
 
   z=transpose(linspace(0,400,100)*1e3);
   P0=1e5;
@@ -25,7 +28,7 @@ function TestResult = test_fm_plates_006_thermoprops()
   T=1400*z/z_L;
   T(z>z_L)=(z(z>z_L)-z_L) * dTdz_ad + max(T(z<=z_L));
   T=T+273;
-  PropTypes= {'con';'P_dep';'T_dep';'PT_dep'};  
+  PropTypes= {'con';'P_dep';'T_dep';'PT_dep'};
   P1=zeros(numel(z),4);
   P2=zeros(numel(z),4);
 
@@ -37,14 +40,21 @@ function TestResult = test_fm_plates_006_thermoprops()
 % [Rho,Cp,Kc,P]
     diff=sum(abs(P1(:)-P2(:))./P1(:));
     if diff > 0
-      TestResult=false;
-      disp('        ThermodynamicProps not matching MaterialProperties')
+      TestResult.passed=false;
+      msg = '        ThermodynamicProps not matching MaterialProperties';
+      TestResult.fail_message = msg;
+      disp(msg)
     elseif sum(isnan(P1))>0
-      TestResult=false;
-      disp('        ThermodynamicProps solution contains nans')
-    elseif sum(isnan(P2))>0
-      TestResult=false;
-      disp('        MaterialProperties solution contains nans')
+      TestResult.passed=false;
+      msg = '        ThermodynamicProps solution contains nans';
+      disp(msg)
+      TestResult.fail_message = msg;
+    % elseif sum(isnan(P2))>0
+  else 
+      TestResult.passed=false;
+      msg = '        MaterialProperties solution contains nans';
+      disp(msg)
+      TestResult.fail_message = msg;
     end
   end
 

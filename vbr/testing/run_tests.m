@@ -90,16 +90,18 @@ function [TestResults,failedCount, SkippedTests, ErrorMessages] = runTheMfiles(m
     for ifile = 1:numel(mfiles)
         fname=mfiles(ifile).name;
         if ~strcmp('run_tests.m',fname)
-            [fdir,funcname,ext]=fileparts(fname);
 
+            [fdir,funcname,ext]=fileparts(fname);
+            disp(['    **** Running ', funcname, ' ****'])
             if any(strcmp(test_config.matlab_only, funcname)) && isOctave
                 SkippedTests.(funcname) = "MATLAB Only";
             else
 
                 try
                     testResult=feval(funcname);
-                    test_error = struct();
-                    if testResult>0
+                    test_error.message = testResult.fail_message;
+                    test_error.identifier = 'VBRc_TEST_ERROR';
+                    if testResult.passed>0
                         disp('    test passed :D'); disp(' ')
                     else
                         failedCount=failedCount+1;
@@ -113,10 +115,10 @@ function [TestResults,failedCount, SkippedTests, ErrorMessages] = runTheMfiles(m
                     disp(' ')
                     disp(['        ', err_id, ': ', err_msg])
                     disp(' ')
-                    testResult=false;
+                    testResult.passed=false;
                     failedCount=failedCount+1;
                 end
-                TestResults.(funcname)=testResult;
+                TestResults.(funcname)=testResult.passed;
                 ErrorMessages.(funcname) = test_error;
             end
         end

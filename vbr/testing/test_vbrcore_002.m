@@ -10,11 +10,13 @@ function TestResult = test_vbrcore_002()
 %
 % Output
 % ------
-% TestResult   True if passed, False otherwise.
+% TestResult  struct with fields:
+%           .passed         True if passed, False otherwise.
+%           .fail_message   Message to display if false
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  TestResult=true;
-  disp('    **** Running test_vbrcore_002 ****')
+  TestResult.passed = true;
+  TestResult.fail_message = '';
 
   VBR.in.elastic.methods_list={'anharmonic';'anh_poro'};
   VBR.in.anelastic.methods_list={'xfit_premelt'};
@@ -50,8 +52,10 @@ function TestResult = test_vbrcore_002()
     ref_eta=VBRout(1).VBR.out.viscous.xfit_premelt.diff.eta;
     deta=abs(this_eta-ref_eta);
     if sum(deta)==0
-      disp('Diffusion creep viscosities are identical')
-      TestResult=false;
+      msg = 'Diffusion creep viscosities are identical';
+      disp(msg)
+      TestResult.passed = false;
+      TestResult.fail_message = msg;
     end
   end
 
@@ -60,7 +64,7 @@ function TestResult = test_vbrcore_002()
   visc_meths_to_use={'HK2003';'HZK2011'};
   for ivisc=1:numel(visc_meths_to_use)
     vmeth=visc_meths_to_use{ivisc};
-    VBR.in.viscous.methods_list={'xfit_premelt';vmeth};
+    VBR.in.viscous.methods_list={'xfit_premelt'; vmeth};
     VBR.in.viscous.xfit_premelt.eta_melt_free_method=visc_meths_to_use{ivisc};
     VBR=VBR_spine(VBR);
 
@@ -73,8 +77,10 @@ function TestResult = test_vbrcore_002()
     % the two should be identical
     deta=abs(this_eta-ref_eta);
     if sum(deta)>0
-      disp('Melt-free diffusion creep viscosities not matching')
-      TestResult=false;
+      msg = 'Melt-free diffusion creep viscosities not matching';
+      disp(msg)
+      TestResult.passed = false;
+      TestResult.fail_message = msg;
     end
   end
 

@@ -10,11 +10,13 @@ function TestResult = test_vbrcore_006_density_thermal_funcs()
 %
 % Output
 % ------
-% TestResult   True if passed, False otherwise.
+% TestResult  struct with fields:
+%           .passed         True if passed, False otherwise.
+%           .fail_message   Message to display if false
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  TestResult=true;
-  disp('    **** Running test_vbrcore_006_density ****')
+  TestResult.passed=true;
+  TestResult.fail_message = '';  
 
   % just checking that it runs with different argument shapes
   rho_o = 3300;

@@ -10,9 +10,10 @@ function TestResult = test_fm_plates_001()
 %
 % Output
 % ------
-% TestResult   True if passed, False otherwise.
+% TestResult  struct with fields:
+%           .passed         True if passed, False otherwise.
+%           .fail_message   Message to display if false
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  disp('    **** Running test_fm_plates_001 ****')
 
   %  Load Default Settings
   [settings]=init_settings;
@@ -42,5 +43,6 @@ function TestResult = test_fm_plates_001()
   % Lithosphere temperature evolution
   [Vars,Info]=Thermal_Evolution(Info,settings);
 
-  TestResult=true;
+  TestResult.passed=true;
+  TestResult.fail_message = '';
 end
