@@ -23,7 +23,10 @@ function TestResult = test_vbrcore_005_san_carlos_den()
       TestResult = false;
       disp(["expected rho of length 3, found ", num2str(numel(rho))])
   end
-  rng(1);  % set random number seed
+  isOctave = is_octave();
+  if isOctave == 0
+    rng(1);  % set random number seed
+  end
   test_in = rand(4,5) * 17;
 
   rho = san_carlos_density_from_pressure(test_in);

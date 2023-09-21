@@ -16,7 +16,7 @@ function params = Params_Viscous(method,GlobalParams)
   % ------
   % params    the parameter structure for the viscous method
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  params.possible_methods={'HK2003','HZK2011','xfit_premelt'};
+  params.possible_methods={'HK2003';'HZK2011';'xfit_premelt'};
 
   % pull in the small melt effect parameter values
   if ~exist('GlobalParams')

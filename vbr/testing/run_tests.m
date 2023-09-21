@@ -60,17 +60,19 @@ function TestResults = run_tests(test_file_string)
     elseif TestResults.n_tests == 0
         disp('found no tests to run')
     else
-        skfields = fieldnames(SkippedTests);
-        if numel(skfields) > 0
-            for ifield = 1:numel(skfields)
-                reason = SkippedTests.(skfields{ifield});
-                disp('Displaying Skipped tests and reason for skipping:')
-                disp(['    ', skfields{ifield}, " : ", reason])
-            end
-        else
-            disp('all test functions ran successfully')
+        disp('Test functions ran successfully')
+    end
+
+    skfields = fieldnames(SkippedTests);
+    if numel(skfields) > 0
+        for ifield = 1:numel(skfields)
+            reason = SkippedTests.(skfields{ifield});
+            disp(' ')
+            disp('Displaying Skipped tests and reason for skipping:')
+            disp(['    ', skfields{ifield}, " : ", reason])
         end
     end
+
 
 end
 

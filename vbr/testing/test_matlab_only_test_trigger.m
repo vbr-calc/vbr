@@ -16,11 +16,11 @@ function TestResult = test_matlab_only_test_trigger()
     TestResult=true;
     disp('    **** Running test_matlab_only_test_trigger ****')
 
-    isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+    isOctave = is_octave();
 
     if isOctave
         TestResult = false;
-        disp("   This test is MATLAB only, but you Octave is running it..")
+        disp("   This test is MATLAB only, but Octave is running it..")
     end
 
 
