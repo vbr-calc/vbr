@@ -9,7 +9,7 @@ Steady state flow law for pre-melting viscosity drop following Yamauchi and Take
 
 ## Requires
 
-In addition to the state variable arrays required by the other viscous methods (see [HK2003](/vbrmethods/visc/hk2003/), [HZK2011](/vbrmethods/visc/hzk2011/)), this method also requires a solidus:
+In addition to the state variable arrays required by the other viscous methods (see [HK2003](/vbr/vbrmethods/visc/hk2003/), [HZK2011](/vbr/vbrmethods/visc/hzk2011/)), this method also requires a solidus:
 
 ```matlab
 VBR.in.SV.Tsolidus_K % solidus in degrees K
