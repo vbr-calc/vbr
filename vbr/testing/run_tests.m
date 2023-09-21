@@ -36,7 +36,7 @@ function TestResults = run_tests(test_file_string)
     end
 
     if numel(mfiles) > 0
-        [TestResults, failedCount, SkippedTests] = runTheMfiles(mfiles, test_config);
+        [TestResults, failedCount, SkippedTests, ErrorMessages] = runTheMfiles(mfiles, test_config);
         TestResults.failedCount = failedCount;
         TestResults.n_tests = numel(mfiles);
     else
@@ -49,12 +49,15 @@ function TestResults = run_tests(test_file_string)
     disp('Testing complete.')
     disp(' ')
     if TestResults.failedCount > 0
-        disp('Displaying failed test functions. Please run each one and debug:')
+        disp('Displaying failed test functions:')
         fldz=fieldnames(TestResults);
         for ifi = 1:numel(fldz)
             fld=TestResults.(fldz{ifi});
             if fld==0
                 disp(['    ',fldz{ifi}])
+                ei = ErrorMessages.(fldz{ifi});
+                disp(['        ', ei.identifier, ': ', ei.message])
+
             end
         end
     elseif TestResults.n_tests == 0
@@ -70,15 +73,17 @@ function TestResults = run_tests(test_file_string)
             disp(' ')
             disp('Displaying Skipped tests and reason for skipping:')
             disp(['    ', skfields{ifield}, " : ", reason])
+            disp(' ')
         end
     end
 
 
 end
 
-function [TestResults,failedCount, SkippedTests] = runTheMfiles(mfiles, test_config)
+function [TestResults,failedCount, SkippedTests, ErrorMessages] = runTheMfiles(mfiles, test_config)
     TestResults=struct();
     SkippedTests = struct();
+    ErrorMessages = struct();
     failedCount=0;
     isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
 
@@ -93,19 +98,26 @@ function [TestResults,failedCount, SkippedTests] = runTheMfiles(mfiles, test_con
 
                 try
                     testResult=feval(funcname);
+                    test_error = struct();
                     if testResult>0
                         disp('    test passed :D'); disp(' ')
                     else
                         failedCount=failedCount+1;
                         disp('    test failed :('); disp(' ')
                     end
-                catch
+                catch ME
+                    err_id = ME.identifier;
+                    err_msg = ME.message;
+                    test_error = ME;
                     disp(['    ',funcname,' failed :('])
-                    disp(['    please run ',funcname,'() and debug.']); disp(' ')
+                    disp(' ')
+                    disp(['        ', err_id, ': ', err_msg])
+                    disp(' ')
                     testResult=false;
                     failedCount=failedCount+1;
                 end
                 TestResults.(funcname)=testResult;
+                ErrorMessages.(funcname) = test_error;
             end
         end
     end
