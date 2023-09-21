@@ -13,10 +13,10 @@ function VBR = visc_calc_xfit_premelt(VBR)
   %       required fields are the state variables in VBR.in.SV.* including a
   %       solidus, Tsolidus_K.
   %
-  %       if the eta_dry_method parameter for this method is set to
+  %       if the eta_melt_free_method parameter for this method is set to
   %       'xfit_premelt', will use the exact viscosity from Yamauchi and
-  %       Takei for the melt-free viscosity, otherwise eta_dry_method can be
-  %       set to any VBR viscous method, see vbrListMethods()
+  %       Takei for the melt-free viscosity, otherwise eta_melt_free_method can
+  %       be set to any VBR viscous method, see vbrListMethods()
   %
   % Output:
   % -------
@@ -38,10 +38,18 @@ function VBR = visc_calc_xfit_premelt(VBR)
   A_n=calcA_n(Tprime,VBR.in.SV.phi,params);
 
   % calculate melt-free viscosity
-  visc_method=params.eta_dry_method;
+  if isfield(params, 'eta_dry_method') && strcmp(params.eta_dry_method, 'deprecated') == 0
+    warning(['The eta_dry_method field in VBR.in.viscous.xfit_premelt has been ', ...
+             'renamed to eta_meltfree_method.', ...
+             ' eta_dry_method will be fully removed in VBRc version 1.3 or higher', ...
+             ' To avoid this warning, use eta_meltfree_method instead'], 'VBRc:DEPRECATION')
+    visc_method=params.eta_dry_method;
+  else
+    visc_method=params.eta_melt_free_method;
+  end
   if strcmp(visc_method,'xfit_premelt')
     % use exactly what is in YT2016
-    eta_dry=YT2016_dryViscosity(VBR,params);
+    eta_meltfree=YT2016_melt_free_viscosity(VBR,params);
   else
     % use a general olivine flow law to get melt-free diffusion-creep visc
     % need to re-run with phi=0 without losing other state variables
@@ -49,22 +57,22 @@ function VBR = visc_calc_xfit_premelt(VBR)
     VBRtemp.in.viscous.methods_list={visc_method}; % only use one method
     VBRtemp.in.SV.phi=0; % need melt-free viscosity
     VBRtemp=spineGeneralized(VBRtemp,'viscous');
-    eta_dry = VBRtemp.out.viscous.(visc_method).diff.eta ;
+    eta_meltfree = VBRtemp.out.viscous.(visc_method).diff.eta ;
   end
 
   % calculate full viscosity
-  VBR.out.viscous.xfit_premelt.diff.eta=A_n .* eta_dry;
-  VBR.out.viscous.xfit_premelt.diff.eta_meltfree=eta_dry;
-  units.eta_dry = 'Pa*s';
+  VBR.out.viscous.xfit_premelt.diff.eta=A_n .* eta_meltfree;
+  VBR.out.viscous.xfit_premelt.diff.eta_meltfree=eta_meltfree;
+
   units.eta = 'Pa*s';
   units.eta_meltfree = 'Pa*s';
   VBR.out.viscous.xfit_premelt.units = units;
 end
 
-function eta = YT2016_dryViscosity(VBR,params)
+function eta = YT2016_melt_free_viscosity(VBR,params)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %
-  % eta = YT2016_dryViscosity(VBR,params)
+  % eta = YT2016_melt_free_viscosity(VBR,params)
   %
   % exact viscosity function for melt-free diffusion creep viscosity from
   % Yamauchi and Takei, JGR 2016

@@ -39,7 +39,7 @@ function TestResult = test_vbrcore_002()
   % call VBR with different dry viscosity methods for xfit_premelt
   visc_meths_to_use={'xfit_premelt';'HK2003';'HZK2011'};
   for ivisc=1:numel(visc_meths_to_use)
-    VBR.in.viscous.xfit_premelt.eta_dry_method=visc_meths_to_use{ivisc};
+    VBR.in.viscous.xfit_premelt.eta_melt_free_method=visc_meths_to_use{ivisc};
     VBRout(ivisc).VBR=VBR_spine(VBR);
   end
 
@@ -61,7 +61,7 @@ function TestResult = test_vbrcore_002()
   for ivisc=1:numel(visc_meths_to_use)
     vmeth=visc_meths_to_use{ivisc};
     VBR.in.viscous.methods_list={'xfit_premelt';vmeth};
-    VBR.in.viscous.xfit_premelt.eta_dry_method=visc_meths_to_use{ivisc};
+    VBR.in.viscous.xfit_premelt.eta_melt_free_method=visc_meths_to_use{ivisc};
     VBR=VBR_spine(VBR);
 
     % melt free calculated by xfit_premelt

@@ -51,8 +51,9 @@ function params = Params_Viscous(method,GlobalParams)
     params.T_eta=0.94;
     params.gamma=5;
 
-    % method to use for dry (melt-free) diff. creep viscosity
-    params.eta_dry_method='xfit_premelt';
+    % method to use for melt-free diff. creep viscosity
+    params.eta_melt_free_method='xfit_premelt';
+    params.eta_dry_method='deprecated'; % deprecated, use eta_melt_free_method
 
     % flow law constants for YT2016
     params.Tr_K=1200+273; % p7817 of YT2016, second paragraph

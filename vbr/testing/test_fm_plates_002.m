@@ -18,7 +18,6 @@ function TestResult = test_fm_plates_002()
   %  Load Default Settings
   [settings]=init_settings;
 
-  b = 2 * a; 
   % Computational settings
   settings.dz0=2; % grid cell size [km]
   settings.Flags.verbosity_level = 0; % quiet!
