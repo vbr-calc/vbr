@@ -10,11 +10,13 @@ function TestResult = test_vbrcore_003()
 %
 % Output
 % ------
-% TestResult   True if passed, False otherwise.
+% TestResult  struct with fields:
+%           .passed         True if passed, False otherwise.
+%           .fail_message   Message to display if false
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  TestResult=true;
-  disp('    **** Running test_vbrcore_003 ****')
+  TestResult.passed =true;
+  TestResult.fail_message = '';
 
   VBR.in.elastic.methods_list={'anharmonic';'anh_poro'};
   VBR.in.anelastic.methods_list={'eburgers_psp'};
@@ -45,8 +47,9 @@ function TestResult = test_vbrcore_003()
   fastV=VBRfast.out.anelastic.eburgers_psp.V;
   diff=abs((slowV-fastV)./slowV);
   if max(diff)>1e-5
-    disp('FastBurger not matching PointWise calculation in eBurgers')
-    disp(max(diff))
-    TestResult=false;
+    msg = ['FastBurger not matching PointWise calculation in eBurgers: ', num2str(max(diff))];
+    disp(msg)
+    TestResult.fail_message = msg;
+    TestResult.passed = false;
   end
 end

@@ -10,11 +10,13 @@ function TestResult = test_vbrcore_001()
 %
 % Output
 % ------
-% TestResult   True if passed, False otherwise.
+% TestResult  struct with fields:
+%           .passed         True if passed, False otherwise.
+%           .fail_message   Message to display if false
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  TestResult=true;
-  disp('    **** Running test_vbrcore_001 ****')
+  TestResult.passed = true;
+  TestResult.fail_message = '';
 
   VBR.in.elastic.methods_list={'anharmonic';'anh_poro';'SLB2005'};
   VBR.in.viscous.methods_list={'HK2003','HZK2011'};
@@ -39,8 +41,8 @@ function TestResult = test_vbrcore_001()
   VBR.in.SV.Tsolidus_K=1200*ones(n1,n2); % solidus
 
   VBR = VBR_spine(VBR);
-  
-  % check that units are attached to output 
+
+  % check that units are attached to output
   methtypes = {'elastic'; 'viscous'; 'anelastic'};
   for itype = 1:numel(methtypes)
       mtype = methtypes{itype};
@@ -48,15 +50,19 @@ function TestResult = test_vbrcore_001()
           mname = VBR.in.(mtype).methods_list{imeth};
           VBR.out.(mtype).(mname).units;
           if isfield(VBR.out.(mtype).(mname), 'units') == 0
-              TestResult = false;
-              disp([mname, ' is missing units.'])
-          end 
-      end 
-  end 
-  
-  if isfield(VBR.in.SV, 'units') == 0 
-      TestResult = false;
-      disp('units for VBR.in.SV are missing')
+              TestResult.passed = false;
+              msg = [mname, ' is missing units.'];
+              disp(msg)
+              TestResult.fail_message = msg;
+          end
+      end
+  end
+
+  if isfield(VBR.in.SV, 'units') == 0
+      TestResult.passed = false;
+      msg = 'units for VBR.in.SV are missing';
+      disp(msg)
+      TestResult.fail_message = msg;
   end
 
 

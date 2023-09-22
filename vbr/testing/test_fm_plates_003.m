@@ -10,11 +10,12 @@
 %
 % Output
 % ------
-% TestResult   True if passed, False otherwise.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  disp('    **** Running test_fm_plates_003 ****')
-  disp('         (takes <1 minute)')
-  TestResult=true;
+% TestResult  struct with fields:
+%           .passed         True if passed, False otherwise.
+%           .fail_message   Message to display if false
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+  TestResult.passed =true;
+  TestResult.fail_message = '';
   %  Load Default Settings
   [settings]=init_settings;
 
@@ -56,7 +57,9 @@
   % check if it passes
   max_err_tol=1e-5;
   if max_err_tol>max_err_tol
-    disp('     steady state plate solution incorrect!!!!!')
-    TestResult=false;
+    msg = '     steady state plate solution incorrect!!!!!'
+    disp(msg)
+    TestResult.passed=false;
+    TestResult.fail_message = msg;
   end
 end

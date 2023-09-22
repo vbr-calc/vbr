@@ -15,7 +15,7 @@ function [params] = Params_Elastic(method,GlobalParams)
   % ------
   % params    the parameter structure for the elastic method
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  params.possible_methods={'anharmonic','anh_poro','SLB2005'};
+  params.possible_methods={'anharmonic'; 'anh_poro'; 'SLB2005'};
 
   if ~exist('GlobalParams')
     GlobalParams = Params_Global();
@@ -35,7 +35,7 @@ function [params] = Params_Elastic(method,GlobalParams)
     	params.dG_dP = 1.8 ; % unitless ; % Pa/Pa
     elseif strcmp(params.anharm_scale_mthd,'Cammarano')
       % Cammarano et al 2003:
-      % Cammarano has G_0 = 81 - 31*X_Fe, for X = 0.9 (Mg# 91), G_0 = 78.2
+      % Cammarano has G_0 = 81 - 31*X_Fe, for X = 0.9 (Mg number 91), G_0 = 78.2
     	params.dG_dT = -14.0e6 ; % Cammarano 2003) Pa/K (so 13.6 is in MPa/K)
     	params.dG_dP = 1.4 ; %(Cammarano 2003)  unitless ; % Pa/Pa
     end

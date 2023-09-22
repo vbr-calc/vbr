@@ -10,18 +10,22 @@ function TestResult = test_vbrcore_004()
 %
 % Output
 % ------
-% TestResult   True if passed, False otherwise.
+% TestResult  struct with fields:
+%           .passed         True if passed, False otherwise.
+%           .fail_message   Message to display if false
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  TestResult=true;
-  disp('    **** Running test_vbrcore_004 ****')
+  TestResult.passed=true;
+  TestResult.fail_message='';  
 
   % melt enhacement = 0 (default)
   VBR = initVBR();
   VBR_1=VBR_spine(VBR);
   if VBR_1.in.GlobalSettings.melt_enhancement ~=0
-    TestResult=false;
-    disp('      WARNING: melt_enhancement not properly set!!! Should be 0.')
+    TestResult.passed=false;
+    msg = '      WARNING: melt_enhancement not properly set!!! Should be 0.';
+    disp(msg)
+    TestResult.fail_message = msg;
   end
 
   % modify the melt_enhancement flag
@@ -29,8 +33,10 @@ function TestResult = test_vbrcore_004()
   VBR.in.GlobalSettings.melt_enhancement=1;
   VBR_2=VBR_spine(VBR);
   if VBR_2.in.GlobalSettings.melt_enhancement ~=1
-    TestResult=false;
-    disp('      WARNING: melt_enhancement not properly set!!! Should be 1.')
+    TestResult.passed=false;
+    msg = '      WARNING: melt_enhancement not properly set!!! Should be 1.';
+    disp(msg)
+    TestResult.fail_message = msg;
   end
 
   % change phi_c, make sure it propagates where it should:
@@ -44,19 +50,25 @@ function TestResult = test_vbrcore_004()
     meth=VBR_3.in.anelastic.methods_list{imeth};
     phi_c=VBR_3.in.anelastic.(meth).phi_c;
     if phi_c ~= VBR.in.GlobalSettings.phi_c(1)
-      TestResult=false;
-      disp(['      WARNING: phi_c not properly set for ',meth])
+      TestResult.passed=false;
+      msg = ['      WARNING: phi_c not properly set for ',meth];
+      disp(msg)
+      TestResult.fail_message = msg;
     end
 
     for vmethi =1:numel(VBR_3.in.viscous.methods_list)
       vmeth=VBR_3.in.viscous.methods_list{vmethi};
       vphic=VBR_3.in.viscous.(vmeth).diff.phi_c;
       if vphic ~= VBR.in.GlobalSettings.phi_c(1)
-        TestResult=false;
-        disp(['      WARNING: diff phi_c not properly set for ',vmeth])
+        TestResult.passed=false;
+        msg = ['      WARNING: diff phi_c not properly set for ',vmeth];
+        disp(msg)
+        TestResult.fail_message = msg;
       elseif vphic~=phi_c
-        TestResult=false;
-        disp(['      WARNING: diff phi_c not matching for ',vmeth,' and ',meth])
+        TestResult.passed=false;
+        msg = ['      WARNING: diff phi_c not matching for ',vmeth,' and ',meth];
+        disp(msg)
+        TestResult.fail_message = msg;
       end
     end
   end

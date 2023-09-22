@@ -36,7 +36,7 @@ function TestResults = run_tests(test_file_string)
     end
 
     if numel(mfiles) > 0
-        [TestResults, failedCount, SkippedTests] = runTheMfiles(mfiles, test_config);
+        [TestResults, failedCount, SkippedTests, ErrorMessages] = runTheMfiles(mfiles, test_config);
         TestResults.failedCount = failedCount;
         TestResults.n_tests = numel(mfiles);
     else
@@ -49,61 +49,77 @@ function TestResults = run_tests(test_file_string)
     disp('Testing complete.')
     disp(' ')
     if TestResults.failedCount > 0
-        disp('Displaying failed test functions. Please run each one and debug:')
+        disp('Displaying failed test functions:')
         fldz=fieldnames(TestResults);
         for ifi = 1:numel(fldz)
             fld=TestResults.(fldz{ifi});
             if fld==0
                 disp(['    ',fldz{ifi}])
+                ei = ErrorMessages.(fldz{ifi});
+                disp(['        ', ei.identifier, ': ', ei.message])
+
             end
         end
     elseif TestResults.n_tests == 0
         disp('found no tests to run')
     else
-        skfields = fieldnames(SkippedTests);
-        if numel(skfields) > 0
-            for ifield = 1:numel(skfields)
-                reason = SkippedTests.(skfields{ifield});
-                disp('Displaying Skipped tests and reason for skipping:')
-                disp(['    ', skfields{ifield}, " : ", reason])
-            end
-        else
-            disp('all test functions ran successfully')
+        disp('Test functions ran successfully')
+    end
+
+    skfields = fieldnames(SkippedTests);
+    if numel(skfields) > 0
+        for ifield = 1:numel(skfields)
+            reason = SkippedTests.(skfields{ifield});
+            disp(' ')
+            disp('Displaying Skipped tests and reason for skipping:')
+            disp(['    ', skfields{ifield}, " : ", reason])
+            disp(' ')
         end
     end
 
+
 end
 
-function [TestResults,failedCount, SkippedTests] = runTheMfiles(mfiles, test_config)
+function [TestResults,failedCount, SkippedTests, ErrorMessages] = runTheMfiles(mfiles, test_config)
     TestResults=struct();
     SkippedTests = struct();
+    ErrorMessages = struct();
     failedCount=0;
     isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
 
     for ifile = 1:numel(mfiles)
         fname=mfiles(ifile).name;
         if ~strcmp('run_tests.m',fname)
-            [fdir,funcname,ext]=fileparts(fname);
 
+            [fdir,funcname,ext]=fileparts(fname);
+            disp(['    **** Running ', funcname, ' ****'])
             if any(strcmp(test_config.matlab_only, funcname)) && isOctave
                 SkippedTests.(funcname) = "MATLAB Only";
             else
 
                 try
                     testResult=feval(funcname);
-                    if testResult>0
+                    test_error.message = testResult.fail_message;
+                    test_error.identifier = 'VBRc_TEST_ERROR';
+                    if testResult.passed>0
                         disp('    test passed :D'); disp(' ')
                     else
                         failedCount=failedCount+1;
                         disp('    test failed :('); disp(' ')
                     end
-                catch
+                catch ME
+                    err_id = ME.identifier;
+                    err_msg = ME.message;
+                    test_error = ME;
                     disp(['    ',funcname,' failed :('])
-                    disp(['    please run ',funcname,'() and debug.']); disp(' ')
-                    testResult=false;
+                    disp(' ')
+                    disp(['        ', err_id, ': ', err_msg])
+                    disp(' ')
+                    testResult.passed=false;
                     failedCount=failedCount+1;
                 end
-                TestResults.(funcname)=testResult;
+                TestResults.(funcname)=testResult.passed;
+                ErrorMessages.(funcname) = test_error;
             end
         end
     end

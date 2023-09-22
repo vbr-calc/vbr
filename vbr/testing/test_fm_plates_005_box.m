@@ -10,10 +10,13 @@ function TestResult = test_fm_plates_005_box()
   %
   % Output
   % ------
-  % TestResult   True if passed, False otherwise.
+  % TestResult  struct with fields:
+  %           .passed         True if passed, False otherwise.
+  %           .fail_message   Message to display if false
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  disp('    **** Running test_fm_plates_005_box ****')
-  TestResult=true;
+  
+  TestResult.passed =true;
+  TestResult.fail_message = '';
   % Parameter sweep settings
   %  define parameter sweep here. var1name must match EXACTLY a field in
   %  settings structure. var1 must be defined, var2 lines can be

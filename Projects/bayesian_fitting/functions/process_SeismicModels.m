@@ -23,9 +23,8 @@ function [obs_value, obs_error] = process_SeismicModels( ...
 %           lon         longitude - assumed to be positive [degrees East]
 %           z_min       minimum depth for observation range [km]
 %           z_max       maximum depth for observation range [km]
-%          (smooth_rad) half-width of box size in which to average
-%                       observations - if this field is not in location,
-%                       a default value of 0.5 is assumed [degrees E and N]
+%           smooth_rad  half-width of box size in which to average
+%                       observations [degrees]
 %
 %       model_file  string with path to saved .mat file of observations
 %                   This .mat file is expected to contain a single variable

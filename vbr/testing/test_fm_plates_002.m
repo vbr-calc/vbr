@@ -10,11 +10,12 @@ function TestResult = test_fm_plates_002()
 %
 % Output
 % ------
-% TestResult   True if passed, False otherwise.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  disp('    **** Running test_fm_plates_002 ****')
-  disp('         (takes a few minutes)')
-  TestResult=true;
+% TestResult  struct with fields:
+%           .passed         True if passed, False otherwise.
+%           .fail_message   Message to display if false
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  
+  TestResult.passed=true;
+  TestResult.fail_message = '';
   %  Load Default Settings
   [settings]=init_settings;
 
@@ -53,8 +54,10 @@ function TestResult = test_fm_plates_002()
   % get the diffusivity (make sure it's constant)
   kappa=Vars.Kc ./ (Vars.rho .* Vars.cp);
   if min(kappa(:))<max(kappa(:))
-    TestResult=false;
-    disp('    diffusivity is not constant!!!!!')
+    TestResult.passed=false;
+    msg = '    diffusivity is not constant!!!!!';
+    TestResult.fail_message = msg;
+    disp(msg)
   end
   kappa=min(kappa(:));
 
@@ -73,8 +76,10 @@ function TestResult = test_fm_plates_002()
   t_cutoffs=[5,Info.tMyrs(end)]; % min/max for transient h space soln
   tmask=(Info.tMyrs>=t_cutoffs(1))&(Info.tMyrs<=t_cutoffs(2));
   if sum(max_err(tmask)>max_err_tol)
-    disp('     half space cooling solution incorrect!!!!!')
-    TestResult=false;
+    msg = '     half space cooling solution incorrect!!!!!';
+    TestResult.passed=false;
+    TestResult.fail_message = msg;
+    disp(msg)
   end
 
 end
