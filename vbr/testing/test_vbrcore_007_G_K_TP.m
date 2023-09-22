@@ -10,11 +10,13 @@ function TestResult = test_vbrcore_007_G_K_TP()
 %
 % Output
 % ------
-% TestResult   True if passed, False otherwise.
+% TestResult  struct with fields:
+%           .passed         True if passed, False otherwise.
+%           .fail_message   Message to display if false
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  TestResult=true;
-  disp('    **** Running test_vbrcore_007_G_K_TP ****')
+  TestResult.passed=true;
+  TestResult.fail_message = '';
 
   % arbitrary values here, just making sure we execute correctly
   VBR = get_init_VBR();
@@ -24,14 +26,18 @@ function TestResult = test_vbrcore_007_G_K_TP()
 
   Gu = VBR.out.elastic.anharmonic.Gu;
   if sum(Gu == VBR.in.elastic.Gu_TP) ~= 4
-    disp('anharmonic.Gu does not match input G_TP')
-    TestResult = false;
+    msg = 'anharmonic.Gu does not match input G_TP';
+    TestResult.passed = false;
+    TestResult.fail_message = msg;
+    disp(msg)
   end
 
   Ku = VBR.out.elastic.anharmonic.Ku;
   if sum(Ku == VBR.in.elastic.Ku_TP) ~= 4
-    disp('anharmonic.Ku does not match input K_TP')
-    TestResult = false;
+    msg = 'anharmonic.Ku does not match input K_TP';
+    TestResult.passed = false;
+    TestResult.fail_message = msg;
+    disp(msg)
   end
 
   % also check that only supplying G_TP works
@@ -41,8 +47,10 @@ function TestResult = test_vbrcore_007_G_K_TP()
 
   Gu = VBR.out.elastic.anharmonic.Gu;
   if sum(Gu == VBR.in.elastic.Gu_TP) ~= 4
-    disp('anharmonic.Gu does not match input G_TP (only G_TP supplied)')
-    TestResult = false;
+    msg = 'anharmonic.Gu does not match input G_TP (only G_TP supplied)';
+    TestResult.passed = false;
+    TestResult.fail_message = msg;
+    disp(msg)
   end
 
 end
