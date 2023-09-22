@@ -25,14 +25,31 @@ function [ VBR ] = el_ModUnrlx_dTdP_f( VBR )
   T_K_ref = ela.T_K_ref ;
   P_Pa_ref = ela.P_Pa_ref ;
   Gu_0=VBR.out.elastic.Gu_0; % Pa
-  dT = (VBR.in.SV.T_K-T_K_ref);
-  dP = (VBR.in.SV.P_GPa*1e9 - P_Pa_ref);
 
-  % calculate shear modulus at T,P of interest
-  Gu_TP = calc_Gu(Gu_0,dT,dP,dG_dT0,dG_dP0);
+  if isfield(VBR.in.elastic,'Gu_TP') && isfield(VBR.in.elastic,'Ku_TP')
+    % Load unrelaxed shear and bulk moduli (at T,P of interest)
+    Gu_TP = VBR.in.elastic.Gu_TP; % Pa
+    Ku_TP = VBR.in.elastic.Ku_TP; % Pa
+    VBR.out.elastic.Gu_0 = Gu_TP; 
+    
+  elseif isfield(VBR.in.elastic,'Gu_TP') && ~isfield(VBR.in.elastic,'Ku_TP')
+    % Load unrelaxed shear modulus (at T,P of interest)
+    Gu_TP = VBR.in.elastic.Gu_TP; % Pa
+    
+    % calculate bulk modulus
+disp(['Unrelaxed shear modulus was provided without an unrelaxed bulk modulus.', ...
+          ' Calculating bulk modulus assuming nu=', num2str(nu), ...
+          '. Set VBR.in.elastic.Ku_TP to specify a value.']);
+    Ku_TP = calc_Ku(Gu_TP,nu);
+  else
+      dT = (VBR.in.SV.T_K-T_K_ref);
+      dP = (VBR.in.SV.P_GPa*1e9 - P_Pa_ref);
+    % calculate shear modulus at T,P of interest
+    Gu_TP = calc_Gu(Gu_0,dT,dP,dG_dT0,dG_dP0);
 
-  % calculate bulk modulus
-  Ku_TP = calc_Ku(Gu_TP,nu);
+    % calculate bulk modulus
+    Ku_TP = calc_Ku(Gu_TP,nu);
+  end
 
   % calculate velocities
   [Vp,Vs] = el_VpVs_unrelaxed(Ku_TP,Gu_TP,VBR.in.SV.rho);
