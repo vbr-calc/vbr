@@ -10,7 +10,7 @@ function [VBR,HF] = CB_010_depthProfiles()
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % [VBR,HF] = CB_010_depthProfiles()
   %
-  %   Calculate seismic properties for a half space cooling profile at 80 Myrs
+  %   Calculate seismic properties for a half space cooling profile at 30 Myrs
   %   Assumes constant density for thermal profile (analytical half space
   %   cooling), re-calculates density for the seismic properties.
   %
@@ -58,7 +58,7 @@ function [VBR,HF] = CB_010_depthProfiles()
 
   %% Build figures %%
 
-    figure()
+    figure('PaperPosition',[0,0,8,4],'PaperPositionMode','manual')
     ax1=subplot(1,5,1);
     plot(HF.T_C,HF.z_km)
     hold on
@@ -101,6 +101,7 @@ function [VBR,HF] = CB_010_depthProfiles()
       xlim([0,8])
     end
 
+    saveas(gcf,'./figures/CB_00210_depthProfiles.png')
 end
 
 function HF = HalfspaceModel(age_Myrs)

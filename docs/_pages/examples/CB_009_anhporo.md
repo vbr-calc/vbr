@@ -4,6 +4,9 @@ title: ""
 ---
 
 # CB_009_anhporo.m
+## output figures
+
+!['CB_009_anhporo'](/vbr/assets/images/CBs/CB_009_anhporo.png){:class="img-responsive"}
 ## contents
 ```matlab
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -42,4 +45,6 @@ title: ""
   semilogx(VBR.in.SV.phi,VBR.out.elastic.anh_poro.Vsu/1e3,'k','linewidth',1.5)
   xlabel('\phi'); ylabel('Vsu(P,T,\phi) [km/s]')
   set(gca,'linewidth',1.5)
+
+  saveas(gcf,'./figures/CB_009_anhporo.png')
 ```

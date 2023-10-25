@@ -4,6 +4,9 @@ title: ""
 ---
 
 # CB_006_viscosity.m
+## output figures
+
+!['CB_006_viscosity'](/vbr/assets/images/CBs/CB_006_viscosity.png){:class="img-responsive"}
 ## contents
 ```matlab
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -76,4 +79,5 @@ title: ""
 
   subplot(2,2,4)
   box on; xlabel('log10 \sigma [MPa]'); ylabel('log10 effective viscosity [Pa s]')
+saveas(gcf,'./figures/CB_006_viscosity.png')
 ```

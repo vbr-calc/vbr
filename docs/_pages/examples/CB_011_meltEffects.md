@@ -4,9 +4,6 @@ title: ""
 ---
 
 # CB_011_meltEffects.m
-## output figures
-
-!['CB_011_meltEffects_case2_fig2'](/vbr/assets/images/CBs/CB_011_meltEffects_case2_fig2.png){:class="img-responsive"}
 ## contents
 ```matlab
 function Results = CB_011_meltEffects(case2run)
