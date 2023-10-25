@@ -85,7 +85,7 @@
      title(['V_s [km/s] andrade_psp at ',num2str(VBR.in.SV.f(i_f)),' Hz'])
      colorbar()
   end
-
+  saveas(gcf,'./figures/CB_002_2D_HalfSpaceCooling.png')
   % contour percent difference in shear wave velo between two anelastic methods
   % at different frequencies
   dV=abs(VBR.out.anelastic.andrade_psp.V-VBR.out.anelastic.xfit_mxw.V);
