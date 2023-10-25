@@ -26,9 +26,8 @@ The remainder of this README contains information on:
 
 ## Bug Reporting and User Support
 
-Found a bug? Got a question? Join our slack channel at [vbr-calc.slack.com](https://join.slack.com/t/vbr-calc/shared_invite/enQtODI0MTk4NzIxNzkzLTZlYjMwYTc4MTVkOTg2ZDgyNTQxNTAxNjc2NmNkMzA2MmVjOTJkYjYzNjc1ZDJhNzg5ZWU2MzE4OTEyNmMxNGU)!
+Found a bug? [Open an issueon github](https://github.com/vbr-calc/vbr/issues/new)! Got a question? Join our slack channel at [vbr-calc.slack.com](https://join.slack.com/t/vbr-calc/shared_invite/enQtODI0MTk4NzIxNzkzLTZlYjMwYTc4MTVkOTg2ZDgyNTQxNTAxNjc2NmNkMzA2MmVjOTJkYjYzNjc1ZDJhNzg5ZWU2MzE4OTEyNmMxNGU)!
 
-**Why doesn't the VBR Calculator do X that I need for my project Y?** The code VBR Calculator is intended as a starting point for calculating isotropic material properties that account for anelasticity of earth materials and we expect that you will need to tweak the code for your particular application in ways that we did not anticipate. If you don't know where to start in modifying the code, join our slack channel and tell us more about your project! If you are writing a proposal which would benefit from a modified VBR Calculator, get in touch to discuss a collaboration!   
 
 # Basic Usage
 
