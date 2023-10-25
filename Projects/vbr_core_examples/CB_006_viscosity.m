@@ -68,3 +68,4 @@
 
   subplot(2,2,4)
   box on; xlabel('log10 \sigma [MPa]'); ylabel('log10 effective viscosity [Pa s]')
+saveas(gcf,'./figures/CB_006_viscosity.png')

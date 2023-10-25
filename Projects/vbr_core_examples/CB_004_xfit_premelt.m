@@ -60,3 +60,4 @@
   subplot(1,3,3)
   semilogx(1./VBR.in.SV.f,1e-3*squeeze(VBR.out.anelastic.xfit_premelt.V(1,:,:)));
   ylabel('V_s [km/s]'); xlabel('period [s]')
+  saveas(gcf,'./figures/CB_004_xfit_premelt.png')

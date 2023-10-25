@@ -69,3 +69,5 @@
     ylim([0,150])
     set(gca,'ydir','reverse')
   end
+
+  saveas(gcf,'./figures/CB_008_anharmonic_Gu0.png')

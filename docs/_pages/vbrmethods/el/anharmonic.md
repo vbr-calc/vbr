@@ -97,3 +97,20 @@ Gu = Gu_0_ol .* VBR.in.SV.chi + (1-VBR.in.SV.chi) .* Gu_0_crust;
 If `VBR.in.SV.chi` is not set by the user, then  `VBR.in.SV.chi` is initialized to a value of 1 everywhere.
 
 Thus, to produce depth profiles, the state variable arrays should correspond to some depth dependence. For an example, see `Projects/vbr_core_examples/CB_008_anharmonic_Guo.m`.
+
+# Setting unrelaxed moduli at T, P directly
+
+The VBRc relies on a simple linear calculation of the unrelaxed moduli at the
+temperature and pressure of interest. It is possible, however, to load in
+unrelaxed moduli calculated with other programs (like. e.g., Perplex). To do so,
+you can set the following fields:
+
+```matlab
+VBR.in.elastic.Gu_TP = ...
+VBR.in.elastic.Ku_TP = ...
+```
+
+Both `Gu_TP` and `Ku_TP` should be arrays of the same shape as the state variable
+arrays. When these fields are present, the anharmonic calculation will simply read
+from these fields, allowing you to set their values in any way you see fit (e.g.,
+reading from Perplex output or calling your own functions).

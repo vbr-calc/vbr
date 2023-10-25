@@ -43,3 +43,4 @@
   plot(VBR.out.elastic.SLB2005.Vs,z/1e3)
   set(gca,'Ydir','reverse')
   xlabel('Vs [km/s]'); ylabel('z [km]')
+  saveas(gcf,'./figures/CB_007_SLB2005.png')
