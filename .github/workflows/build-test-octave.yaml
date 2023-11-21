@@ -6,6 +6,8 @@ on:
     - "**.m"
     - ".github/workflows/build-test-octave.yaml"
 
+# pinning at octave 8.3.0 due to installation issue, 
+# see https://github.com/vbr-calc/vbr/issues/74
 jobs:
   test-on-octave:
     name: Octave build
