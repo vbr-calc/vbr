@@ -11,7 +11,7 @@ jobs:
     name: Octave build
     runs-on: ubuntu-latest
     container:
-      image: gnuoctave/octave
+      image: gnuoctave/octave:8.3.0
     steps:
     - uses: actions/checkout@v4
     - name: Check octave installation
