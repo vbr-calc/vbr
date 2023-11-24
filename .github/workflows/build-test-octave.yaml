@@ -6,14 +6,17 @@ on:
     - "**.m"
     - ".github/workflows/build-test-octave.yaml"
 
-# pinning at octave 8.3.0 due to installation issue, 
-# see https://github.com/vbr-calc/vbr/issues/74
+# note: this test uses a docker image with the latest gnu octave installed. The
+# octave images are maintained by https://github.com/gnu-octave/docker and this
+# action will fetch from docker hub, https://hub.docker.com/r/gnuoctave/octave
+# to pin to a particular version, replace the image value below with, e.g.,
+# gnuoctave/octave:8.3.0
 jobs:
   test-on-octave:
     name: Octave build
     runs-on: ubuntu-latest
     container:
-      image: gnuoctave/octave:8.3.0
+      image: gnuoctave/octave
     steps:
     - uses: actions/checkout@v4
     - name: Check octave installation
