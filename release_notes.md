@@ -1,7 +1,7 @@
-# v1.1.1
+# v1.1.2
 
 Minor bug fix release 
 
 ## bug fixes
 
-- fix for zenodo sync
+- some CI fixes
