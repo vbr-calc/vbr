@@ -1,7 +1,2 @@
-# v1.1.2
+# v1.1.3
 
-Minor bug fix release 
-
-## bug fixes
-
-- some CI fixes

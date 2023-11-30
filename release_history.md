@@ -1,3 +1,11 @@
+# v1.1.2
+
+Minor bug fix release 
+
+## bug fixes
+
+- some CI fixes
+
 # v1.1.1
 
 Minor bug fix release 
