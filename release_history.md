@@ -1,3 +1,11 @@
+# v1.1.1
+
+Minor bug fix release 
+
+## bug fixes
+
+- fix for zenodo sync
+
 # v1.1.0
 
 ## new features
