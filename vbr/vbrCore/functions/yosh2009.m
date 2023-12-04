@@ -17,7 +17,7 @@ function [ VBR ] = yosh2009( VBR )
 
   % read in eletric parameters
   ele = VBR.in.electric.yosh2009_ol;
-  T = VBR.in.SV.T; % K (Temperature)
+  T = VBR.in.SV.T_K; % K (Temperature)
   Ch2o = VBR.in.SV.Ch2o; % ppm (water content)
   P = VBR.in.SV.P; % Pa (Pressure)
 
