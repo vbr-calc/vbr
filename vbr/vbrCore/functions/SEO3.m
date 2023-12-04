@@ -17,7 +17,7 @@ function [ VBR ] = SEO3( VBR )
 
   % read in eletric parameters
   ele = VBR.in.electric.SEO3_ol;
-  T = VBR.in.SV.T; % K (Temperature)
+  T = VBR.in.SV.T_K; % K (Temperature)
 
   % calculate oxygen fugacity from SV.T
     fO2 = OxF(T); % Pa
