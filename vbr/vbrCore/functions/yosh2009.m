@@ -19,7 +19,7 @@ function [ VBR ] = yosh2009( VBR )
   ele = VBR.in.electric.yosh2009_ol;
   T = VBR.in.SV.T_K; % K (Temperature)
   Ch2o = VBR.in.SV.Ch2o; % ppm (water content)
-  P = VBR.in.SV.P; % Pa (Pressure)
+  P = VBR.in.SV.P_GPa * 1e9; % Pa (Pressure)
 
     % Ionic Conduction
     Si = ele.S_i; % S/m
