@@ -25,7 +25,7 @@ function [params] = Params_Electric(method,GlobalParams)
     params.func_name='yosh2009'; % the name of the matlab function
     % Yoshino et al, 2009
     % Ionic Conduction
-    params.yosh2009_ol.S_i = 10^4.73; % S/m
+    params.S_i = 10^4.73; % S/m
     params.yosh2009_ol.H_i = 2.31; % eV
     params.yosh2009_ol.k_i = 8.617e-5; % eV/(mol*K)
     params.yosh2009_ol.Va_i = 0; % cc/mol (activation volume)
