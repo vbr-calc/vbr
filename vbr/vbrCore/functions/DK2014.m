@@ -17,9 +17,9 @@ function [ VBR ] = DK2014( VBR )
 
   % read in eletric parameters
   ele = VBR.in.electric.DK2014_ol;
-  T = VBR.in.SV.T; % K (Temperature)
+  T = VBR.in.SV.T_K; % K (Temperature)
   Ch2o = VBR.in.SV.Ch2o; % ppm (water content)
-  P = VBR.in.SV.P; % GPa (Pressure)
+  P = VBR.in.SV.P_GPa * 1e9; % GPa (Pressure)
   
   % Low Temperature Conduction
     S1 = ele.S_1; % S/m    
