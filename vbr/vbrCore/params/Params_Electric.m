@@ -1,4 +1,4 @@
-function [params] = Params_Eletric(method,GlobalParams)
+function [params] = Params_Electric(method,GlobalParams)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %
   % params = Params_Electric(method)
