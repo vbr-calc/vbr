@@ -16,9 +16,9 @@ function [ VBR ] = sun2019( VBR )
 
   % read in eletric parameters
   ele = VBR.in.electric.sun2019_ol;
-  T = VBR.in.SV.T; % K (Temperature)
+  T = VBR.in.SV.T_K; % K (Temperature)
   Ch2o = VBR.in.SV.Ch2o; % ppm (water content)
-  P = VBR.in.SV.P; % Pa (Pressure)
+  P = VBR.in.SV.P_GPa * 1e9; % Pa (Pressure)
   
   k = ele.k_i; % eV/(mol*K)
     % Ionic Conduction
