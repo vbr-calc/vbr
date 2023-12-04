@@ -17,10 +17,10 @@ function [ VBR ] = poe2010( VBR )
 
   % read in eletric parameters
   ele = VBR.in.electric.poe2010_ol;
-  T = VBR.in.SV.T; % K (Temmperature)
+  T = VBR.in.SV.T_K; % K (Temmperature)
   Ch2o = VBR.in.SV.Ch2o; % ppm (water content)
-  P = VBR.in.SV.P; % GPa (Pressure)
-  
+  P = VBR.in.SV.P_GPa * 1e9; % Pa (Pressure)
+
   % hydrous 100 axis
     S_H100 = ele.S_H100; % S/m   
     Va_H100 = ele.Va_H100; % cc/mol
