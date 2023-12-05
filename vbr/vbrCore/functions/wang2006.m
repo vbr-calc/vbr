@@ -15,7 +15,7 @@ function [ VBR ] = wang2006( VBR )
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   % read in eletric parameters
-  ele = VBR.in.electric.wang2006_ol;
+  ele = VBR.in.electric.wang2006;
   T = VBR.in.SV.T_K; % K (Temperature)
   Ch2o = VBR.in.SV.Ch2o; % ppm (water content)
   P = VBR.in.SV.P_GPa * 1e9; % Pa (Pressure)
