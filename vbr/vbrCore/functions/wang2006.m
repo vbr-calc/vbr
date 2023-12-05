@@ -45,7 +45,7 @@ function [ VBR ] = wang2006( VBR )
   wang2006_ol.esig_h = esig_h;
   wang2006_ol.esig_p = esig_p;
   wang2006_ol.esig = esig;
-  VBR.out.electric.wang2006_ol = wang2006_ol;
+  VBR.out.electric.wang2006 = wang2006_ol;
 end
 
 function sig = arrh_dry(S,H,k,T)
