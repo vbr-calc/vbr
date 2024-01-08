@@ -17,3 +17,4 @@ vbr/temp
 Projects/1_LabData/1_Attenuation/not_used/
 *.m~
 *.idea
+.vbr_test_data_dir
