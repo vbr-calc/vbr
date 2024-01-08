@@ -130,7 +130,7 @@ use the `VBR_save` function:
 VBR_save(VBR, "my_vbrc_results.mat") 
 ```
 
-This function is useful to ensure that the ```VBR``` structure is saved following in 
+This function is useful to ensure that the ```VBR``` structure is saved in 
 a standardized way, which at present is mainly useful for loading ```VBRc```
 output in the Python wrapper of the VBRc, ```pyVBRc```([link](https://github.com/vbr-calc/pyVBRc)). 
 
