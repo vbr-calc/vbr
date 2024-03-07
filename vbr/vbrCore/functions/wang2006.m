@@ -3,7 +3,7 @@ function [ VBR ] = wang2006( VBR )
   %
   % [ VBR ] = wang2006( VBR )
   %
-  % Conductivity of synthetic polycrystaline Ol (hydrous and Anhydrous)
+  % Conductivity of synthetic polycrystalline Ol (hydrous and Anhydrous)
   %
   % Parameters:
   % ----------
@@ -14,7 +14,7 @@ function [ VBR ] = wang2006( VBR )
   % VBR    the VBR structure, with VBR.out.electric.wang2006_ol structure
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  % read in eletric parameters
+  % read in electric parameters
   ele = VBR.in.electric.wang2006;
   T = VBR.in.SV.T_K; % K (Temperature)
   Ch2o = VBR.in.SV.Ch2o; % ppm (water content)
