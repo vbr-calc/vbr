@@ -3,7 +3,7 @@ function [ VBR ] = poe2010( VBR )
   %
   % [ VBR ] = poe2010( VBR )
   %
-  % calculates the electrical conductivity in single crystal San Carlos 
+  % calculations of electrical conductivity in single crystal San Carlos 
   % olivine (Fo90 ) at 8 GPa were determined by complex impedance spectroscopy.
   %
   % Parameters:
@@ -15,7 +15,7 @@ function [ VBR ] = poe2010( VBR )
   % VBR    the VBR structure, with VBR.out.electric.poe2010_ol structure
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  % read in eletric parameters
+  % read in electric parameters
   ele = VBR.in.electric.poe2010_ol;
   T = VBR.in.SV.T_K; % K (Temmperature)
   Ch2o = VBR.in.SV.Ch2o; % ppm (water content)
