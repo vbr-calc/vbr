@@ -15,7 +15,7 @@ function [ VBR ] = SEO3( VBR )
   % VBR    the VBR structure, with VBR.out.electric.yosh2009_ol structure
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  % read in eletric parameters
+  % read in electric parameters
   ele = VBR.in.electric.SEO3_ol;
   T = VBR.in.SV.T_K; % K (Temperature)
 
@@ -23,10 +23,10 @@ function [ VBR ] = SEO3( VBR )
     fO2 = OxF(T); % Pa
   
   % calculation of conductivity 
-  sig = SEO3_ne(T, fO2);
+  esig = SEO3_ne(T, fO2);
   
   % store in VBR structure
-  SEO3_ol.sig = sig;
+  SEO3_ol.esig = esig;
   VBR.out.electric.yosh2009_ol = SEO3_ol;
 end
 
