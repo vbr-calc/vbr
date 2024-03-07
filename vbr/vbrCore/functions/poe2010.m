@@ -20,6 +20,8 @@ function [ VBR ] = poe2010( VBR )
   T = VBR.in.SV.T_K; % K (Temmperature)
   Ch2o = VBR.in.SV.Ch2o; % ppm (water content)
   P = VBR.in.SV.P_GPa * 1e9; % Pa (Pressure)
+  Ch2o = Ch2o./1d4; % ppm => wt_f
+
 
   % hydrous 100 axis
     S_H100 = ele.S_H100; % S/m   
@@ -64,7 +66,8 @@ function [ VBR ] = poe2010( VBR )
      esig_A100 = arrh_dry(S_A100,H_A100,k,T);
      esig_A010 = arrh_dry(S_A010,H_A010,k,T);
      esig_A001 = arrh_dry(S_A001,H_A001,k,T);
-     esig_A = geomean(esig_A001,esig_A010,esig_A100);
+     esig_A = (esig_A001.*esig_A010.*esig_A100).^(1/3);
+
      
      
   % summation of conduction mechanisms
@@ -79,10 +82,10 @@ end
 
 function sig = arrh_dry(S,H,k,T)
     exponent = -(H)./(k.*T);
-    sig = (10^S).*exp(exponent);
+    sig = (S).*exp(exponent);
 end
 
 function sig = arrh_wet(S,H,k,T,w,a,r)
  exponent = -(H-a.*(w.^(1/3)))./(k.*T);
-    sig = (10^S).*(w.^r).*exp(exponent);
+    sig = (S).*(w.^r).*exp(exponent);
 end
