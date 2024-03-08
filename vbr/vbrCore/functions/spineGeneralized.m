@@ -6,7 +6,7 @@ function [VBR,telapsed]=spineGeneralized(VBR,property)
 %
 % Input:
 %  VBR: The VBR structure
-%  property: the property string ('anelastic','elastic','viscous')
+%  property: the property string ('anelastic','elastic','viscous', 'electric')
 %
 % Ouput:
 %  VBR: The VBR structure with new calculations attached

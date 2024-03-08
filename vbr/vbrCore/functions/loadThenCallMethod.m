@@ -8,7 +8,7 @@ function [VBR] = loadThenCallMethod(VBR,property,meth)
   % Parameters:
   % ----------
   %  VBR: the VBR structure
-  %  property: the property string ('anelastic','elastic','viscous')
+  %  property: the property string ('anelastic','elastic','viscous','electric')
   %  meth: the method string
   %
   % Output:
@@ -41,7 +41,7 @@ function meth_params = loadTheParams(VBR,property,param_func,meth)
   % Parameters:
   % ----------
   %  VBR: the VBR structure
-  %  property: the property string ('anelastic','elastic','viscous')
+  %  property: the property string ('anelastic','elastic','viscous','electric')
   %  param_func: the function to use to pull parameters (e.g., 'Params_Viscous')
   %  meth: the method string
   %
@@ -53,7 +53,7 @@ function meth_params = loadTheParams(VBR,property,param_func,meth)
   % load the the default values for this property and method
   meth_params=feval(param_func,meth,VBR.in.GlobalSettings);
 
-  % loop over all fields and save those defined by user 
+  % loop over all fields and save those defined by user
   if isfield(VBR.in.(property),meth)
     % user set parameters, check which they set
     fldz=fieldnames(meth_params); % only propagate param-defined fields
