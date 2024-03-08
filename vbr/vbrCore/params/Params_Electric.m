@@ -15,14 +15,14 @@ function [params] = Params_Electric(method,GlobalParams)
   % ------
   % params    the parameter structure for the electric method
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  params.possible_methods={'yosh2009','SEO3','poe2010','sun2019','wang2006','UHO2014','DK2014'};
+  params.possible_methods={'yosh2009','SEO3','poe2010','wang2006','UHO2014','jones2012'};
 
   if ~exist('GlobalParams')
     GlobalParams = Params_Global();
   end
 
   if strcmp(method,'yosh2009')
-    params.func_name='yosh2009'; % the name of the matlab function
+    params.func_name='yosh2009'; % the name of the Matlab function
     % Yoshino et al, 2009
     % Ionic Conduction
     params.S_i = 10^4.73; % S/m
@@ -75,7 +75,7 @@ function [params] = Params_Electric(method,GlobalParams)
     params.description='Constable 2006 Standard Electrical Olivine Model (Anhydrous)';
 
   elseif strcmp(method,'poe2010')
-    params.func_name='poe2010'; % the name of the matlab function
+    params.func_name='poe2010'; % the name of the Matlab function
     % Poe et al, 2010
     % hydrous 100 axis
     params.S_H100 = 10^2.59; % S/m   
@@ -117,10 +117,10 @@ function [params] = Params_Electric(method,GlobalParams)
     params.k_A = 8.617e-5; % eV/(mol*K)
 
     params.citations={'Poe et al. (2010), "Electrical conductivity anisotropy of dry and hydrous olivine at 8 GPa", Physics of Earth and Planetary Interiors, Volume 181, Issues 3–4, https://doi.org/10.1016/j.pepi.2010.05.003'};
-    params.description='Poe et al 2010 Ol Conductivity for 3 crystal axises (hydrous & anhydrous), Parameters Sigma_0 and alpha are for wt% from Jones et al., 2012';
+    params.description='Poe et al 2010 Ol Conductivity for 3 crystal axes (hydrous & anhydrous), Parameters Sigma_0 and alpha are for wt% from Jones et al., 2012';
   
    elseif strcmp(method,'wang2006')
-    params.func_name='wang2006'; % the name of the matlab function
+    params.func_name='wang2006'; % the name of the Matlab function
     % Wang, 2006
     params.S_H = 10^3.0; % S/m   
     params.H_H = 87; % kJ/mol
@@ -138,7 +138,7 @@ function [params] = Params_Electric(method,GlobalParams)
     params.description='Wang et al. conductivity of Ol aggregate (hydrous and Anhydrous)';
     
    elseif strcmp(method,'UHO2014')
-    params.func_name='UHO2014'; % the name of the matlab function
+    params.func_name='UHO2014'; % the name of the Matlab function
     % UHO, 2014
     params.H_v = 239; % kJ/mol
     params.S_v = 10^5.07; % S/m
@@ -159,10 +159,10 @@ function [params] = Params_Electric(method,GlobalParams)
 
     params.citations={'Gardes et al. (2014), "Toward a unified hydrous olivine electrical' ...
         'conductivity law", [GeoChemistry, Geophysics, Geosystems], Volume 15, Issue 12, doi:10.1002/2014GC005496'};
-    params.description='Gardes derives universal Ol conductivity law based on labratory database (tested against true petrophysical data) ';
+    params.description='Gardes et al. derives universal Ol conductivity law based on laboratory database (tested against true petrophysical data) ';
 
   elseif strcmp(method,'jones2012')
-    params.func_name='jones2012'; % the name of the matlab function
+    params.func_name='jones2012'; % the name of the Matlab function
 
     % Jones et al., 2012 (Hydrous)
     params.jones2012_ol.S = 10.^(3.05); % S/m
@@ -174,7 +174,7 @@ function [params] = Params_Electric(method,GlobalParams)
 
     params.citations={'Jones et al. (2012), "Water in cratonic lithosphere: Calibrating laboratory- determined models ..."' ...
         'Geochemistry, Geophysics, Geosystems, Volume 13, http://dx.doi.org/10.1029/2012GC004055'};
-    params.description='Jones et al. calibration of hydrous electrical conductivity from previous labratory experiments to South African Jagersfontein and Gibeon Xenolith in situ, Constable 2006(SEO3) used as the anhydrous component';
+    params.description='Jones et al. calibration of hydrous electrical conductivity from previous laboratory experiments to South African Jagersfontein and Gibeon Xenolith in situ, Constable 2006(SEO3) used as the anhydrous component';
 end
   
 end
