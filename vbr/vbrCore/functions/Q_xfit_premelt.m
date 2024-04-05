@@ -50,7 +50,7 @@ function [VBR] = Q_xfit_premelt(VBR)
 
     % poroelastic J1 effect if applicable
     if params.include_direct_melt_effect == 1
-      % poroelastic effect comes in through unrelaxed modulus
+      % poroelastic effect added to J1
       poro_elastic_factor = params.poro_Lambda * phi.*(Tn >= 1);
     else
       % no poroelastic effects outside of incoming unrelaxed modulus
