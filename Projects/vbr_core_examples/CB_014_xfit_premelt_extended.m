@@ -2,8 +2,8 @@
 % CB_004_xfit_premelt.m
 %
 %  Calls VBR using xfit_premelt method from:
-%    Hatsuki Yamauchi and Yasuko Takei, JGR 2016, "Polycrystal anelasticity at
-%    near-solidus temperatures,"
+%    Hatsuki Yamauchi and Yasuko Takei, JGR 2024, "Effect of Melt on Polycrystal
+%    Anelasticity", https://doi.org/10.1029/2023JB027738
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% put VBR in the path %%
@@ -15,13 +15,14 @@
 %% write method list %%
   VBR.in.elastic.methods_list={'anharmonic'};
   VBR.in.anelastic.methods_list={'xfit_premelt'};
+  VBR.in.anelastic.xfit_premelt.include_direct_melt_effect = 1;
 
   % load anharmonic parameters, adjust Gu_0_ol and derivatives to match YT2016
   VBR.in.elastic.anharmonic.Gu_0_ol=72.45; %[GPa]
   VBR.in.elastic.anharmonic.dG_dT = -10.94*1e6; % Pa/C    (equivalent ot Pa/K)
   VBR.in.elastic.anharmonic.dG_dP = 1.987; % GPa / GPa
 
-  VBR.in.anelastic.xfit_premelt.include_direct_melt_effect = 1;
+
 %% Define the Thermodynamic State %%
 
   VBR.in.SV.T_K=700:50:1200;
