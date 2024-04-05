@@ -50,6 +50,7 @@ function params = Params_Viscous(method,GlobalParams)
     params.alpha=25; % taken from diff. creep value of HZK2011. YT2016 call this lambda.
     params.T_eta=0.94;
     params.gamma=5;
+    params.B = 1.0;
 
     % method to use for melt-free diff. creep viscosity
     params.eta_melt_free_method='xfit_premelt';
