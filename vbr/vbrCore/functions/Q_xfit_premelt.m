@@ -53,7 +53,7 @@ function [VBR] = Q_xfit_premelt(VBR)
       % poroealstic effect comes in through unrelaxed modulus
       poro_elastic_factor = params.poro_Lambda * phi.*(Tn >= 1);
     else
-      % poroealstic effect is applied to J1
+      % no poroelastic effects outside of incoming unrelaxed modulus
       poro_elastic_factor = 0.0;
     end
 
