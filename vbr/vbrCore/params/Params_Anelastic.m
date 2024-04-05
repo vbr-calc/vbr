@@ -121,7 +121,7 @@ function params = Params_Anelastic(method,GlobalParams)
     params.Ap_Tn_pts=[0.91,0.96,1]; % Tn cuttoff points
     params.sig_p_Tn_pts=[0.92,1]; % Tn cuttoff points
 
-    % note: sig_p_fac2 and Ap_fac_2 above combinations of the other constants
+    % note: sig_p_fac2 and Ap_fac_2 above are combinations of the other constants
     % and appear in the original papers as:
     % sig_p_fac2 = (sig_p_fac_3-sig_p_fac_1) / (sig_p_Tn_pts(2) - sig_p_Tn_pts(1))
     % Ap_fac_2 = (Ap_fac_3-Ap_fac_1) / (Ap_Tn_pts(3) - Ap_Tn_pts(1))
