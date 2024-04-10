@@ -18,6 +18,7 @@ function FitData_YT16()
   path_to_top_level_vbr='../../../';
   addpath(path_to_top_level_vbr)
   vbr_init
+  addpath('./functions')
 
   plot_visc();
   plot_Q();
@@ -32,7 +33,6 @@ function plot_Q()
   viscData = loadYT2016visc();
   Qdata=loadYT2016Q();
 
-  %figure('DefaultAxesFontSize',12,'PaperPosition',[0,0,6,2.5],'PaperPositionMode','manual')
   fig=figure('Position', [10 10 600 300],'PaperPosition',[0,0,6,2.5],'PaperPositionMode','manual');
   OutVBR=struct();
   if viscData.has_data && Qdata.Qinv.has_data
@@ -300,56 +300,3 @@ function data = loadYT2016Q()
   end
 end
 
-function params = setBorneolParams()
-  % set the general viscous parameters for borneol.
-  % near-solidus and melt effects
-  params.alpha=25;
-  params.T_eta=0.94; % eqn 17,18- T at which homologous T for premelting.
-  params.gamma=5;
-  % flow law constants for YT2016
-  params.Tr_K=23+273; % reference temp [K]
-  params.Pr_Pa=0; % reference pressure [Pa]
-  params.eta_r=7e13;% reference eta (eta at Tr_K, Pr_Pa)
-  params.H=147*1e3; % activation energy [J/mol]
-  params.V=0; % activation vol [m3/mol]
-  params.R=8.314; % gas constant [J/mol/K]
-  params.m=2.56; % grain size exponent
-  params.dg_um_r=34.2 ; % eference grain size [um]
-end
-
-function [G,dGdT,dGdT_ave] = YT16_E(T_C)
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  % [G,dGdT,dGdT_ave]= YT16_E(T_C)
-  %
-  % YT2016 Figure 6 caption polynomial fit of E vs T, T in degrees C
-  %
-  % parameters
-  % ----------
-  % T_C   temperature in deg C, any size array
-  %
-  % output
-  % ------
-  % G          modulus, GPa. same size as T_C
-  % dGdT       temperature derivative of G at T_C, same size as T_C. [GPa/C]
-  % dGdT_ave   average temp derivative over range of T_C given, scalar. [GPa/C].
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-  a0=2.5943;
-  a1=2.6911*1e-3;
-  a2=-2.9636*1e-4;
-  a3 =1.4932*1e-5;
-  a4 =-2.9351*1e-7;
-  a5 =1.8997*1e-9;
-  a = [a5,a4,a3,a2,a1,a0];
-
-  G=zeros(size(T_C));
-  dGdT=zeros(size(T_C));
-  for iTC=1:numel(T_C)
-    Gpoly = polyval(a,T_C(iTC));
-    dGdTpoly = polyval(a(1:end-1),T_C(iTC));
-    G(iTC)=sum(Gpoly(:));
-    dGdT(iTC)=sum(dGdTpoly(:));
-  end
-  dGdT_ave=mean(dGdT);
-
-end
