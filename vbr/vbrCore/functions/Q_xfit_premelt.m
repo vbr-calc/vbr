@@ -51,7 +51,7 @@ function [VBR] = Q_xfit_premelt(VBR)
     % poroelastic J1 effect if applicable
     if params.include_direct_melt_effect == 1
       % poroelastic effect added to J1
-      poro_elastic_factor = params.poro_Lambda * phi.*(Tn >= 1);
+      poro_elastic_factor = params.poro_Lambda * phi;
     else
       % no poroelastic effects outside of incoming unrelaxed modulus
       poro_elastic_factor = 0.0;
@@ -70,14 +70,15 @@ function [VBR] = Q_xfit_premelt(VBR)
     n_freq = numel(VBR.in.SV.f);
     sz = size(Gu_in);
     J1 = proc_add_freq_indeces(zeros(sz),n_freq);
-    J2 = J1; V = J1;
+    J2 = J1; V = J1; f_norm_glob=J1;
     n_SVs=numel(Tn); % total elements in state variables
 
     % loop over frequencies, calculate J1,J2
     for i = 1:n_freq
+
       sv_i0=(i-1)*n_SVs + 1; % starting linear index of this freq
       sv_i1=sv_i0+n_SVs-1; % ending linear index of this freq
-
+      f_norm_glob(sv_i0:sv_i1)=tau_m*VBR.in.SV.f(i);
       p_p=period_vec(i)./(2*pi*tau_m);
       % tau_eta^S= tau_s / (2 pi tau_m);, tau_s = seismic wave period, tau_m = ss maxwell time
       ABppa=A_B_plus_Beta_B .* (p_p.^alpha_B);
@@ -102,6 +103,7 @@ function [VBR] = Q_xfit_premelt(VBR)
     VBRout.Qinv = J2./J1.*(J2_J1_frac.^-1);
     VBRout.Q = 1./VBRout.Qinv;
     VBRout.M=1./sqrt(J1.^2+J2.^2);
+    VBRout.f_norm = f_norm_glob;
 
     % calculate mean velocity along frequency dimension
     VBRout.Vave = Q_aveVoverf(VBRout.V,VBR.in.SV.f);
@@ -109,6 +111,7 @@ function [VBR] = Q_xfit_premelt(VBR)
     VBRout.units = Q_method_units();
     VBRout.units.M1 = 'Pa';
     VBRout.units.M2 = 'Pa';
+    VBRout.units.f_norm = '';
     % store the output structure
     VBR.out.anelastic.xfit_premelt=VBRout;
 
