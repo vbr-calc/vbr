@@ -52,6 +52,7 @@ function VBRc_results = plot_fig7(full_data_dir);
     combined_data = YT24_load_fig7_combined_data(full_data_dir);
     n_exps = numel(combined_data);
 
+    freq_range = logspace(-4,9,100);
     T_sc_min = 0.3;
     T_sc_max = 1.01;
     dT_rng = T_sc_max - T_sc_min;
@@ -71,9 +72,7 @@ function VBRc_results = plot_fig7(full_data_dir);
         hold all
         loglog(data.f_normed, data.Qinv, '.', 'markersize', 12, 'color', rgb)
     end
-    Tref = 8.2;
-    eta_ref = 1433 * 1e12; % sample 41
-    H41 = 147*1e3;
+
     % now get VBRc results
     VBRc_results = struct();
     for i_exp = 1:n_exps
@@ -88,23 +87,19 @@ function VBRc_results = plot_fig7(full_data_dir);
         VBR.in.anelastic.methods_list={'xfit_premelt'};
         VBR.in.anelastic.xfit_premelt.include_direct_melt_effect = 1.0;
 
-
-        VBR.in.viscous.xfit_premelt=setBorneolParams();
-%        VBR.in.viscous.xfit_premelt.dg_um_r=34.2;
-%        VBR.in.viscous.xfit_premelt.Tr_K=Tref+273;
-%        VBR.in.viscous.xfit_premelt.eta_r=eta_ref;
-%        VBR.in.viscous.xfit_premelt.H=H41;
+        VBR.in.viscous.xfit_premelt=setBorneolViscParams();
+        VBR.in.viscous.xfit_premelt.dg_um_r = dg; %47.9;
+        VBR.in.viscous.xfit_premelt.Tr_K = 46.3 + 273.;
+        VBR.in.viscous.xfit_premelt.eta_r = 0.173 * 1e12;
+        VBR.in.viscous.xfit_premelt.H = 147*1e3;
 
         % set anharmonic conditions
         VBR.in.elastic.anharmonic=Params_Elastic('anharmonic');
-        [Gu_o,dGdT,dGdT_ave]= YT16_E(T);
-        Gu_o=(Gu_o-0.05)*1e9;
-
+        % extract reference modulus (E_normed = E / E_u)
+        Gu_o = mean(data.E ./ data.E_normed)*1e9;
         % Gu_o is for a given T, specify at elevated TP to skip anharmonic scaling
         VBR.in.elastic.Gu_TP = Gu_o;
-
-        % adjust some anelastic settings
-        VBR.in.anelastic.xfit_premelt.tau_pp=2*1e-5;  % why? i dont remember...
+        VBR.in.elastic.quiet = 1; % not bothering with K, avoid printing the poisson warning
 
         % set experimental conditions
         VBR.in.SV.T_K = T+273 ;
@@ -114,10 +109,11 @@ function VBRc_results = plot_fig7(full_data_dir);
         VBR.in.SV.rho =rho .* ones(sz); % density [kg m^-3]
         VBR.in.SV.sig_MPa =1000 .* ones(sz)./1e6; % differential stress [MPa]
         VBR.in.SV.Tsolidus_K = Tsol + 273 ;
+        disp(T/Tsol)
         VBR.in.SV.phi = phi * ones(sz); % melt fraction
         VBR.in.SV.Ch2o_0=zeros(sz);
 
-        VBR.in.SV.f=logspace(-4,7,75);
+        VBR.in.SV.f=freq_range;
         [VBR_bysamp] = VBR_spine(VBR);
         results.Qinv=VBR_bysamp.out.anelastic.xfit_premelt.Qinv;
         results.E=VBR_bysamp.out.anelastic.xfit_premelt.M;

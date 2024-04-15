@@ -1,4 +1,4 @@
-function params = setBorneolParams()
+function params = setBorneolViscParams()
   % set the general viscous parameters for borneol.
   % near-solidus and melt effects
   params.alpha=25;

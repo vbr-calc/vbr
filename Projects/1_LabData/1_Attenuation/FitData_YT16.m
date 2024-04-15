@@ -63,7 +63,7 @@ function plot_Q()
       [T_Cvisc,I]=sort(T_Cvisc); eta=eta(I);
 
       % set this sample's viscosity parameters
-      VBR.in.viscous.xfit_premelt=setBorneolParams();
+      VBR.in.viscous.xfit_premelt=setBorneolViscParams();
       VBR.in.viscous.xfit_premelt.dg_um_r=dg;
       VBR.in.viscous.xfit_premelt.Tr_K=T_Cvisc(1)+273;
       VBR.in.viscous.xfit_premelt.eta_r=eta(1);

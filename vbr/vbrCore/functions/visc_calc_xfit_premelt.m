@@ -138,6 +138,6 @@ function A_n = calcA_n(Tn,phi,params)
   msk=(Tn >= T_eta) & (Tn < 1);
   A_n(msk)=exp(-(Tn(msk)-T_eta)./(Tn(msk)-Tn(msk)*T_eta)*log(gamma));
 
-  msk=(Tn > 1);
+  msk=(Tn >= 1);
   A_n(msk)=exp(-lambda*phi(msk))/gamma/B;
 end

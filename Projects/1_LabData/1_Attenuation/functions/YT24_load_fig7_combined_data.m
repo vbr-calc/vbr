@@ -35,6 +35,7 @@ function single_exp = extract_single_experiment(current_run, sample_info, iT, Ts
     T = current_run(iT).T; % celcius
     cdata = current_run(iT).data;
     single_exp.T = T;
+    single_exp.Tn = T / 43;
     single_exp.f = cdata(:,1);
     single_exp.f_normed = cdata(:,2);
     single_exp.E = cdata(:,3);
