@@ -63,6 +63,7 @@
         ylabel('Qs', 'fontsize', 12)
         ylim([0, 200])
 
+        yticks(0:20:200)
 
   end
 

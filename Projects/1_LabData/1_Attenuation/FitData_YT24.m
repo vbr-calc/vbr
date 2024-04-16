@@ -86,7 +86,7 @@ function VBRc_results = plot_fig7(full_data_dir);
 
         rgb = get_rgb(i_exp, data.T/Tsol, T_sc_min, dT_rng);
         Tvals = [Tvals, data.T];
-        Tnlab = num2str(data.T/Tsol);
+        Tnlab = num2str((data.T+273)/(Tsol+273));
         subplot(2,1,1)
         hold_if(i_exp)
         semilogx(data.f_normed, data.E_normed * mod_fac, 'o', 'markersize', 3, 'color', rgb, 'displayname', Tnlab)

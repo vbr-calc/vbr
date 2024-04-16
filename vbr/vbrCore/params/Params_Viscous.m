@@ -47,7 +47,7 @@ function params = Params_Viscous(method,GlobalParams)
     params.citations={'Yamauchi and Takei, 2016, J. Geophys. Res. Solid Earth, https://doi.org/10.1002/2016JB013316'};
     params.description='Steady state flow law for pre-melting viscosity drop, flow law parameters from fitting upper mantle.';
     % near-solidus and melt effects
-    params.alpha=25; % taken from diff. creep value of HZK2011. YT2016 call this lambda.
+    params.alpha=30; % taken from diff. creep value of HZK2011. YT2016 call this lambda.
     params.T_eta=0.94;
     params.gamma=5;
     params.B = 1.0;
