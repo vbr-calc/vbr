@@ -1,5 +1,5 @@
 function params = setBorneolViscParams()
-  % set the general viscous parameters for borneol.
+  % set the general viscous parameters for borneol for YT2016
   % near-solidus and melt effects
   params.alpha=25;
   params.T_eta=0.94; % eqn 17,18- T at which homologous T for premelting.

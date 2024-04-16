@@ -111,7 +111,7 @@ function params = Params_Anelastic(method,GlobalParams)
     params.A_B=0.664; % high temp background dissipation strength
 
     % pre-melting dissipation peak settings:
-    params.tau_pp=6*1e-5; % peak center
+    params.tau_pp=6*1e-5; % peak center, table 4 of YT16, paragraph before eq 10
     params.Ap_fac_1=0.01;
     params.Ap_fac_2=0.4;
     params.Ap_fac_3=0.03;
@@ -133,7 +133,7 @@ function params = Params_Anelastic(method,GlobalParams)
     params.include_direct_melt_effect = 0; % set to 1 to include YT2024 melt effect
     params.Beta=1.38; % this is determined in YT2024, named Beta_P in YT2024 eq 5
     params.Beta_B=6.94; % YT2024 only
-    params.poro_Lambda = 4.0; % Table 6 YT2024, 
+    params.poro_Lambda = 4.0; % Table 6 YT2024,
     params.description='pre-melting scaling';
   end
 

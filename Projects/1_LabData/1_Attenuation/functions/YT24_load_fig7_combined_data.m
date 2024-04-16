@@ -59,7 +59,7 @@ function [run_data, sample_info] = load_sample_data(sample_number, full_data_dir
     data = getfield(sample_data, struct_name); % e.g., anela42
 
     run_data = data.run;
-    sample_info = get_sample_info(sample_number, data);
+    sample_info = get_sample_info(sample_number);
 end
 
 

@@ -50,7 +50,7 @@ function [VBR] = Q_xfit_premelt(VBR)
 
     % poroelastic J1 effect if applicable
     if params.include_direct_melt_effect == 1
-      % poroelastic effect added to J1
+      % poroelastic effect added to J1, Delta_poro
       poro_elastic_factor = params.poro_Lambda * phi;
     else
       % no poroelastic effects outside of incoming unrelaxed modulus
@@ -127,14 +127,14 @@ function [A_p,sig_p] = calcApSigp(Tn,phi,params);
   Ap_Tn_pts=params.Ap_Tn_pts;
   sig_p_Tn_pts=params.sig_p_Tn_pts;
   if params.include_direct_melt_effect == 1
-      Beta = params.Beta; % this depends on melt fraction in YT2024
+      Beta_p = params.Beta; % this depends on melt fraction in YT2024
   else
-      Beta = 0; % no direct melt dependence
+      Beta_p = 0; % no direct melt dependence
   end
   A_p=zeros(size(Tn));
-  A_p(Tn>=Ap_Tn_pts(3))=params.Ap_fac_3+Beta*phi(Tn>=Ap_Tn_pts(3));
-  A_p(Tn<Ap_Tn_pts(3))=params.Ap_fac_3;
-  A_p(Tn<Ap_Tn_pts(2))=(params.Ap_fac_1 +params.Ap_fac_2*(Tn(Tn<Ap_Tn_pts(2))-Ap_Tn_pts(1)));
+  A_p(Tn >= Ap_Tn_pts(3))=params.Ap_fac_3+Beta_p*phi(Tn >= Ap_Tn_pts(3));
+  A_p(Tn < Ap_Tn_pts(3))=params.Ap_fac_3;
+  A_p(Tn < Ap_Tn_pts(2))=params.Ap_fac_1 + params.Ap_fac_2*(Tn(Tn < Ap_Tn_pts(2))-Ap_Tn_pts(1));
   A_p(Tn < Ap_Tn_pts(1))=params.Ap_fac_1;
 
   sig_p=zeros(size(Tn));

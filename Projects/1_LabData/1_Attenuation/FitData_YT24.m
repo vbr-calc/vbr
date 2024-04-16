@@ -1,4 +1,4 @@
-function VBRc_results = FitData_YT24(use_data)
+function VBRc_results = FitData_YT24()
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % FitData_YT24()
     %
@@ -26,6 +26,7 @@ function VBRc_results = FitData_YT24(use_data)
     addpath('./functions')
 
     % check on data
+    use_data = 1;
     full_data_dir = 0;
     if use_data == 1
         full_data_dir = download_YT24('data');
@@ -35,11 +36,31 @@ function VBRc_results = FitData_YT24(use_data)
 
 end
 
-function rgb = get_rgb(Tn, Tn_min, dT)
-    clr_sc = (Tn - Tn_min) / dT;
-    clr_sc(clr_sc > 1) = 1.0;
-    clr_sc(clr_sc < 0) = 0.0;
-    rgb = [clr_sc, 0., 1-clr_sc];
+function rgb = get_rgb(i_exp, Tn, Tn_min, dT)
+
+    rgba = [
+           0  , 0.4470  , 0.7410;
+           0.8500 ,  0.3250  , 0.0980;
+           0.9290 ,  0.6940  , 0.1250;
+           0.4940 ,  0.1840  , 0.5560;
+           0.4660 ,  0.6740  , 0.1880;
+           0.3010 ,  0.7450  , 0.9330;
+           0.6350 ,  0.0780  , 0.1840;
+           0  , 0.4470  , 0.7410;
+           0.8500 ,  0.3250  , 0.0980;
+           0.9290 ,  0.6940  , 0.1250;
+           0.4940 ,  0.1840  , 0.5560;
+           0.4660 ,  0.6740  , 0.1880;
+           0.3010 ,  0.7450  , 0.9330;
+           0.6350 ,  0.0780  , 0.1840;
+    ];
+    rgba(8:end,:) = rgba(8:end,:) * 0.5;
+
+    rgb = rgba(i_exp,:);
+%    clr_sc = (Tn - Tn_min) / dT;
+%    clr_sc(clr_sc > 1) = 1.0;
+%    clr_sc(clr_sc < 0) = 0.0;
+%    rgb = [clr_sc, 0., 1-clr_sc];
 end
 
 function VBRc_results = plot_fig7(full_data_dir);
@@ -52,26 +73,31 @@ function VBRc_results = plot_fig7(full_data_dir);
     combined_data = YT24_load_fig7_combined_data(full_data_dir);
     n_exps = numel(combined_data);
 
-    freq_range = logspace(-4,9,100);
+    freq_range = logspace(-6,9,100);
     T_sc_min = 0.3;
     T_sc_max = 1.01;
     dT_rng = T_sc_max - T_sc_min;
     Tsol = 43.0;
     Tvals = [];
     % first plot experimental results
+    mod_fac = 1 / ( 1 - 0.031);  % systematic error correction
     for i_exp = 1:n_exps
         data = combined_data(i_exp);
 
-        rgb = get_rgb(data.T/Tsol, T_sc_min, dT_rng);
+        rgb = get_rgb(i_exp, data.T/Tsol, T_sc_min, dT_rng);
         Tvals = [Tvals, data.T];
-
+        Tnlab = num2str(data.T/Tsol);
         subplot(2,1,1)
-        hold all
-        semilogx(data.f_normed, data.E_normed, '.', 'markersize', 12, 'color', rgb)
+        hold_if(i_exp)
+        semilogx(data.f_normed, data.E_normed * mod_fac, 'o', 'markersize', 3, 'color', rgb, 'displayname', Tnlab)
         subplot(2,1,2)
-        hold all
-        loglog(data.f_normed, data.Qinv, '.', 'markersize', 12, 'color', rgb)
+        hold_if(i_exp)
+        loglog(data.f_normed, data.Qinv, 'o', 'markersize', 3, 'color', rgb, 'displayname', Tnlab)
     end
+    subplot(2,1,1)
+    legend('Location', 'eastoutside','AutoUpdate','off')
+    subplot(2,1,2)
+    legend('Location', 'eastoutside','AutoUpdate','off')
 
     % now get VBRc results
     VBRc_results = struct();
@@ -82,21 +108,26 @@ function VBRc_results = plot_fig7(full_data_dir);
         dg = data.dg_um;
         phi = data.phi;
         rho = data.rho_kgm3;
-        VBR.in.elastic.methods_list={'anharmonic';'anh_poro'};
+
+        VBR.in.elastic.methods_list={'anharmonic';};
         VBR.in.viscous.methods_list={'xfit_premelt'};
         VBR.in.anelastic.methods_list={'xfit_premelt'};
         VBR.in.anelastic.xfit_premelt.include_direct_melt_effect = 1.0;
+        VBR.in.anelastic.xfit_premelt.tau_pp=2*1e-5;
+        % plotting with correction for poro-elastic effect applied, so
+        % set effect to 0 here.
+        VBR.in.anelastic.xfit_premelt.poro_Lambda = 0.0;
 
-        VBR.in.viscous.xfit_premelt=setBorneolViscParams();
-        VBR.in.viscous.xfit_premelt.dg_um_r = dg; %47.9;
-        VBR.in.viscous.xfit_premelt.Tr_K = 46.3 + 273.;
-        VBR.in.viscous.xfit_premelt.eta_r = 0.173 * 1e12;
-        VBR.in.viscous.xfit_premelt.H = 147*1e3;
+        % set viscous params
+        VBR.in.viscous.xfit_premelt=setBorneolViscParams(); % YT2016 values, sample 41
+        VBR.in.viscous.xfit_premelt.alpha = 32;  % YT2024 actually fit this
 
         % set anharmonic conditions
         VBR.in.elastic.anharmonic=Params_Elastic('anharmonic');
         % extract reference modulus (E_normed = E / E_u)
-        Gu_o = mean(data.E ./ data.E_normed)*1e9;
+        [Gu_o,dGdT,dGdT_ave]= YT16_E(T);
+        Gu_o = Gu_o * 1e9;
+
         % Gu_o is for a given T, specify at elevated TP to skip anharmonic scaling
         VBR.in.elastic.Gu_TP = Gu_o;
         VBR.in.elastic.quiet = 1; % not bothering with K, avoid printing the poisson warning
@@ -104,12 +135,12 @@ function VBRc_results = plot_fig7(full_data_dir);
         % set experimental conditions
         VBR.in.SV.T_K = T+273 ;
         sz=size(VBR.in.SV.T_K);
-        VBR.in.SV.dg_um= dg.* ones(sz);
+        VBR.in.SV.dg_um= dg .* ones(sz); %dg.* ones(sz);
         VBR.in.SV.P_GPa = 1.0132e-04 .* ones(sz); % pressure [GPa]
         VBR.in.SV.rho =rho .* ones(sz); % density [kg m^-3]
-        VBR.in.SV.sig_MPa =1000 .* ones(sz)./1e6; % differential stress [MPa]
+        VBR.in.SV.sig_MPa = 1000 .* ones(sz)./1e6; % differential stress [MPa]
         VBR.in.SV.Tsolidus_K = Tsol + 273 ;
-        disp(T/Tsol)
+
         VBR.in.SV.phi = phi * ones(sz); % melt fraction
         VBR.in.SV.Ch2o_0=zeros(sz);
 
@@ -129,23 +160,29 @@ function VBRc_results = plot_fig7(full_data_dir);
     for i_exp = 1:n_exps
 
         results = VBRc_results(i_exp);
-        rgb = get_rgb(results.T/Tsol, T_sc_min, dT_rng);
+        rgb = get_rgb(i_exp, results.T/Tsol, T_sc_min, dT_rng);
         % and plot
         subplot(2,1,1)
-        hold all
+        hold_if(i_exp)
+
         semilogx(results.f_normed, results.E_normed ,'color', rgb)
         subplot(2,1,2)
-        hold all
+        hold_if(i_exp)
         loglog(results.f_normed, results.Qinv , 'color', rgb)
     end
 
     subplot(2,1,1)
     xlim([1e-2,1e9])
     ylim([0,1.1])
+    xlabel('f / f_M')
+    ylabel("E/E_u")
 
     subplot(2,1,2)
     xlim([1e-2,1e9])
     ylim([1e-3,2])
+    xlabel('f / f_M')
+    ylabel("Q^-^1")
+
 end
 
 
@@ -168,5 +205,11 @@ function unzipped_data_dir = download_YT24(datadir)
         urlwrite(YT24data_url, zipfilename)
         movefile(zipfilename, unzipped_data_dir)
         unzip(local_data, unzipped_data_dir)
+    end
+end
+
+function hold_if(iterval)
+    if iterval > 1
+        hold all
     end
 end
