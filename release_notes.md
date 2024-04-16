@@ -1,6 +1,7 @@
 # v1.1.3
 
 ## New Features
+* add direct melt effects to xfit_premelt, from Yamauchi and Takei, 2024. The `xfit_premelt` method will use the updated parameter values when `VBR.in.anelastic.xfit_premelt.include_direct_melt_effect = 1;` (default is 0, a future VBRc version will change the default to 1).  
 * add a `VBR_save` function for saving `VBR` structures 
 * add framework for handling temporary files in test suite
 * add convenience function, `full_nd`, to create filled arrays
