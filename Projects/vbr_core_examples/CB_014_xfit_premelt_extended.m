@@ -1,9 +1,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% CB_004_xfit_premelt.m
+% CB_014_xfit_premelt_extended.m
 %
-%  Calls VBR using xfit_premelt method from:
-%    Hatsuki Yamauchi and Yasuko Takei, JGR 2024, "Effect of Melt on Polycrystal
-%    Anelasticity", https://doi.org/10.1029/2023JB027738
+%  Calls VBR using xfit_premelt method including the direct melt effect,
+%  from:
+%    Hatsuki Yamauchi and Yasuko Takei, JGR 2024, "Effect of Melt on
+%    Polycrystal Anelasticity", https://doi.org/10.1029/2023JB027738
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% put VBR in the path %%
