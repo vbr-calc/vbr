@@ -46,9 +46,9 @@ function TestResult = test_vbrcore_009_premelt_direct()
   Qinv = VBR.out.anelastic.xfit_premelt.Qinv;
   phi = VBR.in.SV.phi;
   dQdphi = (Qinv(2:end) - Qinv(1:end-1))./ (phi(2:end) - phi(1:end-1));
-  if sum(dQdphi>0) > 0
+  if sum(dQdphi<0) > 0
         TestResult.passed=false;
-        TestResult.fail_message = 'Increasing melt fraction should decrease Qinv.';
+        TestResult.fail_message = 'Increasing melt fraction should increase Qinv.';
   end
 end
 
