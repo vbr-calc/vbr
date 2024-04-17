@@ -45,7 +45,11 @@ disp(VBR.in.viscous.xfit_premelt)
 
 ### eta_melt_free_method
 
-The parameter, `VBR.in.viscous.xfit_premelt.eta_melt_free_method`, controls what viscosity method is used to calculate the melt free viscosity. By default, this is set to `xfit_premelt`, in which case it uses the upper mantle fit directly from Yamauchi and Takei (2016). If set to one of the other viscosity mtehods, `HK2003` or `HZK2011`, then the melt free viscosity is calculated using those methods with melt fraction set to 0 and then the near-solidus pre-melting effect is then multiplied on.
+The parameter, `VBR.in.viscous.xfit_premelt.eta_melt_free_method`, controls what viscosity method is used to calculate 
+the melt free viscosity. By default, this is set to `xfit_premelt`, in which case it uses the upper mantle fit directly 
+from Yamauchi and Takei (2016). If set to one of the other viscosity mtehods, `HK2003` or `HZK2011`, then the melt 
+free viscosity is calculated using those methods with melt fraction set to 0 and then the near-solidus pre-melting 
+effect is then multiplied on.
 
 ## Output
 Output is stored in `VBR.out.viscous.xfit_premelt`. Unlike the other viscous methods, `xfit_premelt` only returns a diffusion creep viscosity sub-structure:
