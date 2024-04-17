@@ -1,4 +1,4 @@
-function combined_data = YT24_load_fig7_combined_data(full_data_dir)
+function combined_data_final = YT24_load_fig7_combined_data(full_data_dir)
 
     combined_data = struct();
     % pull all data for sample 41 first T cycle
@@ -11,8 +11,10 @@ function combined_data = YT24_load_fig7_combined_data(full_data_dir)
 
     i_data = 1;
     Tsol = 43;
+    Tvals = [];
     for iT = i_Tstart: i_Tend
         combined_data(i_data) = extract_single_experiment(current_run, sample_info, iT, Tsol, sample_id);
+        Tvals = [Tvals, combined_data(i_data).Tn];
         i_data = i_data + 1;
     end
 
@@ -24,9 +26,18 @@ function combined_data = YT24_load_fig7_combined_data(full_data_dir)
         for iT = i_Tstart: i_Tend
             if current_run(iT).T >= Tsol
                 combined_data(i_data) = extract_single_experiment(current_run, sample_info, iT, Tsol, sample_id);
+                Tvals = [Tvals, combined_data(i_data).Tn];
                 i_data =  i_data + 1;
             end
         end
+    end
+
+
+
+    % finally, re-order based on homologous temperature
+    [sorted_T, idx] = sort(Tvals);
+    for isamp = 1:numel(combined_data)
+        combined_data_final(isamp) = combined_data(idx(isamp));
     end
 
 end
@@ -35,7 +46,7 @@ function single_exp = extract_single_experiment(current_run, sample_info, iT, Ts
     T = current_run(iT).T; % celcius
     cdata = current_run(iT).data;
     single_exp.T = T;
-    single_exp.Tn = T / 43;
+    single_exp.Tn = (T + 273.0) / (Tsol+273); % homologous temperature
     single_exp.f = cdata(:,1);
     single_exp.f_normed = cdata(:,2);
     single_exp.E = cdata(:,3);

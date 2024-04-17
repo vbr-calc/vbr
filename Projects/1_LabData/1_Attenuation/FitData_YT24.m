@@ -25,79 +25,83 @@ function VBRc_results = FitData_YT24()
 
     addpath('./functions')
 
-    % check on data
-    use_data = 1;
-    full_data_dir = 0;
-    if use_data == 1
-        full_data_dir = download_YT24('data');
-    end
+    % check on data, download if needed
+    full_data_dir = download_YT24('data');
 
+    % get VBRc result and plot along the way
     VBRc_results = plot_fig7(full_data_dir);
 
 end
 
 function rgb = get_rgb(i_exp, Tn, Tn_min, dT)
 
-    rgba = [
-           0  , 0.4470  , 0.7410;
-           0.8500 ,  0.3250  , 0.0980;
-           0.9290 ,  0.6940  , 0.1250;
-           0.4940 ,  0.1840  , 0.5560;
-           0.4660 ,  0.6740  , 0.1880;
-           0.3010 ,  0.7450  , 0.9330;
-           0.6350 ,  0.0780  , 0.1840;
-           0  , 0.4470  , 0.7410;
-           0.8500 ,  0.3250  , 0.0980;
-           0.9290 ,  0.6940  , 0.1250;
-           0.4940 ,  0.1840  , 0.5560;
-           0.4660 ,  0.6740  , 0.1880;
-           0.3010 ,  0.7450  , 0.9330;
-           0.6350 ,  0.0780  , 0.1840;
-    ];
-    rgba(8:end,:) = rgba(8:end,:) * 0.5;
-
-    rgb = rgba(i_exp,:);
-%    clr_sc = (Tn - Tn_min) / dT;
-%    clr_sc(clr_sc > 1) = 1.0;
-%    clr_sc(clr_sc < 0) = 0.0;
-%    rgb = [clr_sc, 0., 1-clr_sc];
+%    rgba = [
+%           0  , 0.4470  , 0.7410;
+%           0.8500 ,  0.3250  , 0.0980;
+%           0.9290 ,  0.6940  , 0.1250;
+%           0.4940 ,  0.1840  , 0.5560;
+%           0.4660 ,  0.6740  , 0.1880;
+%           0.3010 ,  0.7450  , 0.9330;
+%           0.6350 ,  0.0780  , 0.1840;
+%           0  , 0.4470  , 0.7410;
+%           0.8500 ,  0.3250  , 0.0980;
+%           0.9290 ,  0.6940  , 0.1250;
+%           0.4940 ,  0.1840  , 0.5560;
+%           0.4660 ,  0.6740  , 0.1880;
+%           0.3010 ,  0.7450  , 0.9330;
+%           0.6350 ,  0.0780  , 0.1840;
+%    ];
+%    rgba(8:end,:) = rgba(8:end,:) * 0.5;
+%
+%    rgb = rgba(i_exp,:);
+    clr_sc = (Tn - Tn_min) / dT;
+    clr_sc(clr_sc > 1) = 1.0;
+    clr_sc(clr_sc < 0) = 0.0;
+    rgb = [clr_sc, 0., 1-clr_sc];
 end
 
 function VBRc_results = plot_fig7(full_data_dir);
 
-    figure();
+    figure('Position', [10 10 500 600],'PaperPosition',[0,0,7,7*6/5],'PaperPositionMode','manual');
+    ax_1 = subplot(2,1,1);
+    ax_2 = subplot(2,1,2);
 
     load(fullfile('data','YT16','table3.mat'));
     visc_data.table3_H=table3_H.table3_H;
 
     combined_data = YT24_load_fig7_combined_data(full_data_dir);
+
     n_exps = numel(combined_data);
 
     freq_range = logspace(-6,9,100);
-    T_sc_min = 0.3;
-    T_sc_max = 1.01;
+    T_sc_min = 0.889;
+    T_sc_max = 1.015;
     dT_rng = T_sc_max - T_sc_min;
     Tsol = 43.0;
-    Tvals = [];
     % first plot experimental results
     mod_fac = 1 / ( 1 - 0.031);  % systematic error correction
     for i_exp = 1:n_exps
         data = combined_data(i_exp);
 
-        rgb = get_rgb(i_exp, data.T/Tsol, T_sc_min, dT_rng);
-        Tvals = [Tvals, data.T];
-        Tnlab = num2str((data.T+273)/(Tsol+273));
+        rgb = get_rgb(i_exp, data.Tn, T_sc_min, dT_rng);
+        if data.Tn >= 1
+            mrkr = 'o';
+            mrkr_sz = 3;
+        else
+            mrkr = '.';
+            mrkr_sz=10;
+        end
+        Tnlab = num2str(data.Tn, 3+(data.Tn>=1));
         subplot(2,1,1)
         hold_if(i_exp)
-        semilogx(data.f_normed, data.E_normed * mod_fac, 'o', 'markersize', 3, 'color', rgb, 'displayname', Tnlab)
+        semilogx(data.f_normed, data.E_normed * mod_fac, mrkr, 'markersize', mrkr_sz, 'color', rgb, 'displayname', Tnlab)
         subplot(2,1,2)
         hold_if(i_exp)
-        loglog(data.f_normed, data.Qinv, 'o', 'markersize', 3, 'color', rgb, 'displayname', Tnlab)
+        loglog(data.f_normed, data.Qinv, mrkr, 'markersize', mrkr_sz, 'color', rgb, 'displayname', Tnlab)
     end
-    subplot(2,1,1)
-    legend('Location', 'eastoutside','AutoUpdate','off')
     subplot(2,1,2)
-    legend('Location', 'eastoutside','AutoUpdate','off')
+    leg = legend('Location', 'eastoutside', 'Orientation', 'vertical', ...
+                 'AutoUpdate','off','title','T_n','NumColumns',1);
 
     % now get VBRc results
     VBRc_results = struct();
@@ -160,7 +164,7 @@ function VBRc_results = plot_fig7(full_data_dir);
     for i_exp = 1:n_exps
 
         results = VBRc_results(i_exp);
-        rgb = get_rgb(i_exp, results.T/Tsol, T_sc_min, dT_rng);
+        rgb = get_rgb(i_exp, (results.T +273)/(Tsol+273), T_sc_min, dT_rng);
         % and plot
         subplot(2,1,1)
         hold_if(i_exp)
@@ -172,6 +176,7 @@ function VBRc_results = plot_fig7(full_data_dir);
     end
 
     subplot(2,1,1)
+    xticklabels([])
     xlim([1e-2,1e9])
     ylim([0,1.1])
     xlabel('f / f_M')
@@ -183,6 +188,18 @@ function VBRc_results = plot_fig7(full_data_dir);
     xlabel('f / f_M')
     ylabel("Q^-^1")
 
+    ax2pos = get(ax_2, 'Position');
+    ax1pos = get(ax_1, 'Position');
+
+    ax1pos(2) = ax2pos(2) + ax2pos(4); % use the same x axis
+    set(ax_1, 'Position', ax1pos)
+    set(ax_2, 'Position', ax2pos)
+
+    leg_pos = get(leg, 'Position');
+    leg_pos(2) = ax2pos(2);
+    set(leg, 'Position', leg_pos)
+
+    saveas(gcf,'./figures/YT24_MQ.png')
 end
 
 
