@@ -87,6 +87,20 @@ function [VBR] = Q_xfit_premelt(VBR)
     VBRout.units = Q_method_units();
     VBRout.units.M1 = 'Pa';
     VBRout.units.M2 = 'Pa';
+
+
+    if VBR.in.GlobalSettings.anelastic.include_complex_viscosity == 1
+        etao = tau_m .* Gu_in;
+        omega = 2 * pi * VBR.in.SV.f;
+        [eta_star, eta_star_bar, eta_app] = complex_viscosity(J1, J2, omega, etao, tau_m);
+        VBRout.units.eta_star = 'Pa*s';
+        VBRout.units.eta_app = 'Pa * s';
+        VBRout.units.eta_star_bar = '';
+        VBRout.eta_star = eta_star;
+        VBRout.eta_apparent = eta_star;
+        VBRout.eta_star_bar = eta_star_bar;
+    end
+
     % store the output structure
     VBR.out.anelastic.xfit_premelt=VBRout;
 
