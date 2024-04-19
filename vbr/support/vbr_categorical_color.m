@@ -17,7 +17,8 @@ function rgb = vbr_categorical_color(iclr)
     %     3-element array of floating point rgb values in (0,1) range
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     rgbs = vbr_categorical_cmap_array();
-    ncolors = size(rgbs)(1);
+    ncolors = size(rgbs);
+    ncolors = ncolors(1);
     iclr = ncolors - mod(iclr, ncolors);
     rgb = rgbs(iclr, :);
 end
