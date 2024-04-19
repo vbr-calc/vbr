@@ -70,4 +70,5 @@ function VBR = get_init_VBR()
   VBR.in.elastic.methods_list={'anharmonic';'anh_poro';};
   VBR.in.anelastic.methods_list={'eburgers_psp';'andrade_psp';'xfit_mxw'};
   VBR.in.viscous.methods_list={'HZK2011'};
+  VBR.in.elastic.quiet = 1;
 end

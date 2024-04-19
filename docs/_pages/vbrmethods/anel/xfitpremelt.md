@@ -116,3 +116,7 @@ The Project script, `Projects/1_LabData/1_Attenuation/FitData_YT16.m` calculates
 !['mxwPMLab'](/vbr/assets/images/xfitpremelt1.png){:class="img-responsive"}
 
 Data are from figure 10 of Yamauchi and Takei (2016) and are not included in the repository at present.
+
+The Project script,  `Projects/1_LabData/1_Attenuation/FitData_YT24.m` reproduces figure 7 from Yamauchi and Takei (2024).
+
+!['mxwPMLab'](/vbr/assets/images/xfitpremelt_melt_effects.png){:class="img-responsive"}

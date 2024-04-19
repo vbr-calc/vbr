@@ -33,38 +33,18 @@ function VBRc_results = FitData_YT24()
 
 end
 
-function rgb = get_rgb(i_exp, Tn, Tn_min, dT)
-
-%    rgba = [
-%           0  , 0.4470  , 0.7410;
-%           0.8500 ,  0.3250  , 0.0980;
-%           0.9290 ,  0.6940  , 0.1250;
-%           0.4940 ,  0.1840  , 0.5560;
-%           0.4660 ,  0.6740  , 0.1880;
-%           0.3010 ,  0.7450  , 0.9330;
-%           0.6350 ,  0.0780  , 0.1840;
-%           0  , 0.4470  , 0.7410;
-%           0.8500 ,  0.3250  , 0.0980;
-%           0.9290 ,  0.6940  , 0.1250;
-%           0.4940 ,  0.1840  , 0.5560;
-%           0.4660 ,  0.6740  , 0.1880;
-%           0.3010 ,  0.7450  , 0.9330;
-%           0.6350 ,  0.0780  , 0.1840;
-%    ];
-%    rgba(8:end,:) = rgba(8:end,:) * 0.5;
-%
-%    rgb = rgba(i_exp,:);
-    clr_sc = (Tn - Tn_min) / dT;
-    clr_sc(clr_sc > 1) = 1.0;
-    clr_sc(clr_sc < 0) = 0.0;
-    rgb = [clr_sc, 0., 1-clr_sc];
-end
 
 function VBRc_results = plot_fig7(full_data_dir);
 
     figure('Position', [10 10 500 600],'PaperPosition',[0,0,7,7*6/5],'PaperPositionMode','manual');
-    ax_1 = subplot(2,1,1);
-    ax_2 = subplot(2,1,2);
+    yheight = 0.4;
+    xpos = 0.1;
+    ypos = 0.1;
+    xwidth = 0.6;
+    ax_Q = axes('position', [xpos, ypos, xwidth, yheight]);
+    ax_E = axes('position', [xpos, ypos + yheight, xwidth, yheight]);
+    leg_pos = [xpos+xwidth+0.05, ypos, 0.2, yheight];
+
 
     load(fullfile('data','YT16','table3.mat'));
     visc_data.table3_H=table3_H.table3_H;
@@ -74,36 +54,9 @@ function VBRc_results = plot_fig7(full_data_dir);
     n_exps = numel(combined_data);
 
     freq_range = logspace(-6,9,100);
-    T_sc_min = 0.889;
-    T_sc_max = 1.015;
-    dT_rng = T_sc_max - T_sc_min;
     Tsol = 43.0;
-    % first plot experimental results
-    mod_fac = 1 / ( 1 - 0.031);  % systematic error correction
-    for i_exp = 1:n_exps
-        data = combined_data(i_exp);
 
-        rgb = get_rgb(i_exp, data.Tn, T_sc_min, dT_rng);
-        if data.Tn >= 1
-            mrkr = 'o';
-            mrkr_sz = 3;
-        else
-            mrkr = '.';
-            mrkr_sz=10;
-        end
-        Tnlab = num2str(data.Tn, 3+(data.Tn>=1));
-        subplot(2,1,1)
-        hold_if(i_exp)
-        semilogx(data.f_normed, data.E_normed * mod_fac, mrkr, 'markersize', mrkr_sz, 'color', rgb, 'displayname', Tnlab)
-        subplot(2,1,2)
-        hold_if(i_exp)
-        loglog(data.f_normed, data.Qinv, mrkr, 'markersize', mrkr_sz, 'color', rgb, 'displayname', Tnlab)
-    end
-    subplot(2,1,2)
-    leg = legend('Location', 'eastoutside', 'Orientation', 'vertical', ...
-                 'AutoUpdate','off','title','T_n','NumColumns',1);
-
-    % now get VBRc results
+    % get VBRc results
     VBRc_results = struct();
     for i_exp = 1:n_exps
         data = combined_data(i_exp);
@@ -117,7 +70,7 @@ function VBRc_results = plot_fig7(full_data_dir);
         VBR.in.viscous.methods_list={'xfit_premelt'};
         VBR.in.anelastic.methods_list={'xfit_premelt'};
         VBR.in.anelastic.xfit_premelt.include_direct_melt_effect = 1.0;
-        VBR.in.anelastic.xfit_premelt.tau_pp=2*1e-5;
+        % VBR.in.anelastic.xfit_premelt.tau_pp=2*1e-5;
         % plotting with correction for poro-elastic effect applied, so
         % set effect to 0 here.
         VBR.in.anelastic.xfit_premelt.poro_Lambda = 0.0;
@@ -156,47 +109,76 @@ function VBRc_results = plot_fig7(full_data_dir);
         results.f_normed = VBR_bysamp.out.anelastic.xfit_premelt.f_norm;
         results.E_normed = results.E / Gu_o;
         results.T = T;
+        results.Tn = VBR.in.SV.T_K  / VBR.in.SV.Tsolidus_K ;
         results.VBR = VBR_bysamp;
         VBRc_results(i_exp) = results;
     end
 
 
     for i_exp = 1:n_exps
-
+        if i_exp == 2
+            linesty = '--';
+        else
+            linesty = '-';
+        end
         results = VBRc_results(i_exp);
-        rgb = get_rgb(i_exp, (results.T +273)/(Tsol+273), T_sc_min, dT_rng);
-        % and plot
-        subplot(2,1,1)
+        rgb = vbr_categorical_color(i_exp);
+        Tnlab = num2str(results.Tn, 3+(results.Tn>=1));
+        axes(ax_E)
         hold_if(i_exp)
-
-        semilogx(results.f_normed, results.E_normed ,'color', rgb)
-        subplot(2,1,2)
+        semilogx(results.f_normed, results.E_normed ,'color', rgb, ...
+                 'linewidth', 1.5, 'linestyle', linesty)
+        axes(ax_Q)
         hold_if(i_exp)
-        loglog(results.f_normed, results.Qinv , 'color', rgb)
+        loglog(results.f_normed, results.Qinv , 'color', rgb, ...
+              'linewidth', 1.5, 'displayname', Tnlab, 'linestyle', linesty)
     end
 
-    subplot(2,1,1)
+    % plot experimental results
+    delta_systematic = 0.031;
+
+    for i_exp = 1:n_exps
+        data = combined_data(i_exp);
+        dporo = data.dporo * data.phi;
+        mod_fac = 1 / ( 1 - delta_systematic) / (1 - dporo);  % correction factor
+        rgb = vbr_categorical_color(i_exp);
+        if data.Tn >= 1
+            mrkr = 'o';
+            mrkr_sz = 5;
+            mkr_fc = 'w';
+        else
+            mrkr = '.';
+            mrkr_sz=15;
+            mkr_fc = rgb;
+        end
+        Tnlab = num2str(data.Tn, 3+(data.Tn>=1));
+        axes(ax_E)
+        hold_if(i_exp)
+        semilogx(data.f_normed, data.E_normed * mod_fac, mrkr, ...
+                 'markersize', mrkr_sz, 'color', rgb, 'displayname', Tnlab, ...
+                 'MarkerFaceColor', mkr_fc)
+        axes(ax_Q)
+        hold_if(i_exp)
+        loglog(data.f_normed, data.Qinv, mrkr, 'markersize', mrkr_sz, ....
+               'color', rgb, 'displayname', Tnlab, 'MarkerFaceColor', mkr_fc)
+    end
+    axes(ax_Q)
+    leg = legend('Location', 'eastoutside', 'Orientation', 'vertical', ...
+                 'AutoUpdate','off','title','T_n','NumColumns',1);
+
+    axes(ax_E)
     xticklabels([])
     xlim([1e-2,1e9])
     ylim([0,1.1])
     xlabel('f / f_M')
     ylabel("E/E_u")
 
-    subplot(2,1,2)
+    axes(ax_Q)
     xlim([1e-2,1e9])
     ylim([1e-3,2])
     xlabel('f / f_M')
     ylabel("Q^-^1")
 
-    ax2pos = get(ax_2, 'Position');
-    ax1pos = get(ax_1, 'Position');
-
-    ax1pos(2) = ax2pos(2) + ax2pos(4); % use the same x axis
-    set(ax_1, 'Position', ax1pos)
-    set(ax_2, 'Position', ax2pos)
-
-    leg_pos = get(leg, 'Position');
-    leg_pos(2) = ax2pos(2);
     set(leg, 'Position', leg_pos)
 
     saveas(gcf,'./figures/YT24_MQ.png')

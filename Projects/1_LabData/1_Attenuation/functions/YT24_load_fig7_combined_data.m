@@ -59,6 +59,7 @@ function single_exp = extract_single_experiment(current_run, sample_info, iT, Ts
     single_exp.dg_um = sample_info.dg_um;
     single_exp.sample_id = sample_id;
     single_exp.rho_kgm3 = sample_info.rho_kgm3;
+    single_exp.dporo = (phi > 0) * sample_info.dporo;
 end
 
 function [run_data, sample_info] = load_sample_data(sample_number, full_data_dir)
@@ -84,6 +85,7 @@ function sample_data = get_sample_info(sample_number)
         sample_data.eta_r = 1061*1e12;
         sample_data.first_Tcycle_index_start_stop = [2, 9];
         sample_data.nT = 8;
+        sample_data.dporo = 0.135;
     elseif sample_number == 42
         sample_data.dg_um = 46.3;
         sample_data.rho_kgm3 = 1.0111;
@@ -91,6 +93,7 @@ function sample_data = get_sample_info(sample_number)
         sample_data.eta_r = 132 * 1e12;
         sample_data.first_Tcycle_index_start_stop = [2, 8];
         sample_data.nT = 7;
+        sample_data.dporo = 0.0585;
     elseif sample_number == 41
         sample_data.dg_um = 34.2;
         sample_data.rho_kgm3 = 1.0111;
@@ -98,6 +101,7 @@ function sample_data = get_sample_info(sample_number)
         sample_data.eta_r = 1433 * 1e12;
         sample_data.first_Tcycle_index_start_stop = [3, 10];
         sample_data.nT = 8;
+        sample_data.dporo = 0.0178;
     end
 
 end

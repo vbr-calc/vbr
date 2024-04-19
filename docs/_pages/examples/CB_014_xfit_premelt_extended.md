@@ -1,3 +1,14 @@
+---
+permalink: /examples/CB_014_xfit_premelt_extended/
+title: ""
+---
+
+# CB_014_xfit_premelt_extended.m
+## output figures
+
+!['CB_014_xfit_premelt_extended'](/vbr/assets/images/CBs/CB_014_xfit_premelt_extended.png){:class="img-responsive"}
+## contents
+```matlab
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CB_014_xfit_premelt_extended.m
 %
@@ -72,3 +83,4 @@
   saveas(gcf,'./figures/CB_014_xfit_premelt_extended.png')
 
 
+```
