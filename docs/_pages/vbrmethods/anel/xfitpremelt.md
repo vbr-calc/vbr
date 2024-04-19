@@ -6,7 +6,9 @@ title: ''
 
 # `xfit_premelt`
 
-Master curve maxwell scaling using near-solidus parametrization of Yamauchi and Takei (2016), J. Geophys. Res. Solid Earth, [DOI](https://doi.org/10.1002/2016JB013316).
+Master curve maxwell scaling using near-solidus parametrization of Yamauchi and Takei (2016), 
+J. Geophys. Res. Solid Earth, [DOI](https://doi.org/10.1002/2016JB013316) with optional extension to include direct melt effects 
+of Yamauchi and Takei (2024), J. Geophys. Res. Solid Earth, [DOI](https://doi.org/10.1029/2023JB027738).
 
 ## Requires
 
@@ -21,11 +23,27 @@ VBR.in.SV.sig_MPa % differential stress [MPa]
 VBR.in.SV.phi % melt fraction / porosity
 VBR.in.SV.rho % density in kg m<sup>-3</sup>
 ```
+
+To use the Yamauchi and Takei (2024) scaling that includes direct melt effects, set the 
+following flag:
+
+```matlab 
+VBR.in.anelastic.xfit_premelt.include_direct_melt_effect = 1;
+```
 Additionally, `xfit_premelt` relies on output from the elastic and viscous methods.
 
-**Required Elastic Methods**: `anharmonic` MUST be in the `VBR.in.elastic.methods_list`. If `anh_poro` is in the methods list then `xfit_premelt` will use the unrelaxed moduli from `anh_poro` (which includes the P,T projection of `anharmonic` plus the poroelastic correction). See the section on [elastic methods](/vbr/vbrmethods/elastic/) for more details.
+**Required Elastic Methods**: `anharmonic` MUST be in the `VBR.in.elastic.methods_list`. Poroelasticity 
+is treated differently depending on the value of `include_direct_melt_effect`. 
+If `include_direct_melt_effect==0` and `anh_poro` is in the methods list then `xfit_premelt` will use the unrelaxed moduli 
+from `anh_poro` (which includes the P,T projection of `anharmonic` plus the poroelastic correction). See the section 
+on [elastic methods](/vbr/vbrmethods/elastic/) for more details. If `include_direct_melt_effect==1`, then poroelasticity is incororated within 
+J1, following Yamauchi and Takei (2024). The current version of the VBRc uses `include_direct_melt_effect=0` as the default, 
+future versions will set this flag to 1 by default.
 
-**Optional Viscous Methods**: `xfit_premelt` calculates maxwell times using the [viscous xfit_premelt method](/vbr/vbrmethods/visc/xfit_premelt/). If you want to adjust the viscosity calculation used in the maxwell time, you can add `xfit_premelt` to `VBR.in.viscous.methods_list` and adjust the desired parameters. The anelastic calculation will then use the results calculated by the viscous `xfit_premelt` method. This is particularly useful when fitting laboratory measurements of borneol (see [example](/vbr/vbrmethods/anel/xfitpremelt/#example-at-laboratory-conditions) below).
+**Optional Viscous Methods**: `xfit_premelt` calculates maxwell times using the [viscous xfit_premelt method](/vbr/vbrmethods/visc/xfit_premelt/). 
+If you want to adjust the viscosity calculation used in the maxwell time, you can add `xfit_premelt` to `VBR.in.viscous.methods_list` 
+and adjust the desired parameters. The anelastic calculation will then use the results calculated by the viscous `xfit_premelt` method. 
+This is particularly useful when fitting laboratory measurements of borneol (see [example](/vbr/vbrmethods/anel/xfitpremelt/#example-at-laboratory-conditions) below).
 
 ## Calling Procedure
 
@@ -52,6 +70,9 @@ VBR.in.elastic.methods_list={'anharmonic';'anh_poro'};
 
 % set anelastic methods list
 VBR.in.anelastic.methods_list={'xfit_premelt'};
+
+% enable melt effects from Yamauchi and Takei (2024)
+VBR.in.anelastic.xfit_premelt.include_direct_melt_effect = 1;
 
 % call VBR_spine
 [VBR] = VBR_spine(VBR) ;
@@ -95,3 +116,7 @@ The Project script, `Projects/1_LabData/1_Attenuation/FitData_YT16.m` calculates
 !['mxwPMLab'](/vbr/assets/images/xfitpremelt1.png){:class="img-responsive"}
 
 Data are from figure 10 of Yamauchi and Takei (2016) and are not included in the repository at present.
+
+The Project script,  `Projects/1_LabData/1_Attenuation/FitData_YT24.m` reproduces figure 7 from Yamauchi and Takei (2024).
+
+!['mxwPMLab'](/vbr/assets/images/xfitpremelt_melt_effects.png){:class="img-responsive"}
