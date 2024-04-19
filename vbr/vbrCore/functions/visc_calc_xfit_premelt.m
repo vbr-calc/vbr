@@ -130,7 +130,7 @@ function A_n = calcA_n(Tn,phi,params)
   T_eta=params.T_eta;
   gamma=params.gamma;
   lambda=params.alpha; % rename to be consistent with YT2016 nomenclature
-
+  B = params.B;
   A_n=zeros(size(Tn));
 
   A_n(Tn<T_eta)=1;
@@ -138,6 +138,6 @@ function A_n = calcA_n(Tn,phi,params)
   msk=(Tn >= T_eta) & (Tn < 1);
   A_n(msk)=exp(-(Tn(msk)-T_eta)./(Tn(msk)-Tn(msk)*T_eta)*log(gamma));
 
-  msk=(Tn > 1);
-  A_n(msk)=exp(-lambda*phi(msk))/gamma;
+  msk=(Tn >= 1);
+  A_n(msk)=exp(-lambda*phi(msk))/gamma/B;
 end
