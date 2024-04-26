@@ -6,13 +6,14 @@ function vbrListMethods(single_prop)
   %
   % Parameters:
   % -----------
-  % single_prop: optional string, must be in 'anelastic', 'elastic' or 'viscous'
+  % single_prop: optional string, must be in 'anelastic', 'elastic', 'viscous' or
+  % 'electric'
   %
   % vbrListMethods() will print all methods
-  % vbrListMethods('viscous') will print only viscous methods 
+  % vbrListMethods('viscous') will print only viscous methods
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  param_types={'anelastic';'elastic';'viscous'};
+  param_types={'anelastic';'elastic';'viscous';'electric'};
   if exist('single_prop', 'var')
     param_type=lower(single_prop);
     if any(strcmp(param_types,param_type))

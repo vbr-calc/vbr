@@ -78,6 +78,13 @@ if isfield(VBR.in,'anelastic')
    [VBR,telapsed.anelastic]=spineGeneralized(VBR,'anelastic');
 end
 
+%% =====================================================================
+%% Electrical conductivity ! ===========================================
+%% =====================================================================
+if isfield(VBR.in, 'electric')
+   [VBR,telapsed.electric]=spineGeneralized(VBR,'electric');
+end
+
 %% ========================================================================
    VBR.out.computation_time=telapsed; % store elapsed time for each
 

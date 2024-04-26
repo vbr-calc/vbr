@@ -27,6 +27,8 @@ function TestResult = test_vbrcore_002()
   % Define the Thermodynamic State
   VBR.in.SV.T_K=linspace(500,1400,100)+273;
   sz=size(VBR.in.SV.T_K);
+  n1 = 3;
+  n2 = 5;
   VBR.in.SV.P_GPa = 2 * ones(sz); % pressure [GPa]
   VBR.in.SV.T_K = 1473 * ones(sz); % temperature [K]
   VBR.in.SV.rho = 3300 * ones(sz); % density [kg m^-3]

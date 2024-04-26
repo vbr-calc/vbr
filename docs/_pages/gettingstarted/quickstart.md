@@ -119,26 +119,3 @@ VBR.out.anelastic.eburgers_psp.V % anelastic-dependent seismic shear wave veloci
 VBR.out.viscous.HZK2011.eta_total % composite steady state creep viscosity
 ```
 As noted above, any frequency dependence is stored in an additional dimension. For example, if ```size(VBR.in.SV.T)``` is (50,100) and ```numel(VBR.in.SV.f)``` is 3, then  ```size(VBR.out.anelastic.eburgers_psp.V)``` will be (50,100,3).
-
-
-## 7. Saving results 
-
-To save your results, you can manually save the ```VBR``` structure as usual in MATLAB. You can, however, also 
-use the `VBR_save` function:
-
-```matlab 
-VBR_save(VBR, "my_vbrc_results.mat") 
-```
-
-This function is useful to ensure that the ```VBR``` structure is saved in 
-a standardized way, which at present is mainly useful for loading ```VBRc```
-output in the Python wrapper of the VBRc, ```pyVBRc```([link](https://github.com/vbr-calc/pyVBRc)). 
-
-Additionally, `VBR_save` allows you to easily exclude the `VBR.in.SV` structure from the saved file:
-
-```matlab 
-VBR_save(VBR, "my_vbrc_results_without_SV.mat", 1) 
-```
-
-This can be useful if you wish to save disk space and instead reconstruct your state variables 
-on re-load (which you must do manually!). 

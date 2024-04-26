@@ -77,15 +77,7 @@ function TestResults = run_tests(test_file_string)
         end
     end
 
-    % cleanup
-    test_files_to_clean = dir(test_config.vbr_test_data_dir);
-    for ifile = 1:numel(test_files_to_clean)
-        maybe_fi = test_files_to_clean(ifile);
-        if maybe_fi.isdir == 0
-            fname = fullfile(maybe_fi.folder, maybe_fi.name);
-            delete(fname);
-        end
-    end
+
 end
 
 function [TestResults,failedCount, SkippedTests, ErrorMessages] = runTheMfiles(mfiles, test_config)

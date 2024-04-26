@@ -50,24 +50,3 @@ whether or not some code runs without error, then your function should always re
 
 If you are adding a test that is not compatible with octave, add the test function name
 to the test configuration in the `get_config.m` file. 
-
-### saving data during tests
-
-If you want to save data as part of running your test, save files to the directory in the 
-`vbr_test_data_dir` field of the configuration structure returned by `get_config()`. This
-ensures that any temporary tests files are cleared after running the tests. To use it, you 
-can do the following within a test:
-
-```
-test_config = get_config();
-save_dir = test_config.vbr_test_data_dir;
-fname = fullfile(save_dir, "my_test_file.mat");
-```
-
-No need to delete the file within the test, this is done automatically in `run_tests.m`.
-
-The default directory for the temporary files is `.vbr_test_data_dir` (which will 
-be created on first run). To change the default, you can set the environment variable 
-`VBR_TEST_DATA_DIR` to any path you like (in bash or zsh, 
-`export VBR_TEST_DATA_DIR=/my/preferred/path`) and a `.vbr_test_data_dir` subdirectory 
-will be created there instead.

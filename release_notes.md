@@ -1,5 +1,7 @@
-# v1.1.3
+# v1.1.1
 
-## New Features
-* add a `VBR_save` function for saving `VBR` structures 
-* add framework for handling temporary files in test suite
+Minor bug fix release 
+
+## bug fixes
+
+- fix for zenodo sync
