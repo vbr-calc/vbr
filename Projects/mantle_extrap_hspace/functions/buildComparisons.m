@@ -17,6 +17,7 @@ function buildComparisons(VBR,HS,figDir)
   close all
   profile_ts=0:2.5:50;
   plotProfiles(VBR,HS,figDir,profile_ts); % depth profiles
+  plotE_sigProfiles(VBR, HS, figDir, profile_ts)
   close all
 
   % Q profiles
@@ -46,6 +47,98 @@ function buildComparisons(VBR,HS,figDir)
   close all
 end
 
+function plotE_sigProfiles(VBR, HS, figDir, profile_ts)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % plots depth profiles of T, Esig HS Upper, Esig HS Lower, Esig Geometric Average
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ 
+ z=HS.z_km;
+ tMyr=HS.t_Myr;
+
+  fig=figure('Position', [10 10 700 400],'PaperPosition',[0,0,6,3],'PaperPositionMode','manual','DefaultAxesFontSize',8);
+  ax_T=subplot(1,4,1);
+  ax_hsup=subplot(1,4,2);
+  ax_hslo=subplot(1,4,3);
+  ax_geo =subplot(1,4,4);
+
+  esig_ol = cell2mat(struct2cell(VBR.out.electric.SEO3_ol)); % S/m, Phase 1 (Olivine)
+  esig_m = cell2mat(struct2cell(VBR.out.electric.sifre2014_ol)); % S/m, Phase 2 (Melt)
+  esig_hsup = HSup(esig_ol, esig_m, VBR.in.SV.phi); % S/m, HS upper 
+  esig_hslo = HSlo(esig_ol, esig_m, VBR.in.SV.phi); % S/m, HS lower
+  esig_geo = sqrt(esig_ol.*esig_m); % S/m, Geo average
+
+    function esig = HSup(esig_ol, esig_m,phi) % Hashin-Strickman Upper
+    num = 3.*(1-phi).*(esig_m-esig_ol); % numerator
+    den = 3.*esig_m-phi.*(esig_m-esig_ol); % denominator
+    esig = esig_m.*(1-(num./den));
+    end
+    function esig = HSlo(esig_ol, esig_m,phi) % case specific
+    num = 3.*(phi).*(esig_m-esig_ol); % numerator
+    den = 3.*esig_ol+(1-phi).*(esig_m-esig_ol); % denominator
+    esig = esig_ol.*(1+(num./den));
+    end
+
+  set(fig,'currentaxes',ax_T)
+  plot(VBR.in.SV.Tsolidus_K(:,1)-273,z,'k')
+
+  for t_indx=1:numel(profile_ts)
+    [val,indx]=min(abs(profile_ts(t_indx)-tMyr));
+
+    R=tMyr(indx) / max(tMyr);
+    R=R*(R<=1)+1*(R>1);
+    RGB=[R,0,1-R];
+
+    % temperature v depth
+    set(fig,'currentaxes',ax_T)
+    hold on
+    plot(VBR.in.SV.T_K(:,indx)-273,z,'color',RGB)
+
+    % Hashin-Stricktman Upper v depth
+    set(fig,'currentaxes',ax_hsup)
+    hold on
+    plot(log10(esig_hsup(:,indx)),z,'color',RGB)
+
+    % Hashin-Strickman Lower v depth
+    set(fig,'currentaxes',ax_hslo)
+    hold on
+    plot(log10(esig_hslo(:,indx)),z,'color',RGB)
+
+    % Geometric Mean v depth
+    set(fig,'currentaxes',ax_geo)
+    hold on
+    plot(log10(esig_geo(:,indx)),z,'color',RGB)
+  end
+
+  set(fig,'currentaxes',ax_T)
+  xlabel('T [C]')
+  ylabel('Depth [km]')
+  Tmajor=0:500:1500;
+  set(ax_T,'xtick',Tmajor,'xticklabel',Tmajor)
+  set(ax_T,'ydir','reverse')
+  xlim([0,1700])
+  box on
+
+  set(fig,'currentaxes',ax_hsup)
+  xlabel(' log_1_0\sigma [S/m]')
+  set(ax_hsup,'ydir','reverse')
+  title('HS-Upper')
+  box on
+
+  set(fig,'currentaxes',ax_hslo)
+  xlabel(' log_1_0\sigma [S/m]')
+  set(ax_hslo,'ydir','reverse')
+  title('HS-Lower')
+  box on
+
+  set(fig,'currentaxes',ax_geo)
+  xlabel(' log_1_0\sigma [S/m]')
+  set(ax_geo,'ydir','reverse')
+  title('Geo Average')
+  box on
+
+  saveas(fig,[figDir,'/esigHS_profiles.png'])
+  
+end
 
 function plotFreqDepProfs(VBR,HS,fld,labs,figDir,ts)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -58,7 +151,7 @@ function plotFreqDepProfs(VBR,HS,fld,labs,figDir,ts)
 
   fig=figure('Position', [10 10 700 400],'PaperPosition',[0,0,6,3],'PaperPositionMode','manual','DefaultAxesFontSize',8);
 
-  meths=meths=fieldnames(VBR.out.anelastic);
+  meths=fieldnames(VBR.out.anelastic);
   Nmeths=numel(meths);
   Nfreqs=numel(VBR.in.SV.f);
   for ifreq=1:Nfreqs
@@ -285,7 +378,7 @@ function plotComparisons(VBR,HS,figDir)
   set(gcf,'currentaxes',ax_leg);
   pos=get(ax_leg,'position');
   L=legend('location','north');
-  set(L,'linewidth',0,'position',pos,'edgecolor',[1,1,1])
+  set(L,'linewidth',1,'position',pos,'edgecolor',[1,1,1])
   set(ax_leg,'visible','off')
   for iBad=1:numel(BadLines)
     set(BadLines(iBad).ln,'visible','off')

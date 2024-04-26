@@ -1,7 +1,7 @@
-function [ VBR ] = yosh2009( VBR )
+function [ VBR ] = ec_yosh2009( VBR )
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %
-  % [ VBR ] = yosh2009( VBR )
+  % [ VBR ] = ec_yosh2009( VBR )
   %
   % calculates the conductivity of San Carlos Olivine Aggregate at 10GPa
   % from temperature and water content
@@ -16,7 +16,7 @@ function [ VBR ] = yosh2009( VBR )
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   % read in electric parameters
-  ele = VBR.in.electric.yosh2009;
+  ele = VBR.in.electric.yosh2009_ol;
   T = VBR.in.SV.T_K; % K (Temperature)
   Ch2o = VBR.in.SV.Ch2o; % ppm (water content)
   P = VBR.in.SV.P_GPa * 1e9; % Pa (Pressure)
@@ -53,7 +53,7 @@ function [ VBR ] = yosh2009( VBR )
   yosh2009_ol.esig_h = esig_h;
   yosh2009_ol.esig_p = esig_p;
   yosh2009_ol.esig = esig;
-  VBR.out.electric.yosh2009 = yosh2009_ol;
+  VBR.out.electric.yosh2009_ol = yosh2009_ol;
 end
 
 function sig = arrh_dry(S,H,k,T)

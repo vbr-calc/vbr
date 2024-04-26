@@ -1,7 +1,7 @@
-function [ VBR ] = UHO2014( VBR )
+function [ VBR ] = ec_UHO2014( VBR )
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %
-  % [ VBR ] = UHO2014( VBR )
+  % [ VBR ] = ec_UHO2014( VBR )
   %
   % Review of experimental hydrous conductivity of Olivine evaluated with
   % water concentration correction (Withers, 2012)

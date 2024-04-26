@@ -1,7 +1,7 @@
-function [ VBR ] = wang2006( VBR )
+function [ VBR ] = ec_wang2006( VBR )
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %
-  % [ VBR ] = wang2006( VBR )
+  % [ VBR ] = ec_wang2006( VBR )
   %
   % Conductivity of synthetic polycrystalline Ol (hydrous and Anhydrous)
   %
@@ -15,7 +15,7 @@ function [ VBR ] = wang2006( VBR )
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   % read in electric parameters
-  ele = VBR.in.electric.wang2006;
+  ele = VBR.in.electric.wang2006_ol;
   T = VBR.in.SV.T_K; % K (Temperature)
   Ch2o = VBR.in.SV.Ch2o; % ppm (water content)
   P = VBR.in.SV.P_GPa * 1e9; % Pa (Pressure)
@@ -43,11 +43,10 @@ function [ VBR ] = wang2006( VBR )
   esig = esig_A + esig_H; % S/m
   
   % store in VBR structure
-  wang2006_ol.esig_i = esig_i;
-  wang2006_ol.esig_h = esig_h;
-  wang2006_ol.esig_p = esig_p;
+  wang2006_ol.esig_A = esig_A;
+  wang2006_ol.esig_H = esig_H;
   wang2006_ol.esig = esig;
-  VBR.out.electric.wang2006 = wang2006_ol;
+  VBR.out.electric.wang2006_ol = wang2006_ol;
 end
 
 function sig = arrh_dry(S,H,k,T)

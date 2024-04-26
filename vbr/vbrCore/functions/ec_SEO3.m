@@ -1,7 +1,7 @@
-function [ VBR ] = SEO3( VBR )
+function [ VBR ] = ec_SEO3( VBR )
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %
-  % [ VBR ] = SEO3( VBR )
+  % [ VBR ] = ec_SEO3( VBR )
   %
   % Standard Electrical Olivine 3 model based on point defects in a dunite 
   % from temperature for anhydrous olivine
@@ -12,11 +12,10 @@ function [ VBR ] = SEO3( VBR )
   %
   % Output:
   % ------
-  % VBR    the VBR structure, with VBR.out.electric.yosh2009_ol structure
+  % VBR    the VBR structure, with VBR.out.electric.SEO3_ol structure
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   % read in electric parameters
-  ele = VBR.in.electric.SEO3_ol;
   T = VBR.in.SV.T_K; % K (Temperature)
 
   % calculate oxygen fugacity from SV.T
@@ -27,7 +26,7 @@ function [ VBR ] = SEO3( VBR )
   
   % store in VBR structure
   SEO3_ol.esig = esig;
-  VBR.out.electric.yosh2009_ol = SEO3_ol;
+  VBR.out.electric.SEO3_ol = SEO3_ol;
 end
 
 function fO2 = OxF(T)

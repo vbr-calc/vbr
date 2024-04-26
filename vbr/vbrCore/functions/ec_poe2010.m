@@ -1,7 +1,7 @@
-function [ VBR ] = poe2010( VBR )
+function [ VBR ] = ec_poe2010( VBR )
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %
-  % [ VBR ] = poe2010( VBR )
+  % [ VBR ] = ec_poe2010( VBR )
   %
   % calculations of electrical conductivity in single crystal San Carlos 
   % olivine (Fo90 ) at 8 GPa were determined by complex impedance spectroscopy.
@@ -60,7 +60,7 @@ function [ VBR ] = poe2010( VBR )
      esig_H100 = arrh_wet(S_H100,H_H100,k,T,Ch2o,a_H100,r);
      esig_H010 = arrh_wet(S_H010,H_H010,k,T,Ch2o,a_H010,r);
      esig_H001 = arrh_wet(S_H001,H_H001,k,T,Ch2o,a_H001,r);
-     esig_H = geomean(esig_H001,esig_H010,esig_H100);
+     esig_H = (esig_H001+esig_H010+esig_H100).^(1/3);
      
   % calculate anhydrous arrhenius relation for each crystal axis
      esig_A100 = arrh_dry(S_A100,H_A100,k,T);
