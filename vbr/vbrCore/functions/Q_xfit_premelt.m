@@ -18,6 +18,7 @@ function [VBR] = Q_xfit_premelt(VBR)
 
   params=VBR.in.anelastic.xfit_premelt;
 
+  mu_method = 'anharmonic';
   if has_solidus
     % state variables
     if params.include_direct_melt_effect == 1
@@ -27,6 +28,7 @@ function [VBR] = Q_xfit_premelt(VBR)
     else
         if isfield(VBR.in.elastic,'anh_poro')
           Gu_in = VBR.out.elastic.anh_poro.Gu;
+          mu_method = 'anh_poro';
         elseif isfield(VBR.in.elastic,'anharmonic')
           Gu_in = VBR.out.elastic.anharmonic.Gu;
         end
@@ -104,6 +106,7 @@ function [VBR] = Q_xfit_premelt(VBR)
     VBRout.Q = 1./VBRout.Qinv;
     VBRout.M=1./sqrt(J1.^2+J2.^2);
     VBRout.f_norm = f_norm_glob;
+    VBRout.tau_M = tau_m;
 
     % calculate mean velocity along frequency dimension
     VBRout.Vave = Q_aveVoverf(VBRout.V,VBR.in.SV.f);
@@ -111,23 +114,18 @@ function [VBR] = Q_xfit_premelt(VBR)
     VBRout.units = Q_method_units();
     VBRout.units.M1 = 'Pa';
     VBRout.units.M2 = 'Pa';
-
-    if VBR.in.GlobalSettings.anelastic.include_complex_viscosity == 1
-        etao = tau_m .* Gu_in;
-        omega = 2 * pi * VBR.in.SV.f;
-        [eta_star, eta_star_bar, eta_app] = complex_viscosity(J1, J2, omega, etao, tau_m);
-        VBRout.units.eta_star = 'Pa*s';
-        VBRout.units.eta_app = 'Pa * s';
-        VBRout.units.eta_star_bar = '';
-        VBRout.eta_star = eta_star;
-        VBRout.eta_apparent = eta_star;
-        VBRout.eta_star_bar = eta_star_bar;
-    end
-
+    VBRout.units.tau_M = "s";
     VBRout.units.f_norm = '';
 
     % store the output structure
     VBR.out.anelastic.xfit_premelt=VBRout;
+
+    method_settings.mu_method = mu_method;
+    VBR.out.anelastic.method_settings = method_settings;
+
+    if VBR.in.GlobalSettings.anelastic.include_complex_viscosity == 1
+        VBR = complex_viscosity_VBR(VBR, onm);
+    end
 
   end % end of has_solidus check
 end

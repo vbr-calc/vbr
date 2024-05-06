@@ -29,8 +29,10 @@ function [VBR] = Q_eBurgers_f(VBR)
   % unrelaxed compliance and density
   if isfield(VBR.in.elastic,'anh_poro')
    Mu = VBR.out.elastic.anh_poro.Gu ;
+   mu_method = 'anh_poro';
   elseif isfield(VBR.in.elastic,'anharmonic')
-   Mu = VBR.out.elastic.anharmonic.Gu ;
+    Mu = VBR.out.elastic.anharmonic.Gu ;
+    mu_method = 'anharmonic';
   end
   Ju_mat = 1./Mu ;
   rho_mat = VBR.in.SV.rho ; % density
@@ -165,14 +167,10 @@ function [VBR] = Q_eBurgers_f(VBR)
   VBR.out.anelastic.(onm).units = Q_method_units();
   VBR.out.anelastic.(onm).units.tau_M = "s";
 
+  method_settings.mu_method = mu_method;
+  VBR.out.anelastic.method_settings = method_settings;
+
   if VBR.in.GlobalSettings.anelastic.include_complex_viscosity == 1
-        etao = tau.maxwell .* Mu;
-        [eta_star, eta_star_bar, eta_app] = complex_viscosity(J1, J2, omega, etao, maxwell_time);
-        VBR.out.anelastic.(onm).units.eta_star = 'Pa*s';
-        VBR.out.anelastic.(onm).units.eta_app = 'Pa * s';
-        VBR.out.anelastic.(onm).units.eta_star_bar = '';
-        VBR.out.anelastic.(onm).eta_star = eta_star;
-        VBR.out.anelastic.(onm).eta_apparent = eta_star;
-        VBR.out.anelastic.(onm).eta_star_bar = eta_star_bar;
+    VBR = complex_viscosity_VBR(VBR, onm);
   end
 end

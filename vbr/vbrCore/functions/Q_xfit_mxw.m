@@ -24,14 +24,15 @@ function [VBR] = Q_xfit_mxw(VBR)
   rho_in = VBR.in.SV.rho ;
   if isfield(VBR.in.elastic,'anh_poro')
    Mu_in = VBR.out.elastic.anh_poro.Gu ;
+   mu_method = 'anh_poro';
   elseif isfield(VBR.in.elastic,'anharmonic')
    Mu_in = VBR.out.elastic.anharmonic.Gu ;
+   mu_method = 'anharmonic';
   end
   Ju_in  = 1./Mu_in ;
 
   % Frequency
   f_vec = VBR.in.SV.f;  % frequency
-  period_vec = 1./f_vec ;
   omega_vec = f_vec.*(2*pi) ;
   tau_vec = 1./omega_vec ;
 
@@ -117,15 +118,10 @@ function [VBR] = Q_xfit_mxw(VBR)
   VBR.out.anelastic.(onm).units.f_norm = '';
   VBR.out.anelastic.(onm).units.tau_norm = '';
 
+  method_settings.mu_method = mu_method;
+  VBR.out.anelastic.method_settings = method_settings;
 
   if VBR.in.GlobalSettings.anelastic.include_complex_viscosity == 1
-        etao = tau.maxwell .* Mu_in;
-        [eta_star, eta_star_bar, eta_app] = complex_viscosity(J1, J2, omega_vec, etao, maxwell_time);
-        VBR.out.anelastic.(onm).units.eta_star = 'Pa*s';
-        VBR.out.anelastic.(onm).units.eta_app = 'Pa * s';
-        VBR.out.anelastic.(onm).units.eta_star_bar = '';
-        VBR.out.anelastic.(onm).eta_star = eta_star;
-        VBR.out.anelastic.(onm).eta_apparent = eta_star;
-        VBR.out.anelastic.(onm).eta_star_bar = eta_star_bar;
+    VBR = complex_viscosity_VBR(VBR, onm);
   end
 end

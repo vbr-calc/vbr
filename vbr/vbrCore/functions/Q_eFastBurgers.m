@@ -43,8 +43,10 @@ function [VBR] = Q_eFastBurgers(VBR)
   f_vec = VBR.in.SV.f ;
   if isfield(VBR.in.elastic,'anh_poro')
     Mu = VBR.out.elastic.anh_poro.Gu ;
+    mu_method = 'anh_poro';
   elseif isfield(VBR.in.elastic,'anharmonic')
     Mu = VBR.out.elastic.anharmonic.Gu ;
+    mu_method = 'anharmonic';
   end
   rho_mat = VBR.in.SV.rho ;
   w_vec = 2*pi.*f_vec ; % period
@@ -156,20 +158,18 @@ function [VBR] = Q_eFastBurgers(VBR)
   VBR.out.anelastic.(onm).Qinv = Qinv;
   VBR.out.anelastic.(onm).M=M;
   VBR.out.anelastic.(onm).V=V;
+  VBR.out.anelastic.(onm).tau_M = tau.maxwell;
 
   % calculate mean velocity along frequency dimension
   VBR.out.anelastic.(onm).Vave = Q_aveVoverf(V,f_vec);
   VBR.out.anelastic.(onm).units = Q_method_units();
+  VBR.out.anelastic.(onm).units.tau_M = "s";
 
+  method_settings.mu_method = mu_method;
+  VBR.out.anelastic.method_settings = method_settings;
 
   if VBR.in.GlobalSettings.anelastic.include_complex_viscosity == 1
-        etao = tau.maxwell .* Mu;
-        [eta_star, eta_star_bar, eta_app] = complex_viscosity(J1, J2, omega, etao, maxwell_time);
-        VBR.out.anelastic.(onm).units.eta_star = 'Pa*s';
-        VBR.out.anelastic.(onm).units.eta_app = 'Pa * s';
-        VBR.out.anelastic.(onm).units.eta_star_bar = '';
-        VBR.out.anelastic.(onm).eta_star = eta_star;
-        VBR.out.anelastic.(onm).eta_apparent = eta_star;
-        VBR.out.anelastic.(onm).eta_star_bar = eta_star_bar;
+    VBR = complex_viscosity_VBR(VBR, onm);
   end
+
 end
