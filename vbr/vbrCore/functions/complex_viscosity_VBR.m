@@ -1,4 +1,4 @@
-function VBR = complex_viscosity(VBR, method)
+function VBR = complex_viscosity_VBR(VBR, method)
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     omega = 2 * pi * VBR.in.SV.f;
@@ -13,11 +13,11 @@ function VBR = complex_viscosity(VBR, method)
     etao = mxw_time ./ Gu;
     [eta_star, eta_star_bar, eta_app] = complex_viscosity(J1, J2, omega, etao, mxw_time);
 
-    VBR.out.anelastic.(onm).units.eta_star = 'Pa*s';
-    VBR.out.anelastic.(onm).units.eta_app = 'Pa * s';
-    VBR.out.anelastic.(onm).units.eta_star_bar = '';
-    VBR.out.anelastic.(onm).eta_star = eta_star;
-    VBR.out.anelastic.(onm).eta_apparent = eta_star;
-    VBR.out.anelastic.(onm).eta_star_bar = eta_star_bar;
+    VBR.out.anelastic.(method).units.eta_star = 'Pa*s';
+    VBR.out.anelastic.(method).units.eta_app = 'Pa * s';
+    VBR.out.anelastic.(method).units.eta_star_bar = '';
+    VBR.out.anelastic.(method).eta_star = eta_star;
+    VBR.out.anelastic.(method).eta_apparent = eta_star;
+    VBR.out.anelastic.(method).eta_star_bar = eta_star_bar;
 
 end

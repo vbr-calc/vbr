@@ -20,8 +20,10 @@ function [VBR] = Q_Andrade_PseudoP_f(VBR)
   % State Variables
   if isfield(VBR.in.elastic,'anh_poro')
    Mu_in = VBR.out.elastic.anh_poro.Gu ;
+   mu_method = 'anh_poro';
   elseif isfield(VBR.in.elastic,'anharmonic')
    Mu_in = VBR.out.elastic.anharmonic.Gu ;
+   mu_method = 'anharmonic';
   end
   Ju_in = 1./Mu_in ; % compliance
   rho_in = VBR.in.SV.rho ;
@@ -30,18 +32,19 @@ function [VBR] = Q_Andrade_PseudoP_f(VBR)
   Tau0_vec = 1./f_vec ; % period
 
   % Andrade parameters, set in params file
-  andrade_nm='andrade_psp';
-  n = VBR.in.anelastic.(andrade_nm).n  ; % andrade exponent
-  Tau_MR = VBR.in.anelastic.(andrade_nm).Tau_MR ; %
-  Beta = VBR.in.anelastic.(andrade_nm).Beta ; %
+  onm='andrade_psp'; % anelastic output name
+  n = VBR.in.anelastic.(onm).n  ; % andrade exponent
+  Tau_MR = VBR.in.anelastic.(onm).Tau_MR ; %
+  Beta = VBR.in.anelastic.(onm).Beta ; %
 
   % Elastic-GBS relaxation peak parameters, set in params file
-  % Te = VBR.in.anelastic.(andrade_nm).Te ; %
-  % Tgbs = VBR.in.anelastic.(andrade_nm).Tgbs ; % sec
-  % Delta = VBR.in.anelastic.(andrade_nm).Delta ;% relaxation strength
+  % Te = VBR.in.anelastic.(onm).Te ; %
+  % Tgbs = VBR.in.anelastic.(onm).Tgbs ; % sec
+  % Delta = VBR.in.anelastic.(onm).Delta ;% relaxation strength
 
   % pseudo-period master variable independent of period/freqency
   Xtilde = calculateXtilde(VBR);
+  tau_M = Tau_MR ./ Xtilde; % scaled maxwell time
 
   % allocation of Qstruct and V
   n_freq = numel(f_vec);
@@ -50,8 +53,8 @@ function [VBR] = Q_Andrade_PseudoP_f(VBR)
   % frequency dependent vars
   J1 = proc_add_freq_indeces(zeros(sz),n_freq);
   J2 = J1; Qa = J1; Qinv = J1; Ma = J1; Va = J1;
-  J1_gbs = J1; J2_gbs = J1; Q_gbs = J1; M_gbs = J1;
-  J1_comp = J1; J2_comp = J1; Q_comp = J1; M_comp = J1; Va_comp = J1;
+%  J1_gbs = J1; J2_gbs = J1; Q_gbs = J1; M_gbs = J1;
+%  J1_comp = J1; J2_comp = J1; Q_comp = J1; M_comp = J1; Va_comp = J1;
 
   % vectorized rho
   n_th = numel(Ju_in); % total elements
@@ -100,26 +103,35 @@ function [VBR] = Q_Andrade_PseudoP_f(VBR)
   end
 
   % Store output in VBR structure
-  VBR.out.anelastic.(andrade_nm).J1 = J1;
-  VBR.out.anelastic.(andrade_nm).J2 = J2;
-  VBR.out.anelastic.(andrade_nm).Q = Qa;
-  VBR.out.anelastic.(andrade_nm).Qinv = Qinv;
-  VBR.out.anelastic.(andrade_nm).M=Ma;
-  VBR.out.anelastic.(andrade_nm).V=Va;
-  % VBR.out.anelastic.(andrade_nm).J1_gbs = J1_gbs;
-  % VBR.out.anelastic.(andrade_nm).J2_gbs = J2_gbs;
-  % VBR.out.anelastic.(andrade_nm).Q_gbs = Q_gbs;
-  % VBR.out.anelastic.(andrade_nm).M_gbs=M_gbs;
-  % VBR.out.anelastic.(andrade_nm).J1_comp = J1_comp;
-  % VBR.out.anelastic.(andrade_nm).J2_comp = J2_comp;
-  % VBR.out.anelastic.(andrade_nm).Q_comp = Q_comp;
-  % VBR.out.anelastic.(andrade_nm).M_comp=M_comp;
-  % VBR.out.anelastic.(andrade_nm).Va_comp=Va_comp;
+  VBR.out.anelastic.(onm).J1 = J1;
+  VBR.out.anelastic.(onm).J2 = J2;
+  VBR.out.anelastic.(onm).Q = Qa;
+  VBR.out.anelastic.(onm).Qinv = Qinv;
+  VBR.out.anelastic.(onm).M=Ma;
+  VBR.out.anelastic.(onm).V=Va;
+  VBR.out.anelastic.(onm).tau_M = tau_M;
+
+  % VBR.out.anelastic.(onm).J1_gbs = J1_gbs;
+  % VBR.out.anelastic.(onm).J2_gbs = J2_gbs;
+  % VBR.out.anelastic.(onm).Q_gbs = Q_gbs;
+  % VBR.out.anelastic.(onm).M_gbs=M_gbs;
+  % VBR.out.anelastic.(onm).J1_comp = J1_comp;
+  % VBR.out.anelastic.(onm).J2_comp = J2_comp;
+  % VBR.out.anelastic.(onm).Q_comp = Q_comp;
+  % VBR.out.anelastic.(onm).M_comp=M_comp;
+  % VBR.out.anelastic.(onm).Va_comp=Va_comp;
 
   % calculate mean velocity along frequency dimension
-  VBR.out.anelastic.(andrade_nm).Vave = Q_aveVoverf(Va,f_vec);
-  VBR.out.anelastic.(andrade_nm).units = Q_method_units();
+  VBR.out.anelastic.(onm).Vave = Q_aveVoverf(Va,f_vec);
+  VBR.out.anelastic.(onm).units = Q_method_units();
+  VBR.out.anelastic.(onm).units.tau_M = 's';
 
+  method_settings.mu_method = mu_method;
+  VBR.out.anelastic.(onm).method_settings = method_settings;
+
+  if VBR.in.GlobalSettings.anelastic.include_complex_viscosity == 1
+    VBR = complex_viscosity_VBR(VBR, onm);
+  end  
 
 end
 

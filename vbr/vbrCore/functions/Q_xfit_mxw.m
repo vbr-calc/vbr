@@ -119,7 +119,7 @@ function [VBR] = Q_xfit_mxw(VBR)
   VBR.out.anelastic.(onm).units.tau_norm = '';
 
   method_settings.mu_method = mu_method;
-  VBR.out.anelastic.method_settings = method_settings;
+  VBR.out.anelastic.(onm).method_settings = method_settings;
 
   if VBR.in.GlobalSettings.anelastic.include_complex_viscosity == 1
     VBR = complex_viscosity_VBR(VBR, onm);

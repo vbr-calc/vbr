@@ -121,10 +121,10 @@ function [VBR] = Q_xfit_premelt(VBR)
     VBR.out.anelastic.xfit_premelt=VBRout;
 
     method_settings.mu_method = mu_method;
-    VBR.out.anelastic.method_settings = method_settings;
+    VBR.out.anelastic.xfit_premelt.method_settings = method_settings;
 
     if VBR.in.GlobalSettings.anelastic.include_complex_viscosity == 1
-        VBR = complex_viscosity_VBR(VBR, onm);
+        VBR = complex_viscosity_VBR(VBR, "xfit_premelt");
     end
 
   end % end of has_solidus check
