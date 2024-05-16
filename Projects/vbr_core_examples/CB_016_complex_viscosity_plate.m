@@ -12,15 +12,25 @@ VBR.in.GlobalSettings.anelastic.include_complex_viscosity = 1;
 
 %  frequencies to calculate at
 nfreqs = 50;
-VBR.in.SV.f = logspace(-16,5,nfreqs);
+VBR.in.SV.f = logspace(-15,0,nfreqs);
 
 % Define the Thermodynamic State
-%nT = 100;
-%VBR.in.SV.T_K = transpose(linspace(700+273,1400+273, nT));
+nT = 100;
+z = transpose(linspace(0, 350, nT));
 
-nT = 1;
-VBR.in.SV.T_K = 1200+273;
+Tpot = 1300;
+dTdz_ad = 0.5; % deg/km
+zLAB = 235;
+Tpot_z = Tpot + dTdz_ad * z;
 
+[zv, zi] = min(abs(z-zLAB));
+T_LAB = Tpot_z(zi);
+T = T_LAB * z / zLAB;
+T(zi+1: end) = Tpot_z(zi+1:end);
+
+plot(T, z)
+
+VBR.in.SV.T_K = T + 273;
 VBR.in.SV.dg_um = full_nd(0.01*1e6, nT, 1);
 VBR.in.SV.P_GPa = full_nd(2, nT, 1); % pressure [GPa]
 VBR.in.SV.rho = full_nd(3300, nT, 1); % density [kg m^-3]
@@ -29,23 +39,13 @@ VBR.in.SV.phi = full_nd(0, nT, 1); % melt fraction
 VBR.in.SV.Tsolidus_K=full_nd(1200+273, nT, 1); % solidus
 
 VBR = VBR_spine(VBR);
-meth = 'andrade_psp';
+meth = 'xfit_mxw';
 eta_a = VBR.out.anelastic.(meth).eta_apparent;
-Qinv = VBR.out.anelastic.(meth).Qinv;
 eta_star_bar = VBR.out.anelastic.(meth).eta_star_bar;
 
-subplot(3,1,1)
-loglog(VBR.in.SV.f, eta_a)
-
-subplot(3,1,2)
-loglog(VBR.in.SV.f, Qinv)
-
-subplot(3,1,3)
-loglog(VBR.in.SV.f, eta_star_bar)
-
-
-%contourf(log10(VBR.in.SV.f),VBR.in.SV.T_K,  log10(eta_star_bar))
-%contourf(log10(VBR.in.SV.f),VBR.in.SV.T_K,  log10(eta_a))
-%colorbar()
+%contourf(log10(VBR.in.SV.f), z,  log10(eta_a))
+contourf(log10(VBR.in.SV.f), z,  eta_star_bar)
+set(gca(), 'ydir', 'reverse')
+colorbar()
 
 
