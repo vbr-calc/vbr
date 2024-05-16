@@ -28,36 +28,50 @@ function [eta_star, eta_star_bar, eta_app] = complex_viscosity(J1, J2, omega, et
     % eta_app
     %   apparent viscosity
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    M1 = 1./J1;
-    M2 = 1./J2;
-%    Mstar = M1 + M2 * i;
-    eta_star = zeros(size(M1));
-    eta_app = zeros(size(M1));
-    eta_star_bar = zeros(size(M1));
+
+    % allocate output arrays
+    full_size = size(J1);
+    eta_star = zeros(full_size);
+    eta_app = zeros(full_size);
+    eta_star_bar = zeros(full_size);
 
     sz = size(J1);
     nfreqs = sz(end);
     n_not_freq = prod(sz(1:end-1));
 
+    % allocate intermediate arrays for frequency loop
+    eta_star_mx_i = zeros(n_not_freq,1);
+    eta_star_i = zeros(n_not_freq,1);
+    eta_star_bar_i = zeros(n_not_freq,1);
+    eta_app_i = zeros(n_not_freq,1);
+
     for ifreq = 1:nfreqs
 
-        om_i = omega(ifreq);
+        om_i = omega(ifreq); % the current angular frequency
 
+        % linear index range for this frequency
         i_start = (ifreq - 1) * n_not_freq + 1;
         i_end = i_start + n_not_freq - 1;
-        % complex visc
-        Mstar = M1(i_start:i_end) + M2(i_start:i_end) * i;
-        eta_star_i = -i / om_i .* Mstar;
+
+        % get complex modulus for this frequency range
+        M1 = 1./J1(i_start:i_end);
+        M2 = 1./J2(i_start:i_end);
+        Mstar = M1 + M2 * i;
+
+        % full complex viscosity
+        eta_star_i(:) = -i / om_i .* Mstar;
 
         % normalizing maxwell complex visc
-        eta_star_mx_i = abs(-i ./ om_i .* (i * om_i * etao(1:n_not_freq) ./ (1 + i * om_i * maxwell_time(1:n_not_freq))));
+        denom = 1.0 + i * om_i * maxwell_time(1:n_not_freq);
+        eta_star_mx_i(:) = abs(etao(1:n_not_freq) ./ denom);
 
         % apparent viscosity
-        eta_app_i = abs(eta_star_i);
+        eta_app_i(:) = abs(eta_star_i);
 
         % normalized complex viscosity
-        eta_star_bar_i = eta_app_i ./ eta_star_mx_i;
+        eta_star_bar_i(:) = eta_app_i ./ eta_star_mx_i;
 
+        % store in output arrays
         eta_star(i_start:i_end) = eta_star_i;
         eta_app(i_start:i_end) = eta_app_i;
         eta_star_bar(i_start:i_end) = eta_star_bar_i;
