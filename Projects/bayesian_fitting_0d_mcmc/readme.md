@@ -14,7 +14,8 @@ insert notes
 % prior distribution settings
 priors.T_K_mean = 1200 + 273;  % mean of T_K prior distribution
 priors.T_K_std = 200;  % standard deviation of T_K prior distribution
-
+``` 
+```matlab
 % mcmc settings:
 % for testing, the following are set to small numbers. they should be increased,
 % which will be obvious when you run this with small numbers...
@@ -25,7 +26,9 @@ settings.mcmc_jump_std = priors.T_K_std * .05; % the jump magnitude for updating
 settings.mcmc_initial_T_K = 0; % set to 0 to draw initial guess from distribution
 settings.mcmc_initial_guess_jump_std = priors.T_K_std; % jump magnitude for the initial guess
 settings.mcmc_acceptance_sc = 1; % acceptance threshold = sc * rand()
+``` 
 
+```matlab
 % set the fixed state variables and single anelastic method
 settings.fixed_SVs.P_GPa = 2;
 settings.fixed_SVs.sig_MPa = 0.1;
@@ -35,6 +38,27 @@ settings.fixed_SVs.f = 1. / 50.;
 settings.fit_a_fixed_TK = 1; % 1 to fixed hidden T_K, 0 to draw from distribution about a hidden mean
 settings.anelastic_method = 'eburgers_psp';
 ``` 
+
+
+
+### Explorations 
+
+#### Understanding MCMC-MH
+1. what temperature was used to generate the synthetic observations? (check your answer by looking at `bayes_0d_funcs/get_data.m`)
+2. how does the jump magnitude affect convergence?
+3. how does the initial guess affect convergence?
+4. how does the uncertainty of the observations affect convergence? (go edit `bayes_0d_funcs/get_data.m`)
+5. what is the difference in the resulting temperature with different averaging methods:
+   * taking a single value from the final model
+   * taking an average of values after burn-in 
+   * averaging single values from multiple runs 
+   * averaging values after burn-in across multiple runs 
+
+#### Extending 
+1. How you would include frequency-dependence?
+2. How would add more parameters (like melt fraction or grain size)? 
+
+
 
 ### A note on `sample_normal`
  

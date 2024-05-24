@@ -135,23 +135,15 @@ plot(results.mcmc_samples_T_K)  % full
 hold all
 % plot only the iterations after the burn in
 plot(results.after_iters, results.after_burn)
-% add a line for the actual input T
-plot([1, results.mcmc_sample_i],[input_data.T_mean, input_data.T_mean],'--k')
 xlabel("iterations")
 ylabel("T_K")
 
 subplot(1,2,2)
 hist(results.after_burn)
 results.mean_T_K = mean(results.after_burn);
-results.final_error = abs(results.mean_T_K - input_data.T_mean)./input_data.T_mean;
-ttl_str = ["mean T_K = ", num2str(mean(results.after_burn)), ...
-           " , error = ", num2str(results.final_error)];
+ttl_str = ["mean T_K = ", num2str(mean(results.after_burn))];
 title(ttl_str)
 
 disp('')
 disp('final mean:')
 disp(['   T_K = ', num2str(results.mean_T_K)])
-disp('actual:')
-disp(['   T_K_input = ', num2str(input_data.T_mean)])
-disp('relative error:')
-disp(['   abs(T_K_input-T_K) / T_K_input = ', num2str(results.final_error)])
