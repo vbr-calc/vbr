@@ -67,3 +67,7 @@ Output is stored in `VBR.out.viscous.xfit_premelt`. Unlike the other viscous met
   [2,1] = eta_meltfree
 }
 ```
+
+Note that `eta_meltfree` is both the melt-free **and** volatile-free viscosity: the pre-melting method 
+incorprates weakening from volatiles in the solidus depression. To incorporate effects of volatiles, 
+should calculate a volatile-dependent solidus. 
