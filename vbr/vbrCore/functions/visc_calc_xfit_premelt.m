@@ -56,6 +56,10 @@ function VBR = visc_calc_xfit_premelt(VBR)
     VBRtemp=VBR;
     VBRtemp.in.viscous.methods_list={visc_method}; % only use one method
     VBRtemp.in.SV.phi=0; % need melt-free viscosity
+    % additionally, water effects are accounted for by the homologous temperature
+    % scaling in the A_n factor, so **also** need to set the water content to 0
+    % for getting the reference viscosity. see https://github.com/vbr-calc/vbr/issues/96
+    VBRtemp.in.SV.Ch2o=0;
     VBRtemp=spineGeneralized(VBRtemp,'viscous');
     eta_meltfree = VBRtemp.out.viscous.(visc_method).diff.eta ;
   end
