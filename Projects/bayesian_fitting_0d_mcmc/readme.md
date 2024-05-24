@@ -19,14 +19,17 @@ priors.T_K_std = 200;  % standard deviation of T_K prior distribution
 % mcmc settings:
 % for testing, the following are set to small numbers. they should be increased,
 % which will be obvious when you run this with small numbers...
-settings.max_mcmc_iters = 100; % max iterations for this chain
+settings.mcmc_max_iters = 100; % max iterations for this chain
 settings.mcmc_info_very_N = 10; % print info every N steps
-settings.mcmc_burnin_iters = round(0.2 * settings.max_mcmc_iters); % burn in iterations
+settings.mcmc_burnin_iters = round(0.2 * settings.mcmc_max_iters); % burn in iterations
 settings.mcmc_jump_std = priors.T_K_std * .05; % the jump magnitude for updating T_K
 settings.mcmc_initial_T_K = 0; % set to 0 to draw initial guess from distribution
 settings.mcmc_initial_guess_jump_std = priors.T_K_std; % jump magnitude for the initial guess
 settings.mcmc_acceptance_sc = 1; % acceptance threshold = sc * rand()
 ``` 
+
+**IMPORTANT**: the version of the code sets `mcmc_max_iters` to a **very** small number in order to 
+easily check that the code runs. You'll want to increase this number. How much is up to you :) 
 
 ```matlab
 % set the fixed state variables and single anelastic method
@@ -39,24 +42,32 @@ settings.fit_a_fixed_TK = 1; % 1 to fixed hidden T_K, 0 to draw from distributio
 settings.anelastic_method = 'eburgers_psp';
 ``` 
 
-
-
 ### Explorations 
 
+
 #### Understanding MCMC-MH
+
+The following are a number of ideas for getting a better handle on how different 
+settings affect the inferred result. 
+
 1. what temperature was used to generate the synthetic observations? (check your answer by looking at `bayes_0d_funcs/get_data.m`)
-2. how does the jump magnitude affect convergence?
-3. how does the initial guess affect convergence?
-4. how does the uncertainty of the observations affect convergence? (go edit `bayes_0d_funcs/get_data.m`)
-5. what is the difference in the resulting temperature with different averaging methods:
+2. how does increasing the number of iterations affect convergence?
+3. how does the jump magnitude affect convergence?
+4. how does the initial guess affect convergence? 
+5. how does the uncertainty of the observations affect convergence? (go edit `bayes_0d_funcs/get_data.m`)
+6. what is the difference in the resulting temperature with different averaging methods:
    * taking a single value from the final model
    * taking an average of values after burn-in 
    * averaging single values from multiple runs 
    * averaging values after burn-in across multiple runs 
 
 #### Extending 
-1. How you would include frequency-dependence?
-2. How would add more parameters (like melt fraction or grain size)? 
+
+Here are some coding exercises that would be interesting! 
+
+1. Add frequency-dependence
+2. Add more parameters (like melt fraction or grain size)
+3. Re-write the code as a function and then write a script to run and store results from multiple chains. For more of a challenge, parallelize it.
 
 
 

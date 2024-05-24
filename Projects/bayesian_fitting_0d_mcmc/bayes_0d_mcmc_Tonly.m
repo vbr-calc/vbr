@@ -11,9 +11,9 @@ priors.T_K_std = 200;  % standard deviation of T_K prior distribution
 % mcmc settings:
 % for testing, the following are set to small numbers. they should be increased,
 % which will be obvious when you run this with small numbers...
-settings.max_mcmc_iters = 100; % max iterations for this chain
+settings.mcmc_max_iters = 100; % max iterations for this chain
 settings.mcmc_info_very_N = 10; % print info every N steps
-settings.mcmc_burnin_iters = round(0.2 * settings.max_mcmc_iters); % burn in iterations
+settings.mcmc_burnin_iters = round(0.2 * settings.mcmc_max_iters); % burn in iterations
 settings.mcmc_jump_std = priors.T_K_std * .05; % the jump magnitude for updating T_K
 settings.mcmc_initial_T_K = 0; % set to 0 to draw initial guess from distribution
 settings.mcmc_initial_guess_jump_std = priors.T_K_std; % jump magnitude for the initial guess
@@ -57,7 +57,7 @@ disp(["   Vs = ", num2str(current_model.Vs)])
 disp(["   Q = ", num2str(current_model.Q)])
 
 % start the itreations
-results.mcmc_samples_T_K = zeros(settings.max_mcmc_iters,1);
+results.mcmc_samples_T_K = zeros(settings.mcmc_max_iters,1);
 mcmc_sample_i = 1;
 current_iter = 1;
 
@@ -65,7 +65,7 @@ disp("")
 disp("Starting chain iterations")
 disp("")
 
-while current_iter <= settings.max_mcmc_iters
+while current_iter <= settings.mcmc_max_iters
 
     if rem(current_iter, settings.mcmc_info_very_N) == 0
         if current_iter >= settings.mcmc_burnin_iters + 1
