@@ -220,11 +220,24 @@ The primary VBRc "methods paper" to cite is:
 
 Havlin, C., Holtzman, B.K. and Hopper, E., 2021. Inference of thermodynamic state in the asthenosphere from anelastic properties, with applications to North American upper mantle. Physics of the Earth and Planetary Interiors, 314, p.106639, [https://doi.org/10.1016/j.pepi.2020.106639](https://doi.org/10.1016/j.pepi.2020.106639).
 
+If you use bibtex: 
+
+```commandline
+@article{havlin2021inference,
+  title={Inference of thermodynamic state in the asthenosphere from anelastic properties, with applications to North American upper mantle},
+  author={Havlin, C. and Holtzman, B.K. and Hopper, E.},
+  journal={Physics of the Earth and Planetary Interiors},
+  volume={314},
+  pages={106639},
+  year={2021},
+  publisher={Elsevier}
+}
+```
 Additionally, you're welcome to cite the software DOI directly if you would like to point your readers directly to the software (but please also cite the methods paper above):
 
 [![DOI](https://zenodo.org/badge/225459902.svg)](https://zenodo.org/badge/latestdoi/225459902)
 
-We also encourage you to cite the underlying primary sources that developed the scaling methods implemented by the VBRc, particularly if comparing results from different methods. Many of the methods actually have citations built into the code! For example,
+**We also encourage you to cite the underlying primary sources** that developed the scaling methods implemented by the VBRc, particularly if comparing results from different methods. Many of the methods actually have citations built into the code! For example,
 
 ```
 addpath('path/to/vbrc/');
@@ -236,24 +249,6 @@ will display relevant citations for the `eburgers_psp` method.
 
 **If you publish with the VBRc**, please also send us a note and we can add you to our [VBR in the wild](https://vbr-calc.github.io/vbr/relatedpubs/) publication list.
 
-## MIT License ##
+## Licensing ##
 
-Copyright (c) 2019-2023 Benjamin Holtzman, Christopher Havlin
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+The VBRc is open source and licensed under an MIT license. See the [LICENSE](LICENSE) file for more information.
