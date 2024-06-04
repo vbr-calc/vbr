@@ -12,7 +12,8 @@ The following publications have contributed directly towards writing or formulat
 
 The following papers have used the VBRc in some capacity:
 
-* **Lau, H.C., Holtzman, B.K., Havlin, C., 2020**. Toward a Self‐Consistent Characterization of Lithospheric Plates Using Full‐Spectrum Viscoelasticity. AGU Advances 1 (4), e2020AV000205
+* **Byrnes, J. S., J. Gaherty, and E. Hopper (2023)**. Seismic Architecture of the Lithosphere-Asthenosphere System in the Western United States from a Joint Inversion of Body- and Surface-wave Observations: Distribution of Partial Melt in the Upper Mantle, Seismica, 2(2), https://doi.org/10.26443/seismica.v2i2.272
+* **Lau, H.C., Holtzman, B.K., Havlin, C., 2020**. Toward a Self‐Consistent Characterization of Lithospheric Plates Using Full‐Spectrum Viscoelasticity. AGU Advances 1 (4), e2020AV000205, https://doi.org/10.1029/2020AV000205
 *  **Lau, H. C. P., Austermann, J., Holtzman, B. K., Havlin, C., Lloyd, A. J., Book, C., & Hopper, E. (2021).** Frequency dependent mantle viscoelasticity via the complex viscosity: Cases from Antarctica. Journal of Geophysical Research: Solid Earth, 126, e2021JB022622. https://doi.org/10.1029/2021JB022622
 * **Byrnes, J.S., Bezada, M., Long, M.D., Benoit, M.H., 2019.** Thin lithosphere beneath the central appalachian mountains: constraints from seismic attenuation beneath the magic array. Earth and Planetary Science Letters 519, 297–307.
 * **Hopper, E., Gaherty, J.B., Shillington, D.J., Accardo, N.J., Nyblade, A.A., Holtzman, B.K., Havlin, C., Scholz, C.A., Chindandali, P.R., Ferdinand, R.W., et al., 2020.** Preferential localized thinning of lithospheric mantle in the melt-poor malawi rift. Nature Geoscience 13, 584–589.
