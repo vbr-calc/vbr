@@ -59,7 +59,7 @@ Priestly & McKenzie (2013) with `dg_um = dg_um_r` (i.e., the grain size is at th
 reference grain size). This results in a viscosity relationship independent of grain size. 
 The VBRc sets `dg_um_r` to 4mm, the mean grain size of the upper mantle calculated in
 Priestly & McKenzie (2013). To **exactly** match Yamauchi and Takei (2016), you should 
-set the grain size exponent to 0:
+set the grain size to the value of the reference grain size (e.g., `VBR.in.SV.dg_um = 4000.`).
 
 ```matlab
 VBR.in.viscous.xfit_premelt = Params_Viscous('xfit_premelt');
