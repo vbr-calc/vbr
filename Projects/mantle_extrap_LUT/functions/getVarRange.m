@@ -19,7 +19,7 @@ function Ranges=getVarRange(VBR,target_val,target_var,freq_target,cutoff,scl)
   % Ranges       structure with resulting ranges for each method.
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  meths=meths=fieldnames(VBR.out.anelastic);
+  meths=fieldnames(VBR.out.anelastic);
   Nmeths=numel(meths);
 
   [val,ifreq]=min(abs(VBR.in.SV.f-freq_target));
@@ -34,7 +34,7 @@ function Ranges=getVarRange(VBR,target_val,target_var,freq_target,cutoff,scl)
     phi=VBR.in.SV.phi(dvar<=cutoff);
 
     for ifl=1:numel(SVflds)
-      goodvals=VBR.in.SV.(SVflds{ifl})(dvar<=cutoff)(:);
+      goodvals=VBR.in.SV.(SVflds{ifl})(dvar<=cutoff);
       fldn=SVflds{ifl};
       if strcmp(fldn,'T_K')
         fldn='T_C';

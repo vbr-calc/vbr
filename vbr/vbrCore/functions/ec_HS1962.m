@@ -1,4 +1,4 @@
-function VBR = ec_HS1962(VBR) 
+function [VBR] = ec_HS1962(VBR, phase1, phase2, ~) 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %
   % [ VBR ] = ec_HS1962( VBR )
@@ -12,61 +12,50 @@ function VBR = ec_HS1962(VBR)
   %
   % Output:
   % ------
-  % VBR    the VBR structure, with VBR.out.electric.HSup.esig{index,1}
-  %            & VBR structure, with VBR.out.electric.HSlo.esig{index,1}
+  % VBR    the VBR structure, with VBR.out.electric.HSup.esig()
+  %              & VBR.out.electric.HSlo.esig()
+  %              & VBR.out.electric.HS.method{} 
+  %           
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  non = find(strcmp({'HS1962'}, VBR.in.electric.methods_list)); % check for HS1962 in method_list and store its index
-  VBR.in.electric.methods_list(non) = []; % delete HS1962 from method list to run all other methods as phases
+  
+  % read in electric parameters
+  phi = VBR.in.SV.phi; % v_f
+  p1 = phase1; %S/m
+  p2 = phase2; % S/m
 
-  if isfield(VBR.out, 'electric') && length(fieldnames(VBR.out.electric))>2
-      % read in electric parameters
-      phi = VBR.in.SV.phi; % v_f (melt fraction)
-      meths = VBR.in.electric.methods_list;
-      n_meths = numel(meths);
+  if mean(phase1,"all") > mean(phase2,"all")
+      phase1 = p2; % S/m
+      phase2 = p1; % S/m
 
-      for i_meth = 1:n_meths
-        meth = meths{i_meth}; % the current method
-        esig_1 = VBR.out.electric.(meth).esig; % current method esig becomes phase
-        alt = find(i_meth~=1:n_meths); % indexes of alternative(s); other methods\
+      disp(" \n ")
+      disp(" mean(Phase2) less than mean(phase1), where phase2 should be greater than phase1 \n ")
+      disp(" Therefore phase2 and phase1 values exchanged for one another \n ")
+      disp(" \n ")
+  end
 
-        for index = alt
-            esig_2 = VBR.out.electric.(meths{index}).esig; % all other methods iterate as esig phase 2
-            esig_HSup = HS1962_up(esig_1, esig_2, phi); % S/m, HS upper 
-            esig_HSlo = HS1962_lo(esig_1, esig_2, phi); % S/m, HS lower
-            
-            meth_str = [meth, '__',meths{index}]; % method combo
-            HSup.esig.(meth_str) = esig_HSup;
-            HSlo.esig.(meth_str) = esig_HSlo;
-            cell.(meth_str) = {};
-            
-        end
-      end
+  tf = phase1 < phase2; % logic array
 
-      % Store in the VBR structure
-      m = fieldnames(cell); 
-      cell_up = struct2cell(HSup.esig); % cell storage HSup for reassignement 
-      cell_lo = struct2cell(HSlo.esig); % cell storage HSlo for reassignement
-      VBR.out.electric.HSup.esig = cell_up;
-      VBR.out.electric.HSlo.esig = cell_lo;
-      VBR.out.electric.HS.methods = m;
-      
-   else
-      disp('')
-      disp('WARNING!!!!!')
-      disp('Two outputs in struct VBR.out.elctric required for HS1962 method')
-      disp(' run vbrListMethods() for valid list')
-      disp('')
- end
+  %Calculations
+  esigUP = HS1962_up(phase1, phase2, phi); % HS upper bound 
+  esigLO = HS1962_lo(phase1, phase2, phi); % HS lower bound
 
+  HSup.esig = esigUP;
+  HSlo.esig = esigLO;
+  HS.tf = tf;
+
+  % Store in VBR structure
+  VBR.out.electric.HSup = HSup;
+  VBR.out.electric.HSlo = HSlo;
+  VBR.out.electric.HS = HS;
 end
 
-    function esig = HS1962_up(esig_1, esig_2,phi) % Hashin-Strickman Upper
+    function esig = HS1962_up(esig_1, esig_2,phi) % Hashin-Shtrikman Upper
     num = 3.*(1-phi).*(esig_2-esig_1); % numerator
     den = 3.*esig_2-phi.*(esig_2-esig_1); % denominator
     esig = esig_2.*(1-(num./den));
     end
 
-    function esig = HS1962_lo(esig_1, esig_2,phi) % case specific
+    function esig = HS1962_lo(esig_1, esig_2,phi) % Hashin-Shtrikman Lower
     num = 3.*(phi).*(esig_2-esig_1); % numerator
     den = 3.*esig_1+(1-phi).*(esig_2-esig_1); % denominator
     esig = esig_1.*(1+(num./den));

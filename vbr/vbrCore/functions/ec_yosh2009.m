@@ -16,29 +16,30 @@ function [ VBR ] = ec_yosh2009( VBR )
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   % read in electric parameters
-  ele = VBR.in.electric.yosh2009_ol;
+  params = VBR.in.electric.yosh2009_ol;
   T = VBR.in.SV.T_K; % K (Temperature)
   Ch2o = VBR.in.SV.Ch2o; % ppm (water content)
-  P = VBR.in.SV.P_GPa * 1e9; % Pa (Pressure)
+  % P = VBR.in.SV.P_GPa * 1e9; % Pa (Pressure)
+  P = 0;
   Ch2o = Ch2o./1d4; % ppm => wt_f
 
     % Ionic Conduction
-    Si = ele.S_i; % S/m
-    Va_i = ele.Va_i; % cc/mol
-    Hi = ele.H_i + Va_i.*P; % eV
-    k = ele.k_i; % eV/(mol*K)
+    Si = params.S_i; % S/m
+    Va_i = params.Va_i; % cc/mol
+    Hi = params.H_i + Va_i.*P; % eV
+    k = params.k_i; % eV/(mol*K)
     
     % Hopping Conduction
-    Sh = ele.S_h; % S/m
-    Va_h = ele.Va_h; % cc/mol
-    Hh = ele.H_h + Va_h.*P; % eV
+    Sh = params.S_h; % S/m
+    Va_h = params.Va_h; % cc/mol
+    Hh = params.H_h + Va_h.*P; % eV
     
     % Proton Conduction
-    Sp = ele.S_p; % S/m
-    Va_p = ele.Va_p; % cc/mol
-    Hp = ele.H_p + Va_p.*P; % eV
-    a = ele.a_p; % unitless
-    r = ele.r_p; % unitless
+    Sp = params.S_p; % S/m
+    Va_p = params.Va_p; % cc/mol
+    Hp = params.H_p + Va_p.*P; % eV
+    a = params.a_p; % unitless
+    r = params.r_p; % unitless
 
   % calculate Arrhenius relation for each conduction mechanism
   esig_i = arrh_dry(Si,Hi,k,T); % ionic conduction

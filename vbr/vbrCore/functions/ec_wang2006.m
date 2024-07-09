@@ -15,25 +15,26 @@ function [ VBR ] = ec_wang2006( VBR )
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   % read in electric parameters
-  ele = VBR.in.electric.wang2006_ol;
+  params = VBR.in.electric.wang2006_ol;
   T = VBR.in.SV.T_K; % K (Temperature)
   Ch2o = VBR.in.SV.Ch2o; % ppm (water content)
-  P = VBR.in.SV.P_GPa * 1e9; % Pa (Pressure)
+  % P = VBR.in.SV.P_GPa * 1e9; % Pa (Pressure)
+  P = 0;
   Ch2o = Ch2o./1d4; % ppm => wtf
 
   
     % Hydrous Conduction
-    SH = ele.S_H; % S/m
-    Va_H = ele.Va_H; % cc/mol
-    HH = ele.H_H + Va_H.*P; % kJ
-    R = ele.R_H; % kJ/(mol*K)
-    a = ele.a_H; % unitless
-    r = ele.r_H; % unitless
+    SH = params.S_H; % S/m
+    Va_H = params.Va_H; % cc/mol
+    HH = params.H_H + Va_H.*P; % kJ
+    R = params.R_H; % kJ/(mol*K)
+    a = params.a_H; % unitless
+    r = params.r_H; % unitless
     
     % Anhydrous Conduction
-    SA = ele.S_A; % S/m
-    Va_A = ele.Va_A; % cc/mol
-    HA = ele.H_A + Va_A.*P; % kJ
+    SA = params.S_A; % S/m
+    Va_A = params.Va_A; % cc/mol
+    HA = params.H_A + Va_A.*P; % kJ
 
   % calculate Arrhenius relation for each conduction mechanism
   esig_A = arrh_dry(SA,HA,R,T);

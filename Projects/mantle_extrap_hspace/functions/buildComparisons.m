@@ -62,7 +62,7 @@ function plotE_sigProfiles(VBR, HS, figDir, profile_ts)
   ax_geo =subplot(1,4,4);
 
   esig_ol = cell2mat(struct2cell(VBR.out.electric.SEO3_ol)); % S/m, Phase 1 (Olivine)
-  esig_m = cell2mat(struct2cell(VBR.out.electric.sifre2014_ol)); % S/m, Phase 2 (Melt)
+  esig_m = cell2mat(struct2cell(VBR.out.electric.sifre2014_melt)); % S/m, Phase 2 (Melt)
   esig_hsup = HSup(esig_ol, esig_m, VBR.in.SV.phi); % S/m, HS upper 
   esig_hslo = HSlo(esig_ol, esig_m, VBR.in.SV.phi); % S/m, HS lower
   esig_geo = sqrt(esig_ol.*esig_m); % S/m, Geo average

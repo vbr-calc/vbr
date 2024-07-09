@@ -15,12 +15,12 @@ function VBR = ec_gail2008(VBR)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
   % read in electric parameters
-  ele = VBR.in.electric.gail2008_melt;
+  params = VBR.in.electric.gail2008_melt;
   T = VBR.in.SV.T_K; % K (Temmperature)
 
-  S = ele.S; % S/m
-  H = ele.H; % KJ
-  R = ele.R; % KJ /(K*mol)
+  S = params.S; % S/m
+  H = params.H; % KJ
+  R = params.R; % KJ /(K*mol)
    
   % calculation of Carbonatite melt conduction
   exponent = -H./(R.*T);

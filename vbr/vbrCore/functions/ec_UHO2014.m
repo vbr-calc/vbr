@@ -16,28 +16,29 @@ function [ VBR ] = ec_UHO2014( VBR )
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   % read in electric parameters
-  ele = VBR.in.electric.UHO2014_ol;
+  params = VBR.in.electric.UHO2014_ol;
   T = VBR.in.SV.T_K; % K (Temperature)
   Ch2o = VBR.in.SV.Ch2o; % ppm (water content)
-  P = VBR.in.SV.P_GPa * 1e9; % Pa (Pressure)
+  % P = VBR.in.SV.P_GPa * 1e9; % Pa (Pressure)
+  P = 0;
   
   % Vacancy Conduction
-    Sv = ele.S_v; % S/m
-    Va_v = ele.Va_v; % cc/mol
-    Hv = ele.H_v + Va_v.*P; % kJ
+    Sv = params.S_v; % S/m
+    Va_v = params.Va_v; % cc/mol
+    Hv = params.H_v + Va_v.*P; % kJ
     
   % Polaron Conduction
-    Sp = ele.S_p; % S/m
-    Va_p = ele.Va_p; % cc/mol
-    Hp = ele.H_p + Va_p.*P; % kJ
+    Sp = params.S_p; % S/m
+    Va_p = params.Va_p; % cc/mol
+    Hp = params.H_p + Va_p.*P; % kJ
     
   % Hydrous Conduction
-    Sh = ele.S_h; % S/m
-    Va_h = ele.Va_h; % cc/mol
-    Hh = ele.H_h + Va_h.*P; % kJ
-    R = ele.R_h; % kJ/(mol*K)
-    a = ele.a_h; % unitless
-    r = ele.r_h; % unitless
+    Sh = params.S_h; % S/m
+    Va_h = params.Va_h; % cc/mol
+    Hh = params.H_h + Va_h.*P; % kJ
+    R = params.R_h; % kJ/(mol*K)
+    a = params.a_h; % unitless
+    r = params.r_h; % unitless
 
   % calculate Arrhenius relation for each conduction mechanism
   esig_v = arrh_dry(Sv,Hv,R,T);

@@ -16,19 +16,20 @@ function [ VBR ] = ec_jones2012( VBR)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   % read in electric parameters
-  ele = VBR.in.electric.jones2012_ol;
+  params = VBR.in.electric.jones2012_ol;
   T = VBR.in.SV.T_K; % K (Temmperature)
   Ch2o = VBR.in.SV.Ch2o; % ppm (water content)
-  P = VBR.in.SV.P_GPa * 1e9; % Pa (Pressure)
+  % P = VBR.in.SV.P_GPa * 1e9; % Pa (Pressure)
+  P = 0;
   Ch2o = Ch2o./1d4; % ppm => wt_f
 
       % Jones et al., 2012
-        S = ele.S; % S/m
-        r = ele.r; % unitless
-        H = ele.H; % eV
-        a = ele.a; % unitless
-        Va = ele.Va; % cc/mol
-        k = ele.k; % eV/(mol*K)
+        S = params.S; % S/m
+        r = params.r; % unitless
+        H = params.H; % eV
+        a = params.a; % unitless
+        Va = params.Va; % cc/mol
+        k = params.k; % eV/(mol*K)
         H = H + Va.*P; % eV
 
   % Hydrous Conduction
@@ -51,7 +52,7 @@ function [ VBR ] = ec_jones2012( VBR)
 end
 
 function sig = arrh_wet(S,H,k,T,w,a,r)
- exponent = -(H-a.*(w.^(1/3)))./(k.*T);
+ exponent = -((H-a.*(w.^(1/3)))./(k.*T));
     sig = (S).*(w.^r).*exp(exponent);
 end
 
