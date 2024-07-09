@@ -8,16 +8,16 @@
 
 Further documentation available at [https://vbr-calc.github.io/vbr/](https://vbr-calc.github.io/vbr/).
 
-
 ## Overview
 
-The Very Broadband Rheology Calculator (VBRc) provides a useful framework for calculating material properties from thermodynamic state variables (e.g., temperature, pressure, melt fraction, grain size) using a wide range of experimental scalings. The VBRc at present contains constitutive models only for olivine, but may be applied to other compositions (at your own risk). The main goal is to allow easy comparison between methods for calculating anelastic-dependent seismic properties, but the VBRc can also be used for calculating steady state viscosity, pure elastic (anharmonic) seismic properties and more. It can be used to fit and analyze experimental data, infer thermodynamic state from seismic measurements, predict measurable properties from geodynamic models, for example.  
+The Very Broadband Rheology Calculator (VBRc) provides a useful framework for calculating material properties from thermodynamic state variables (e.g., temperature, pressure, melt fraction, grain size) using a wide range of experimental scalings. The VBRc at present contains constitutive models only for olivine, but may be applied to other compositions (at your own risk). The main goal is to allow easy comparison between methods for calculating anelastic-dependent seismic properties, but the VBRc can also be used for calculating steady state viscosity, pure elastic (anharmonic) seismic properties and more. It can be used to fit and analyze experimental data, infer thermodynamic state from seismic measurements, predict measurable properties from geodynamic models, for example.
 
 The code is in MATLAB and is also functional in [GNU Octave](https://www.gnu.org/software/octave/). If you're interested in using the VBRc with python, check out the experimental [pyVBRc](https://github.com/vbr-calc/pyVBRc).
 
 To install, see the [instructions in the main documentation](https://vbr-calc.github.io/vbr/gettingstarted/installation/).
 
 The remainder of this README contains information on:
+
 1. [Bug Reporting and User Support](#bug-reporting-and-user-support)
 2. [Basic Usage](#basic-usage)
 3. [Getting Help](#getting-help)
@@ -28,25 +28,27 @@ The remainder of this README contains information on:
 
 Found a bug? [Open an issueon github](https://github.com/vbr-calc/vbr/issues/new)! Got a question? Join our slack channel at [vbr-calc.slack.com](https://join.slack.com/t/vbr-calc/shared_invite/enQtODI0MTk4NzIxNzkzLTZlYjMwYTc4MTVkOTg2ZDgyNTQxNTAxNjc2NmNkMzA2MmVjOTJkYjYzNjc1ZDJhNzg5ZWU2MzE4OTEyNmMxNGU)!
 
-
 # Basic Usage
 
-The following outlines the basic usage for the VBR calculator. Additionally, there is a growing number of examples in  Projects/ to illustrate more complex usage, particularly in developing a statistical framework for comparing predicted mechanical properties to observed properties.  
+The following outlines the basic usage for the VBR calculator. Additionally, there is a growing number of examples in Projects/ to illustrate more complex usage, particularly in developing a statistical framework for comparing predicted mechanical properties to observed properties.
 
 ### Directory structure
+
 The code is divided into two primary subdirectories: `vbr` and `Projects`.
-* `./vbr`: the inner guts of the VBR calculator. The subdirectory `./vbr/vbrCore/functions/` contains the functions in which the actual methods are coded. For example, functions beginning `Q_` are functions related to anelastic methods.
-* `./Projects`: each subdirectory within this directory is an example of using the VBR Calculator in a wider "Project." These projects are self-contained codes that use the VBR Calculator in a broader context:
- * `vbr_core_examples`: scripts that simply call VBR in different ways
- * `1_LabData`: functions that call VBR for experimental conditions and materials
- * `mantle_extrap_*`: 3 directories demonstrating how to call VBR for a range of mantle conditions by (1) generating a look up table (LUT, `mantle_extrap_LUT`), (2) using an the analytical solution for half space cooling (`mantle_extrap_hspace`) and (3) using a numerical solution of half space cooling (`mantle_extrap_FM`) .
- * `LAB_fitting_bayesian` a demonstration of how one can use the VBR Calculator in a forward modeling framework to investigate seismic observations.
+
+- `./vbr`: the inner guts of the VBR calculator. The subdirectory `./vbr/vbrCore/functions/` contains the functions in which the actual methods are coded. For example, functions beginning `Q_` are functions related to anelastic methods.
+- `./Projects`: each subdirectory within this directory is an example of using the VBR Calculator in a wider "Project." These projects are self-contained codes that use the VBR Calculator in a broader context:
+- `vbr_core_examples`: scripts that simply call VBR in different ways
+- `1_LabData`: functions that call VBR for experimental conditions and materials
+- `mantle_extrap_*`: 3 directories demonstrating how to call VBR for a range of mantle conditions by (1) generating a look up table (LUT, `mantle_extrap_LUT`), (2) using an the analytical solution for half space cooling (`mantle_extrap_hspace`) and (3) using a numerical solution of half space cooling (`mantle_extrap_FM`) .
+- `LAB_fitting_bayesian` a demonstration of how one can use the VBR Calculator in a forward modeling framework to investigate seismic observations.
 
 Note that you should write your code that uses vbr in directories outside the vbr github repository, unless you plan on submitting them to the repository (see the `DevelopmentGuide.md` if that's the case).
 
 ### Initialize VBR
 
 To start, add the top level directory to your Matlab path (relative or absolute path) and run vbr_init to add all the required directories to your path:
+
 ```
 vbr_path='~/src/vbr/';
 addpath(vbr_path)
@@ -55,16 +57,17 @@ vbr_init
 
 ### Initialize Methods List
 
-The VBR Calculator is built around Matlab structures. All direction and data is stored in the ```VBR``` structure, which gets passed around to where it needs to go. ```VBR.in``` contains the user's input. ```VBR.out``` contains the results of any calculations.
+The VBR Calculator is built around Matlab structures. All direction and data is stored in the `VBR` structure, which gets passed around to where it needs to go. `VBR.in` contains the user's input. `VBR.out` contains the results of any calculations.
 
-**First**, the user must supply a cell array called ```methods_list``` for each property for which they want to calculate:
+**First**, the user must supply a cell array called `methods_list` for each property for which they want to calculate:
+
 ```Matlab
 VBR.in.elastic.methods_list={'anharmonic';'anh_poro';};
 VBR.in.viscous.methods_list={'HK2003','HZK2011'};
 VBR.in.anelastic.methods_list={'eburgers_psp';'andrade_psp';'xfit_mxw'};
 ```
 
-Each method will have a field in ```VBR.out```  beneath the property, e.g.,
+Each method will have a field in `VBR.out` beneath the property, e.g.,
 
 ```Matlab
 VBR.out.elastic.anharmonic
@@ -72,13 +75,14 @@ VBR.out.viscous.HK2003
 VBR.out.anelastic.eburgers_psp
 VBR.out.anelastic.andrade_psp
 ```
-beneath which there will be fields for the output for the calculations, e.g., ```VBR.out.anelastic.andrade_psp.Q``` for quality factor Q (attenuation=Q<sup>-1</sup>).
 
-After VBR is initialized, a list of available methods can be printed by running `vbrListMethods()`. For theoretical background on the different methods, see the accompanying VBR Calculator Manual.
+beneath which there will be fields for the output for the calculations, e.g., `VBR.out.anelastic.andrade_psp.Q` for quality factor Q (attenuation=Q<sup>-1</sup>).
+
+After VBR is initialized, a list of available methods can be printed by running `VBR_list_methods()`. For theoretical background on the different methods, see the accompanying VBR Calculator Manual.
 
 ### Initialize the State Variables
 
-The input structure ```VBR.in.SV``` contains the state variables that define the conditions at which you want to apply the methods. The following fields **MUST** be defined:
+The input structure `VBR.in.SV` contains the state variables that define the conditions at which you want to apply the methods. The following fields **MUST** be defined:
 
 ```Matlab
 %  frequencies to calculate at
@@ -102,7 +106,7 @@ The input structure ```VBR.in.SV``` contains the state variables that define the
 
 ```
 
-All SV arrays must be the same size and shape, except for the frequency ```VBR.in.SV.f```. They can be any length and shape as long as they are the same. Frequency dependent variables store the frequency dependencein an extra dimension of the output. If ```shape(VBR.in.SV.T)``` is (50,100) and ```numel(VBR.in.SV.f)``` is 3, then  ```shape(VBR.out.anelastic.eburgers_psp.V)``` will be (50,100,3).
+All SV arrays must be the same size and shape, except for the frequency `VBR.in.SV.f`. They can be any length and shape as long as they are the same. Frequency dependent variables store the frequency dependencein an extra dimension of the output. If `shape(VBR.in.SV.T)` is (50,100) and `numel(VBR.in.SV.f)` is 3, then `shape(VBR.out.anelastic.eburgers_psp.V)` will be (50,100,3).
 
 ### Adjust parameters (optional)
 
@@ -113,7 +117,7 @@ VBR.in.elastic.anharmonic.Gu_0_ol = 75.5; % olivine reference shear modulus [GPa
 VBR.in.viscous.HZK2011.diff.Q=350e3; % diffusion creep activation energy
 ```
 
-The default parameters are stored in ```vbr/vbrCore/params/``` and can be loaded and explored with
+The default parameters are stored in `vbr/vbrCore/params/` and can be loaded and explored with
 
 ```Matlab
 VBR.in.elastic.anharmonic=Params_Elastic('anharmonic'); % unrelaxed elasticity
@@ -124,7 +128,7 @@ When changing parameters from those loaded by default, you can either load all t
 
 ### Run the VBR Calculator
 
-The VBR Calculator executes calculations by passing the ```VBR``` structure to the ``VBR_spine()```:
+The VBR Calculator executes calculations by passing the `VBR` structure to the ``VBR_spine()```:
 
 ```Matlab
 [VBR] = VBR_spine(VBR) ;
@@ -132,7 +136,7 @@ The VBR Calculator executes calculations by passing the ```VBR``` structure to t
 
 ### Extracting results
 
-Results are stored in ```VBR.out``` for each property type and method:
+Results are stored in `VBR.out` for each property type and method:
 
 ```Matlab
 VBR.out.elastic.anharmonic.Vsu % unrelaxed seismic shear wave velocity
@@ -144,14 +148,11 @@ VBR.out.viscous.HZK2011.eta_total % composite steady state creep viscosity
 
 The VBR Calculator nominally works in GNU Octave, but you may find that you need to install some packages.
 
-https://octave.sourceforge.io/io/index.html
-https://octave.sourceforge.io/statistics/index.html
-https://octave.org/doc/interpreter/Installing-and-Removing-Packages.html
+https://octave.sourceforge.io/io/index.html https://octave.sourceforge.io/statistics/index.html https://octave.org/doc/interpreter/Installing-and-Removing-Packages.html
 
 # Getting Help
 
-See the full documentation page on [Contributing and Getting Help](https://vbr-calc.github.io/vbr/contrib/contributing/)
-for ways to reach out or [post a github issue](https://github.com/vbr-calc/vbr/issues/new)!
+See the full documentation page on [Contributing and Getting Help](https://vbr-calc.github.io/vbr/contrib/contributing/) for ways to reach out or [post a github issue](https://github.com/vbr-calc/vbr/issues/new)!
 
 # Contributing to the VBRc
 
@@ -159,11 +160,11 @@ The VBRc is open to community contributions! New methods, new examples, document
 
 We follow a typical open source workflow. To submit new features:
 
-* create your fork of the VBRc repo
-* checkout a new branch
-* do work on your new branch
-* push those changes to your fork on github
-* submit a pull request back to the main VBRc repo
+- create your fork of the VBRc repo
+- checkout a new branch
+- do work on your new branch
+- push those changes to your fork on github
+- submit a pull request back to the main VBRc repo
 
 If you're adding a new method, be sure to add a new test (see the following section) and add a note to the active release notes (`release_notes.md`) with a short summary of your work.
 
@@ -194,6 +195,7 @@ To release, create a new version tag locally:
 ```
 $ git tag v0.99.5
 ```
+
 and push it up to gitub
 
 ```
@@ -213,14 +215,13 @@ Then commit and push the following changes to `main`:
 - Copy/paste `release_notes.md` into `release_history.md`, reset `release_notes.md` for active development.
 - Bump the version in `vbr/support/vbr_version.m` appropriately
 
-
 # How to Cite
 
 The primary VBRc "methods paper" to cite is:
 
 Havlin, C., Holtzman, B.K. and Hopper, E., 2021. Inference of thermodynamic state in the asthenosphere from anelastic properties, with applications to North American upper mantle. Physics of the Earth and Planetary Interiors, 314, p.106639, [https://doi.org/10.1016/j.pepi.2020.106639](https://doi.org/10.1016/j.pepi.2020.106639).
 
-If you use bibtex: 
+If you use bibtex:
 
 ```commandline
 @article{havlin2021inference,
@@ -233,6 +234,7 @@ If you use bibtex:
   publisher={Elsevier}
 }
 ```
+
 Additionally, you're welcome to cite the software DOI directly if you would like to point your readers directly to the software (but please also cite the methods paper above):
 
 [![DOI](https://zenodo.org/badge/225459902.svg)](https://zenodo.org/badge/latestdoi/225459902)
@@ -245,10 +247,11 @@ vbr_init
 params = Params_Anelastic('eburgers_psp');
 disp(params.citations)
 ```
+
 will display relevant citations for the `eburgers_psp` method.
 
 **If you publish with the VBRc**, please also send us a note and we can add you to our [VBR in the wild](https://vbr-calc.github.io/vbr/relatedpubs/) publication list.
 
-## Licensing ##
+## Licensing
 
 The VBRc is open source and licensed under an MIT license. See the [LICENSE](LICENSE) file for more information.
