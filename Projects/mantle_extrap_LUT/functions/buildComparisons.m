@@ -57,7 +57,7 @@ function plotFreqDepPanel(VBR,Ranges,fld,labs,figDir,Fixed_indx)
   % plots a contour of fld for each method
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  meths=meths=fieldnames(VBR.out.anelastic);
+  meths=fieldnames(VBR.out.anelastic);
   Nmeths=numel(meths);
   Nfreqs=numel(VBR.in.SV.f);
 
