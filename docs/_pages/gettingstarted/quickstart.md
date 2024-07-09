@@ -1,9 +1,9 @@
 ---
 permalink: /gettingstarted/
-title: "Quick Start"
+title: 'Quick Start'
 ---
 
-The following outlines the basic usage for the VBR calculator. Additionally, there are a growing number of [examples](/vbr/examples/) in  Projects/ to illustrate more complex usage, particularly in developing a statistical framework for comparing predicted mechanical properties to observed properties. In general, the flow is to:
+The following outlines the basic usage for the VBR calculator. Additionally, there are a growing number of [examples](/vbr/examples/) in Projects/ to illustrate more complex usage, particularly in developing a statistical framework for comparing predicted mechanical properties to observed properties. In general, the flow is to:
 
 1. Initialize VBR
 2. Set Methods List
@@ -14,13 +14,14 @@ The following outlines the basic usage for the VBR calculator. Additionally, the
 
 ## 0. The VBR structure
 
-The VBR Calculator is built around MATLAB structures. All direction and data is stored in the ```VBR``` structure, which gets passed around to where it needs to go. ```VBR.in``` contains the user's input. ```VBR.out``` contains the results of any calculations.
+The VBR Calculator is built around MATLAB structures. All direction and data is stored in the `VBR` structure, which gets passed around to where it needs to go. `VBR.in` contains the user's input. `VBR.out` contains the results of any calculations.
 
 !['VBRstructure'](/vbr/assets/images/vbrcoreflowchart.png){:class="img-responsive"}
 
 ## 1. Initialize VBR
 
 To start, add the top level directory to your MATLAB path (relative or absolute path) and run vbr_init to add all the required directories to your path:
+
 ```matlab
 vbr_path='~/src/vbr/';
 addpath(vbr_path)
@@ -31,7 +32,7 @@ If desired, you can permanently add the vbr directory to your path and even call
 
 ## 2. Set Methods List
 
-The user must supply a cell array called ```methods_list``` for each property for which they want to calculate (see [here](/vbr/gettingstarted/methods/) for more on available methods):
+The user must supply a cell array called `methods_list` for each property for which they want to calculate (see [here](/vbr/gettingstarted/methods/) for more on available methods):
 
 ```matlab
 VBR.in.elastic.methods_list={'anharmonic';'anh_poro';};
@@ -39,7 +40,7 @@ VBR.in.viscous.methods_list={'HK2003','HZK2011'};
 VBR.in.anelastic.methods_list={'eburgers_psp';'andrade_psp';'xfit_mxw'};
 ```
 
-Each method will have a field in ```VBR.out```  beneath the property, e.g.,
+Each method will have a field in `VBR.out` beneath the property, e.g.,
 
 ```matlab
 VBR.out.elastic.anharmonic
@@ -47,13 +48,14 @@ VBR.out.viscous.HK2003
 VBR.out.anelastic.eburgers_psp
 VBR.out.anelastic.andrade_psp
 ```
-beneath which there will be fields for the output for the calculations, e.g., ```VBR.out.anelastic.andrade_psp.Q``` for quality factor Q (attenuation=Q<sup>-1</sup>).
 
-After VBR is initialized, a list of available methods can be printed by running `vbrListMethods()`. For theoretical background on the different methods, see the accompanying VBR Calculator Manual.
+beneath which there will be fields for the output for the calculations, e.g., `VBR.out.anelastic.andrade_psp.Q` for quality factor Q (attenuation=Q<sup>-1</sup>).
+
+After VBR is initialized, a list of available methods can be printed by running `VBR_list_methods()`. For theoretical background on the different methods, see the accompanying VBR Calculator Manual.
 
 ## 3. Specify the State Variables
 
-The input structure ```VBR.in.SV``` contains the state variables that define the conditions at which you want to apply the methods. The following fields **MUST** be defined:
+The input structure `VBR.in.SV` contains the state variables that define the conditions at which you want to apply the methods. The following fields **MUST** be defined:
 
 ```matlab
 %  frequencies to calculate at
@@ -81,7 +83,7 @@ while the following fields are optional:
    VBR.in.SV.Ch2o = 0 * ones(n1,1) ; % water concentration  (OPTIONAL, DEFAULT 0)
 ```
 
-All SV arrays must be the same size and shape, except for the frequency ```VBR.in.SV.f```. They can be any length and shape as long as they are the same. Frequency dependent variables store the frequency dependencein an extra dimension of the output. If ```size(VBR.in.SV.T)``` is (50,100) and ```numel(VBR.in.SV.f)``` is 3, then  ```size(VBR.out.anelastic.eburgers_psp.V)``` will be (50,100,3).
+All SV arrays must be the same size and shape, except for the frequency `VBR.in.SV.f`. They can be any length and shape as long as they are the same. Frequency dependent variables store the frequency dependencein an extra dimension of the output. If `size(VBR.in.SV.T)` is (50,100) and `numel(VBR.in.SV.f)` is 3, then `size(VBR.out.anelastic.eburgers_psp.V)` will be (50,100,3).
 
 ## 4. Adjust parameters (optional)
 
@@ -92,7 +94,7 @@ VBR.in.elastic.anharmonic.Gu_0_ol = 75.5; % olivine reference shear modulus [GPa
 VBR.in.viscous.HZK2011.diff.Q=350e3; % diffusion creep activation energy
 ```
 
-The default parameters are stored in ```vbr/vbrCore/params/``` and can be loaded and explored with
+The default parameters are stored in `vbr/vbrCore/params/` and can be loaded and explored with
 
 ```matlab
 VBR.in.elastic.anharmonic=Params_Elastic('anharmonic'); % unrelaxed elasticity
@@ -103,7 +105,7 @@ When changing parameters from those loaded by default, you can either load all t
 
 ## 5. Run the VBR Calculator
 
-The VBR Calculator executes calculations by passing the ```VBR``` structure to the ``VBR_spine()```:
+The VBR Calculator executes calculations by passing the `VBR` structure to the ``VBR_spine()```:
 
 ```matlab
 [VBR] = VBR_spine(VBR) ;
@@ -111,34 +113,30 @@ The VBR Calculator executes calculations by passing the ```VBR``` structure to t
 
 ## 6. Extract results
 
-Results are stored in ```VBR.out``` for each property type and method:
+Results are stored in `VBR.out` for each property type and method:
 
 ```matlab
 VBR.out.elastic.anharmonic.Vsu % unrelaxed seismic shear wave velocity
 VBR.out.anelastic.eburgers_psp.V % anelastic-dependent seismic shear wave velocity
 VBR.out.viscous.HZK2011.eta_total % composite steady state creep viscosity
 ```
-As noted above, any frequency dependence is stored in an additional dimension. For example, if ```size(VBR.in.SV.T)``` is (50,100) and ```numel(VBR.in.SV.f)``` is 3, then  ```size(VBR.out.anelastic.eburgers_psp.V)``` will be (50,100,3).
 
+As noted above, any frequency dependence is stored in an additional dimension. For example, if `size(VBR.in.SV.T)` is (50,100) and `numel(VBR.in.SV.f)` is 3, then `size(VBR.out.anelastic.eburgers_psp.V)` will be (50,100,3).
 
-## 7. Saving results 
+## 7. Saving results
 
-To save your results, you can manually save the ```VBR``` structure as usual in MATLAB. You can, however, also 
-use the `VBR_save` function:
+To save your results, you can manually save the `VBR` structure as usual in MATLAB. You can, however, also use the `VBR_save` function:
 
-```matlab 
-VBR_save(VBR, "my_vbrc_results.mat") 
+```matlab
+VBR_save(VBR, "my_vbrc_results.mat")
 ```
 
-This function is useful to ensure that the ```VBR``` structure is saved in 
-a standardized way, which at present is mainly useful for loading ```VBRc```
-output in the Python wrapper of the VBRc, ```pyVBRc```([link](https://github.com/vbr-calc/pyVBRc)). 
+This function is useful to ensure that the `VBR` structure is saved in a standardized way, which at present is mainly useful for loading `VBRc` output in the Python wrapper of the VBRc, `pyVBRc`([link](https://github.com/vbr-calc/pyVBRc)).
 
 Additionally, `VBR_save` allows you to easily exclude the `VBR.in.SV` structure from the saved file:
 
-```matlab 
-VBR_save(VBR, "my_vbrc_results_without_SV.mat", 1) 
+```matlab
+VBR_save(VBR, "my_vbrc_results_without_SV.mat", 1)
 ```
 
-This can be useful if you wish to save disk space and instead reconstruct your state variables 
-on re-load (which you must do manually!). 
+This can be useful if you wish to save disk space and instead reconstruct your state variables on re-load (which you must do manually!).
