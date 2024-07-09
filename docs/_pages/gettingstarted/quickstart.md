@@ -105,7 +105,7 @@ When changing parameters from those loaded by default, you can either load all t
 
 ## 5. Run the VBR Calculator
 
-The VBR Calculator executes calculations by passing the `VBR` structure to the ``VBR_spine()```:
+The VBR Calculator executes calculations by passing the `VBR` structure to the `VBR_spine()`:
 
 ```matlab
 [VBR] = VBR_spine(VBR) ;
