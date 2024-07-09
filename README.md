@@ -146,7 +146,9 @@ VBR.out.viscous.HZK2011.eta_total % composite steady state creep viscosity
 
 ### Notes for GNU Octave users
 
-The VBR Calculator nominally works in GNU Octave, but you may find that you need to install some packages.
+The VBR Calculator works with [GNU Octave](https://octave.sourceforge.io/io/index.html) as well as MATLAB. Some of the `Projects/` may require additional packages. For how to install GNU Octave and additional packages, see:
+* https://octave.sourceforge.io/io/index.html
+* https://octave.org/doc/interpreter/Installing-and-Removing-Packages.html
 
 https://octave.sourceforge.io/io/index.html https://octave.sourceforge.io/statistics/index.html https://octave.org/doc/interpreter/Installing-and-Removing-Packages.html
 
