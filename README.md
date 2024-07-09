@@ -150,7 +150,6 @@ The VBR Calculator works with [GNU Octave](https://octave.sourceforge.io/io/inde
 * https://octave.sourceforge.io/io/index.html
 * https://octave.org/doc/interpreter/Installing-and-Removing-Packages.html
 
-https://octave.sourceforge.io/io/index.html https://octave.sourceforge.io/statistics/index.html https://octave.org/doc/interpreter/Installing-and-Removing-Packages.html
 
 # Getting Help
 
