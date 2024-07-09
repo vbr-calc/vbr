@@ -161,11 +161,11 @@ The VBRc is open to community contributions! New methods, new examples, document
 
 We follow a typical open source workflow. To submit new features:
 
-- create your fork of the VBRc repo
-- checkout a new branch
-- do work on your new branch
-- push those changes to your fork on github
-- submit a pull request back to the main VBRc repo
+* create your fork of the VBRc repo
+* checkout a new branch
+* do work on your new branch
+* push those changes to your fork on github
+* submit a pull request back to the main VBRc repo
 
 If you're adding a new method, be sure to add a new test (see the following section) and add a note to the active release notes (`release_notes.md`) with a short summary of your work.
 
