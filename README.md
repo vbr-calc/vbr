@@ -153,7 +153,7 @@ The VBR Calculator works with [GNU Octave](https://octave.sourceforge.io/io/inde
 
 # Getting Help
 
-See the full documentation page on [Contributing and Getting Help](https://vbr-calc.github.io/vbr/contrib/contributing/) for ways to reach out or [post a github issue](https://github.com/vbr-calc/vbr/issues/new)!
+For bug reports, please open a [github issue](https://github.com/vbr-calc/vbr/issues/new). For general questions, join the VBRc slack channel and ask in the #vbr-help channel (join the slack from the invite link on the [Contributing and Getting Help](https://vbr-calc.github.io/vbr/contrib/contributing/) page).
 
 # Contributing to the VBRc
 
