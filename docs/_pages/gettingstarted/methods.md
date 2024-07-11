@@ -17,6 +17,7 @@ available anelastic methods:
     andrade_psp
     xfit_mxw
     xfit_premelt
+    andrade_analytical
 
 available elastic methods:
     anharmonic

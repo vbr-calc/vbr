@@ -18,7 +18,8 @@ function params = Params_Anelastic(method,GlobalParams)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   % available anelastic methods
-  params.possible_methods={'eburgers_psp'; 'andrade_psp'; 'xfit_mxw'; 'xfit_premelt'};
+  params.possible_methods={'eburgers_psp'; 'andrade_psp'; 'xfit_mxw'; 'xfit_premelt'; ...
+                           'andrade_analytical';};
 
   if strcmp(method,'eburgers_psp')
     % extended burgers parameters
@@ -137,6 +138,16 @@ function params = Params_Anelastic(method,GlobalParams)
     params.description='pre-melting scaling';
   end
 
+  if strcmp(method, 'andrade_analytical')
+      params.description='analytical Andrade model';
+      params.citations = {'Lau and Holtzman, 2019, GRL. https://doi.org/10.1029/2019GL083529';};
+      params.func_name='Q_andrade_analytical';
+      params.alpha = 1/3; % the andrade exponent
+      params.Beta = 1e-4; % andrade pre-factor
+      params.viscosity_method = 'calculated'; % one of 'calculated' or 'fixed'
+      params.viscosity_method_mechanism = 'diff'; % one of the viscous deformation mechanism structure fields
+      params.eta_ss = 1e23; % only used if params.viscosity_method == 'fixed'
+  end
   % set steady-state melt dependence for diff. creep (i.e., exp(-alpha * phi))
   HK2003 = Params_Viscous('HK2003'); % viscous parameters
   params.melt_alpha = HK2003.diff.alf ;

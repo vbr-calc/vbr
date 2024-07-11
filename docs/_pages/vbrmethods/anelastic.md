@@ -10,6 +10,7 @@ The anelastic methods displayed by `VBR_list_methods` currently include:
 * `andrade_psp` [documentation](/vbr/vbrmethods/anel/andradepsp/): Andrade Model, pseudo period scaling
 * `xfit_mxw` [documentation](/vbr/vbrmethods/anel/xfitmxw/): Master Curve Fit, maxwell scaling
 * `xfit_premelt` [documentation](/vbr/vbrmethods/anel/xfitpremelt/): Master Curve Fit, pre-melting maxwell scaling
+* `andrade_analytical` [documentation](/vbr/vbrmethods/anel/andradeanalytical/): Master Curve Fit, pre-melting maxwell scaling
 
 A detailed theoretical description of each is provided in the full methods paper ([link](https://doi.org/10.1016/j.pepi.2020.106639)) or in the papers cited by the methods and so here, we only describe the computational aspects useful to the end user.
 
