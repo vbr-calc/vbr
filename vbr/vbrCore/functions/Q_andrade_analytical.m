@@ -69,7 +69,7 @@ function [VBR] = Q_andrade_analytical(VBR)
 
     % pure andrade model
     M_fac = 1 + beta * gamma(1+alf) * cos(alf * pi /2) / (w.^alf);
-    M_fac = M_fac - i * (beta * gamma(1+alf)*sin(alf*pi/2)/(w.^alf)+ 1/(w * tau_m));
+    M_fac = M_fac - i * (beta * gamma(1+alf)*sin(alf*pi/2)/(w.^alf)+ 1./(w * tau_m));
     M_complex = Mu_in(1:n_th) ./ M_fac;
 
     M1 = real(M_complex);
