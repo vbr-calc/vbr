@@ -24,10 +24,33 @@ function TestResult = test_vbrcore_011_analytical_andrade()
     TestResult = check_fdep_size(TestResult, VBR, fdep_size);
 
     % check that you can change the viscosity mechanism
+    [VBR, fdep_size] = get_VBR();
+    VBR.in.anelastic.andrade_analytical = Params_Anelastic('andrade_analytical');
+    VBR.in.anelastic.andrade_analytical.viscosity_method_mechanism = 'gbs';
+    [VBR] = VBR_spine(VBR);
+    TestResult = check_fdep_size(TestResult, VBR, fdep_size);
 
     % check that you can specify a constant eta_ss
+    [VBR, fdep_size] = get_VBR();
+    VBR.in.anelastic.andrade_analytical = Params_Anelastic('andrade_analytical');
+    VBR.in.anelastic.andrade_analytical.viscosity_method = 'fixed';
+    VBR.in.anelastic.andrade_analytical.eta_ss = 1e22;
+    VBR.in.elastic.Gu_TP = full_nd(60*1e9, [fdep_size(1), fdep_size(2)]);
+    VBR.in.elastic.quiet = 1;
+    tau_M_expected = VBR.in.anelastic.andrade_analytical.eta_ss ./ VBR.in.elastic.Gu_TP;
 
-    % check characteristics of frequency dependence 
+    [VBR] = VBR_spine(VBR);
+    TestResult = check_fdep_size(TestResult, VBR, fdep_size);
+    tau_M = VBR.out.anelastic.andrade_analytical.tau_M;
+    if tau_M ~= tau_M_expected
+        TestResult.passed = false;
+        msg = ['Maxwell time does not match expected value.', ...
+               ' Found: ', num2str(tau_M), ...
+               ' Expected: ', num2str(tau_M_expected)];
+        TestResult.fail_message = msg;
+    end
+    
+    % check characteristics of frequency dependence
 end
 
 function TestResult = check_fdep_size(TestResult, VBR, fdep_size)
