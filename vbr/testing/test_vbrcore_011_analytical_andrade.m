@@ -51,6 +51,29 @@ function TestResult = test_vbrcore_011_analytical_andrade()
     end
     
     % check characteristics of frequency dependence
+    VBR = struct();
+    VBR.in.elastic.methods_list={'anharmonic'};
+    VBR.in.viscous.methods_list={'HZK2011'};
+    VBR.in.anelastic.methods_list={'andrade_analytical'};
+
+    VBR.in.SV.phi = 0.0;
+    VBR.in.SV.T_K = 1375+273;
+    VBR.in.SV.P_GPa = 2.0; % pressure [GPa]
+    VBR.in.SV.dg_um= 0.01 * 1e6; % grain size [um]
+    VBR.in.SV.rho = 3300; % density [kg m^-3]
+    VBR.in.SV.sig_MPa =.1; % differential stress [MPa]
+    VBR.in.SV.f = logspace(-12,2, 50); % [Hz]
+    [VBR] = VBR_spine(VBR);
+
+    Qinv = VBR.out.anelastic.andrade_analytical.Qinv;
+
+    if Qinv(end) > Qinv(1)
+        TestResult.passed = false;
+        msg = ['Attenuation should decrease with increasing frequency but found ', ...
+               'Qinv(f_max) < Qinv(f_min)'];
+        TestResult.fail_message = msg;
+    end
+
 end
 
 function TestResult = check_fdep_size(TestResult, VBR, fdep_size)
@@ -73,9 +96,7 @@ function [VBR, fdep_size] = get_VBR()
 
     sz = [5, 3];
     VBR.in.SV.phi = full_nd(0.01, sz);
-    VBR.in.SV.Ch2o = full_nd(0.00, sz);
     VBR.in.SV.T_K = full_nd(1350+273, sz);
-    VBR.in.SV.Tsolidus_K = full_nd(1300+273., sz);
     VBR.in.SV.P_GPa = full_nd(2.5, sz); % pressure [GPa]
     VBR.in.SV.dg_um=full_nd(0.01 * 1e6, sz); % grain size [um]
     VBR.in.SV.rho = full_nd(3300, sz); % density [kg m^-3]
