@@ -1,6 +1,6 @@
 ---
 permalink: /gettingstarted/methods/
-title: "Listing & Setting Methods"
+title: 'Listing & Setting Methods'
 ---
 
 At present, the VBR Calculator includes methods for pure elastic, viscous and anelastic material properties. This section describes how to list and specify methods for calculation. To see descriptions of the methods, see the pages on [elastic](), [viscous]() and [anelastic]() methods.
@@ -10,13 +10,13 @@ At present, the VBR Calculator includes methods for pure elastic, viscous and an
 To list available methods from a MATLAB command window:
 
 ```matlab
->> vbrListMethods
+>> VBR_list_methods
 
 available anelastic methods:
     eburgers_psp
     andrade_psp
     xfit_mxw
-    xfit_premelt    
+    xfit_premelt
 
 available elastic methods:
     anharmonic
@@ -26,10 +26,10 @@ available elastic methods:
 available viscous methods:
     HK2003
     HZK2011
-    xfit_premelt  
+    xfit_premelt
 ```
 
-Each method has a corresponding set of parameters that can be displayed and/or changed. To load the parameters for a given method, `method_name`, you call `Params_Elastic(method_name)`, `Params_Viscous(method_name)` or  `Params_Anelastic(method_name)` depending on the proprety type of the method. For example, to load the `xfit_mxw` anelastic method parameters:
+Each method has a corresponding set of parameters that can be displayed and/or changed. To load the parameters for a given method, `method_name`, you call `Params_Elastic(method_name)`, `Params_Viscous(method_name)` or `Params_Anelastic(method_name)` depending on the proprety type of the method. For example, to load the `xfit_mxw` anelastic method parameters:
 
 ```matlab
 >> xfit_mxw_params=Params_Anelastic('xfit_mxw');
@@ -68,22 +68,22 @@ Each method has a corresponding set of parameters that can be displayed and/or c
 ```
 
 Some fields of note include:
-* `citations`: relevant references for the method
-* `func_name`: the function in `vbr/vbrCore/functions` called for this method
-* `description`: a short description of the method  
+
+- `citations`: relevant references for the method
+- `func_name`: the function in `vbr/vbrCore/functions` called for this method
+- `description`: a short description of the method
 
 The remaining fields are all of the parameters and arguments needed to apply the method. In the above case, this includes all coefficients for the master curve maxwell scaling.
 
 ## Specifying Methods
 
-The above methods are listed by "property type," which is one of `elastic`, `viscous` or `anelastic`. Each property type has a  corresponding `methods_list` cell array in the `VBR.in` structure that represents the list of methods to apply:
+The above methods are listed by "property type," which is one of `elastic`, `viscous` or `anelastic`. Each property type has a corresponding `methods_list` cell array in the `VBR.in` structure that represents the list of methods to apply:
 
 ```matlab
 VBR.in.elastic.methods_list={'anharmonic';'anh_poro';};
 VBR.in.viscous.methods_list={'HK2003';'HZK2011'};
 VBR.in.anelastic.methods_list={'eburgers_psp';'andrade_psp';'xfit_mxw'};
 ```
-
 
 After calculations, each property type will have a field in `VBR.out`, beneath which each method also has a field, e.g.:
 

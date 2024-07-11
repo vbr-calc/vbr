@@ -16,7 +16,7 @@ function VBR = visc_calc_xfit_premelt(VBR)
   %       if the eta_melt_free_method parameter for this method is set to
   %       'xfit_premelt', will use the exact viscosity from Yamauchi and
   %       Takei for the melt-free viscosity, otherwise eta_melt_free_method can
-  %       be set to any VBR viscous method, see vbrListMethods()
+  %       be set to any VBR viscous method, see VBR_list_methods()
   %
   % Output:
   % -------

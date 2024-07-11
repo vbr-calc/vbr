@@ -25,7 +25,7 @@ location_colors={[1,0.6,0];[0,0.8,0];[0,0.3,0]};
 
 % Extract the relevant values for the input depth range.
 % Need to choose the attenuation method used for anelastic calculations
-%       see possible methods by running vbrListMethods()
+%       see possible methods by running VBR_list_methods()
 q_method = 'xfit_premelt'; %'eburgers_psp' 'xfit_mxw', 'xfit_premelt' 'andrade_psp'
 fetch_data('./'); % builds data directories and fetches data
 filenames.Vs = './data/vel_models/Shen_Ritzwoller_2016.mat';
