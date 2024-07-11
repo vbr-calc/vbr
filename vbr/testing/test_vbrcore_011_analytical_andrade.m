@@ -30,6 +30,12 @@ function TestResult = test_vbrcore_011_analytical_andrade()
     [VBR] = VBR_spine(VBR);
     TestResult = check_fdep_size(TestResult, VBR, fdep_size);
 
+    [VBR, fdep_size] = get_VBR();
+    VBR.in.anelastic.andrade_analytical = Params_Anelastic('andrade_analytical');
+    VBR.in.anelastic.andrade_analytical.viscosity_method_mechanism = 'eta_total';
+    [VBR] = VBR_spine(VBR);
+    TestResult = check_fdep_size(TestResult, VBR, fdep_size);
+
     % check that you can specify a constant eta_ss
     [VBR, fdep_size] = get_VBR();
     VBR.in.anelastic.andrade_analytical = Params_Anelastic('andrade_analytical');

@@ -1,3 +1,14 @@
+---
+permalink: /examples/CB_016_complex_viscosity/
+title: ""
+---
+
+# CB_016_complex_viscosity.m
+## output figures
+
+!['CB_016_complex_viscosity'](/vbr/assets/images/CBs/CB_016_complex_viscosity.png){:class="img-responsive"}
+## contents
+```matlab
 % reproduce the andrade model curve from Fig. 2 of Lau and Holtzman, 2019, GRL,
 % https://doi.org/10.1029/2019GL083529
 
@@ -75,3 +86,4 @@ ylabel('normalized ||{\eta}*||')
 xlabel('f [Hz]')
 
 saveas(gcf,'./figures/CB_016_complex_viscosity.png')
+```

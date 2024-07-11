@@ -24,7 +24,6 @@ function [VBR] = Q_andrade_analytical(VBR)
   elseif isfield(VBR.in.elastic,'anharmonic')
    Mu_in = VBR.out.elastic.anharmonic.Gu ;
   end
-  Ju_in  = 1./Mu_in ;
 
   % Frequency
   f_vec = VBR.in.SV.f;  % frequency
@@ -48,7 +47,11 @@ function [VBR] = Q_andrade_analytical(VBR)
   if strcmp(method_settings.viscosity_method, 'calculated')
       visc_method=VBR.in.viscous.methods_list{1};
       mech = method_settings.viscosity_method_mechanism; % e.g., 'diff'
-      eta_ss = VBR.out.viscous.(visc_method).(mech).eta ;
+      if strcmp(mech, 'eta_total')
+          eta_ss = VBR.out.viscous.(visc_method).(mech);
+      else
+          eta_ss = VBR.out.viscous.(visc_method).(mech).eta ;
+      end
   elseif strcmp(method_settings.viscosity_method, 'fixed')
       eta_ss = method_settings.eta_ss .* ones(sz);
   else

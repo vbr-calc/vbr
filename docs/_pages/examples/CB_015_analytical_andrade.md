@@ -1,3 +1,14 @@
+---
+permalink: /examples/CB_015_analytical_andrade/
+title: ""
+---
+
+# CB_015_analytical_andrade.m
+## output figures
+
+!['CB_015_analytical_andrade'](/vbr/assets/images/CBs/CB_015_analytical_andrade.png){:class="img-responsive"}
+## contents
+```matlab
 %% put VBR in the path %%
 clear
 path_to_top_level_vbr='../../';
@@ -111,3 +122,4 @@ xlabel('f [Hz]')
 ylabel('Q^{-1}')
 legend()
 saveas(gcf,'./figures/CB_015_analytical_andrade.png')
+```
