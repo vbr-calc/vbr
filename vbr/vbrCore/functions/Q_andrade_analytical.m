@@ -64,6 +64,7 @@ function [VBR] = Q_andrade_analytical(VBR)
 
   % loop over frequency
   tau_m = tau.maxwell(1:n_th);
+  Ju_in = Ju_in(1:n_th);
   for i_f = 1:n_freq
     w = 2*pi*f_vec(i_f) ;
     % get linear index of J1, J2, etc.
