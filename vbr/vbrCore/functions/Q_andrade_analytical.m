@@ -24,7 +24,7 @@ function [VBR] = Q_andrade_analytical(VBR)
   elseif isfield(VBR.in.elastic,'anharmonic')
    Mu_in = VBR.out.elastic.anharmonic.Gu ;
   end
-
+  Ju_in = 1./Mu_in;
   % Frequency
   f_vec = VBR.in.SV.f;  % frequency
 
@@ -71,16 +71,13 @@ function [VBR] = Q_andrade_analytical(VBR)
     ig2 = (ig1-1)+ n_th; % the last linear index in current frequency
 
     % pure andrade model
-    M_fac = 1 + beta * gamma(1+alf) * cos(alf * pi /2) / (w.^alf);
-    M_fac = M_fac - i * (beta * gamma(1+alf)*sin(alf*pi/2)/(w.^alf)+ 1./(w * tau_m));
-    M_complex = Mu_in(1:n_th) ./ M_fac;
+    MJ_real = 1 + beta * gamma(1+alf) * cos(alf * pi /2) ./ (w.^alf);
+    MJ_imag = 1. ./ (w .* tau_m) + beta * gamma(1+alf)*sin(alf*pi/2)./(w.^alf);
 
-    M1 = real(M_complex);
-    M2 = imag(M_complex);
-    J1(ig1:ig2) = 1./M1;
-    J2(ig1:ig2) = 1./M2;
-    M1_M2_fac = 1; %(1 + sqrt(1+(M2./M1).^2)) / 2;
-    Qinv(ig1:ig2) = (M2./M1) ./ M1_M2_fac;
+    J1(ig1:ig2) = Ju_in .* MJ_real;
+    J2(ig1:ig2) = Ju_in .* MJ_imag;
+    J1J2_fac = (1 + sqrt(1+(J2(ig1:ig2)./J1(ig1:ig2)).^2)) / 2;
+    Qinv(ig1:ig2) = (J2(ig1:ig2)./J1(ig1:ig2)) .* J1J2_fac;
     Ma(ig1:ig2) = (J1(ig1:ig2).^2 + J2(ig1:ig2).^2).^(-1/2) ;
 
     % velocities [m/s]

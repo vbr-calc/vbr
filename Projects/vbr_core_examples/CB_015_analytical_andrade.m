@@ -33,7 +33,7 @@ VBR.in.SV.f = logspace(-14,0,50);
 VBR = VBR_spine(VBR) ;
 
 % plot frequency dependence of attenuation
-figure('PaperPosition',[0,0,6,4],'PaperPositionMode','manual')
+figure('PaperPosition',[0,0,4,4],'PaperPositionMode','manual')
 loglog(VBR.in.SV.f, VBR.out.anelastic.andrade_analytical.Qinv, ...
      'displayname', 'analytical andrade', 'linewidth', 2)
 hold all
@@ -104,7 +104,6 @@ VBR.in.SV.f = logspace(-14,0,50);
 VBR = VBR_spine(VBR) ;
 
 % plot frequency dependence of attenuation
-figure('PaperPosition',[0,0,4,4],'PaperPositionMode','manual')
 loglog(VBR.in.SV.f, VBR.out.anelastic.andrade_analytical.Qinv, ...
      'displayname', 'analytical andrade, fixed eta\_ss', 'linewidth', 2)
 xlabel('f [Hz]')
