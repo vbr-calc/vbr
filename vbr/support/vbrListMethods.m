@@ -16,9 +16,9 @@ function vbrListMethods(single_prop)
   % vbrListMethods() will print all methods
   % vbrListMethods('viscous') will print only viscous methods 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    msg = ['DEPRECATION WARNING: vbrListMethods has been renamed to VBR_list_methods',
-       ' vbrListMethods will be removed soon from ',
-       'future version of the VBRc. Use VBR_list_methods to silence ',
+    msg = ['DEPRECATION WARNING: vbrListMethods has been renamed to VBR_list_methods', ...
+       ' vbrListMethods will be removed soon from ', ...
+       'future version of the VBRc. Use VBR_list_methods to silence ', ...
        'this warning.'];
     disp(msg)
     if exist('single_prop', 'var')
