@@ -1,8 +1,8 @@
 function TestResult = test_vbrcore_011_analytical_andrade()
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% TestResult = test_vbrcore_010_premelt_volatiles()
+% TestResult = test_vbrcore_011_analytical_andrade()
 %
-% test for volatile behavior
+% test that analytical_andrade runs with the different viscosity options
 %
 % Parameters
 % ----------

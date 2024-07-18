@@ -1,6 +1,6 @@
 function [VBR] = Q_andrade_analytical(VBR)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  % [VBR]=Q_andrade_simple(VBR)
+  % [VBR]=Q_andrade_analytical(VBR)
   %
   % the analytical andrade model. See supplement of Lau and Holtzman, 2019,
   % https://doi.org/10.1029/2019GL083529, for a nice, succinct formulation.
@@ -12,7 +12,7 @@ function [VBR] = Q_andrade_analytical(VBR)
   %
   % Output:
   % ------
-  % VBR    the VBR structure, with VBR.out.anelastic.MTH2011 structure
+  % VBR    the VBR structure, with VBR.out.anelastic.analytical structure
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   method_settings = VBR.in.anelastic.andrade_analytical;
