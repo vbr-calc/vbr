@@ -51,7 +51,6 @@ function [VBR] = Q_xfit_mxw(VBR)
   f_norm_glob=J1; tau_norm_glob=J1;
 
   % vectorized rho and Vave
-  rho_vec = reshape(rho_in,size(Mu_in(1:n_th)));
   Vave=reshape(zeros(sz),size(Mu_in(1:n_th)));
 
   % ====================================================
