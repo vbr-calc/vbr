@@ -23,9 +23,9 @@ If you're new to git, github or contributing to open source projects, the follow
 
 This sections outlines the git commands for creating and using a feature branch. The following assumes that you have already forked and cloned the VBR repository and have a terminal open in the VBR repository's directory `vbr/`
 
-1. **Initial State**: make sure you are on master branch and up to date:
+1. **Initial State**: make sure you are on main branch and up to date:
   ```
-  git checkout master
+  git checkout main
   git pull
   ```
 2. **New Branch**: create the new feature branch (or branch for fixing a bug):  
@@ -42,11 +42,11 @@ This command sets the remote branch that your local `new_branch` will track. Any
 
 4. **Develop your branch**: develop as normal on the new branch, adding commits as you see fit.
 
-5. **Test your branch**: If your feature branch adds new functionality to the `vbr` directory, you should add new test functions for your new features in `vbr/testing` (see the README there, `vbr/testing/README.md`) and occasionally run the existing test functions during development. If your new feature is a self contained project in `Projects`, new test functions are not required (as running your project is its own test). In either case, before submitting a pull request back to master, please run the full test (we don't have any automated testing from within github... yet?).
+5. **Test your branch**: If your feature branch adds new functionality to the `vbr` directory, you should add new test functions for your new features in `vbr/testing` (see the README there, `vbr/testing/README.md`) and occasionally run the existing test functions during development. If your new feature is a self contained project in `Projects`, new test functions are not required (as running your project is its own test). In either case, before submitting a pull request back to main, please run the full test (we don't have any automated testing from within github... yet?).
 
-6. **Final push and pull request**: Your branch is ready! The tests run successfully and you want to submit your great new feature back into the main VBR repository so that other people can use your great work! So push up any remaining commits to github and then visit your github page for your vbr fork. There should be a notice up top saying something to the effect of "YOUR_NEW_BRANCH had recent pushes 11 minutes ago (Compare & pull request)". Click the button to "Compare & pull request". If it's not visible, you can select your branch from the dropdown menu and then the button should appear. To submit the pull request: hit the button and then enter a sensible title and a description of what you've done, and click "Create pull request". 
+6. **Final push and pull request**: Your branch is ready! The tests run successfully and you want to submit your great new feature back into the main VBR repository so that other people can use your great work! So push up any remaining commits to github and then visit your github page for your vbr fork. There should be a notice up top saying something to the effect of "YOUR_NEW_BRANCH had recent pushes 11 minutes ago (Compare & pull request)". Click the button to "Compare & pull request". If it's not visible, you can select your branch from the dropdown menu and then the button should appear. To submit the pull request: hit the button and then enter a sensible title and a description of what you've done, and click "Create pull request".
 
-7. **Pull request review**: so you've created a pull request! What happens now? Well the core VBRc developers will get a notice of your pull request and they will look it over (hopefully in a timely fashion). They may request code changes or more information or may merge it into the VBRc repository directly! If your branch cannot be automatically merged due to conflicts and you need help rebasing or merging, we'll help! 
+7. **Pull request review**: so you've created a pull request! What happens now? Well the core VBRc developers will get a notice of your pull request and they will look it over (hopefully in a timely fashion). They may request code changes or more information or may merge it into the VBRc repository directly! If your branch cannot be automatically merged due to conflicts and you need help rebasing or merging, we'll help!
 
 ## style guide & helpful git tips:
 
