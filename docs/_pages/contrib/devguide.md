@@ -23,7 +23,7 @@ If you're new to git, github or contributing to open source projects, the follow
 
 This sections outlines the git commands for creating and using a feature branch. The following assumes that you have already forked and cloned the VBR repository and have a terminal open in the VBR repository's directory `vbr/`
 
-1. **Initial State**: make sure you are on main branch and up to date:
+1. **Initial State**: make sure you are on main branch and that your main branch is up to date:
   ```
   git checkout main
   git pull
