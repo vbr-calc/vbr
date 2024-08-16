@@ -24,14 +24,15 @@ function [VBR] = Q_xfit_mxw(VBR)
   rho_in = VBR.in.SV.rho ;
   if isfield(VBR.in.elastic,'anh_poro')
    Mu_in = VBR.out.elastic.anh_poro.Gu ;
+   mu_method = 'anh_poro';
   elseif isfield(VBR.in.elastic,'anharmonic')
    Mu_in = VBR.out.elastic.anharmonic.Gu ;
+   mu_method = 'anharmonic';
   end
   Ju_in  = 1./Mu_in ;
 
   % Frequency
   f_vec = VBR.in.SV.f;  % frequency
-  period_vec = 1./f_vec ;
   omega_vec = f_vec.*(2*pi) ;
   tau_vec = 1./omega_vec ;
 
@@ -47,7 +48,7 @@ function [VBR] = Q_xfit_mxw(VBR)
 
   % frequency dependent vars
   J1 = proc_add_freq_indeces(zeros(sz),n_freq);
-  J2 = J1; Q = J1; Qinv = J1; M1 = J1; M2 = J1; M = J1; V = J1;
+  J2 = J1; Q = J1; Qinv = J1; M = J1; V = J1;
   f_norm_glob=J1; tau_norm_glob=J1;
 
   % vectorized rho and Vave
@@ -74,13 +75,9 @@ function [VBR] = Q_xfit_mxw(VBR)
       tau_norm_vec_local = logspace(-30,log10(max_tau_norm),100);
       X_tau = Q_xfit_mxw_xfunc(tau_norm_vec_local,VBR.in.anelastic.xfit_mxw) ;
 
-      %FINT1 = trapz(X_tau) ;  %@(taup) (X_tau, taup
-      %int1 = Tau_fac.*quad(FINT1, 0, tau_norm_i);
       int1 = trapz(tau_norm_vec_local,X_tau./tau_norm_vec_local) ; % eq 18 of [1]
 
       J1(i_glob) = Ju.*(1 + int1);
-
-      % XJ2= Q_xfit_mxw_xfunc(J2tau_norm,VBR.in.anelastic.xfit_mxw) ;
       J2(i_glob) = Ju.*((pi/2)*X_tau(end) + tau_norm(i)); % eq 18  of [1]
 
       % See McCarthy et al, 2011, Appendix B, Eqns B6 !
@@ -116,4 +113,10 @@ function [VBR] = Q_xfit_mxw(VBR)
   VBR.out.anelastic.(onm).units.f_norm = '';
   VBR.out.anelastic.(onm).units.tau_norm = '';
 
+  method_settings.mu_method = mu_method;
+  VBR.out.anelastic.(onm).method_settings = method_settings;
+
+  if VBR.in.GlobalSettings.anelastic.include_complex_viscosity == 1
+    VBR = complex_viscosity_VBR(VBR, onm);
+  end
 end
