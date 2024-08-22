@@ -3,20 +3,21 @@
 %
 %  Calculating electrical conductivity of Olivine
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function CB_014_electrical_conductivity_ol()
+    % put the VBRc in the path %
+    clear
+    path_to_top_level_vbr='../../';
+    addpath(path_to_top_level_vbr)
+    vbr_init
 
-% put the VBRc in the path %
-clear
-path_to_top_level_vbr='../../';
-addpath(path_to_top_level_vbr)
-vbr_init
-
-naif2021_CB
-yosh2009_CB
-SEO_CB
-poe2010_CB
-wang2006_CB
-UHO2014_CB
-Jones2012_CB
+    naif2021_CB()
+    yosh2009_CB()
+    SEO_CB()
+    poe2010_CB()
+    wang2006_CB()
+    UHO2014_CB()
+    Jones2012_CB()
+end
 
 function naif2021_CB
     clear
@@ -66,9 +67,11 @@ function yosh2009_CB
     % plot Figure
     fig = figure("Name",'Yoshino_2009');
     for  i = 1:length(VBR.in.SV.Ch2o_ol)
-    semilogy(1d3./VBR.in.SV.T_K, VBR.out.electric.yosh2009_ol.esig(i,:), "LineWidth",2.5), hold on
+        ch2o_ol =[num2str(VBR.in.SV.Ch2o_ol(i)/1d4) " wt%"];
+        semilogy(1d3./VBR.in.SV.T_K, VBR.out.electric.yosh2009_ol.esig(i,:), ...
+                 "LineWidth", 2.5, 'displayname', ch2o_ol), hold on
     end
-    legend(string([0, logspace(1,4,4)]./1d4) + " wt%")
+    legend()
     title("Electrical conductivity of Ol at temperature for a given given wt% water")
     xlabel("Reciprical Temperature (1/K)")
     ylabel("Conductivity (S/m)")
@@ -128,10 +131,13 @@ function poe2010_CB
     % plot figure
     fig = figure("Name",'Poe_2010');
     subplot(1,2,1)
-        for  i = 1:length(VBR.in.SV.Ch2o_ol)
-        semilogy(1./VBR.in.SV.T_K, VBR.out.electric.poe2010_ol.esig_H(:,i), "LineWidth",2.5), hold on
-        end
-    legend(string(round(logspace(3,0,7),2,"significant")) + 'ppm H_{2}O',"Location","southwest")
+    for  i = 1:length(VBR.in.SV.Ch2o_ol)
+        h2o_name = [sprintf("%.2f", VBR.in.SV.Ch2o_ol(i)) ' ppm H_{2}O'];
+        semilogy(1./VBR.in.SV.T_K, VBR.out.electric.poe2010_ol.esig_H(:,i), ...
+                 "LineWidth",2.5, 'displayname', h2o_name)
+        hold on
+    end
+    legend("Location", "southwest")
     xlabel('Reciprical Temperature 1/T (K^{-1}')
     ylabel('Conductivtity (S/m)')
     title('Hydrous Ol Conductivity')
@@ -142,9 +148,7 @@ function poe2010_CB
     set(gca, "YTick", [800:200:2000])
     shading interp  
     colormap(hsv)
-    cb = colorbar();
-    cb.Label.String = 'Conductivity (S/m)';
-    cb.Label.FontWeight = "bold";
+    colorbar('title', 'Conductivity');
     hold on
     contour(x,y,log10(VBR.out.electric.poe2010_ol.esig),'k', 'ShowText','on');
     xlabel('log (ppm water)')
@@ -172,9 +176,11 @@ function wang2006_CB
     fig = figure("Name",'Wang_2006');
     subplot(2,1,1)
     for i = 1:length(VBR.in.SV.T_K)-1
-        loglog(VBR.in.SV.Ch2o_ol./1d4, VBR.out.electric.wang2006_ol.esig(i,:),"LineWidth", 2.5), hold on
+        T_name = [num2str(VBR.in.SV.T_K(i)) ' K'];
+        loglog(VBR.in.SV.Ch2o_ol./1d4, VBR.out.electric.wang2006_ol.esig(i,:), ...
+               "LineWidth", 2.5, 'displayname', T_name), hold on
     end
-    legend(string(linspace(1273,873, 5)) + ' K' ,"Location","best");
+    legend()
     xlabel('Water Content (wt %)')
     ylabel('Temperature (K)')
     set(gca,'YTick', [0.0001 0.001 0.01 0.1 1 10]);
@@ -255,14 +261,15 @@ function Jones2012_CB
     shading interp
     hold on
     colormap("jet")
-    [lines, hand] = contourf(x-273,y,log10(VBR.out.electric.jones2012_ol.esig),'k', 'ShowText','on');
+    contourf(x-273,y,log10(VBR.out.electric.jones2012_ol.esig), ...
+             [-0.5 -1.25:-0.25:-3.5 -5.5], 'linecolor', 'k', ...
+             'ShowText','on');
+
     xlim([600 1200])
     ylim([0 1000])
-    hand.LevelList = [-0.5 -1.25:-0.25:-3.5 -5.5];
-    cb = colorbar();
-    cb.Label.String = 'log(Sigma) (S/m)';
-    cb.Label.FontWeight = "bold";
-    cb.Limits = [-5.5 -0.5];
+    caxis([-5.5, -0.5])
+    colorbar('title', 'log(Sigma) (S/m)');
+
     xlabel('Temperature (C)')
     ylabel('Water Content (ppm)')
     title('Proton Conduction vs Temperature/Water Content')

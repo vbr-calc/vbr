@@ -24,7 +24,7 @@ function [VBR] = ec_HS1962(VBR, phase1, phase2)
     phi = VBR.in.SV.phi; % volume fraction, melt 
     
     % Correction
-    if mean(phase1,"all") > mean(phase2,"all") % HS requires that Esig phase 2 > Esig phase 1
+    if mean(phase1(:)) > mean(phase2(:)) % HS requires that Esig phase 2 > Esig phase 1
       phase1 = phase2; % S/m
       phase2 = phase1; % S/m
     
