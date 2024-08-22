@@ -64,6 +64,7 @@ function [ VBR ] = ec_wang2006( VBR )
     wang2006_ol.esig_A = esig_A; % S/m, conductivity anhydrous olivine
     wang2006_ol.esig_H = esig_H; % S/m, conductivity hydrous olivine
     wang2006_ol.esig = esig; % S/m, conductivty olivine bulk
+    wang2006_ol = ec_method_units(wang2006_ol);
     VBR.out.electric.wang2006_ol = wang2006_ol;
 end
 

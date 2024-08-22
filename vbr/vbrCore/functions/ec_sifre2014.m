@@ -57,5 +57,6 @@ function VBR = ec_sifre2014(VBR)
     
     % Output to VBR structure
     sifre2014_melt.esig = esig; % S/m, conductivity melt bulk
+    sifre2014_melt = ec_method_units(sifre2014_melt);
     VBR.out.electric.sifre2014_melt = sifre2014_melt;
 end

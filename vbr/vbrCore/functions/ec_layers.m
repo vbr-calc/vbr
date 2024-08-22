@@ -33,5 +33,6 @@ function [VBR] = ec_layers(VBR, phase1, phase2)
     
     % Store in VBR structure
     layers.esig = esig; % S/m, conductivity bulk
+    layers = ec_method_units(layers);
     VBR.out.electric.layers = layers;
 end

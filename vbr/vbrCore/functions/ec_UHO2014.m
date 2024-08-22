@@ -68,6 +68,7 @@ function [ VBR ] = ec_UHO2014(VBR)
     UHO2014_ol.esig_h = esig_p; % S/m, conductivity polaron hopping
     UHO2014_ol.esig_p = esig_h; % S/m, conductivity proton 
     UHO2014_ol.esig = esig; % S/m, conductivity olivine bulk
+    UHO2014_ol = ec_method_units(UHO2014_ol);
     VBR.out.electric.UHO2014_ol = UHO2014_ol;
 end
 

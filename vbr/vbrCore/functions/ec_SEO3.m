@@ -27,6 +27,7 @@ function [ VBR ] = ec_SEO3( VBR )
     
     % store in VBR structure
     SEO3_ol.esig = esig; % S/m, conductivity olivine bulk
+    SEO3_ol = ec_method_units(SEO3_ol);
     VBR.out.electric.SEO3_ol = SEO3_ol;
 end
 

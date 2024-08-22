@@ -72,6 +72,7 @@ function [ VBR ] = ec_yosh2009( VBR )
     yosh2009_ol.esig_h = esig_h; % S/m, conductivity polaron hopping
     yosh2009_ol.esig_p = esig_p; % S/m, conductivity proton
     yosh2009_ol.esig = esig; % S/m, conductivity olivine bulk
+    yosh2009_ol = ec_method_units(yosh2009_ol);
     VBR.out.electric.yosh2009_ol = yosh2009_ol;
 end
 

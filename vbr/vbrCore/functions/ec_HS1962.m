@@ -44,6 +44,8 @@ function [VBR] = ec_HS1962(VBR, phase1, phase2)
     HS.esig_up = esigUP; % S/m, conductivity bulk
     HS.esig_lo = esigLO; % S/m, conductivity bulk
     HS.tf = tf; % logical array
+    HS = ec_method_units(HS);
+    HS.units.tf = '';
 
     VBR.out.electric.HS = HS;
 end

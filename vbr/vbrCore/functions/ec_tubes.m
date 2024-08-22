@@ -24,5 +24,6 @@ function [VBR] = ec_tubes(VBR, phase1, phase2, ~)
     
     % Store in VBR structure
     tubes.esig = esig; % S/m, conductivity bulk
+    tubes = ec_method_units(tubes);
     VBR.out.electric.tubes = tubes;
 end

@@ -33,5 +33,6 @@ function VBR = ec_ni2011(VBR)
     
     % store in VBR structure
     ni2011_melt.esig = esig; % S/m, conductivity melt bulk
+    ni2011_melt = ec_method_units(ni2011_melt);
     VBR.out.electric.ni2011_melt = ni2011_melt;
 end

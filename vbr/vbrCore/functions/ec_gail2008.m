@@ -30,5 +30,6 @@ function VBR = ec_gail2008(VBR)
     
     % store in VBR structure
     gail2008_melt.esig = esig; % S/m, conductivity melt bulk
+    gail2008_melt = ec_method_units(gail2008_melt);
     VBR.out.electric.gail2008_melt = gail2008_melt;
 end

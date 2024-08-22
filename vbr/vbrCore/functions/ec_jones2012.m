@@ -64,6 +64,7 @@ function [ VBR ] = ec_jones2012(VBR)
     jones2012_ol.esig_A = esig_A; % S/m, conductivity anhydrous
     jones2012_ol.esig_H = esig_H; % S/m, conductivity hydrous
     jones2012_ol.esig = esig; % S/m, conductivity olivine bulk
+    jones2012_ol = ec_method_units(jones2012_ol);
     VBR.out.electric.jones2012_ol = jones2012_ol;
 end
     

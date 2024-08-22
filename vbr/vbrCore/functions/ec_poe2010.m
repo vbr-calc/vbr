@@ -89,6 +89,7 @@ function [ VBR ] = ec_poe2010(VBR)
     poe2010_ol.esig_H = esig_H; % S/m, conductivity hydrous
     poe2010_ol.esig_A = esig_A; % S/m, conductivity anhydrous
     poe2010_ol.esig = esig; % S/m, conductivity bulk olivine
+    poe2010_ol = ec_method_units(poe2010_ol);
     VBR.out.electric.poe2010_ol = poe2010_ol;
 end
 
