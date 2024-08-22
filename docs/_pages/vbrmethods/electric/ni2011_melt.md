@@ -20,11 +20,11 @@ VBR.in.SV.ch20 = 1d4.*linspace(0,6,61); % water content [ppm]
 
 
 % add to electric methods list
-VBR.in.electric.methods_list={'sifre2014_melt'};
+VBR.in.electric.methods_list={'ni2011_melt'};
 
 % call VBR_spine
 [VBR] = VBR_spine(VBR) ;
 ```
 
 ## Output
-Output is `VBR.out.electric.sifre2014_melt.esig`, the electrical conductivity of Olivine in S/m.
+Output is `VBR.out.electric.ni2011_melt.esig`, the electrical conductivity of Olivine in S/m.

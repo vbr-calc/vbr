@@ -4,16 +4,16 @@ path_to_top_level_vbr='../../';
 addpath(path_to_top_level_vbr)
 vbr_init
 
-% ni2011_CB
-% gail2008_CB
-% sifre2014_CB
+ni2011_CB
+gail2008_CB
+sifre2014_CB
 sifre2014_CB2
 
 function ni2011_CB
 clear
  % set required state variables
 VBR.in.SV.T_K = (1400) + 273; % K, temperature
-VBR.in.SV.Ch2o(:,1) = [125 600]; % ppm, water content
+VBR.in.SV.Ch2o_m(:,1) = [125 600]; % ppm, water content
 VBR.in.SV.phi = linspace(0,0.06, 100);
 
 % add to electric methods list
@@ -74,9 +74,9 @@ VBR.in.electric.methods_list={'SEO3_ol','gail2008_melt'};
 
 % plot figures
 fig = figure("Name",'Gaillard_2008');
-plot(VBR.out.electric.HSup.esig(:,1), HF.z_km,"LineWidth",2.5,"LineStyle","-"), hold on
-plot(VBR.out.electric.HSup.esig(:,2), HF.z_km,"LineWidth",2.5,"LineStyle","--")
-plot(VBR.out.electric.HSup.esig(:,3), HF.z_km,"LineWidth",2.5,"LineStyle","-.")
+plot(VBR.out.electric.HS.esig_up(:,1), HF.z_km,"LineWidth",2.5,"LineStyle","-"), hold on
+plot(VBR.out.electric.HS.esig_up(:,2), HF.z_km,"LineWidth",2.5,"LineStyle","--")
+plot(VBR.out.electric.HS.esig_up(:,3), HF.z_km,"LineWidth",2.5,"LineStyle","-.")
 
 set(gca,"YDir",'reverse')
 set(gca,"XScale",'log')
@@ -97,9 +97,8 @@ function sifre2014_CB
 clear
 % set required state variables
 VBR.in.SV.T_K = linspace(1d4/9, 1d4/5, 25); % K, temperature
-VBR.in.SV.Cco2_m(:,1) = [25.9 23.3 18.2 10.4]; % wt_percent, CO2 in melt
-VBR.in.SV.Ch2o_m(:,1) = [10.2 9.2 7.3 4.4]; % wt_percent, bulk water content
-VBR.in.SV.mf = 1; % mass fraction of melt
+VBR.in.SV.Cco2_m(:,1) = [25.9 23.3 18.2 10.4]*1d4; % ppm, CO2 in melt
+VBR.in.SV.Ch2o_m(:,1) = [10.2 9.2 7.3 4.4]*1d4; % ppm, bulk water content
 
 % add to electric methods list
 VBR.in.electric.methods_list={'sifre2014_melt'};
@@ -117,7 +116,7 @@ xlabel('10,000/T (K^-1)')
 ylabel('log [conductivity (S m^-1)]')
 set(gca,"Xdir",'reverse')
 set(gca,"Yscale",'log')
-names = [string(VBR.in.SV.Ch2o_m) string(VBR.in.SV.Cco2_m)];
+names = [string(VBR.in.SV.Ch2o_m./1d4) string(VBR.in.SV.Cco2_m./1d4)];
 legend([names(:,1) + ' wt % H_2O + ' + names(:,2) + ' wt% CO_2 '])
 xlim([900 1500])
 
@@ -131,8 +130,8 @@ clear
 % set required state variables
 % VBR.in.SV.T_K(:,1) = linspace(950,1450,11) + 273 ; % K, temperature
 VBR.in.SV.T_K(:,1) = linspace(950,1450,31) + 273 ; % K, temperature
-Cco2 = [0 200 5000]; % ppm, bulk CO2
-Ch2o = [200 200 5000]; % ppm, bulk H2O
+Cco2 = [0 200 500]; % ppm, bulk CO2
+Ch2o = [200 200 500]; % ppm, bulk H2O
 VBR.in.SV.mf = [0 logspace(-5,0, 61)]; % mass fraction of melt
 
 fig = figure("Name",'Sifre_2014_Fig2');
@@ -140,25 +139,16 @@ for id =1:numel(Cco2)
 
     VBR.in.SV.Cco2 = Cco2(id); % ppm, bulk CO2 
     VBR.in.SV.Ch2o = Ch2o(id); % ppm, bulk H2O
+
+    VBR = ec_vol2part(VBR,'sifre2014','on');
     
     % add to electric methods list
-    VBR.in.electric.methods_list={'sifre2014_melt'};
+    VBR.in.electric.methods_list={'jones2012_ol','SEO3_ol','sifre2014_melt'};
     
     % call VBR_spine
     [VBR] = VBR_spine(VBR);
-    
-    % reset specific state variables
-    clear VBR.in.SV.Ch2o
-    VBR.in.SV.Ch2o = VBR.out.electric.sifre2014_melt.Ch2o_ol; % residual H2O in Ol
-    
-    % add to electric methods list
-    VBR.in.electric.methods_list={'jones2012_ol','SEO3_ol'};
-    
-    % call VBR_spine
-    [VBR] = VBR_spine(VBR);
-    
+
     % Mixing Model, Hashin-Shtrikman 
-    VBR.in.SV.phi = VBR.out.electric.sifre2014_melt.phi;
     VBR = ec_HS1962(VBR,VBR.out.electric.jones2012_ol.esig,VBR.out.electric.sifre2014_melt.esig);
 
     % plot subplots
@@ -168,7 +158,7 @@ for id =1:numel(Cco2)
     shading interp
     hold on
     colormap("hsv")
-    [lines, hand] = contourf(x*100,y-273,log10(VBR.out.electric.HSup.esig),'k', 'ShowText','on');
+    [lines, hand] = contourf(x*100,y-273,log10(VBR.out.electric.HS.esig_up),'k', 'ShowText','on');
     cb = colorbar();
     cb.Label.String = 'log(Sigma) (S/m)';
     cb.Label.FontWeight = "bold";
@@ -177,7 +167,7 @@ for id =1:numel(Cco2)
     xticks([0.01 0.02 0.05 0.1 0.2 0.5 1 2 5 10])
     hand.LevelStep = 0.1;
     hand.TextList = [-2.5:0.5:0.5];
-    title('Bulk H_{2}O = ' + string(Ch2o(id)) + ' p.p.m.,  Bulk CO_{2} = ' + string(Cco2(id)) + ' p.p.m')
+    title('Bulk H_{2}O = ' + string(Ch2o(id)) + ' ppm,  Bulk CO_{2} = ' + string(Cco2(id)) + ' ppm')
     set(gca,"Xscale",'log')
 
 end

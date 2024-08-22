@@ -22,7 +22,7 @@ function naif2021_CB
     clear
     % set required state variables
     VBR.in.SV.T_K = (1200) + 273; % K, temperature
-    VBR.in.SV.Ch2o = [0, logspace(0,3,31)]; % ppm, water content
+    VBR.in.SV.Ch2o_ol = [0, logspace(0,3,31)]; % ppm, water content
     
     % add to electric methods list
     VBR.in.electric.methods_list={'yosh2009_ol','SEO3_ol','poe2010_ol','wang2006_ol','UHO2014_ol','jones2012_ol'};
@@ -31,16 +31,16 @@ function naif2021_CB
     [VBR] = VBR_spine(VBR);
     
     % plot Figure
-    sz = size(VBR.in.SV.Ch2o);
-    dry = repmat(VBR.out.electric.SEO3_ol.esig, sz(1), sz(2)); % SEO3 Ol (anhydrous Ol conduction)
+    sz = size(VBR.in.SV.Ch2o_ol);
+    dry = repmat(VBR.out.electric.SEO3_ol.esig, sz(1), sz(2)); % SEO3 (anhydrous Ol conduction)
     
     fig = figure("Name",'Naif_2021');
-    loglog(VBR.in.SV.Ch2o, 1./VBR.out.electric.yosh2009_ol.esig,  "LineWidth", 2.5), hold on
-    loglog(VBR.in.SV.Ch2o, 1./dry, "LineWidth", 2.5)
-    loglog(VBR.in.SV.Ch2o, 1./VBR.out.electric.poe2010_ol.esig, "LineWidth", 2.5)
-    loglog(VBR.in.SV.Ch2o, 1./VBR.out.electric.wang2006_ol.esig, "LineWidth", 2.5)
-    loglog(VBR.in.SV.Ch2o, 1./VBR.out.electric.UHO2014_ol.esig, "LineWidth",2.5)
-    loglog(VBR.in.SV.Ch2o, 1./VBR.out.electric.jones2012_ol.esig,"LineWidth", 2.5)
+    loglog(VBR.in.SV.Ch2o_ol, 1./VBR.out.electric.yosh2009_ol.esig,  "LineWidth", 2.5), hold on
+    loglog(VBR.in.SV.Ch2o_ol, 1./dry, "LineWidth", 2.5)
+    loglog(VBR.in.SV.Ch2o_ol, 1./VBR.out.electric.poe2010_ol.esig, "LineWidth", 2.5)
+    loglog(VBR.in.SV.Ch2o_ol, 1./VBR.out.electric.wang2006_ol.esig, "LineWidth", 2.5)
+    loglog(VBR.in.SV.Ch2o_ol, 1./VBR.out.electric.UHO2014_ol.esig, "LineWidth",2.5)
+    loglog(VBR.in.SV.Ch2o_ol, 1./VBR.out.electric.jones2012_ol.esig,"LineWidth", 2.5)
     
     name = {'yosh2009_{ol}','SEO3_{ol}','poe2010_{ol}','wang2006_{ol}','UHO2014_{ol}','jones2012_{ol}'};
     legend(name)
@@ -57,7 +57,7 @@ function yosh2009_CB
     clear 
     % set required state variables
     VBR.in.SV.T_K = linspace(500,2000,16); % K, temperature
-    VBR.in.SV.Ch2o = [0, logspace(1,4,4)]'; % ppm, water content (opposite vector orientation)
+    VBR.in.SV.Ch2o_ol = [0, logspace(1,4,4)]'; % ppm, water content (opposite vector orientation)
     VBR.in.electric.methods_list={'yosh2009_ol'};
     
     % call VBR_spine
@@ -65,7 +65,7 @@ function yosh2009_CB
     
     % plot Figure
     fig = figure("Name",'Yoshino_2009');
-    for  i = 1:length(VBR.in.SV.Ch2o)
+    for  i = 1:length(VBR.in.SV.Ch2o_ol)
     semilogy(1d3./VBR.in.SV.T_K, VBR.out.electric.yosh2009_ol.esig(i,:), "LineWidth",2.5), hold on
     end
     legend(string([0, logspace(1,4,4)]./1d4) + " wt%")
@@ -117,7 +117,7 @@ function poe2010_CB
     clear
     % set required state variables
     VBR.in.SV.T_K(:,1) = linspace(500,1600,12) + 273; % K, temperature (opposite vector orientation)
-    VBR.in.SV.Ch2o = logspace(3,0,7); % ppm, water content
+    VBR.in.SV.Ch2o_ol = logspace(3,0,7); % ppm, water content
     
     % add to electric methods list
     VBR.in.electric.methods_list={'poe2010_ol'};
@@ -128,7 +128,7 @@ function poe2010_CB
     % plot figure
     fig = figure("Name",'Poe_2010');
     subplot(1,2,1)
-        for  i = 1:length(VBR.in.SV.Ch2o)
+        for  i = 1:length(VBR.in.SV.Ch2o_ol)
         semilogy(1./VBR.in.SV.T_K, VBR.out.electric.poe2010_ol.esig_H(:,i), "LineWidth",2.5), hold on
         end
     legend(string(round(logspace(3,0,7),2,"significant")) + 'ppm H_{2}O',"Location","southwest")
@@ -137,7 +137,7 @@ function poe2010_CB
     title('Hydrous Ol Conductivity')
 
     subplot(1,2,2)
-    [x, y] = meshgrid(log10(VBR.in.SV.Ch2o),VBR.in.SV.T_K);
+    [x, y] = meshgrid(log10(VBR.in.SV.Ch2o_ol),VBR.in.SV.T_K);
     pcolor(x,y,log10(VBR.out.electric.poe2010_ol.esig))
     set(gca, "YTick", [800:200:2000])
     shading interp  
@@ -160,7 +160,7 @@ function wang2006_CB
     clear
     % set required state variables
     VBR.in.SV.T_K(:,1) = [linspace(1273,873, 5) 1673]; % K, temperature (opposite vector orientation)
-    VBR.in.SV.Ch2o = 1d4.*logspace(-4,0, 21); % ppm, water content
+    VBR.in.SV.Ch2o_ol = 1d4.*logspace(-4,0, 21); % ppm, water content
     
     % add to electric methods list
     VBR.in.electric.methods_list={'wang2006_ol'};
@@ -172,7 +172,7 @@ function wang2006_CB
     fig = figure("Name",'Wang_2006');
     subplot(2,1,1)
     for i = 1:length(VBR.in.SV.T_K)-1
-        loglog(VBR.in.SV.Ch2o./1d4, VBR.out.electric.wang2006_ol.esig(i,:),"LineWidth", 2.5), hold on
+        loglog(VBR.in.SV.Ch2o_ol./1d4, VBR.out.electric.wang2006_ol.esig(i,:),"LineWidth", 2.5), hold on
     end
     legend(string(linspace(1273,873, 5)) + ' K' ,"Location","best");
     xlabel('Water Content (wt %)')
@@ -180,16 +180,16 @@ function wang2006_CB
     set(gca,'YTick', [0.0001 0.001 0.01 0.1 1 10]);
 
     subplot(2,1,2)
-    dry = repmat(VBR.out.electric.wang2006_ol.esig_A(end),1,numel(VBR.in.SV.Ch2o)); % Wang Andhydrous Ol conduction
-    loglog(VBR.in.SV.Ch2o./1d4,dry, "LineWidth", 2.5); hold on
-    [x, y] = meshgrid(VBR.in.SV.Ch2o./1d4, logspace(-4,1, numel(VBR.in.SV.Ch2o)));
+    dry = repmat(VBR.out.electric.wang2006_ol.esig_A(end),1,numel(VBR.in.SV.Ch2o_ol)); % Wang Andhydrous Ol conduction
+    loglog(VBR.in.SV.Ch2o_ol./1d4,dry, "LineWidth", 2.5); hold on
+    [x, y] = meshgrid(VBR.in.SV.Ch2o_ol./1d4, logspace(-4,1, numel(VBR.in.SV.Ch2o_ol)));
     ineq = (y>1d-2) & (y<1d-1);
     ineq = double(ineq);
     ineq(ineq==0) = NaN ;
     pcolor(x, y,ineq);
     shading interp
     colormap('gray')
-    loglog(VBR.in.SV.Ch2o./1d4,VBR.out.electric.wang2006_ol.esig(end,:), "LineWidth", 2.5);
+    loglog(VBR.in.SV.Ch2o_ol./1d4,VBR.out.electric.wang2006_ol.esig(end,:), "LineWidth", 2.5);
     xlim([1d-4 1d-1])
     ylim([1d-4 1d1])
     legend('Dry Olivine','Upper Mantle Conductivity Range','Wang2006',"Location","best")
@@ -206,7 +206,7 @@ function UHO2014_CB
     clear 
     % set required state variables
     VBR.in.SV.T_K(:,1) = [1200 600] + 273; % K, temperture (opposite vector orientation)
-    VBR.in.SV.Ch2o = logspace(0,4,17); % ppm, water content
+    VBR.in.SV.Ch2o_ol = logspace(0,4,17); % ppm, water content
     
     % add to electric methods list
     VBR.in.electric.methods_list={'UHO2014_ol'};
@@ -217,7 +217,7 @@ function UHO2014_CB
     % plot figure
     fig = figure("Name",'UHO_2014');
     subplot(2,1,1)
-    loglog(VBR.in.SV.Ch2o, VBR.out.electric.UHO2014_ol.esig(1,:),"LineWidth",2.5)
+    loglog(VBR.in.SV.Ch2o_ol, VBR.out.electric.UHO2014_ol.esig(1,:),"LineWidth",2.5)
     xlabel('C_{H_{2}O} (wt. ppm)')
     ylabel('\sigma (S/m)')
     title('Hydrous Conductivity @1200 C')
@@ -225,7 +225,7 @@ function UHO2014_CB
     ylim([1d-3 1d0])
 
     subplot(2,1,2)
-    loglog(VBR.in.SV.Ch2o, VBR.out.electric.UHO2014_ol.esig(2,:),"LineWidth",2.5)
+    loglog(VBR.in.SV.Ch2o_ol, VBR.out.electric.UHO2014_ol.esig(2,:),"LineWidth",2.5)
     xlabel('C_{H_{2}O} (wt. ppm)')
     ylabel('\sigma (S/m)')
     title('Hydrous Conductivity @ 600 C')
@@ -241,7 +241,7 @@ function Jones2012_CB
     clear
     % set required state variables
     VBR.in.SV.T_K = linspace(600,1200,61) + 273; % K, temperature
-    VBR.in.SV.Ch2o(:,1) = logspace(-1,4,61); % ppm, water content (opposite vector orientation)
+    VBR.in.SV.Ch2o_ol(:,1) = logspace(-1,4,61); % ppm, water content (opposite vector orientation)
     
     % add to electric methods list
     VBR.in.electric.methods_list={'jones2012_ol'};
@@ -251,15 +251,14 @@ function Jones2012_CB
 
     % plot figure
     fig = figure("Name",'Jones_2012');
-    [x, y] = meshgrid(VBR.in.SV.T_K,VBR.in.SV.Ch2o);
-    pcolor(x-273,y,log10(VBR.out.electric.jones2012_ol.esig))
-    xlim([600 1200])
-    ylim([0 1000])
+    [x, y] = meshgrid(VBR.in.SV.T_K,VBR.in.SV.Ch2o_ol);
     shading interp
     hold on
-    colormap("hsv")
-    [lines, hand] = contour(x-273,y,log10(VBR.out.electric.jones2012_ol.esig),'k', 'ShowText','on');
-    hand.LevelList = [-0.5:-0.25:-3 -3.5:-0.5:-6];
+    colormap("jet")
+    [lines, hand] = contourf(x-273,y,log10(VBR.out.electric.jones2012_ol.esig),'k', 'ShowText','on');
+    xlim([600 1200])
+    ylim([0 1000])
+    hand.LevelList = [-0.5 -1.25:-0.25:-3.5 -5.5];
     cb = colorbar();
     cb.Label.String = 'log(Sigma) (S/m)';
     cb.Label.FontWeight = "bold";

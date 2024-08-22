@@ -55,7 +55,8 @@ function VBR = runVBR(SVs,VBRsettings);
 
   VBR.in.SV=SVs;
   VBR.in.SV.f=VBRsettings.freqs;
-  VBR.in.SV.phi= VBRsettings.phi0 * (SVs.T_K>=SVs.Tsolidus_K); % melt fraction
+  VBR.in.SV.mf= VBRsettings.mf0 * (SVs.T_K>=SVs.Tsolidus_K); % melt fraction
+  VBR = ec_vol2part(VBR, 'sifre2014','vol'); % Ch2o and Cco2 partitioning between ol & melt phases
   disp('Calculating material properties....')
   [VBR] = VBR_spine(VBR) ;
 end

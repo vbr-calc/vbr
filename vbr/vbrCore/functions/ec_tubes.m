@@ -1,31 +1,28 @@
 function [VBR] = ec_tubes(VBR, phase1, phase2, ~) 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  %
-  % [ VBR ] = ec_tube( VBR )
-  %
-  % TUBES geophysical mixing model for electrical conductivity of 2 phases
-  %
-  % Parameters:
-  % ----------
-  % VBR    the VBR structure
-  %
-  % Output:
-  % ------
-  % VBR    the VBR structure, with VBR.out.electric.tubes.esig()
-  %              & VBR.out.electric.tubes.method{}
-  %           
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  
-  % read in electric parameters
-  phi = VBR.in.SV.phi; % v_f
+%
+% [ VBR ] = ec_tube( VBR )
+%
+% Geophysical mixing model of continous tubes of melt
+%     arranged in an ordely fashion
+%
+% Parameters:
+% ----------
+% VBR    the VBR structure
+%
+% Output:
+% ------
+% VBR    the VBR structure, with VBR.out.electric.tubes.esig
+%           
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  % Calculations
-  esig = (1/3)*phi.*phase2 + (1-phi).*phase1; % S/m
-  tubes.esig = esig; 
-
-  % Store in VBR structure
-  VBR.out.electric.tubes = tubes;
-
+    % read in phi
+    phi = VBR.in.SV.phi; % volume fraction, melt
+    
+    % Calculations
+    esig = (1/3)*phi.*phase2 + (1-phi).*phase1;
+    
+    % Store in VBR structure
+    tubes.esig = esig; % S/m, conductivity bulk
+    VBR.out.electric.tubes = tubes;
 end
-
-  
