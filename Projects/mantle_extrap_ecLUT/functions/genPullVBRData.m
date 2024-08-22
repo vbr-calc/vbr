@@ -1,4 +1,4 @@
-function VBR = genPullVBRdata(SVs,vbrboxname,VBRsettings)
+function VBR = genPullVBRData(SVs,vbrboxname,VBRsettings)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % Box = genPullVBRdata(SVs,vbrboxname,VBRsettings)
   %
@@ -29,7 +29,7 @@ function VBR = genPullVBRdata(SVs,vbrboxname,VBRsettings)
 
 end
 
-function VBR = runVBR(SVs,VBRsettings);
+function VBR = runVBR(SVs,VBRsettings)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % Box = runVBR(Box,VBRsettings)
   %
@@ -46,17 +46,8 @@ function VBR = runVBR(SVs,VBRsettings);
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   % Load and set shared VBR parameters
-  VBR.in.elastic.methods_list={'anharmonic','anh_poro'};
-  VBR.in.viscous.methods_list={'HK2003'};
-  VBR.in.anelastic.methods_list=VBRsettings.ane_meths;
-  VBR.in.elastic.anharmonic=Params_Elastic('anharmonic'); % unrelaxed elasticity
-  VBR.in.elastic.anharmonic.Gu_0_ol = 75.5; % olivine reference shear modulus [GPa]
-  VBR.in.electric.methods_list={'SEO3_ol','sifre2014_melt'};
-
+  VBR.in.electric.methods_list=VBRsettings.ele_meths;
   VBR.in.SV=SVs;
-  VBR.in.SV.f=VBRsettings.freqs;
-  VBR.in.SV.mf= VBRsettings.mf0 * (SVs.T_K>=SVs.Tsolidus_K); % melt fraction
-  VBR = ec_vol2part(VBR, 'sifre2014','vol'); % Ch2o and Cco2 partitioning between ol & melt phases
   disp('Calculating material properties....')
-  [VBR] = VBR_spine(VBR) ;
+  [VBR] = VBR_spine(VBR);
 end

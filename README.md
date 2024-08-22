@@ -1,5 +1,4 @@
 # The Very Broadband Rheology (VBR) Calculator
-
 **Licensing**: MIT License (see end of this document)
 
 **Citing**: Please see the [How to Cite](#how-to-cite) section at the end of this document if using the VBRc for your research.

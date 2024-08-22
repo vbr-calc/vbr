@@ -45,7 +45,7 @@ function plotQBoxes(Box,figDir)
 
     fig=figure('Position', [10 10 700 400],'PaperPosition',[0,0,6,3],'PaperPositionMode','manual','DefaultAxesFontSize',8);
 
-    meths=meths=fieldnames(B.VBR.out.anelastic);
+    meths=fieldnames(B.VBR.out.anelastic);
     Nmeths=numel(meths);
     Nfreqs=numel(B.VBR.in.SV.f);
     for ifreq=1:Nfreqs
@@ -116,7 +116,7 @@ function plotVsBoxes(Box,figDir)
 
     fig=figure('Position', [10 10 700 400],'PaperPosition',[0,0,6,3],'PaperPositionMode','manual','DefaultAxesFontSize',8);
 
-    meths=meths=fieldnames(B.VBR.out.anelastic);
+    meths=fieldnames(B.VBR.out.anelastic);
     Nmeths=numel(meths);
     Nfreqs=numel(B.VBR.in.SV.f);
     for ifreq=1:Nfreqs

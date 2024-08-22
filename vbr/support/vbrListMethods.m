@@ -11,11 +11,13 @@ function vbrListMethods(single_prop)
   %
   % Parameters:
   % -----------
-  % single_prop: optional string, must be in 'anelastic', 'elastic' or 'viscous'
+  % single_prop: optional string, must be in 'anelastic', 'elastic', 'viscous' or
+  % 'electric'
   %
   % vbrListMethods() will print all methods
-  % vbrListMethods('viscous') will print only viscous methods 
+  % vbrListMethods('viscous') will print only viscous methods
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
     msg = ['DEPRECATION WARNING: vbrListMethods has been renamed to VBR_list_methods', ...
        ' vbrListMethods will be removed soon from ', ...
        'future version of the VBRc. Use VBR_list_methods to silence ', ...
