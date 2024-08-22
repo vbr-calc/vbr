@@ -6,8 +6,6 @@ function al_int = thermal_expansion_coefficient(T_K, FracFo)
     %
     % Parameters
     % ----------
-    % Rho : scalar or array
-    %     density in any units
     % T_K : scalar or array
     %     temperature in Kelvin
     % FracFo : scalar or array
@@ -15,8 +13,8 @@ function al_int = thermal_expansion_coefficient(T_K, FracFo)
     %
     % Output
     % -------
-    % Rho : scalar or array
-    %     density in same units as input density
+    % al_int : scalar or array
+    %     coefficient of thermal expansion
     %
     % References
     % ----------

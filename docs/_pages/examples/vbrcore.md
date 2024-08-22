@@ -18,3 +18,6 @@ Simple "Cookbook" (CB) scripts demonstrating various use cases of the VBR Calcul
 * `CB_011_meltEffects.m` [link](/vbr/examples/CB_011_meltEffects/)
 * `CB_012_simplecrust.m` [link](/vbr/examples/CB_012_simplecrust/)
 * `CB_013_G_K_inputs.m` [link](/vbr/examples/CB_013_G_K_inputs/)
+* `CB_014_xfit_premelt_extended.m` [link](/vbr/examples/CB_014_xfit_premelt_extended/)
+* `CB_015_analytical_andrade.m` [link](/vbr/examples/CB_015_analytical_andrade/)
+* `CB_016_complex_viscosity.m` [link](/vbr/examples/CB_016_complex_viscosity/)

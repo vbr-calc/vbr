@@ -1,10 +1,10 @@
 ---
 permalink: /vbrmethods/elastic/
-title: "Elastic Methods"
+title: 'Elastic Methods'
 toc: false
 ---
 
-The elastic methods displayed by `vbrListMethods` currently include:
+The elastic methods displayed by `VBR_list_methods` currently include:
 
 * `anharmonic` [documentation](/vbr/vbrmethods/el/anharmonic/): anharmonic scaling
 * `anh_poro` [documentation](/vbr/vbrmethods/el/anhporo/): poro-elastic scaling

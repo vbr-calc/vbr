@@ -106,10 +106,28 @@ function [VBR]=checkInput(VBR)
 
   % some optional state variable fields
   if ~isfield(VBR.in.SV,'Ch2o')
-    VBR.in.SV.Ch2o=zeros(size(VBR.in.SV.T_K)); % no effect when at 0
+      SV_size = get_SV_size(VBR.in.SV);
+      VBR.in.SV.Ch2o=zeros(SV_size); % no effect when at 0
   end
   if ~isfield(VBR.in.SV,'chi')
-    VBR.in.SV.chi=ones(size(VBR.in.SV.T_K)); % all olivine when 1
+      SV_size = get_SV_size(VBR.in.SV);
+      VBR.in.SV.chi=ones(SV_size); % all olivine when 1
   end
 
+end
+
+
+function SV_size = get_SV_size(SV)
+    fields = fieldnames(SV);
+    SV_size = 0;
+    for ifield = 1:numel(fields)
+        fld = fields{ifield};
+        if strcmp(fld, 'f') == 0
+            % not frequency, use this one
+            SV_size = size(SV.(fld));
+        end
+    end
+    if SV_size == 0
+        error("Could not determine size of state variable arrays.")
+    end
 end

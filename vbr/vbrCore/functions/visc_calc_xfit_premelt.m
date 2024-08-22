@@ -16,7 +16,7 @@ function VBR = visc_calc_xfit_premelt(VBR)
   %       if the eta_melt_free_method parameter for this method is set to
   %       'xfit_premelt', will use the exact viscosity from Yamauchi and
   %       Takei for the melt-free viscosity, otherwise eta_melt_free_method can
-  %       be set to any VBR viscous method, see vbrListMethods()
+  %       be set to any VBR viscous method, see VBR_list_methods()
   %
   % Output:
   % -------
@@ -56,6 +56,10 @@ function VBR = visc_calc_xfit_premelt(VBR)
     VBRtemp=VBR;
     VBRtemp.in.viscous.methods_list={visc_method}; % only use one method
     VBRtemp.in.SV.phi=0; % need melt-free viscosity
+    % additionally, water effects are accounted for by the homologous temperature
+    % scaling in the A_n factor, so **also** need to set the water content to 0
+    % for getting the reference viscosity. see https://github.com/vbr-calc/vbr/issues/96
+    VBRtemp.in.SV.Ch2o=0;
     VBRtemp=spineGeneralized(VBRtemp,'viscous');
     eta_meltfree = VBRtemp.out.viscous.(visc_method).diff.eta ;
   end
@@ -130,7 +134,7 @@ function A_n = calcA_n(Tn,phi,params)
   T_eta=params.T_eta;
   gamma=params.gamma;
   lambda=params.alpha; % rename to be consistent with YT2016 nomenclature
-
+  B = params.B;
   A_n=zeros(size(Tn));
 
   A_n(Tn<T_eta)=1;
@@ -138,6 +142,6 @@ function A_n = calcA_n(Tn,phi,params)
   msk=(Tn >= T_eta) & (Tn < 1);
   A_n(msk)=exp(-(Tn(msk)-T_eta)./(Tn(msk)-Tn(msk)*T_eta)*log(gamma));
 
-  msk=(Tn > 1);
-  A_n(msk)=exp(-lambda*phi(msk))/gamma;
+  msk=(Tn >= 1);
+  A_n(msk)=exp(-lambda*phi(msk))/gamma/B;
 end

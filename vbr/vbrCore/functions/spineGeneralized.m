@@ -32,7 +32,7 @@ function [VBR,telapsed]=spineGeneralized(VBR,property)
       disp('')
       disp('WARNING!!!!!')
       disp(['    ',meth,' is not a valid method for ',property])
-      disp('    run vbrListMethods() for valid list')
+      disp('    run VBR_list_methods() for valid list')
       disp('')
     end
   end

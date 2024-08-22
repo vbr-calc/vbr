@@ -45,7 +45,26 @@ disp(VBR.in.viscous.xfit_premelt)
 
 ### eta_melt_free_method
 
-The parameter, `VBR.in.viscous.xfit_premelt.eta_melt_free_method`, controls what viscosity method is used to calculate the melt free viscosity. By default, this is set to `xfit_premelt`, in which case it uses the upper mantle fit directly from Yamauchi and Takei (2016). If set to one of the other viscosity mtehods, `HK2003` or `HZK2011`, then the melt free viscosity is calculated using those methods with melt fraction set to 0 and then the near-solidus pre-melting effect is then multiplied on.
+The parameter, `VBR.in.viscous.xfit_premelt.eta_melt_free_method`, controls what viscosity method is used to calculate 
+the melt free viscosity. By default, this is set to `xfit_premelt`, in which case it uses the upper mantle fit directly 
+from Yamauchi and Takei (2016). If set to one of the other viscosity mtehods, `HK2003` or `HZK2011`, then the melt 
+free viscosity is calculated using those methods with melt fraction set to 0 and then the near-solidus pre-melting 
+effect is then multiplied on.
+
+
+### Grain size dependence 
+
+Note that in section 4.4 of Yamauchi and Takei (2016), YT2016 fit for H, V following 
+Priestly & McKenzie (2013) with `dg_um = dg_um_r` (i.e., the grain size is at the 
+reference grain size). This results in a viscosity relationship independent of grain size. 
+The VBRc sets `dg_um_r` to 4mm, the mean grain size of the upper mantle calculated in
+Priestly & McKenzie (2013). To **exactly** match Yamauchi and Takei (2016), you should 
+set the grain size to the value of the reference grain size (e.g., `VBR.in.SV.dg_um = 4000.`).
+
+```matlab
+VBR.in.viscous.xfit_premelt = Params_Viscous('xfit_premelt');
+VBR.in.viscous.xfit_premelt.m = 0;
+```
 
 ## Output
 Output is stored in `VBR.out.viscous.xfit_premelt`. Unlike the other viscous methods, `xfit_premelt` only returns a diffusion creep viscosity sub-structure:
@@ -63,3 +82,7 @@ Output is stored in `VBR.out.viscous.xfit_premelt`. Unlike the other viscous met
   [2,1] = eta_meltfree
 }
 ```
+
+Note that `eta_meltfree` is both the melt-free **and** volatile-free viscosity: the pre-melting method 
+incorprates weakening from volatiles in the solidus depression. To incorporate effects of volatiles, 
+should calculate a volatile-dependent solidus. 

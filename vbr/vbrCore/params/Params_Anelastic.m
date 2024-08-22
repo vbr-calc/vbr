@@ -18,7 +18,8 @@ function params = Params_Anelastic(method,GlobalParams)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   % available anelastic methods
-  params.possible_methods={'eburgers_psp'; 'andrade_psp'; 'xfit_mxw'; 'xfit_premelt'};
+  params.possible_methods={'eburgers_psp'; 'andrade_psp'; 'xfit_mxw'; 'xfit_premelt'; ...
+                           'andrade_analytical';};
 
   if strcmp(method,'eburgers_psp')
     % extended burgers parameters
@@ -102,7 +103,8 @@ function params = Params_Anelastic(method,GlobalParams)
 
   if strcmp(method,'xfit_premelt')
     % xfit_premelt parameters
-    params.citations={'Yamauchi and Takei, 2016, J. Geophys. Res. Solid Earth, https://doi.org/10.1002/2016JB013316'};
+    params.citations={'Yamauchi and Takei, 2016, J. Geophys. Res. Solid Earth, https://doi.org/10.1002/2016JB013316';
+                      'Yamauchi and Takei, 2024, J. Geophys. Res. Solid Earth, https://doi.org/10.1029/2023JB027738'};
     params.func_name='Q_xfit_premelt'; % the name of the matlab function
 
     % high temp background spectrum
@@ -110,8 +112,7 @@ function params = Params_Anelastic(method,GlobalParams)
     params.A_B=0.664; % high temp background dissipation strength
 
     % pre-melting dissipation peak settings:
-    params.tau_pp=6*1e-5; % peak center
-    params.Beta=0; %
+    params.tau_pp=6*1e-5; % peak center, table 4 of YT16, paragraph before eq 10
     params.Ap_fac_1=0.01;
     params.Ap_fac_2=0.4;
     params.Ap_fac_3=0.03;
@@ -120,9 +121,33 @@ function params = Params_Anelastic(method,GlobalParams)
     params.sig_p_fac_3=7;
     params.Ap_Tn_pts=[0.91,0.96,1]; % Tn cuttoff points
     params.sig_p_Tn_pts=[0.92,1]; % Tn cuttoff points
+
+    % note: sig_p_fac2 and Ap_fac_2 above are combinations of the other constants
+    % and appear in the original papers as:
+    % sig_p_fac2 = (sig_p_fac_3-sig_p_fac_1) / (sig_p_Tn_pts(2) - sig_p_Tn_pts(1))
+    % Ap_fac_2 = (Ap_fac_3-Ap_fac_1) / (Ap_Tn_pts(3) - Ap_Tn_pts(1))
+
+    % melt effects. The following beta values are set to 0.0 within Q_xfit_premelt
+    % if include_direct_melt_effect = 0, corresponding to YT2016. If set to 1,
+    % the scaling will follow YT2024. Additionally, include_direct_melt_effect=1
+    % will trigger different poro-elastic behavior.
+    params.include_direct_melt_effect = 0; % set to 1 to include YT2024 melt effect
+    params.Beta=1.38; % this is determined in YT2024, named Beta_P in YT2024 eq 5
+    params.Beta_B=6.94; % YT2024 only
+    params.poro_Lambda = 4.0; % Table 6 YT2024,
     params.description='pre-melting scaling';
   end
 
+  if strcmp(method, 'andrade_analytical')
+      params.description='analytical Andrade model';
+      params.citations = {'Lau and Holtzman, 2019, GRL. https://doi.org/10.1029/2019GL083529';};
+      params.func_name='Q_andrade_analytical';
+      params.alpha = 1/3; % the andrade exponent
+      params.Beta = 1e-4; % andrade pre-factor
+      params.viscosity_method = 'calculated'; % one of 'calculated' or 'fixed'
+      params.viscosity_method_mechanism = 'diff'; % one of the viscous deformation mechanism structure fields
+      params.eta_ss = 1e23; % only used if params.viscosity_method == 'fixed'
+  end
   % set steady-state melt dependence for diff. creep (i.e., exp(-alpha * phi))
   HK2003 = Params_Viscous('HK2003'); % viscous parameters
   params.melt_alpha = HK2003.diff.alf ;

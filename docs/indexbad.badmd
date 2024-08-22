@@ -68,7 +68,7 @@ VBR.out.anelastic.andrade_psp
 ```
 beneath which there will be fields for the output for the calculations, e.g., ```VBR.out.anelastic.andrade_psp.Q``` for quality factor Q (attenuation=Q<sup>-1</sup>).
 
-After VBR is initialized, a list of available methods can be printed by running `vbrListMethods()`. For theoretical background on the different methods, see the accompanying VBR Calculator Manual.
+After VBR is initialized, a list of available methods can be printed by running `VBR_list_methods()`. For theoretical background on the different methods, see the accompanying VBR Calculator Manual.
 
 ### Initialize the State Variables
 
