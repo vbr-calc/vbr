@@ -12,7 +12,7 @@ function VBR_list_methods(single_prop)
   % VBR_list_methods('viscous') will print only viscous methods 
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  param_types={'anelastic';'elastic';'viscous'};
+  param_types={'anelastic';'elastic';'viscous';'electric'};
   if exist('single_prop', 'var')
     param_type=lower(single_prop);
     if any(strcmp(param_types,param_type))
