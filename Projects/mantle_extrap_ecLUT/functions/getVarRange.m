@@ -26,6 +26,7 @@ SVflds={'T_K';'Ch2o';'mf'};
     var=squeeze(VBR.out.electric.(meth).(target_var));
     dvar=abs(var-target_val)./target_val*100;
     ind=dvar<=cutoff;
+    sum(ind,"all")
     Tkeep=VBR.in.SV.T_K(ind);
     Ckeep=VBR.in.SV.Ch2o(ind);
     Mkeep=VBR.in.SV.mf(ind);

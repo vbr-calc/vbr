@@ -48,7 +48,6 @@ function VBR = runVBR(SVs,VBRsettings)
   % Load and set shared VBR parameters
   VBR.in.electric.methods_list=VBRsettings.ele_meths;
   VBR.in.SV=SVs;
-  VBR = ec_vol2part(VBR, 'sifre2014','vol'); % Ch2o and Cco2 partitioning between ol & melt phases
   disp('Calculating material properties....')
   [VBR] = VBR_spine(VBR);
 end

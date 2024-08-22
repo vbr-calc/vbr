@@ -22,8 +22,13 @@ fprintf('\nBuilding State Variable Ranges\n')
 [SVs, Ranges] = genSVranges();
 
 % run Box through VBR calculator (or load if it exists)
-VBRsettings.ele_meths={'yosh2009_ol','SEO3_ol','poe2010_ol','wang2006_ol','UHO2014_ol','jones2012_ol','sifre2014_melt','ni2011_melt','gail2008_melt'};
-VBR = genPullVBRData(SVs,fullfile(pwd,'data/VBR_Box.mat'),VBRsettings);
+VBR.in.SV=SVs;
+VBR.in.electric.methods_list={'yosh2009_ol','SEO3_ol','poe2010_ol','wang2006_ol','UHO2014_ol','jones2012_ol'};
+% VBR = genPullVBRData(SVs,fullfile(pwd,'data/VBR_Box.mat'),VBRsettings);
+VBR = VBR_spine(VBR);
+VBR = ec_vol2part(VBR, 'sifre2014','vol'); % Ch2o and Cco2 partitioning between ol & melt phases
+VBR.in.electric.methods_list={'sifre2014_melt','ni2011_melt','gail2008_melt'};
+VBR = VBR_spine(VBR);
 VBR = HS_mixing(VBR); % Hashin-Shtrikman for melt mixing model
 
 % Generate Variable Ranges
@@ -32,6 +37,6 @@ cutoffperc=5; % cutoffperc./100
 PossibleRanges=getVarRange(VBR,esigtarget,'esig',cutoffperc);
 
 % build figures and comparisons
-buildComparisons2(VBR,PossibleRanges,fullfile(pwd,'figures/'));
+buildComparisons(VBR,PossibleRanges,fullfile(pwd,'figures/'));
 
 [index, uho_, poe_] = check_val(VBR);
