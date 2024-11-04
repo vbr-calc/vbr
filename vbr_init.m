@@ -56,7 +56,9 @@ function vbr_init(varargin)
 
   if success
     if Options.quiet==0
-     disp('VBR calculator added to working path');
+        version = vbr_version();
+        msg = ['VBRc version ', version.version, ' added to working path'];
+        disp(msg);
    end
   else
    disp('WARNING: VBR calculator (or its components) is not in path')
