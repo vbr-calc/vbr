@@ -5,6 +5,8 @@ on:
     paths:
     - "**.m"
     - ".github/workflows/build-test-octave.yaml"
+  schedule:
+      - cron: "30  1  *  *  1"
 
 # note: this test uses a docker image with the latest gnu octave installed. The
 # octave images are maintained by https://github.com/gnu-octave/docker and this
