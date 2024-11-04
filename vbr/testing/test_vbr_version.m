@@ -27,6 +27,20 @@ function TestResult = test_vbr_version()
         TestResult.fail_message = msg;
     end
 
+    if isfield(version, 'is_development') == 0
+        TestResult.passed = false;
+        msg = '         vbr_version output missing is_development field';
+        disp(msg)
+        TestResult.fail_message = msg;
+    elseif version.is_development == 1
+        if strfind(version.version, 'dev') == 0
+            TestResult.passed = false;
+            msg = '         vbr_version missing dev tag';
+            disp(msg)
+            TestResult.fail_message = msg;
+        end
+    end
+
     % also check that the version gets attached to the VBR in a call
     VBR.in.elastic.methods_list={'anharmonic'};
 
