@@ -13,6 +13,11 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v3
+      # The exit status for grep -q is 0 if a match is found, 1 if not fund
+      - name: confirm that Version.is_development is 0
+        run: grep -q "Version.is_development = 0;" vbr/support/vbr_version.m
+      - name: confirm that the release tag matches release_notes.md
+        run: grep -q ${{ github.ref }} release_notes.md
       - uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
