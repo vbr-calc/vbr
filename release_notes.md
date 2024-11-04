@@ -9,6 +9,7 @@
 * add framework for handling temporary files in test suite
 * add convenience function, `full_nd`, to create filled arrays
 * add a development tag to version structure
+* add weekly test runs
 
 ## Bug fix
 * fix for undefined behavior of pre-melt scaling at Tn == 1.0
