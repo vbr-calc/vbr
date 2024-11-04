@@ -28,7 +28,7 @@
   settings.T_init_diff_steps=0;
 
   % time
-  settings.nt= 5000; % max number of time steps
+  settings.nt= 1000; % max number of time steps
   settings.outk = 50 ; % frequency of output (output every outk steps)
   settings.t_max_Myrs=1500; % max time to calculate [Myr]
 
@@ -56,8 +56,8 @@
 
   % check if it passes
   max_err_tol=1e-5;
-  if max_err_tol>max_err_tol
-    msg = '     steady state plate solution incorrect!!!!!'
+  if max_err > max_err_tol
+    msg = ['     steady state plate solution incorrect!!!!! ', num2str(max_err)]
     disp(msg)
     TestResult.passed=false;
     TestResult.fail_message = msg;

@@ -140,7 +140,10 @@ function params = Params_Anelastic(method,GlobalParams)
 
   if strcmp(method, 'andrade_analytical')
       params.description='analytical Andrade model';
-      params.citations = {'Lau and Holtzman, 2019, GRL. https://doi.org/10.1029/2019GL083529';};
+      params.citations = {...
+           'Andrade, 1910, Proceedings of the Royal Society of London, https://doi.org/10.1098/rspa.1910.0050'; ...
+           'Cooper, 2002, Reviews in mineralogy and geochemistry, https://doi.org/10.2138/gsrmg.51.1.253'; ...
+           'Lau and Holtzman, 2019, GRL. https://doi.org/10.1029/2019GL083529';};
       params.func_name='Q_andrade_analytical';
       params.alpha = 1/3; % the andrade exponent
       params.Beta = 1e-4; % andrade pre-factor

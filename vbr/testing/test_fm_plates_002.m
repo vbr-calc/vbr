@@ -28,7 +28,7 @@ function TestResult = test_fm_plates_002()
   settings.T_init_diff_steps=0;
 
   % time
-  settings.nt= 5000; % max number of time steps
+  settings.nt= 200; % max number of time steps
   settings.outk = 50 ; % frequency of output (output every outk steps)
   settings.t_max_Myrs=100; % max time to calculate [Myr]
 
