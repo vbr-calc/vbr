@@ -61,11 +61,6 @@ The VBRc sets `dg_um_r` to 4mm, the mean grain size of the upper mantle calculat
 Priestly & McKenzie (2013). To **exactly** match Yamauchi and Takei (2016), you should 
 set the grain size to the value of the reference grain size (e.g., `VBR.in.SV.dg_um = 4000.`).
 
-```matlab
-VBR.in.viscous.xfit_premelt = Params_Viscous('xfit_premelt');
-VBR.in.viscous.xfit_premelt.m = 0;
-```
-
 ## Output
 Output is stored in `VBR.out.viscous.xfit_premelt`. Unlike the other viscous methods, `xfit_premelt` only returns a diffusion creep viscosity sub-structure:
 
