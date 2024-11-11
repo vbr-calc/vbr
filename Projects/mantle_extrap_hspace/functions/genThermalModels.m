@@ -41,6 +41,7 @@ function [SVs,HF] = genThermalModels()
   SVs.sig_MPa = 0.1 * ones(sz); % differential stress [MPa]
   SVs.phi = 0.0 * ones(sz); % melt fraction
   SVs.dg_um = 0.01 * 1e6 * ones(sz); % grain size [um]
+  SVs.Ch2o = 100 * ones(sz); % water content [ppm]
 
   [Solidus] = SoLiquidus(SVs.P_GPa*1e9,zeros(sz),zeros(sz),'hirschmann');
   SVs.Tsolidus_K=Solidus.Tsol+273;

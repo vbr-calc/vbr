@@ -7,17 +7,17 @@ function param_func = fetchParamFunction(property)
   %
   % Parameters:
   % ----------
-  %  property: string ('elastic','anelastic','viscous')
+  %  property: string ('elastic','anelastic','viscous','electric')
   %
   % Output:
   % ------
   %  the parameter file name
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  if strcmp(property,'elastic')
-    param_func='Params_Elastic';
-  elseif strcmp(property,'anelastic')
-    param_func='Params_Anelastic';
-  elseif strcmp(property,'viscous')
-    param_func='Params_Viscous';
+  possible = {'elastic'; 'anelastic'; 'viscous'; 'electric'};
+  if any(strcmp(possible,property))
+    param_func = ['Params_', upper(property(1)), property(2:end)];
+  else
+    msg = 'Unexpected property type in fetchParamFunction';
+    error(msg)
   end
 end
