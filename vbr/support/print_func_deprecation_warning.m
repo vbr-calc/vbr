@@ -1,4 +1,4 @@
-function msg = print_func_deprecation_warning(func_old, func_new, dep_type)
+function msg = print_func_deprecation_warning(func_old, func_new, dep_type, print_it)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  msg = print_func_deprecation_warning(func_old, func_new, dep_type)
 %
@@ -12,8 +12,12 @@ function msg = print_func_deprecation_warning(func_old, func_new, dep_type)
 %    the name of the new function, string
 %  dep_type
 %    deprecation type, must match one of ['renamed', ]
+%  print_it
+%    Optional bool, if true (default), will print the message.
 %
 %  Returns
+%  -------
+%
 %  str
 %    the deprecation message
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -24,5 +28,12 @@ function msg = print_func_deprecation_warning(func_old, func_new, dep_type)
                ' will be removed in a future version of the VBRc. Use ', ...
                func_new, ' to silence this warning.\n'];
     end
-    fprintf(msg)
+
+    if (~exist('print_it', 'var'))
+        print_it = true;
+    end
+
+    if print_it
+        fprintf(msg)
+    end
 end
