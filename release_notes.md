@@ -1,4 +1,4 @@
-# v1.1.2dev
+# v1.2.0
 
 ## New Features
 * new method: analytical_andrade, see [documentation](https://vbr-calc.github.io/vbr/vbrmethods/anel/andradeanalytical/) for detials.
