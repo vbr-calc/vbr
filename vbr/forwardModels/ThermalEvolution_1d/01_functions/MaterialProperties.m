@@ -41,7 +41,7 @@ function [Rho,Cp,Kc,P] = MaterialProperties(Rho_o,Kc_o,Cp_o,T,z,P0,dTdz_ad,PropT
       Kc = Kc_o;
       Cp = Cp_o;
     elseif strcmp(PropType,'P_dep')
-     [Rho,P] = Density_Adiabatic_Compression(Rho_o,z,P0);
+     [Rho,P] = density_adiabatic_compression(Rho_o,z,P0);
       Kc = Kc_o;
       Cp = Cp_o;
     elseif strcmp(PropType,'T_dep')
@@ -51,7 +51,7 @@ function [Rho,Cp,Kc,P] = MaterialProperties(Rho_o,Kc_o,Cp_o,T,z,P0,dTdz_ad,PropT
       Cp = SpecificHeat(T,FracFo);
     elseif strcmp(PropType,'PT_dep')
       Rho = Density_NonAdiabatic_Thermal_Expansion(Rho_o,T,z,dTdz_ad,FracFo);
-     [Rho,P] = Density_Adiabatic_Compression(Rho,z,P0);
+     [Rho,P] = density_adiabatic_compression(Rho,z,P0);
       Kc = ThermalConductivity(Kc_o,T,P);
       Cp = SpecificHeat(T,FracFo);
     elseif strcmp(PropType,'Prescribed_P')
@@ -86,6 +86,6 @@ function [Rho] = Density_NonAdiabatic_Thermal_Expansion(Rho_o,T,Z,dTdz_ad,FracFo
 
     Rho = Rho_o.*ones(size(Z)); % make sure Rho is an array
     Tpot_z = T - dTdz_ad * Z; % the non-adibatic temperature difference
-    Rho = Density_Thermal_Expansion(Rho, Tpot_z, FracFo);
+    Rho = density_thermal_expansion(Rho, Tpot_z, FracFo);
 
 end
