@@ -4,6 +4,9 @@
 
 ## Bug fixes
 
+## Documentation 
+* Add notes on installing specific versions @chrishavlin [#149](https://github.com/vbr-calc/vbr/pull/149)
+
 ## Deprecations
 
 ## Infrastructure improvements
