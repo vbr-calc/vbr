@@ -179,17 +179,51 @@ When you submit a pull request, a suite of tests will run via github actions. Th
 
 Ensuring that code runs on both MATLAB and Octave can be tricky. Please avoid using MATLAB Toolboxes or 3rd party Octave packages. If you would like to add functionality that requires either of these, please open a discussion via the Issues page or reach out on Slack and we can figure out ways to minimize impact and properly test new functionality.
 
-If you use Python for other projects, you can use some pre-commit checks here to help catch some errors. From a fresh environment, run `pip install -r dev_requirements.txt` to install some extra dependencies and then run
+If you use Python for other projects, you can use some pre-commit checks here to 
+help catch some errors. From a fresh environment, run 
+`pip install -r dev_requirements.txt` to install some extra dependencies and then run
 
 ```
 pre-commit install
 ```
 
-After which, any time you run `git commit`, pre-commit will run some simple checks for you. As of now, the only check ensures that `.m` files do not contain the pound/hashtag symbol, which is a valid comment symbol in octave but not matlab and is a common mistake when your other projects are in Python...
+After which, any time you run `git commit`, pre-commit will run some simple checks 
+for you. As of now, the only check ensures that `.m` files do not contain the 
+pound/hashtag symbol, which is a valid comment symbol in octave but not matlab 
+and is a common mistake when your other projects are in Python...
 
 ## Release Notes
 
-This section contains notes for the VBRc maintainers on creating releases.
+This section contains notes for the VBRc maintainers on creating releases. VBRc
+releases are simply snapshots of the code, managed by git tags and saved as source 
+code copies in github releases (and automatically backed up to zenodo).
+
+### Release prep 
+
+To create a release, there are a few changes you first have to make: 
+
+1. Make sure your local `main` branch matches the remote upstream `main` branch:
+
+```shell
+$ git checkout main 
+$ git fetch --all 
+$ git rebase upstream/main
+```
+
+2. Go into `vbr/support/vbr_version.m` and set `Version.is_development = 0;` and adjust the `major`, `minor` or `patch` entries in the `Version` structure to whatever version you are releasing. 
+3. Make sure the `release_notes.md` header contains the versions string you are releasing and adjust the entries in the release notes as needed.
+4. commit those changes to a new branch, e.g.:
+
+```shell
+$ git checkout -b release_prep_v1pt2pt0
+$ git add . 
+$ git commit -m "release prep v1.2.0"
+```
+5. push up the new branch and create a pull request as usual
+
+You're now ready to release! 
+
+### Actually releasing 
 
 To release, create a new version tag locally:
 
@@ -203,18 +237,25 @@ and push it up to gitub
 $ git push upstream v0.99.5
 ```
 
-this will trigger a github action that drafts a release based on the current version of `release_notes.md`. Go to github, edit the release and then hit publish when ready.
+this will trigger a github action that drafts a release based on the current 
+version of `release_notes.md`. Go to github, edit the release and then hit publish 
+when ready.
 
 ### release cleanup:
 
-After publishing, do the following:
-
-- Merge with the relevant stable series branch (`stable_0.x`, etc.)
-
-Then commit and push the following changes to `main`:
+Make sure your local `main` matches the upstream VBRc `main` branch and then 
+create a new branch, e.g., `cleanup_from_v1pt2pt0` and make the following 
+changes:
 
 - Copy/paste `release_notes.md` into `release_history.md`, reset `release_notes.md` for active development.
-- Bump the version in `vbr/support/vbr_version.m` appropriately
+- Go to `vbr/support/vbr_version.m` and set `Version.is_development = 0;`.
+
+Commit the changes, push up the branch and create a new pull request as usual.
+
+Finally, go check out the github [milestones](https://github.com/vbr-calc/vbr/milestones) and 
+if there is a corresponding version for this release, close it out (if there are open issues 
+or pull requests remaining that did not make it to release, remove them from the milestone and 
+add them to a new one). 
 
 # How to Cite
 

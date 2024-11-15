@@ -17,7 +17,7 @@ jobs:
       - name: confirm that Version.is_development is 0
         run: grep -q "Version.is_development = 0;" vbr/support/vbr_version.m
       - name: confirm that the release tag matches release_notes.md
-        run: grep -q ${{ github.ref }} release_notes.md
+        run: grep -q ${{ github.ref_name }} release_notes.md
       - uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
