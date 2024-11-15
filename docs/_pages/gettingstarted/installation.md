@@ -18,16 +18,39 @@ Both options (described below) will give you the choice of installing the latest
 
 To install with git, clone the repository, https://github.com/vbr-calc/vbr (NOTE: if you might be interested in contributing code, you can instead fork the repository and then clone your fork). 
 
-```
+```shell
 $ git clone https://github.com/vbr-calc/vbr.git
 ```
 
 After cloning, you'll be on the `main` branch, which is the latest development version. To check out the latest stable version, run the following 
 
-```
+```shell
 $ git fetch --all 
 $ git checkout -b origin/stable
 ``` 
+
+To checkout a specific version of the VBRc, you need to checkout the corresponding version tag. Run
+the following to see a list of available versions
+
+```shell
+$ git tag -l --sort=-v:refname
+v1.2.0
+v1.1.2
+v1.1.1
+v1.1.0
+v1.0.1
+v0.99.4
+v0.99.3
+v0.99.2
+v0.99.1
+v0.99.0
+```
+
+to checkout a specific version:
+
+```shell 
+$ git checkout v1.1.1
+```
 
 ### installing via download 
 
