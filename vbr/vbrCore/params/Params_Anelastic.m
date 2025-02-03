@@ -285,32 +285,32 @@ function params=load_Qu2024_eBurger_params(params)
   params.A1802.DeltaB = .76 ;% relaxation strength of background.
   params.A1802.alf = 0.217 ; % high temp background tau exponent
   params.A1802.Tau_LR = 1e-4 ; % Relaxation time lower limit reference
-  params.A1802.Tau_HR = 1e8.87 ; % Relaxation time higher limit reference
+  params.A1802.Tau_HR = 10^8.87 ; % Relaxation time higher limit reference
   params.A1802.DeltaP=.012; % relaxation strength of peak
   params.A1802.Tau_PR=10^3.7; % center maxwell time
   params.A1802.sig=1.1; % sigma, peak breadth    
   params.A1802.E = 660000 ; % J/mol  
-  params.A1802.description = "stainless steel jacketed dunite, 900-1200C"
+  params.A1802.description = "SS-jacketed dunite, 900-1200C";
 
   params.A1906.DeltaB = .93 ;% relaxation strength of background.
   params.A1906.alf = 0.222 ; % high temp background tau exponent
   params.A1906.Tau_LR = 1e-4 ; % Relaxation time lower limit reference
-  params.A1906.Tau_HR = 1e9.93 ; % Relaxation time higher limit reference
+  params.A1906.Tau_HR = 10^9.93 ; % Relaxation time higher limit reference
   params.A1906.DeltaP=.0006; % relaxation strength of peak
   params.A1906.Tau_PR=10^4.8; % center maxwell time
   params.A1906.sig=0.6; % sigma, peak breadth    
   params.A1906.E = 671000 ; % J/mol  
-  params.A1906.description = "MS-jacketed dunite, 900-1300C"
+  params.A1906.description = "MS-jacketed dunite, 900-1300C";
 
   params.A1928.DeltaB = .87 ;% relaxation strength of background.
   params.A1928.alf = 0.250 ; % high temp background tau exponent
   params.A1928.Tau_LR = 1e-5 ; % Relaxation time lower limit reference
-  params.A1928.Tau_HR = 1e9.68 ; % Relaxation time higher limit reference
+  params.A1928.Tau_HR = 1^9.68 ; % Relaxation time higher limit reference
   params.A1928.DeltaP=.029; % relaxation strength of peak
   params.A1928.Tau_PR=10^5.1; % center maxwell time
   params.A1928.sig=0.9; % sigma, peak breadth    
   params.A1928.E = 664000 ; % J/mol  
-  params.A1928.description = "MS-jacketed dunite, 1050-1300C"
+  params.A1928.description = "MS-jacketed dunite, 1050-1300C";
 
   params.Qu2024.DeltaB = .87 ;% relaxation strength of background.
   params.Qu2024.alf = 0.233 ; % high temp background tau exponent  
@@ -320,8 +320,8 @@ function params=load_Qu2024_eBurger_params(params)
   params.Qu2024.E = 662000 ; % J/mol  
   % these are not mentioned in the paragraph
   params.Qu2024.Tau_LR = 1e-5 ; % Relaxation time lower limit reference
-  params.Qu2024.Tau_HR = 1e9.68 ; % Relaxation time higher limit reference
-  params.Qu2024.description = "multi-sample averages, see Qu et al 2024 text"
+  params.Qu2024.Tau_HR = 10^9.68 ; % Relaxation time higher limit reference
+  params.Qu2024.description = "multi-sample averages, see Qu et al 2024 text";
 
   meths={'A1802';'A1906'; 'A1928'; 'Qu2024'};
   for imeth=1:numel(meths)
