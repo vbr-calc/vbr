@@ -276,7 +276,9 @@ function params=load_JF10_eBurger_params(params)
     params.(meth).Vstar = 10e-6 ; % m^3/mol (Activation Volume? or molar volume?)
     params.(meth).m_v = 3 ; % viscous grain size exponent for maxwell time
     nfits = nfits + 1;
-    params.available_fits{nfits} = meth;    
+    params.available_fits{nfits} = meth;   
+    
+    params.(meth).citations = params.citations;
   end
 
   
@@ -366,6 +368,9 @@ function params=load_Qu2024_eBurger_params(params)
     params.(meth).Tau_MR = params.(meth).Tau_HR ; % Reference Maxwell relaxation time    
     nfits = nfits + 1;
     params.available_fits{nfits} = meth;
+
+    params.(meth).citations = {'Qu et al, 2024, PEPI, '; ...
+                               'Qu et al, 2021, PEIP, '};
   end
   
 end 
