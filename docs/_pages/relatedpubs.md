@@ -11,6 +11,8 @@ The following publications have contributed directly towards writing or formulat
 * **Bellis, C., Holtzman, B., 2014.** Sensitivity of seismic measurements to frequency-dependent attenuation and upper mantle structure: an initial approach. Journal of Geophysical Research doi:10.1002/2013JB010831.
 
 The following papers have used the VBRc in some capacity:
+
+* **Eilon, Z. C. (2025)**. Attenuation and Velocity Tomography of the Northern East African Rift. Journal of Geophysical Research: Solid Earth 130.2, e2024JB030417. https://doi.org/10.1029/2024JB030417
 * **Bezada, M. J., Byrnes, J. S., Zhu, Z., & Lee, H. (2023)**. Lateral variations in teleseismic attenuation of the conterminous U.S. and new insights derived from its relationship to Mantle seismic velocity. Journal of Geophysical Research: Solid Earth, 128, e2023JB027299. https://doi.org/10.1029/2023JB027299
 * **Byrnes, J. S., J. Gaherty, & E. Hopper (2023)**. Seismic Architecture of the Lithosphere-Asthenosphere System in the Western United States from a Joint Inversion of Body- and Surface-wave Observations: Distribution of Partial Melt in the Upper Mantle, Seismica, 2(2), https://doi.org/10.26443/seismica.v2i2.272
 * **Lau, H.C., Holtzman, B.K. & Havlin, C. (2020)**. Toward a Self‐Consistent Characterization of Lithospheric Plates Using Full‐Spectrum Viscoelasticity. AGU Advances 1 (4), e2020AV000205, https://doi.org/10.1029/2020AV000205
