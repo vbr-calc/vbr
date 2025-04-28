@@ -26,7 +26,7 @@ The remainder of this README contains information on:
 
 ## Bug Reporting and User Support
 
-Found a bug? [Open an issueon github](https://github.com/vbr-calc/vbr/issues/new)! Got a question? Join our slack channel at [vbr-calc.slack.com](https://join.slack.com/t/vbr-calc/shared_invite/enQtODI0MTk4NzIxNzkzLTZlYjMwYTc4MTVkOTg2ZDgyNTQxNTAxNjc2NmNkMzA2MmVjOTJkYjYzNjc1ZDJhNzg5ZWU2MzE4OTEyNmMxNGU)!
+Found a bug? [Open an issue on github](https://github.com/vbr-calc/vbr/issues/new)! Got a question? Join our slack channel at [vbr-calc.slack.com](https://join.slack.com/t/vbr-calc/shared_invite/enQtODI0MTk4NzIxNzkzLTZlYjMwYTc4MTVkOTg2ZDgyNTQxNTAxNjc2NmNkMzA2MmVjOTJkYjYzNjc1ZDJhNzg5ZWU2MzE4OTEyNmMxNGU)!
 
 # Basic Usage
 
@@ -150,6 +150,9 @@ The VBR Calculator works with [GNU Octave](https://octave.sourceforge.io/io/inde
 * https://octave.sourceforge.io/io/index.html
 * https://octave.org/doc/interpreter/Installing-and-Removing-Packages.html
 
+# Other Learning Resources
+
+Want more of a deep dive into the VBRc? Check out the respository for the [2024 VBRc Virtual Workshop](https://github.com/vbr-calc/VBRc_2024_workshop) where you'll find some sample code as well as links to recorded tutorial sessions as well as talks from researchers who have used the VBRc. 
 
 # Getting Help
 
