@@ -19,7 +19,7 @@ function params = Params_Anelastic(method,GlobalParams)
 
   % available anelastic methods
   params.possible_methods={'eburgers_psp'; 'andrade_psp'; 'xfit_mxw'; 'xfit_premelt'; ...
-                           'andrade_analytical';};
+                           'andrade_analytical'; 'backstress_linear';};
 
   if strcmp(method,'eburgers_psp')
     % extended burgers parameters
@@ -151,6 +151,28 @@ function params = Params_Anelastic(method,GlobalParams)
       params.viscosity_method_mechanism = 'diff'; % one of the viscous deformation mechanism structure fields
       params.eta_ss = 1e23; % only used if params.viscosity_method == 'fixed'
   end
+
+
+  if strcmp(method, 'backstress_linear')
+    params.func_name='Q_backstress_linear'; % the name of the matlab function
+    params.citations={'Hein et al., 2025, ESS Open Archive (Submitted to JGR Solid Earth ), https://doi.org/10.22541/essoar.174326672.28941810/v1'};
+    params.description='Linearized backstress model.';
+    
+    params.sig_p_sig_dc_factor = 0.8; % see supplement figure S12    
+    params.burgers_vector_nm = 5; % burgers vector in micrometers
+    params.Beta = 2; % geometric constant
+    
+    params.G_UR = 65; % GPa    
+    params.G_method_options = {'fixed'; 'calculated'};
+    params.G_method = {'fixed'}; 
+
+    params.M = 135; % hardening modulus GPa
+    params.M_G_factor = params.M / params.G_UR; % ratio of M to G    
+
+    params.SV_required = {'T_K'; 'sig_dc_MPa' ; 'dg_um'};
+    params.SV_optional = {'P_Pa';};
+  end 
+
   % set steady-state melt dependence for diff. creep (i.e., exp(-alpha * phi))
   HK2003 = Params_Viscous('HK2003'); % viscous parameters
   params.melt_alpha = HK2003.diff.alf ;
