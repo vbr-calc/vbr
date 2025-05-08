@@ -7,46 +7,41 @@ function [VBR] = visc_calc_backstress_linear(VBR)
         G_GPa  = VBR.in.elastic.anharmonic.Gu;         
     end 
     
+    disp("calculating viscosity")
+    Aprime_T = backstress_Aprime(G_GPa, VBR); % units: 1 / (s GPa^2)    
+    sig_ref_T_GPa = backstress_sig_ref_GPa(VBR);    
 
-    
-    Aprime_T = backstress_Aprime(G_GPa, VBR); 
-    % Aprime units = (units(taylor_constant_alpha) * GPa * m) ^ -2
-    sig_ref_T_GPa = backstress_sig_ref_GPa(VBR);
-
-    sig_p_GPa = params.sig_p_sig_dc_factor * VBR.in.SV.sig_dc_MPa * 1e9; 
+    sig_p_GPa = params.sig_p_sig_dc_factor * VBR.in.SV.sig_dc_MPa / 1000; 
     
     eta_1 = sig_ref_T_GPa ./ (Aprime_T .* sig_p_GPa.^2);
-    eta_1 = eta_1 * 1e9; 
+    eta_1 = eta_1 * 1e9; % Pa s
 
-    VBR.out.viscous.backstress_linear.eta_total = eta_1; 
-    
-    
+    VBR.out.viscous.backstress_linear.eta_total = eta_1;     
+    disp("done")
 end 
 
 
 function A_prime_T = backstress_Aprime(G_GPa, VBR)
-    % units will be (units(taylor_constant_alpha) * GPa * m) ^ -2
-
+    % units will be: 1 / (s GPa^2)
 
     % parameters for convenience
     params = VBR.in.viscous.backstress_linear;     
     alpha = params.taylor_constant_alpha; 
-    bvec = params.burgers_vector_nm * 1e-9;
+    bvec_m = params.burgers_vector_nm * 1e-9;
     Q = params.Q_J_per_mol; 
-    V = params.V; 
+    A = params.A; % m2/s    
     R = 8.31446261815324; % J/mol/K
 
     % state variables 
-    if isfield(VBR.in.SV, 'P_GPa')
-        P_Pa = 1e9.*(VBR.in.SV.P_GPa) ; % [GPa] to [Pa]
-    else 
-        P_Pa = 0.0; 
-    end 
     T_K = VBR.in.SV.T_K; 
 
     % the calculation
-    factor = 1./((alpha * G_GPa * bvec).^2);         
-    A_prime_T = factor .* exp(-((Q+P_Pa*V )./ (R * T_K)));     
+    factor = A ./ ((alpha * G_GPa * bvec_m).^2); 
+
+    % units are wrong I think    
+    A_prime_0 = 10^6.94 * 1e6; % 1 / (GPa^2 * s)    
+    factor = A_prime_0 
+    A_prime_T = factor .* exp(-(Q ./ (R * T_K)));     
 end 
 
 function sig_ref_T_GPa = backstress_sig_ref_GPa(VBR)

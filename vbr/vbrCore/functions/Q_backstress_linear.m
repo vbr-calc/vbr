@@ -2,25 +2,22 @@ function [VBR] = Q_backstress_linear(VBR)
 
     params = VBR.in.viscous.backstress_linear; 
     if strcmp(params.G_method, 'fixed') 
-        G_GPa = params.G_UR; 
-        M_GPa = params.M; 
-    else 
-        % hardening modulus is a factor of shear modulus 
-        % see Beithaupt et al. 
-        G_GPa  = VBR.in.elastic.anharmonic.Gu; 
-        M_GPa = params.M_G_factor * G_GPa; 
-    end     
+        G_GPa = params.G_UR;          
+    else         
+        G_GPa  = VBR.in.elastic.anharmonic.Gu;
+    end
+    M_GPa = params.M;
 
     omega = 2 * pi * VBR.in.SV.f ; 
 
     if isfield(VBR.out.viscous, 'backstress_linear')
         eta1 = VBR.out.viscous.backstress_linear.eta_total; 
     else 
-        eta1 = visc_calc_xfit_premelt(VBR); 
+        VBRtemp = visc_calc_xfit_premelt(VBR); 
+        eta1 = VBRtemp.out.viscous.backstress_linear.eta_total;
     end 
 
-
-    d_nm = VBR.in.SV.dg_um / 1e3; 
+    d_nm = VBR.in.SV.dg_um * 1e3; 
     
     % allocation of new matrixes
     n_freq = numel(omega);
@@ -33,12 +30,13 @@ function [VBR] = Q_backstress_linear(VBR)
 
     % initial calulations     
     sig_dc_MPa = VBR.in.SV.sig_dc_MPa; 
+    
     sig_p_MPa = params.sig_p_sig_dc_factor * sig_dc_MPa; 
 
     sig_d_MPa = params.Beta .* G_GPa .* params.burgers_vector_nm ./ d_nm; 
 
-    E_R = M_GPa .* (sig_p_MPa + sig_d_MPa) ./ sig_p_MPa * 1e9; 
-    E_U = G_GPa * 1e9; 
+    E_R_Pa = M_GPa .* (sig_p_MPa + sig_d_MPa) ./ sig_p_MPa * 1e9; 
+    E_U_Pa = G_GPa * 1e9; 
     
     if strcmp(params.G_method, 'fixed')         
         E_U_i = G_GPa;
@@ -49,14 +47,14 @@ function [VBR] = Q_backstress_linear(VBR)
     for i_sv = 1:n_th
 
         eta_i = eta1(i_sv);
-        E_R_i = E_R(i_sv); 
+        E_R_i = E_R_Pa(i_sv); 
         if strcmp(params.G_method, 'fixed') == 0            
-            E_U_i = E_U(i_sv);
+            E_U_i = E_U_Pa(i_sv);
         end 
 
         for iw = 1:n_freq
             i_glob = i_sv + (iw - 1) * n_th; % the linear index of the arrays with a frequency index
-            E_star_inv = 1./(E_R_i + eta_i .* omega(iw) * i) + 1 / E_U_i; 
+            E_star_inv = (1 ./ (E_R_i + eta_i .* omega(iw) * i) + 1 ./ E_U_i); 
             E_star_i = 1 ./ E_star_inv; 
             J1_i(i_glob) = real(E_star_i); 
             J2_i(i_glob) = imag(E_star_i); 
@@ -80,10 +78,5 @@ function [VBR] = Q_backstress_linear(VBR)
 
     out_s.units = Q_method_units(); 
     VBR.out.anelastic.backstress_linear = out_s; 
-
-
-
-
-    
 
 end 
