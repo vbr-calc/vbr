@@ -79,7 +79,7 @@ function params = Params_Viscous(method,GlobalParams)
     params.A = 10^6.94; % Pre-exponent low-temperature plasticity, units are m^2/s
     params.pierls_barrier_GPa = 3.1; % symbol in text is capital Sigma
     params.sig_p_sig_dc_factor = 0.8; % see supplement figure S12
-    params.taylor_constant_alpha = taylor_constant = 2.46; % see Breithaupt appendix
+    params.taylor_constant_alpha = 2.46; % see Breithaupt appendix
     params.burgers_vector_nm = 5; % burgers vector in micrometers
     params.Beta = 2; % geometric constant
     params.M = 135; % hardening modulus GPa. Likely T-dependent, 
