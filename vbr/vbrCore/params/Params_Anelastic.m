@@ -165,12 +165,8 @@ function params = Params_Anelastic(method,GlobalParams)
     params.G_UR = 65; % GPa    
     params.G_method_options = {'fixed'; 'calculated'};
     params.G_method = {'fixed'}; 
-
-    params.M = 135; % hardening modulus GPa
-    params.M_G_factor = params.M / params.G_UR; % ratio of M to G    
-
-    params.SV_required = {'T_K'; 'sig_dc_MPa' ; 'dg_um'};
-    params.SV_optional = {'P_Pa';};
+    params.M = 135; % hardening modulus GPa    
+    params.SV_required = {'T_K'; 'sig_dc_MPa' ; 'dg_um'};    
   end 
 
   % set steady-state melt dependence for diff. creep (i.e., exp(-alpha * phi))
