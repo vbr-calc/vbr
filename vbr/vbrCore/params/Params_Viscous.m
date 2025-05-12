@@ -75,18 +75,13 @@ function params = Params_Viscous(method,GlobalParams)
     params.citations={'Hein et al., 2025, ESS Open Archive (Submitted to JGR Solid Earth ), https://doi.org/10.22541/essoar.174326672.28941810/v1'};
     params.description='Linear viscosity for dislocation glide';
 
-    params.Q_J_per_mol = 450 *1e3; % activation energy J/mol, DeltaF in text
-    params.A = 10^6.94; % Pre-exponent low-temperature plasticity, units are m^2/s
+    params.Q_J_per_mol = 450 *1e3; % activation energy J/mol, DeltaF in text    
+    params.A = 10^6.94; % Pre-exponent low-temperature plasticity, units are MPa−2 s−1
     params.pierls_barrier_GPa = 3.1; % symbol in text is capital Sigma
     params.sig_p_sig_dc_factor = 0.8; % see supplement figure S12
-    params.taylor_constant_alpha = 2.46; % see Breithaupt appendix
-    params.burgers_vector_nm = 5; % burgers vector in micrometers
-    params.Beta = 2; % geometric constant
-    params.M = 135; % hardening modulus GPa. Likely T-dependent, 
-                    % but waiting on new work... 
-    params.G_UR = 65; % GPa    
-    params.G_method_options = {'fixed'; 'calculated'};
-    params.G_method = {'fixed'};   
+    
+    params.burgers_vector_nm = 0.5; % burgers vector in nm
+    params.Beta = 2; % geometric constant    
 
     params.SV_required = {'T_K'; 'sig_dc_MPa' };
   end
