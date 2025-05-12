@@ -24,10 +24,16 @@ function [params] = Params_Elastic(method,GlobalParams)
   if strcmp(method,'anharmonic')
     params.func_name='el_anharmonic'; % the name of the matlab function
     params.anharm_scale_mthd = 'Isaak' ; % Isaak or Cammarano ;
+    params.available_anharm_scale_mthds = {'Isaak'; 'Cammarano'; 'Abramson-Isaak', 
+                                            'Abramson-Camarano'}
 
     params.T_K_ref = 300 ;% room temp [K] (THIS WAS AT 1173!!)
     params.P_Pa_ref = 1e5;% 1 atm [Pa]
     params.Gu_0_ol = 81; % olivine reference shear modulus [GPa]
+
+    
+    params.isaak.dG_dt =  -13.6*1e6 ; % Pa/K (so 13.6 is in MPa/K)
+    % etc. then have the calculation look at what parameter set to use. 
 
     if strcmp(params.anharm_scale_mthd,'Isaak')
       % Isaak, 1992
@@ -41,6 +47,9 @@ function [params] = Params_Elastic(method,GlobalParams)
     end
 
     params.nu = 0.25 ; % poisson's ratio
+    
+    % calculate bulk modulus instead
+
     params.citations={'Cammarano et al. (2003), "Inferring upper-mantle temperatures from seismic velocities", Physics of the Earth and Planetary Interiors, Volume 138, Issues 3–4, https://doi.org/10.1016/S0031-9201(03)00156-0 '; ...
                       'Isaak, D. G. (1992), "High‐temperature elasticity of iron‐bearing olivines", J. Geophys. Res., 97( B2), 1871– 1885, https://doi.org/10.1029/91JB02675'};
     params.description='anharmonic scaling from STP to VBR.in.SV.T_K and VBR.in.SV.P_GPa';
