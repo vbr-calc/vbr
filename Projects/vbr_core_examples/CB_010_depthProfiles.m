@@ -14,86 +14,86 @@ function [VBR,HF] = CB_010_depthProfiles()
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   %% put VBR in the path %%
-    path_to_top_level_vbr='../../';
-    addpath(path_to_top_level_vbr)
-    vbr_init
+  path_to_top_level_vbr='../../';
+  addpath(path_to_top_level_vbr)
+  vbr_init
 
   %% build thermal model %%
-    HF = HalfspaceModel(30); % analytical half-space cooling
-    HF = correctHF(HF); % adjust solution (variable density, etc.)
-    [Solidus] = SoLiquidus(HF.P,5,0,'katz');
-    Tsolidus_C=Solidus.Tsol;
+  HF = HalfspaceModel(30); % analytical half-space cooling
+  HF = correctHF(HF); % adjust solution (variable density, etc.)
+  [Solidus] = SoLiquidus(HF.P,5,0,'katz');
+  Tsolidus_C=Solidus.Tsol;
 
   %% Load and set VBR parameters and stave variables %%
-    VBR.in.elastic.methods_list={'anharmonic';'anh_poro'};
-    VBR.in.viscous.methods_list={'HK2003'};
-    VBR.in.anelastic.methods_list={'eburgers_psp';'andrade_psp';'xfit_mxw'; 'xfit_premelt'};
-    VBR.in.elastic.anharmonic=Params_Elastic('anharmonic'); % unrelaxed elasticity
-    VBR.in.elastic.anharmonic.Gu_0_ol = 75.5; % olivine reference shear modulus [GPa]
-    VBR.in.SV.f = [0.01, 0.02, 0.04, 0.1];%  frequencies to calculate at
+  VBR.in.elastic.methods_list={'anharmonic';'anh_poro'};
+  VBR.in.viscous.methods_list={'HK2003'};
+  VBR.in.anelastic.methods_list={'eburgers_psp';'andrade_psp';'xfit_mxw'; 'xfit_premelt'};
+  VBR.in.elastic.anharmonic=Params_Elastic('anharmonic'); % unrelaxed elasticity
+  VBR.in.elastic.anharmonic.Gu_0_ol = 75.5; % olivine reference shear modulus [GPa]
+  VBR.in.SV.f = [0.01, 0.02, 0.04, 0.1];%  frequencies to calculate at
 
-    % store thermal model in VBR state variables
-    VBR.in.SV.T_K = HF.T_C+273; % set HF temperature, convert to K
-    VBR.in.SV.P_GPa = HF.P/1e9; % pressure [GPa]
-    VBR.in.SV.rho=HF.rho; % density [kg m^-3]
-    VBR.in.SV.chi=HF.chi;
+  % store thermal model in VBR state variables
+  VBR.in.SV.T_K = HF.T_C+273; % set HF temperature, convert to K
+  VBR.in.SV.P_GPa = HF.P/1e9; % pressure [GPa]
+  VBR.in.SV.rho=HF.rho; % density [kg m^-3]
+  VBR.in.SV.chi=HF.chi;
 
-    % set the other state variables as matrices of same size
-    sz=size(HF.T_C);
-    VBR.in.SV.sig_MPa = 10 * ones(sz); % differential stress [MPa]
-    VBR.in.SV.Tsolidus_K = Tsolidus_C+273;
-    VBR.in.SV.phi = 0.01 * (HF.T_C > Tsolidus_C); % melt fraction
-    VBR.in.SV.dg_um = 0.01 * 1e6 * ones(sz); % grain size [um]
+  % set the other state variables as matrices of same size
+  sz=size(HF.T_C);
+  VBR.in.SV.sig_MPa = 10 * ones(sz); % differential stress [MPa]
+  VBR.in.SV.Tsolidus_K = Tsolidus_C+273;
+  VBR.in.SV.phi = 0.01 * (HF.T_C > Tsolidus_C); % melt fraction
+  VBR.in.SV.dg_um = 0.01 * 1e6 * ones(sz); % grain size [um]
 
-  %% CALL THE VBR CALCULATOR %%
-    [VBR] = VBR_spine(VBR) ;
+  %% CALL THE VBR CALCULATOR %%  
+  [VBR] = VBR_spine(VBR) ;
 
   %% Build figures %%
 
-    figure('PaperPosition',[0,0,8,4],'PaperPositionMode','manual')
-    ax1=subplot(1,5,1);
-    plot(HF.T_C,HF.z_km)
-    hold on
-    plot(Tsolidus_C,HF.z_km,'--k')
-    xlabel('T [C]')
+  figure('PaperPosition',[0,0,8,4],'PaperPositionMode','manual')
+  ax1=subplot(1,5,1);
+  plot(HF.T_C,HF.z_km)
+  hold on
+  plot(Tsolidus_C,HF.z_km,'--k')
+  xlabel('T [C]')
+  ylabel('Depth [km]')
+  set(gca,'ydir','reverse')
+
+  ax2=subplot(1,5,2);
+  plot(HF.P/1e9,HF.z_km)
+  xlabel('P [GPa]')
+  ylabel('Depth [km]')
+  set(gca,'ydir','reverse')
+
+  ax3=subplot(1,5,3);
+  plot(HF.rho/1e3,HF.z_km)
+  xlabel('\rho [g/m3]')
+  ylabel('Depth [km]')
+  set(gca,'ydir','reverse')
+
+  for imeth = 1:numel(VBR.in.anelastic.methods_list)
+    meth=VBR.in.anelastic.methods_list{imeth};
+    
+    ax4=subplot(1,5,4);
+    hold all
+    plot(squeeze(VBR.out.anelastic.(meth).V(:,1))/1e3,HF.z_km,'displayname',meth)
+    xlabel('ave. Vs [km/s]')
     ylabel('Depth [km]')
+    xlim([4.2,4.7])
+    box on
     set(gca,'ydir','reverse')
 
-    ax2=subplot(1,5,2);
-    plot(HF.P/1e9,HF.z_km)
-    xlabel('P [GPa]')
+    ax5=subplot(1,5,5);
+    hold all
+    plot(squeeze(log10(VBR.out.anelastic.(meth).Q(:,1))),HF.z_km,'displayname',meth)
+    xlabel('log10(Q)')
     ylabel('Depth [km]')
+    box on
     set(gca,'ydir','reverse')
+    xlim([0,8])
+  end
 
-    ax3=subplot(1,5,3);
-    plot(HF.rho/1e3,HF.z_km)
-    xlabel('\rho [g/m3]')
-    ylabel('Depth [km]')
-    set(gca,'ydir','reverse')
-
-    for imeth = 1:numel(VBR.in.anelastic.methods_list)
-      meth=VBR.in.anelastic.methods_list{imeth};
-
-      ax4=subplot(1,5,4);
-      hold all
-      plot(squeeze(VBR.out.anelastic.(meth).V(:,1))/1e3,HF.z_km,'displayname',meth)
-      xlabel('ave. Vs [km/s]')
-      ylabel('Depth [km]')
-      xlim([4.2,4.7])
-      box on
-      set(gca,'ydir','reverse')
-
-      ax5=subplot(1,5,5);
-      hold all
-      plot(squeeze(log10(VBR.out.anelastic.(meth).Q(:,1))),HF.z_km,'displayname',meth)
-      xlabel('log10(Q)')
-      ylabel('Depth [km]')
-      box on
-      set(gca,'ydir','reverse')
-      xlim([0,8])
-    end
-
-    saveas(gcf,'./figures/CB_00210_depthProfiles.png')
+  saveas(gcf,'./figures/CB_00210_depthProfiles.png')
 end
 
 function HF = HalfspaceModel(age_Myrs)

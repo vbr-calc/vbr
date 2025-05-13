@@ -33,7 +33,7 @@ function [VBR] = el_ModUnrlx_MELT_f(VBR)
   poro_p = VBR.in.elastic.anh_poro; anharm_p= VBR.in.elastic.anharmonic;
   A  = poro_p.Melt_A  ; % wetting angle factor (1:2.3, Yoshino)
   Km = poro_p.Melt_Km; % bulk modulus of the melt [Pa]
-  nu = anharm_p.nu; % Poisson's ratio
+  nu = poro_p.Melt_nu; % Poisson's ratio
 
   % calculate effective moduli and standard deviations
   [Gu_eff,Gamma_G]=melt_shear_moduli(Gu,phi,A,nu) ;
@@ -44,7 +44,7 @@ function [VBR] = el_ModUnrlx_MELT_f(VBR)
   poro.Ku = Ku_eff;
 
   % calculate effective velocities and standard deviations
-  [Vp,Vs] = Vp_Vs_calc(phi,Gu,nu,Gamma_G,Gamma_K,rho,Km);
+  [Vp,Vs] = Vp_Vs_calc(phi,Gu,Ku,Gamma_G,Gamma_K,rho,Km);
 
   % save velocities to local structure
   poro.Vpu = Vp;
@@ -60,18 +60,14 @@ function [VBR] = el_ModUnrlx_MELT_f(VBR)
   VBR.out.elastic.anh_poro=poro;
 end
 
-function [Vp,Vs] = Vp_Vs_calc(phi,Gu,nu,Gamma_G,Gamma_K,rho,K_m)
+function [Vp,Vs] = Vp_Vs_calc(phi,Gu,Ku,Gamma_G,Gamma_K,rho,K_m)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   %
-  % [Vp,Vs] = Vp_Vs_calc(phi,Gu,nu,Gamma_G,Gamma_K,rho,K_m)
+  % [Vp,Vs] = Vp_Vs_calc(phi,Gu,Ku,Gamma_G,Gamma_K,rho,K_m)
   %
   % calculates Vp and Vs, accouting for poro-elastic effects. Reduces to
   % pure phase calculation when phi = 0.
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-  % unrelaxed bulk mod
-  nu_fac = 2/3*(1+nu)./(1-2*nu);
-  Ku = Gu.*nu_fac;
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
   % the poroelastic factors
   K1 = (1-Gamma_K).^2;
