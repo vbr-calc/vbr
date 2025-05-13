@@ -1,3 +1,14 @@
+---
+permalink: /examples/CB_017_backstress_model/
+title: ""
+---
+
+# CB_017_backstress_model.m
+## output figures
+
+!['CB_017_backstress_model'](/vbr/assets/images/CBs/CB_017_backstress_model.png){:class="img-responsive"}
+## contents
+```matlab
 %% put VBR in the path %%
 clear
 path_to_top_level_vbr='../../';
@@ -51,3 +62,4 @@ xlabel('f [Hz]')
 ylabel('Q^{-1}')
 legend()
 saveas(gcf,'./figures/CB_017_backstress_model.png')
+```
