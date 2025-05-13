@@ -1,4 +1,6 @@
-# v1.2.1dev
+# v2.0.0
+
+This release of the VBRc introduces a few small but potentially breaking changes with the anharmonic calculation and also introduces a new anelastic method, the `backstress_linear` method for dislocation-based dissipation. See below for more details.
 
 ## New Features
 
@@ -9,13 +11,9 @@
 
 * new anelastic method! `backstress_linear` implements the linearized backstress model of dislocation-based dissipation from Hein et al., 2025. See the docs and new example. 
 
-## Bug fixes
-
 ## Documentation 
 
 * add VBRc workshop links to readme in [162](https://github.com/vbr-calc/vbr/pull/162)
-
-## Deprecations
 
 ## Infrastructure improvements
 
