@@ -1,28 +1,21 @@
 function [VBR] = Q_backstress_linear(VBR)
 
+    % pull out some parameters
     params = VBR.in.anelastic.backstress_linear;    
-    
-    % Pressure and temperature derivatives from Abramson et al., 1997 and Isaak, 1992 (9% fayalite)
-    P = VBR.in.SV.P_GPa;
-    T = VBR.in.SV.T_K;
-
-    % following hein et al, should update anharmonic calculation rather than do this here.    
-    % T0 = 273;
-    G_Pa = VBR.out.elastic.anharmonic.Gu; 
-    K_Pa = VBR.out.elastic.anharmonic.Ku;    
-    E_GPa = 9*K_Pa .* G_Pa ./(3*K_Pa+G_Pa) / 1e9; % Pa, Young's modulus 
-    
     M_GPa = params.M_GPa;
 
-    omega = 2 * pi * VBR.in.SV.f ; 
-
-    if isfield(VBR.out.viscous, 'backstress_linear')
-        eta1 = VBR.out.viscous.backstress_linear.eta_total;
-    else
-        VBRtemp = visc_calc_xfit_premelt(VBR);
-        eta1 = VBRtemp.out.viscous.backstress_linear.eta_total;
-    end
+    % pull out state variables 
+    P = VBR.in.SV.P_GPa;
+    T = VBR.in.SV.T_K;
+    G_Pa = VBR.out.elastic.anharmonic.Gu; 
+    K_Pa = VBR.out.elastic.anharmonic.Ku;    
+    omega = 2 * pi * VBR.in.SV.f ;     
     d_nm = VBR.in.SV.dg_um * 1e3; 
+
+    % initial calculations
+    E_GPa = 9*K_Pa .* G_Pa ./(3*K_Pa+G_Pa) / 1e9; % Pa, Young's modulus     
+    eta1 = visc_calc_backstress_linear(VBR, params); % Pa s, linear viscosity for dislocation glide 
+
     
     % allocation of new matrixes
     n_freq = numel(omega);
@@ -76,11 +69,53 @@ function [VBR] = Q_backstress_linear(VBR)
     out_s.V = V;
     out_s.Vave = Q_aveVoverf(out_s.V, VBR.in.SV.f);  
     out_s.valid_f = valid_f; 
-    out_s.omega_o = omega_o(i_sv); 
+    out_s.omega_o = omega_o; 
 
     out_s.units = Q_method_units(); 
     out_s.units.omega_o = 'rad/s'; 
     out_s.units.valid_f = ''; 
     VBR.out.anelastic.backstress_linear = out_s; 
 
+end 
+
+
+function eta_1 = visc_calc_backstress_linear(VBR, params)
+            
+    Aprime_T = backstress_Aprime(VBR, params); % units: 1 / (s GPa^2)    
+    sig_ref_T_GPa = backstress_sig_ref_GPa(VBR, params);       
+
+    sig_p_GPa = params.sig_p_sig_dc_factor * VBR.in.SV.sig_dc_MPa / 1000; 
+    
+    eta_1 = sig_ref_T_GPa ./ (Aprime_T .* sig_p_GPa.^2);
+    eta_1 = eta_1 * 1e9; % Pa s
+    
+end 
+
+
+function A_prime_T = backstress_Aprime(VBR, params)
+    % units will be: 1 / (s GPa^2)
+
+    % parameters for convenience
+    
+    Q = params.Q_J_per_mol; 
+    A = params.A; % MPa−2 s−1   
+    R = 8.31446261815324; % J/mol/K
+
+    % state variables 
+    T_K = VBR.in.SV.T_K; 
+
+    units_converter =  1e3 * 1e3 ;
+    factor = A * units_converter; % MPa-2 s-1 to GPa-2 s -1
+    A_prime_T = factor .* exp(-(Q ./ (R * T_K)));     
+end 
+
+function sig_ref_T_GPa = backstress_sig_ref_GPa(VBR, params)
+
+    % parameters for convenience            
+    R = 8.31446261815324; % J/mol/K
+    BigSigma = params.pierls_barrier_GPa; 
+    dF = params.Q_J_per_mol; 
+    T_K = VBR.in.SV.T_K;     
+    
+    sig_ref_T_GPa = BigSigma .* R .* T_K ./ dF; 
 end 
