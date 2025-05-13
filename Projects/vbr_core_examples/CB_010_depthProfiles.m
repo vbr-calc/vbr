@@ -48,9 +48,8 @@ function [VBR,HF] = CB_010_depthProfiles()
   %% CALL THE VBR CALCULATOR %%  
   [VBR] = VBR_spine(VBR) ;
 
-  %% Build figures %%
-
-  figure('PaperPosition',[0,0,8,4],'PaperPositionMode','manual')
+  %% Build figures %%  
+  figure('PaperPosition',[0,0,14,4],'PaperPositionMode','manual')
   ax1=subplot(1,5,1);
   plot(HF.T_C,HF.z_km)
   hold on
@@ -93,7 +92,7 @@ function [VBR,HF] = CB_010_depthProfiles()
     xlim([0,8])
   end
 
-  saveas(gcf,'./figures/CB_00210_depthProfiles.png')
+  saveas(gcf,'./figures/CB_010_depthProfiles.png')
 end
 
 function HF = HalfspaceModel(age_Myrs)

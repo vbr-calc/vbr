@@ -37,15 +37,16 @@
 %% call VBR_spine %%
   [VBR] = VBR_spine(VBR) ;
 
-%% plot the result %%
-  figure()
+%% plot the result %%  
+  figure('PaperPosition',[0,0,16,4],'PaperPositionMode','manual')
   subplot(1, 5, 1)
   plot(VBR.in.SV.T_K-273,depth_km,'k','linewidth',1.5)
+  xticks([0, 400, 800, 1200])
   xlabel('T [C]'); ylabel('Depth [km]')
 
   subplot(1, 5,2)
-  plot(VBR.in.SV.rho,depth_km,'k','linewidth',1.5)
-  xlabel('\rho [kg/m^3]')
+  plot(VBR.in.SV.rho/1e3,depth_km,'k','linewidth',1.5)
+  xlabel('\rho [g/cm^3]')
 
   subplot(1, 5,3)
   plot(VBR.in.SV.P_GPa,depth_km,'k','linewidth',1.5)
