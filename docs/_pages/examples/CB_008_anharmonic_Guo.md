@@ -45,34 +45,31 @@ title: ""
 %% call VBR_spine %%
   [VBR] = VBR_spine(VBR) ;
 
-%% plot the result %%
-  figure()
-  subplot(2,3,1)
+%% plot the result %%  
+  figure('PaperPosition',[0,0,16,4],'PaperPositionMode','manual')
+  subplot(1, 5, 1)
   plot(VBR.in.SV.T_K-273,depth_km,'k','linewidth',1.5)
+  xticks([0, 400, 800, 1200])
   xlabel('T [C]'); ylabel('Depth [km]')
 
-  subplot(2,3,2)
-  plot(VBR.in.SV.rho,depth_km,'k','linewidth',1.5)
-  xlabel('\rho [kg/m^3]')
+  subplot(1, 5,2)
+  plot(VBR.in.SV.rho/1e3,depth_km,'k','linewidth',1.5)
+  xlabel('\rho [g/cm^3]')
 
-  subplot(2,3,3)
+  subplot(1, 5,3)
   plot(VBR.in.SV.P_GPa,depth_km,'k','linewidth',1.5)
   xlabel('P [GPa]')
 
-  subplot(2,3,4)
-  plot(VBR.out.elastic.Gu_0/1e9,depth_km,'k','linewidth',1.5)
-  xlabel('Gu_0 [GPa]'); ylabel('Depth [km]')
-
-  subplot(2,3,5)
+  subplot(1, 5, 4)
   plot(VBR.out.elastic.anharmonic.Gu/1e9,depth_km,'k','linewidth',1.5)
   xlabel('Gu(T,P) [GPa]')
 
-  subplot(2,3,6)
+  subplot(1, 5, 5)
   plot(VBR.out.elastic.anharmonic.Vsu/1e3,depth_km,'k','linewidth',1.5)
   xlabel('V_s [km/s]')
 
-  for ip =1:6
-    subplot(2,3,ip)
+  for ip =1:5
+    subplot(1, 5,ip)
     hold on
     ylim([0,150])
     set(gca,'ydir','reverse')

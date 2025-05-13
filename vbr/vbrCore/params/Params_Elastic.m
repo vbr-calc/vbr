@@ -57,14 +57,16 @@ function [params] = Params_Elastic(method,GlobalParams)
     params.description='anharmonic scaling from STP to VBR.in.SV.T_K and VBR.in.SV.P_GPa';
 
     % crustal values (approximate anorthite values calculated using Abers and Hacker 2016)
+    % see https://github.com/vbr-calc/vbrPublicData/blob/master/scripts/an_T_P_G_K.m 
+    % for where these values come from
     params.chi_mixing = 1; 
     params.crust.Gu_0 = 40; % effective reference shear modulus for crust [GPa]
-    params.crust.Ku_0 = 80; % effective reference shear modulus for crust [GPa]
-    params.crust.dG_dT = -3.0e6 ; % Pa/K
-    params.crust.dG_dP = 3.5 ; % Pa/Pa
+    params.crust.Ku_0 = 86; % effective reference shear modulus for crust [GPa]
+    params.crust.dG_dT = -3.6 *1e6 ; % Pa/K
+    params.crust.dG_dP = 0.011474 ; % GPa/GPa
     params.crust.dG_dP2 = 0.0; % 1/Pa
-    params.crust.dK_dT = -1.8 * 1e7; % Pa/K 
-    params.crust.dK_dP = 6 ; % Pa/Pa
+    params.crust.dK_dT = -4.7 * 1e6; % Pa/K 
+    params.crust.dK_dP = 0.013032 ; % Pa/Pa
     params.crust.dK_dP2 = 0.0; % 1/Pa
 
 

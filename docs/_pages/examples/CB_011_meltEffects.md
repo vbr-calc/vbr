@@ -4,6 +4,9 @@ title: ""
 ---
 
 # CB_011_meltEffects.m
+## output figures
+
+!['CB_011_meltEffects_case2_fig2'](/vbr/assets/images/CBs/CB_011_meltEffects_case2_fig2.png){:class="img-responsive"}
 ## contents
 ```matlab
 function Results = CB_011_meltEffects(case2run)
@@ -331,8 +334,7 @@ function VBR = appendFixedSVs(VBR,sz)
   VBR.in.SV.dg_um=0.01*1e6* ones(sz); % grain size [um]
   VBR.in.SV.P_GPa = 2 * ones(sz); % pressure [GPa]
   VBR.in.SV.rho = 3300 * ones(sz); % density [kg m^-3]
-  VBR.in.SV.sig_MPa = .1 * ones(sz); % differential stress [MPa]
-  VBR.in.SV.chi = ones(sz); % composition factor
+  VBR.in.SV.sig_MPa = .1 * ones(sz); % differential stress [MPa]  
   VBR.in.SV.f = [0.01,0.02,0.1];
 end
 

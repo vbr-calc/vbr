@@ -33,6 +33,8 @@ VBR.in.anelastic.andrade_analytical.eta_ss = 1.888272e+21;
 % set state variables
 n1 = 1;
 VBR.in.SV.rho = 3300 * ones(n1,1); % density [kg m^-3]
+VBR.in.SV.P_GPa = 2 * ones(n1,1); % pressure [GPa]
+VBR.in.SV.T_K = 1473 * ones(n1,1); % temperature [K]
 VBR.in.SV.f = logspace(-13,1,100);
 VBR.in.elastic.Gu_TP = 60*1e9;
 VBR.in.elastic.quiet = 1;
