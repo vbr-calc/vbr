@@ -323,8 +323,7 @@ function VBR = appendFixedSVs(VBR,sz)
   VBR.in.SV.dg_um=0.01*1e6* ones(sz); % grain size [um]
   VBR.in.SV.P_GPa = 2 * ones(sz); % pressure [GPa]
   VBR.in.SV.rho = 3300 * ones(sz); % density [kg m^-3]
-  VBR.in.SV.sig_MPa = .1 * ones(sz); % differential stress [MPa]
-  VBR.in.SV.chi = ones(sz); % composition factor
+  VBR.in.SV.sig_MPa = .1 * ones(sz); % differential stress [MPa]  
   VBR.in.SV.f = [0.01,0.02,0.1];
 end
 
