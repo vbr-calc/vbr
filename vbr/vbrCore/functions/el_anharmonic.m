@@ -29,7 +29,9 @@ function [VBR] = el_anharmonic(VBR)
     P_Pa_ref = ela.P_Pa_ref ;
     dT = (VBR.in.SV.T_K-T_K_ref);
     dP = (VBR.in.SV.P_GPa*1e9 - P_Pa_ref);
-    Ku_TP = calc_Mu(VBR, 'K', Ku_0, dT, dP);    
+    t_scale = ela.temperature_scaling;
+    p_scale = ela.pressure_scaling; 
+    Ku_TP = calc_Mu(VBR, t_scale, p_scale, 'K', Ku_0, dT, dP);    
   else   
     ela = VBR.in.elastic.anharmonic;
 
