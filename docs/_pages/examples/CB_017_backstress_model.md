@@ -15,15 +15,15 @@ path_to_top_level_vbr='../../';
 addpath(path_to_top_level_vbr)
 vbr_init
 
-VBR.in.viscous.methods_list = {'backstress_linear';};
 VBR.in.anelastic.methods_list = {'backstress_linear'};
 VBR.in.elastic.methods_list = {'anharmonic'};
+
 VBR.in.elastic.anharmonic = Params_Elastic('anharmonic'); 
 VBR.in.elastic.anharmonic.temperature_scaling = 'isaak';
 VBR.in.elastic.anharmonic.pressure_scaling = 'abramson';
 
 % set state variables
-VBR.in.SV.T_K = [1300, 1400, 1500] + +273;
+VBR.in.SV.T_K = [1300, 1400, 1500] + 273;
 sz = size(VBR.in.SV.T_K);
 VBR.in.SV.sig_dc_MPa = full_nd(3., sz);
 VBR.in.SV.dg_um = full_nd(0.001 * 1e6, sz);
@@ -31,14 +31,12 @@ VBR.in.SV.dg_um = full_nd(0.001 * 1e6, sz);
 % following are needed for anharmonic calculation
 VBR.in.SV.P_GPa = full_nd(5., sz);
 VBR.in.SV.rho = full_nd(3300, sz);
-
 VBR.in.SV.f = logspace(-8, 0, 500);%[0.001, 0.01]; 
 
+% calculations
 VBR = VBR_spine(VBR); 
 
-% disp(VBR.out.viscous.backstress_linear.eta_total)
-% disp(VBR.out.anelastic.backstress_linear.Qinv)
-
+% plotting
 Qinv = VBR.out.anelastic.backstress_linear.Qinv;
 valid_f = VBR.out.anelastic.backstress_linear.valid_f;
 figure('PaperPosition',[0,0,6,4],'PaperPositionMode','manual')
