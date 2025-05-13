@@ -7,6 +7,8 @@
     * removes the fixed poisson ratio and instead calculates a bulk modulus following the shear modulus method: there are now fields for reference bulk modulus and temperature, pressure derivatives. 
     * adds a pressure scaling from Abramson et al 1997
 
+* new anelastic method! `backstress_linear` implements the linearized backstress model of dislocation-based dissipation from Hein et al., 2025. See the docs and new example. 
+
 ## Bug fixes
 
 ## Documentation 
