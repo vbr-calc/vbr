@@ -36,26 +36,33 @@ function [VBR] = Q_backstress_linear(VBR)
     sig_d_MPa = params.Beta .* (G_Pa / 1e9) .* params.burgers_vector_nm ./ d_nm;
     E_R_Pa = M_GPa .* (sig_p_MPa + sig_d_MPa) ./ sig_p_MPa * 1e9 ;    
     
-        
     % the main loop over state variables
     for i_sv = 1:n_th
         eta_i = eta1(i_sv);
         E_R_i = E_R_Pa(i_sv); 
         E_U_i = E_GPa(i_sv)*1e9;
+        rho_i = VBR.in.SV.rho(i_sv);
         
         omega_o(i_sv) = sqrt(E_R_i * (E_R_i + E_U_i)) ./ eta_i / 10; 
 
         for iw = 1:n_freq
             i_glob = i_sv + (iw - 1) * n_th; % the linear index of the arrays with a frequency index
             E_star_inv = (1 ./ (E_R_i + eta_i .* omega(iw) .* i) + 1 ./ E_U_i);             
-            E_star_i = 1 ./ E_star_inv;             
-            J1(i_glob) = real(E_star_i); 
-            J2(i_glob) = imag(E_star_i); 
-            M(i_glob) = norm(E_star_i); 
+            E_star_i = 1 ./ E_star_inv;
+            
+            J1(i_glob) = real(1./E_star_i); 
+            J2(i_glob) = imag(1./E_star_i); 
+            M(i_glob) = norm(E_star_i); % relaxed young's modulus
+            
             denom = E_R_i.^2 + E_R_i.*E_U_i + eta_i*eta_i*omega(iw)*omega(iw);
             Qinv(i_glob) = eta_i * E_U_i * omega(iw) ./ (denom);
             
-            V(i_glob) = sqrt(1./(J1(i_glob)) * VBR.in.SV.rho(i_sv));
+            % assume no attenuation for bulk modulus, calculate relaxed shear modulus
+            % from the relaxed young's modulus
+            E_i = M(i_glob);
+            G_eff = 3 * K_Pa(i_sv) *  E_i / (9 * K_Pa(i_sv) - E_i);
+            % J2_J1_frac=(1+sqrt(1+(J2(i_glob)./J1(i_glob)).^2))/2;            
+            V(i_glob) = sqrt(G_eff./ rho_i);
             valid_f(i_glob) = omega(iw) >= omega_o(i_sv);
         end 
     end 

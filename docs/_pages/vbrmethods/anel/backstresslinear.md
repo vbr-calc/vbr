@@ -121,5 +121,7 @@ Some notes on the above fields (see Hein et al, 2025 for more details):
 * `A`: arrhensious pre-exponentional factor for low-temperature plasticity
 * `G_UR`: is the fixed shear modulus, not actually used by the VBRc but included here for reference. The VBRc uses output from the anharmonic calculation.
 
+## Additional notes
 
+The backstress model is cast in terms of young's modulus. To calculate seismic velocities, the VBRc assumes that anelastic effects on bulk modulus are negligible, and the relaxed shear modulus is calculated from the relaxed young's modulus and the unrelaxed bulk modulus using standard relationships for isotropic linear elastic materials.
 
