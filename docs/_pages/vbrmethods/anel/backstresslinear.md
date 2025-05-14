@@ -71,11 +71,9 @@ Output is stored in `VBR.out.anelastic.backstress_linear`:
 
 ```
 
-The following fields are frequency dependent: `J1`,`J2`,`Q`,`Qinv`,`M`, `V` and `valid_f`. 
+The following fields are frequency dependent: `J1`,`J2`,`Q`,`Qinv`,`M`, `V` and `valid_f`. For this method, `M` is the relaxed Young's modulus (and `J1`, `J2` are the real and complex portion of the complex Young's modulus). To calculate seismic velocities, the VBRc assumes that anelastic effects on bulk modulus are negligible, so the relaxed shear modulus can be calculated from the relaxed young's modulus and the unrelaxed bulk modulus using standard relationships for isotropic linear elastic materials.
 
-In addition to the usual outputs, the linear backstress model includes a calculation of the model's characteristic angular frequency, `omega_o`, for each thermodynamic state. The corresponding output, `valid_f`, is a boolean matrix of the same shape as the frequency-dependent variables where the value is 1 if when the frequency is greater than `omega_o / 10`, indicating the regions where the linearized model is expected to be a good fit for the full backstress model (see Hein et al., 2025). 
-
-This allows you to plot or highlight just the regions that are valid, e.g., see the cookbook example, `CB_017_backstress_model.m`:
+In addition to the usual outputs, the linear backstress model includes a calculation of the model's characteristic angular frequency, `omega_o`, for each thermodynamic state. The corresponding output, `valid_f`, is a boolean matrix of the same shape as the frequency-dependent variables where the value is 1 if when the frequency is greater than `omega_o / 10`, indicating the regions where the linearized model is expected to be a good fit for the full backstress model (see Hein et al., 2025). This allows you to plot or highlight just the regions that are valid, e.g., see the cookbook example, `CB_017_backstress_model.m`:
 
 !['backstressexample'](/vbr/assets/images/backstress_example.png){:class="img-responsive"}
 
@@ -121,7 +119,4 @@ Some notes on the above fields (see Hein et al, 2025 for more details):
 * `A`: arrhensious pre-exponentional factor for low-temperature plasticity
 * `G_UR`: is the fixed shear modulus, not actually used by the VBRc but included here for reference. The VBRc uses output from the anharmonic calculation.
 
-## Additional notes
-
-The backstress model is cast in terms of young's modulus. To calculate seismic velocities, the VBRc assumes that anelastic effects on bulk modulus are negligible, and the relaxed shear modulus is calculated from the relaxed young's modulus and the unrelaxed bulk modulus using standard relationships for isotropic linear elastic materials.
 

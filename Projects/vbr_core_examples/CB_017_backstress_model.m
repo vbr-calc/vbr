@@ -1,4 +1,5 @@
-%% put VBR in the path %%
+% reproduces the supplemental figure S12 of Hein et al, 2025 
+
 clear
 path_to_top_level_vbr='../../';
 addpath(path_to_top_level_vbr)
@@ -6,7 +7,6 @@ vbr_init
 
 VBR.in.anelastic.methods_list = {'backstress_linear'};
 VBR.in.elastic.methods_list = {'anharmonic'};
-
 VBR.in.elastic.anharmonic = Params_Elastic('anharmonic'); 
 VBR.in.elastic.anharmonic.temperature_scaling = 'isaak';
 VBR.in.elastic.anharmonic.pressure_scaling = 'abramson';

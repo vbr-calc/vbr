@@ -33,7 +33,7 @@ function [VBR] = Q_backstress_linear(VBR)
     sig_dc_MPa = VBR.in.SV.sig_dc_MPa; 
     sig_p_MPa = params.sig_p_sig_dc_factor * sig_dc_MPa; 
      
-    sig_d_MPa = params.Beta .* (G_Pa / 1e9) .* params.burgers_vector_nm ./ d_nm;
+    sig_d_MPa = params.Beta .* (G_Pa / 1e6) .* params.burgers_vector_nm ./ d_nm;
     E_R_Pa = M_GPa .* (sig_p_MPa + sig_d_MPa) ./ sig_p_MPa * 1e9 ;    
     
     % the main loop over state variables
