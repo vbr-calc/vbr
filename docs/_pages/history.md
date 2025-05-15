@@ -1,3 +1,25 @@
+---
+permalink: /history/
+title: "Release Notes"
+toc: false
+---
+
+# v2.0.2dev
+
+Current development head.
+
+## New Features
+
+## Bug fixes
+
+## Documentation 
+
+## Deprecations
+
+## Infrastructure improvements
+
+## Other changes
+
 # v2.0.1
 
 Bugfix release to improve velocity calculations from the new linearized backstress anelastic method (`backstress_model`) 
@@ -149,3 +171,5 @@ maintenance updates (testing, github CI, documentation)
 # v <= 0.99.3
 
 release_history.md covers v>0.99.3.
+
+

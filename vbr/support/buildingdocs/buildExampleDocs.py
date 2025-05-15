@@ -14,3 +14,5 @@ if __name__ == "__main__":
     # rebuild the cookbook examples
     CBwalker=converter.CBwalker()
     CBwalker.walkDir(clearTargetDir=clear_dir)
+
+    converter.sync_release_notes()
