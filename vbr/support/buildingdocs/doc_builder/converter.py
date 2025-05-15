@@ -192,3 +192,35 @@ class CBwalker(object):
         ' and available to view here:\n')
         rows.append(Details)
         return rows
+
+
+def sync_release_notes():
+
+    vbrinfo = VBRinit()
+    
+    target = os.path.join(vbrinfo.DocsPath, '_pages', 'history.md')
+
+    rows = [] 
+    rows.append('---\n')
+    rows.append('permalink: /history/\n')
+    rows.append('title: "Release Notes"\n')
+    rows.append('toc: false\n')
+    rows.append('---\n\n')
+    
+    r_notes = os.path.join(vbrinfo.VBRpath, 'release_notes.md')
+    r_history = os.path.join(vbrinfo.VBRpath, 'release_history.md')
+
+    with open(r_notes, 'r') as f: 
+        rows += f.readlines()
+
+    rows.append('\n\n')
+
+    with open(r_history, 'r') as f: 
+        rows += f.readlines()
+
+    rows.append('\n\n')
+    with open(target, 'w') as f:
+        f.writelines(rows)
+
+
+

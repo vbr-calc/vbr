@@ -1,6 +1,6 @@
 # v2.0.2dev
 
-Description
+Current development head.
 
 ## New Features
 
