@@ -1,7 +1,11 @@
 function [VBR] = Q_backstress_linear(VBR)
 
     % pull out some parameters
-    params = VBR.in.anelastic.backstress_linear;    
+    params = VBR.in.anelastic.backstress_linear;
+    if params.print_experimental_message == 1
+        disp(params.experimental_message)
+    end
+
     M_GPa = params.M_GPa;
 
     % pull out state variables 
