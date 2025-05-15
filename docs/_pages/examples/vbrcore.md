@@ -22,3 +22,4 @@ Simple "Cookbook" (CB) scripts demonstrating various use cases of the VBR Calcul
 * `CB_015_analytical_andrade.m` [link](/vbr/examples/CB_015_analytical_andrade/)
 * `CB_016_complex_viscosity.m` [link](/vbr/examples/CB_016_complex_viscosity/)
 * `CB_017_backstress_model.m` [link](/vbr/examples/CB_017_backstress_model/)
+* `CB_018_backstress_model_LUT.m` [link](/vbr/examples/CB_018_backstress_model_LUT/)

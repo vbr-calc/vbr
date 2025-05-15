@@ -8,6 +8,9 @@ title: ''
 
 The `backstress_linear` anelastic method is an implementation of the linearized backstress model of dislocation-based dissipation from Hein et al., 2025, https://doi.org/10.22541/essoar.174326672.28941810/v1 . Note that the current implementation is based on the pre-print, and the model here will be updated pending pre-print review. 
 
+Note: this method is new in VBRc 2.0.0 and still needs a bit of work to verify it is 
+working correctly. Feel free to try it out and please [report any issues](https://github.com/vbr-calc/vbr/issues/new)! 
+
 ## Requires
 
 The following state variable arrays are required:
@@ -71,11 +74,9 @@ Output is stored in `VBR.out.anelastic.backstress_linear`:
 
 ```
 
-The following fields are frequency dependent: `J1`,`J2`,`Q`,`Qinv`,`M`, `V` and `valid_f`. 
+The following fields are frequency dependent: `J1`,`J2`,`Q`,`Qinv`,`M`, `V` and `valid_f`. For this method, `M` is the relaxed Young's modulus (and `J1`, `J2` are the real and complex portion of the complex Young's modulus). To calculate seismic velocities, the VBRc assumes that anelastic effects on bulk modulus are negligible, so the relaxed shear modulus can be calculated from the relaxed young's modulus and the unrelaxed bulk modulus using standard relationships for isotropic linear elastic materials.
 
-In addition to the usual outputs, the linear backstress model includes a calculation of the model's characteristic angular frequency, `omega_o`, for each thermodynamic state. The corresponding output, `valid_f`, is a boolean matrix of the same shape as the frequency-dependent variables where the value is 1 if when the frequency is greater than `omega_o / 10`, indicating the regions where the linearized model is expected to be a good fit for the full backstress model (see Hein et al., 2025). 
-
-This allows you to plot or highlight just the regions that are valid, e.g., see the cookbook example, `CB_017_backstress_model.m`:
+In addition to the usual outputs, the linear backstress model includes a calculation of the model's characteristic angular frequency, `omega_o`, for each thermodynamic state. The corresponding output, `valid_f`, is a boolean matrix of the same shape as the frequency-dependent variables where the value is 1 if when the frequency is greater than `omega_o / 10`, indicating the regions where the linearized model is expected to be a good fit for the full backstress model (see Hein et al., 2025). This allows you to plot or highlight just the regions that are valid, e.g., see the cookbook example, `CB_017_backstress_model.m`:
 
 !['backstressexample'](/vbr/assets/images/backstress_example.png){:class="img-responsive"}
 
@@ -120,6 +121,5 @@ Some notes on the above fields (see Hein et al, 2025 for more details):
 * `Beta`: geometric factor
 * `A`: arrhensious pre-exponentional factor for low-temperature plasticity
 * `G_UR`: is the fixed shear modulus, not actually used by the VBRc but included here for reference. The VBRc uses output from the anharmonic calculation.
-
 
 
