@@ -1,4 +1,10 @@
 function [T_1d, dg_1d, sig_dc_1d, VBR] = CB_018_backstress_model_LUT()
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % [T_1d, dg_1d, sig_dc_1d, VBR] = CB_018_backstress_model_LUT();
+    %
+    % a more thorough exploration of the parameter space for the 
+    % linearized backstress model of Hein et al., 2025
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     path_to_top_level_vbr='../../';
     addpath(path_to_top_level_vbr)
@@ -60,7 +66,7 @@ function line_plots(VBR, T_1d, dg_1d, sig_dc_1d)
                  'displayname', dg_name, 'color', clr, 'linewidth', 2);
         hold on
     end 
-    title('fixed sig_dc, freq')
+    title('fixed sig_{dc}, freq')
     legend('location', 'northwest')
     xlabel('T [C]')
     ylabel('Q^{-1}')
@@ -80,7 +86,7 @@ function line_plots(VBR, T_1d, dg_1d, sig_dc_1d)
                  'displayname', T_name, 'color', clr, 'linewidth', 2);
         hold on
     end 
-    title('fixed sig_dc, freq')
+    title('fixed sig_{dc} , freq')
     legend('location', 'eastoutside')
     xlabel('grain size [m]')
     ylabel('Q^{-1}')
