@@ -74,17 +74,17 @@ function [VBR] = Q_xfit_premelt(VBR)
     n_SVs=numel(Tn); % total elements in state variables
 
     % loop over frequencies, calculate J1,J2
-    for i = 1:n_freq
+    for ifreq = 1:n_freq
 
-      sv_i0=(i-1)*n_SVs + 1; % starting linear index of this freq
+      sv_i0=(ifreq-1)*n_SVs + 1; % starting linear index of this freq
       sv_i1=sv_i0+n_SVs-1; % ending linear index of this freq
-      f_norm_glob(sv_i0:sv_i1)=tau_m*VBR.in.SV.f(i);
-      p_p=period_vec(i)./(2*pi*tau_m);
+      f_norm_glob(sv_i0:sv_i1)=tau_m*VBR.in.SV.f(ifreq);
+      p_p=period_vec(ifreq)./(2*pi*tau_m);
       % tau_eta^S= tau_s / (2 pi tau_m);, tau_s = seismic wave period, tau_m = ss maxwell time
       ABppa=A_B_plus_Beta_B .* (p_p.^alpha_B);
       lntaupp=log(tau_pp./p_p);
 
-      J1(sv_i0:sv_i1)=Ju_in .* (1 + poro_elastic_factor + ABppa/alpha_B+ ...
+      J1(sv_i0:sv_i1)=Ju_in .* (1 + poro_elastic_factor + ABppa/alpha_B + ...
            pifac*A_p.*sig_p.*(1-erf(lntaupp./(sqrt(2).*sig_p))));
       J2(sv_i0:sv_i1)=Ju_in*pi/2.*(ABppa+A_p.*(exp(-(lntaupp.^2)./(2*sig_p.^2)))) + ...
            Ju_in.*p_p;

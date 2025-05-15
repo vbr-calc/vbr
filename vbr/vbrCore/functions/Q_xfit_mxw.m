@@ -64,9 +64,9 @@ function [VBR] = Q_xfit_mxw(VBR)
     tau_norm = tau_vec ./ tau_mxw ; % vector ./ scalar
 
     % loop over frequency
-    for i=1:n_freq
-      i_glob = x1 + (i - 1) * n_th; % the linear index of the arrays with a frequency index
-      freq=f_vec(i); % current frequency
+    for ifreq=1:n_freq
+      i_glob = x1 + (ifreq - 1) * n_th; % the linear index of the arrays with a frequency index
+      freq=f_vec(ifreq); % current frequency
       f_norm=tau_mxw*freq; % normalized frequency
       max_tau_norm=1./(2*pi*f_norm); % maximum normalized tau
 
@@ -81,7 +81,7 @@ function [VBR] = Q_xfit_mxw(VBR)
       J1(i_glob) = Ju.*(1 + int1);
 
       % XJ2= Q_xfit_mxw_xfunc(J2tau_norm,VBR.in.anelastic.xfit_mxw) ;
-      J2(i_glob) = Ju.*((pi/2)*X_tau(end) + tau_norm(i)); % eq 18  of [1]
+      J2(i_glob) = Ju.*((pi/2)*X_tau(end) + tau_norm(ifreq)); % eq 18  of [1]
 
       % See McCarthy et al, 2011, Appendix B, Eqns B6 !
       % J2_J1_frac=(1+sqrt(1+(J2(i_glob)./J1(i_glob)).^2))/2;

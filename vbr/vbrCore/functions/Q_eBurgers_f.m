@@ -80,9 +80,9 @@ function [VBR] = Q_eBurgers_f(VBR)
     end
 
     % loop over frequency
-    for i=1:nfreq
-      i_glob = x1 + (i - 1) * n_th; % the linear index of the arrays with a frequency index
-      w = w_vec(i);
+    for ifreq=1:nfreq
+      i_glob = x1 + (ifreq - 1) * n_th; % the linear index of the arrays with a frequency index
+      w = w_vec(ifreq);
 
       if HTB_int_meth==0 %% trapezoidal integration --
           D_vec = (alf.*Tau_X_vec.^(alf-1))./(Tau_H^alf - Tau_L^alf);
