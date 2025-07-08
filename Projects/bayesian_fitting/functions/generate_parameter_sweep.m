@@ -158,8 +158,8 @@ function [sweepBox] = calculate_sweep(VBR_init, sweep_params)
         V = VBR.out.anelastic.(ameth).V/1e3;
         % disp(size(V))
         
-        VBRBox(i_P).(ameth).Qmean = mean(Q,4); # size is (T,phi,gs)
-        VBRBox(i_P).(ameth).Vsmean = mean(V,4); # size is (T,phi,gs)
+        VBRBox(i_P).(ameth).Qmean = mean(Q,4); % size is (T,phi,gs)
+        VBRBox(i_P).(ameth).Vsmean = mean(V,4); % size is (T,phi,gs)
         % disp(size(VBRBox(i_P).(ameth).Qmean))
         % disp(VBRBox(i_P).(ameth).Qmean(1:5))
         % disp(VBRBox(i_P).(ameth).Vsmean(1:5))
