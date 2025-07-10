@@ -1,14 +1,9 @@
+function VBR = CB_013_G_K_inputs()
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CB_013_G_K_inputs.m
 %
 %  Specify unrelaxed shear and bulk moduli.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% put the VBRc in the path %
-clear
-path_to_top_level_vbr='../../';
-addpath(path_to_top_level_vbr)
-vbr_init
 
 % specify state variables as usual
 VBR = struct();
@@ -33,3 +28,4 @@ VBR.in.elastic.Ku_TP = VBR.in.elastic.Gu_TP * 1.5; % bulk modulus
 
 % call the VBRc
 VBR = VBR_spine(VBR);
+end

@@ -1,14 +1,9 @@
+function VBR = CB_012_simplecrust()
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CB_012_simplecrust.m
 %
 %  Calculate seismic properties for steady state plate model with simple crust
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%% put VBR in the path %%
-  clear
-  path_to_top_level_vbr='../../';
-  addpath(path_to_top_level_vbr)
-  vbr_init
 
 %% Set Thermodynamic State Using Steady State Plate Model with no radiogenic heating %%
   % plate model
@@ -80,3 +75,4 @@
   xlim([-.01,1.01])
   set(gca,'ydir','reverse')
   saveas(gcf,'./figures/CB_012_simplecrust.png')
+end

@@ -1,3 +1,4 @@
+function VBR = CB_003_JF10()
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CB_003_JF10.m
 %
@@ -6,11 +7,6 @@
 %  in table 1 of JF10.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% put VBR in the path %%
-  clear; close all;
-  path_to_top_level_vbr='../../';
-  addpath(path_to_top_level_vbr)
-  vbr_init
 
 %%  write method list %%
   VBR.in.elastic.methods_list={'anharmonic'};
@@ -104,3 +100,4 @@
     subplot(2,2,ip); box on;
   end
   saveas(gcf,'./figures/CB_003_JF10.png')
+end

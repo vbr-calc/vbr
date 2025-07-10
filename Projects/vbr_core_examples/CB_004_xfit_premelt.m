@@ -1,3 +1,4 @@
+function VBR = CB_004_xfit_premelt()
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CB_004_xfit_premelt.m
 %
@@ -6,11 +7,6 @@
 %    near-solidus temperatures,"
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% put VBR in the path %%
-  clear; close all
-  path_to_top_level_vbr='../../';
-  addpath(path_to_top_level_vbr)
-  vbr_init
 
 %% write method list %%
   VBR.in.elastic.methods_list={'anharmonic','anh_poro'};
@@ -61,3 +57,4 @@
   semilogx(1./VBR.in.SV.f,1e-3*squeeze(VBR.out.anelastic.xfit_premelt.V(1,:,:)));
   ylabel('V_s [km/s]'); xlabel('period [s]')
   saveas(gcf,'./figures/CB_004_xfit_premelt.png')
+end

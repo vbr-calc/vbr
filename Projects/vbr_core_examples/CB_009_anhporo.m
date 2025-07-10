@@ -1,14 +1,10 @@
+function VBR = CB_009_anhporo()
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CB_009_anhporo.m
 %
 %   Script that plots unrelaxed shear modulus and wavespead vs porosity
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% put VBR in the path %%
-  clear
-  path_to_top_level_vbr='../../';
-  addpath(path_to_top_level_vbr)
-  vbr_init
 
 %% set porosity variation and other state variables %%
   VBR.in.SV.phi=logspace(-5,-1,100);
@@ -36,3 +32,4 @@
   set(gca,'linewidth',1.5)
 
   saveas(gcf,'./figures/CB_009_anhporo.png')
+end

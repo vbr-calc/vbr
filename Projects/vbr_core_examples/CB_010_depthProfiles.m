@@ -13,10 +13,6 @@ function [VBR,HF] = CB_010_depthProfiles()
   %   figures to screen
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  %% put VBR in the path %%
-  path_to_top_level_vbr='../../';
-  addpath(path_to_top_level_vbr)
-  vbr_init
 
   %% build thermal model %%
   HF = HalfspaceModel(30); % analytical half-space cooling

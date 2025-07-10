@@ -1,13 +1,9 @@
+function VBR = CB_008_anharmonic_Gu0()
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CB_008_anharmonic_Gu0.m
 %
 %   Example of including a depth dependence with a low density crust
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%% put VBR in the path %%
-  path_to_top_level_vbr='../../';
-  addpath(path_to_top_level_vbr)
-  vbr_init
 
 %% set depth array and temperature profile %%
   depth_km=linspace(0,150,100);
@@ -68,3 +64,4 @@
   end
 
   saveas(gcf,'./figures/CB_008_anharmonic_Gu0.png')
+end

@@ -6,10 +6,6 @@ function [T_1d, dg_1d, sig_dc_1d, VBR] = CB_018_backstress_model_LUT()
     % linearized backstress model of Hein et al., 2025
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    path_to_top_level_vbr='../../';
-    addpath(path_to_top_level_vbr)
-    vbr_init
-
     VBR.in.anelastic.methods_list = {'backstress_linear'};
     VBR.in.elastic.methods_list = {'anharmonic'};
     VBR.in.elastic.anharmonic = Params_Elastic('anharmonic'); 

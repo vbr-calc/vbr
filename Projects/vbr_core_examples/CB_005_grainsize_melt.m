@@ -1,15 +1,10 @@
+function VBR = CB_005_grainsize_melt()
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CB_005_grainsize_melt.m
 %
 %  Calculates anelastic properties for all methods and a range of grain
 %  size and melt fraction.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%% put VBR in the path %%
-  clear
-  path_to_top_level_vbr='../../';
-  addpath(path_to_top_level_vbr)
-  vbr_init
 
 %% write method lists, adjust parameters %%
   VBR.in.elastic.methods_list={'anharmonic';'anh_poro'};
@@ -90,3 +85,4 @@
   subplot(2,2,1)
   legend('location','southwest')
   saveas(gcf,'./figures/CB_005_grainsize_melt.png')
+end

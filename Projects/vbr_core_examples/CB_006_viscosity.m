@@ -1,3 +1,4 @@
+function VBR = CB_006_viscosity()
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CB_006_viscosity.m
 %
@@ -6,11 +7,6 @@
 %   all full flow-law viscous methods.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% put VBR in the path %%
-  clear
-  path_to_top_level_vbr='../../';
-  addpath(path_to_top_level_vbr)
-  vbr_init
 
 %%write method list  %%
   VBR.in.viscous.methods_list={'HK2003';'HZK2011'};
@@ -69,3 +65,4 @@
   subplot(2,2,4)
   box on; xlabel('log10 \sigma [MPa]'); ylabel('log10 effective viscosity [Pa s]')
 saveas(gcf,'./figures/CB_006_viscosity.png')
+end

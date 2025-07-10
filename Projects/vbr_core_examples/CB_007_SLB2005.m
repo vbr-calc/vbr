@@ -1,14 +1,9 @@
+function VBR = CB_007_SLB2005()
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CB_007_SLB2005.m
 %
 %   Calculates SLB parametrization
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%% put VBR in the path %%
-  clear
-  path_to_top_level_vbr='../../';
-  addpath(path_to_top_level_vbr)
-  vbr_init
 
 %% Load and set VBR parameters %%
   VBR.in.elastic.methods_list={'SLB2005'};
@@ -44,3 +39,4 @@
   set(gca,'Ydir','reverse')
   xlabel('Vs [km/s]'); ylabel('z [km]')
   saveas(gcf,'./figures/CB_007_SLB2005.png')
+end

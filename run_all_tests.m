@@ -1,6 +1,7 @@
 
 vbr_init
-addpath('vbr/testing')
+addpath(['vbr', filesep, 'testing'])
+addpath(['Projects', filesep, 'vbr_core_examples'])
 
 TestResults = run_tests();
 

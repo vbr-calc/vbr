@@ -18,10 +18,6 @@ function Results = CB_011_meltEffects(case2run)
   %   Also prints figures to screen
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  % put VBR in the path
-  path_to_top_level_vbr='../../';
-  addpath(path_to_top_level_vbr)
-  vbr_init
 
   % run the cases
   if ~exist('case2run')

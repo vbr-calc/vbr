@@ -1,15 +1,10 @@
+function VBR = CB_001_0D_scalar()
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CB_001_0D_scalar.m
 %
 %  Calls VBR Calculator using a single thermodynamic state for a range of
 %  frequency.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%% put VBR in the path %%
-  clear
-  path_to_top_level_vbr='../../';
-  addpath(path_to_top_level_vbr)
-  vbr_init
 
 %%  write method list for each property type to calculate %%
   %  all methods will end up as output like:
@@ -74,3 +69,4 @@
   xlabel('Frequency [Hz]'); ylabel('Q'); box on
 
   saveas(gcf,'./figures/CB_001_0D_scalar.png')
+end

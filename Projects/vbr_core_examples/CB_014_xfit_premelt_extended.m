@@ -1,3 +1,4 @@
+function VBR = CB_014_xfit_premelt_extended()
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CB_014_xfit_premelt_extended.m
 %
@@ -7,11 +8,6 @@
 %    Polycrystal Anelasticity", https://doi.org/10.1029/2023JB027738
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% put VBR in the path %%
-  clear; close all
-  path_to_top_level_vbr='../../';
-  addpath(path_to_top_level_vbr)
-  vbr_init
 
 %% write method list %%
   VBR.in.elastic.methods_list={'anharmonic'};
@@ -72,3 +68,4 @@
   saveas(gcf,'./figures/CB_014_xfit_premelt_extended.png')
 
 
+end

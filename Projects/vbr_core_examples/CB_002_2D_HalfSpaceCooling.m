@@ -1,3 +1,4 @@
+function VBR = CB_002_2D_HalfSpaceCooling()
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CB_002_2D_HalfSpaceCooling.m
 %
@@ -5,11 +6,6 @@
 %  results of two anelastic methods.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% put VBR in the path %%
-  clear
-  path_to_top_level_vbr='../../';
-  addpath(path_to_top_level_vbr)
-  vbr_init
 
 %% Set Thermodynamic State Using Half Space Cooling Model %%
 %%   analytical solution:
@@ -23,7 +19,7 @@
   HF.Kappa=1e-6; % thermal diffusivity [m^2/s]
   HF.rho=3300; % density [kg/m3]
   HF.t_Myr=linspace(0,80,50)+1e-12; % seaflor age [Myrs]
-  HF.z_km=linspace(0,200,50)'; % depth, opposite vector orientation [km]
+  HF.z_km=linspace(0,200,55)'; % depth, opposite vector orientation [km]
 
   % HF calculations
   HF.s_in_yr=(3600*24*365); % seconds in a year [s]
@@ -104,3 +100,4 @@
      title([num2str(VBR.in.SV.f(i_f)),' Hz, max(dV)=',num2str(maxval),' percent'])
      colorbar()
   end
+end
