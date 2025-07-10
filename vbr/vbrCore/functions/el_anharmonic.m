@@ -44,8 +44,8 @@ function [VBR] = el_anharmonic(VBR)
     dT = (VBR.in.SV.T_K-T_K_ref);
     dP = (VBR.in.SV.P_GPa*1e9 - P_Pa_ref);
     
-    % calculate shear and bulk moduls at 
-    % at T,P of interest  
+    % calculate shear and bulk modulus at
+    % at T,P of interest
     t_scale = ela.temperature_scaling;
     p_scale = ela.pressure_scaling;  
     Gu_TP = calc_Mu(VBR, t_scale, p_scale, 'G', Gu_0, dT, dP);
@@ -82,7 +82,9 @@ end
 function M_TP = calc_Mu(VBR, t_scale, p_scale, G_or_K, Mu_0, dT, dP)
   % a generic modulus calculation at temperature, 
   % pressure for the selected temperature and pressure
-  % scaling.     
+  % scaling.  
+  %
+  % G_or_K should be in Pa!   
 
   % field names for G or K derivatives
   dMdT_str = ['d', G_or_K, '_dT'];
@@ -104,8 +106,8 @@ function [Gu_TP, Ku_TP] = chi_mixing(Gu_TP, Ku_TP, dT, dP, VBR)
 
   % get crustal G, K
   ela = VBR.in.elastic.anharmonic;
-  Gu_0 = ela.crust.Gu_0;
-  Ku_0 = ela.crust.Ku_0;
+  Gu_0 = ela.crust.Gu_0 * 1e9;
+  Ku_0 = ela.crust.Ku_0 * 1e9;
   t_scale = 'crust';
   p_scale = 'crust';
   Gu_TP_c = calc_Mu(VBR, t_scale, p_scale, 'G', Gu_0, dT, dP);
