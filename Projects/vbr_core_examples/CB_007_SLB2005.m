@@ -1,14 +1,14 @@
 function VBR = CB_007_SLB2005()
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% CB_007_SLB2005.m
-%
-%   Calculates SLB parametrization
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % CB_007_SLB2005.m
+  %
+  %   Calculates SLB parametrization
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% Load and set VBR parameters %%
+  %% Load and set VBR parameters %%
   VBR.in.elastic.methods_list={'SLB2005'};
 
-%% Define the Thermodynamic State %%
+  %% Define the Thermodynamic State %%
   rho=3300;
   z=linspace(0,300,100)*1e3;
   VBR.in.SV.P_GPa = rho*9.8*z / 1e9;
@@ -19,10 +19,10 @@ function VBR = CB_007_SLB2005()
   VBR.in.SV.T_K(z>zPlate)=1300+(z(z>zPlate)-zPlate)*dTdz;
   VBR.in.SV.T_K=VBR.in.SV.T_K+273;
 
-%% CALL THE VBR CALCULATOR %%
+  %% CALL THE VBR CALCULATOR %%
   [VBR] = VBR_spine(VBR) ;
 
-%% Plot output
+  %% Plot output
   figure()
   subplot(1,3,1)
   plot(VBR.in.SV.P_GPa,z/1e3)

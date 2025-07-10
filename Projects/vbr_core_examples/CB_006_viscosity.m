@@ -1,17 +1,17 @@
 function VBR = CB_006_viscosity()
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% CB_006_viscosity.m
-%
-%   Calculates viscosity using different flow laws, plots log-log plots of
-%   composite strain rate, effective viscosity vs stress, grain size for
-%   all full flow-law viscous methods.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % CB_006_viscosity.m
+  %
+  %   Calculates viscosity using different flow laws, plots log-log plots of
+  %   composite strain rate, effective viscosity vs stress, grain size for
+  %   all full flow-law viscous methods.
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-%%write method list  %%
+  %%write method list  %%
   VBR.in.viscous.methods_list={'HK2003';'HZK2011'};
 
-%% Define the Thermodynamic State %%
+  %% Define the Thermodynamic State %%
   VBR.in.SV.dg_um=logspace(-6,-1,80)*1e6;
   sz=size(VBR.in.SV.dg_um);
   VBR.in.SV.phi = zeros(sz); % melt raction
@@ -19,10 +19,10 @@ function VBR = CB_006_viscosity()
   VBR.in.SV.T_K = 1473 * ones(sz); % temperature [K]
   VBR.in.SV.sig_MPa = 10 * ones(sz); % differential stress [MPa]
 
-%% CALL THE VBR CALCULATOR %%
+  %% CALL THE VBR CALCULATOR %%
   [VBR_vs_dg] = VBR_spine(VBR) ;
 
-%% adjust input, call again
+  %% adjust input, call again
   VBR.in.SV=struct(); % clear out SV struct to clear default fields
   VBR.in.SV.sig_MPa=logspace(-1,2,50);
   sz=size(VBR.in.SV.sig_MPa);
@@ -32,7 +32,7 @@ function VBR = CB_006_viscosity()
   VBR.in.SV.T_K = 1473 * ones(sz); % temperature [K]
   [VBR_vs_sig] = VBR_spine(VBR) ;
 
-%% Plot strain rates, viscosity %%
+  %% Plot strain rates, viscosity %%
   figure()
   for imeth=1:numel(VBR_vs_dg.in.viscous.methods_list)
     vmeth=VBR_vs_dg.in.viscous.methods_list{imeth};
@@ -64,5 +64,5 @@ function VBR = CB_006_viscosity()
 
   subplot(2,2,4)
   box on; xlabel('log10 \sigma [MPa]'); ylabel('log10 effective viscosity [Pa s]')
-saveas(gcf,'./figures/CB_006_viscosity.png')
+  saveas(gcf,'./figures/CB_006_viscosity.png')
 end

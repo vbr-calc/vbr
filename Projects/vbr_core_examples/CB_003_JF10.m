@@ -1,18 +1,18 @@
 function VBR = CB_003_JF10()
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% CB_003_JF10.m
-%
-%  Reproduces figures 1a-1d from JF10: moduli and Qinv vs period for
-%  a single sample, sample 6585, using coefficients for the single sample fit
-%  in table 1 of JF10.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % CB_003_JF10.m
+  %
+  %  Reproduces figures 1a-1d from JF10: moduli and Qinv vs period for
+  %  a single sample, sample 6585, using coefficients for the single sample fit
+  %  in table 1 of JF10.
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-%%  write method list %%
+  %%  write method list %%
   VBR.in.elastic.methods_list={'anharmonic'};
   VBR.in.anelastic.methods_list={'eburgers_psp';'andrade_psp'};
 
-%%  load anharmonic parameters, adjust Gu_0_ol %%
+  %%  load anharmonic parameters, adjust Gu_0_ol %%
   % all params in ../vbr/vbrCore/params/ will be loaded in call to VBR spine,
   % but you can load them here and adjust any one of them (rather than changing
   % those parameter files).
@@ -34,7 +34,7 @@ function VBR = CB_003_JF10()
   % frequencies to calculate at
   VBR.in.SV.f = 1./logspace(-2,4,100);
 
-%% Define the Thermodynamic State %%
+  %% Define the Thermodynamic State %%
   VBR.in.SV.T_K=700:50:1200;
   VBR.in.SV.T_K=VBR.in.SV.T_K+273;
   sz=size(VBR.in.SV.T_K); % temperature [K]
@@ -46,20 +46,20 @@ function VBR = CB_003_JF10()
   VBR.in.SV.sig_MPa = 10 * ones(sz); % differential stress [MPa]
   VBR.in.SV.phi = 0.0 * ones(sz); % melt fraction
 
-%% call VBR_spine %%
+  %% call VBR_spine %%
   [VBR] = VBR_spine(VBR) ;
 
-%% adjust VBR input to include dissipation peak in the eburgers method %%
+  %% adjust VBR input to include dissipation peak in the eburgers method %%
   VBR.in.anelastic.eburgers_psp.eBurgerFit='s6585_bg_peak';
 
   % this fit has a slightly different ref modulus, adjust it again:
   GUJF10=VBR.in.anelastic.eburgers_psp.s6585_bg_peak.G_UR;
   VBR.in.elastic.anharmonic.Gu_0_ol = GUJF10 - (900+273-Tref) * dGdT/1e9 - (0.2-Pref)*dGdP;
 
-%% Call VBR_spine again %%
+  %% Call VBR_spine again %%
   [VBR_with_peak] = VBR_spine(VBR) ;
 
-%% build figure %%
+  %% build figure %%
   figure('PaperPosition',[0,0,7,7],'PaperPositionMode','manual');
 
   for iTemp = 1:numel(VBR.in.SV.T_K)

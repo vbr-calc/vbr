@@ -1,18 +1,18 @@
 function VBR = CB_005_grainsize_melt()
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% CB_005_grainsize_melt.m
-%
-%  Calculates anelastic properties for all methods and a range of grain
-%  size and melt fraction.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % CB_005_grainsize_melt.m
+  %
+  %  Calculates anelastic properties for all methods and a range of grain
+  %  size and melt fraction.
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% write method lists, adjust parameters %%
+  %% write method lists, adjust parameters %%
   VBR.in.elastic.methods_list={'anharmonic';'anh_poro'};
   VBR.in.viscous.methods_list={'HZK2011'};
   VBR.in.anelastic.methods_list={'eburgers_psp';'andrade_psp';'xfit_premelt';'xfit_mxw'};
   VBR.in.anelastic.eburgers_psp.eBurgerFit='bg_peak';
 
-%% Define the Thermodynamic State %%
+  %% Define the Thermodynamic State %%
   % build grid of dg and phi
   dg_um=logspace(-3,-1.3,90)*1e6; % grain size [um] (1 mm to 5 cm)
   phi = logspace(-8,-1,100);
@@ -31,10 +31,10 @@ function VBR = CB_005_grainsize_melt()
   Thomol=Thomol(1); % for reference for later...
   VBR.in.SV.f = 0.01; %  frequencies to calculate at
 
-%% CALL THE VBR CALCULATOR %%
+  %% CALL THE VBR CALCULATOR %%
   [VBR] = VBR_spine(VBR) ;
 
-%% Build Plots %%
+  %% Build Plots %%
   close all;
   figure('Position', [10 10 650 650],'PaperPosition',[0,0,7,7],'PaperPositionMode','manual');
   fixed_dg=.01 * 1e6; % 1 cm grain size

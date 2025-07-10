@@ -1,15 +1,14 @@
 function VBR = CB_014_xfit_premelt_extended()
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% CB_014_xfit_premelt_extended.m
-%
-%  Calls VBR using xfit_premelt method including the direct melt effect,
-%  from:
-%    Hatsuki Yamauchi and Yasuko Takei, JGR 2024, "Effect of Melt on
-%    Polycrystal Anelasticity", https://doi.org/10.1029/2023JB027738
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % CB_014_xfit_premelt_extended.m
+  %
+  %  Calls VBR using xfit_premelt method including the direct melt effect,
+  %  from:
+  %    Hatsuki Yamauchi and Yasuko Takei, JGR 2024, "Effect of Melt on
+  %    Polycrystal Anelasticity", https://doi.org/10.1029/2023JB027738
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-%% write method list %%
+  %% write method list %%
   VBR.in.elastic.methods_list={'anharmonic'};
   VBR.in.anelastic.methods_list={'xfit_premelt'};
   VBR.in.anelastic.xfit_premelt.include_direct_melt_effect = 1;
@@ -18,7 +17,6 @@ function VBR = CB_014_xfit_premelt_extended()
   VBR.in.elastic.anharmonic.Gu_0_ol=72.45; %[GPa]
   VBR.in.elastic.anharmonic.dG_dT = -10.94*1e6; % Pa/C    (equivalent ot Pa/K)
   VBR.in.elastic.anharmonic.dG_dP = 1.987; % GPa / GPa
-
 
   %% Define the Thermodynamic State %%
   VBR.in.SV.T_K=1200:5:1500;
@@ -34,7 +32,6 @@ function VBR = CB_014_xfit_premelt_extended()
   VBR.in.SV.rho = full_nd(3300, sz); % density [kg m^-3]
   VBR.in.SV.sig_MPa = full_nd(1, sz); % differential stress [MPa]
   VBR.in.SV.f = 1; % 1 Hz
-
 
   f1=figure('PaperPosition',[0,0,6,4],'PaperPositionMode','manual');
   nTn = numel(Tn_cases);
@@ -61,11 +58,7 @@ function VBR = CB_014_xfit_premelt_extended()
         ylim([0, 200])
 
         yticks(0:20:200)
-
   end
 
-
   saveas(gcf,'./figures/CB_014_xfit_premelt_extended.png')
-
-
 end

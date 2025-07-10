@@ -1,10 +1,10 @@
-function VBR = CB_015_analytical_andrade(
+function VBR = CB_015_analytical_andrade()
      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
      %  CB_015_analytical_andrade
      %
      %  Runs a number of examples with the andrade_analytical anelastic method
      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-)
+
      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
      % Case 1 : default behavior
      % the analytical andrade method will pull unrelaxed modules from the
@@ -38,7 +38,6 @@ function VBR = CB_015_analytical_andrade(
      loglog(VBR.in.SV.f, VBR.out.anelastic.andrade_analytical.Qinv, ...
           'displayname', 'analytical andrade', 'linewidth', 2)
      hold all
-
 
      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
      % Case 2 : change the viscosity deformation mechanism

@@ -1,26 +1,26 @@
 function VBR = CB_001_0D_scalar()
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% CB_001_0D_scalar.m
-%
-%  Calls VBR Calculator using a single thermodynamic state for a range of
-%  frequency.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % CB_001_0D_scalar.m
+  %
+  %  Calls VBR Calculator using a single thermodynamic state for a range of
+  %  frequency.
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%  write method list for each property type to calculate %%
+  %%  write method list for each property type to calculate %%
   %  all methods will end up as output like:
   %      VBR.out.elastic.anharmonic, VBR.out.anelastic.eBurgers, etc.
   VBR.in.elastic.methods_list={'anharmonic';'anh_poro'};
   VBR.in.viscous.methods_list={'HK2003'};
   VBR.in.anelastic.methods_list={'eburgers_psp';'andrade_psp';'xfit_mxw'};
 
-%%  load anharmonic parameters, adjust Gu_0_ol %%
+  %%  load anharmonic parameters, adjust Gu_0_ol %%
   %  all params in ../vbr/vbrCore/params will be loaded in call to VBR spine,
   %  but you can load them here and adjust any one of them (rather than changing
   %  those parameter files).
   VBR.in.elastic.anharmonic=Params_Elastic('anharmonic'); % unrelaxed elasticity
   VBR.in.elastic.anharmonic.Gu_0_ol = 75.5; % olivine ref. shear modulus [GPa]
 
-%% Define the Thermodynamic State %%
+  %% Define the Thermodynamic State %%
 
   % size of the state variable arrays. arrays can be any shape
   % but all arays must be the same shape.
@@ -37,10 +37,10 @@ function VBR = CB_001_0D_scalar()
   % frequencies to calculate at
   VBR.in.SV.f = logspace(-3,0,50);
 
-%% CALL THE VBR CALCULATOR %%
+  %% CALL THE VBR CALCULATOR %%
   [VBR] = VBR_spine(VBR) ;
 
-%% Build plots %%
+  %% Build plots %%
   figure('PaperPosition',[0,0,7,4],'PaperPositionMode','manual')
   % Loop over anelastic methods, plot result of each
   for imeth=1:numel(VBR.in.anelastic.methods_list)

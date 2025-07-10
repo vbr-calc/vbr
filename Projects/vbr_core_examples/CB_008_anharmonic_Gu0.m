@@ -1,17 +1,17 @@
 function VBR = CB_008_anharmonic_Gu0()
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% CB_008_anharmonic_Gu0.m
-%
-%   Example of including a depth dependence with a low density crust
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % CB_008_anharmonic_Gu0.m
+  %
+  %   Example of including a depth dependence with a low density crust
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% set depth array and temperature profile %%
+  %% set depth array and temperature profile %%
   depth_km=linspace(0,150,100);
   VBR.in.SV=struct();
   VBR.in.SV.T_K = 1300 * depth_km/max(depth_km) +273; % temperature [K]
 
-%% set and calculate density and pressure with a crust %%
-%% assumes hydrostatic pressure and no thermal expansion for density %%
+  %% set and calculate density and pressure with a crust %%
+  %% assumes hydrostatic pressure and no thermal expansion for density %%
   moho_km=30;
   rho_c=2800;
   rho_m=3300;
@@ -23,17 +23,17 @@ function VBR = CB_008_anharmonic_Gu0()
   P_Pa(depth_km>moho_km)=P_moho + rho_m * 9.8 * (depth_km(depth_km>moho_km)-moho_km) * 1e3;
   VBR.in.SV.P_GPa=P_Pa/1e9;
 
-%% set the compositional fraction %%
+  %% set the compositional fraction %%
   VBR.in.SV.chi=ones(size(depth_km));
   VBR.in.SV.chi(depth_km<=moho_km)=0;
 
-%% add to elastic methods list %%
+  %% add to elastic methods list %%
   VBR.in.elastic.methods_list={'anharmonic'};
 
-%% call VBR_spine %%
+  %% call VBR_spine %%
   [VBR] = VBR_spine(VBR) ;
 
-%% plot the result %%  
+  %% plot the result %%  
   figure('PaperPosition',[0,0,16,4],'PaperPositionMode','manual')
   subplot(1, 5, 1)
   plot(VBR.in.SV.T_K-273,depth_km,'k','linewidth',1.5)

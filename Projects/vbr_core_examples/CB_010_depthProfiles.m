@@ -13,7 +13,6 @@ function [VBR,HF] = CB_010_depthProfiles()
   %   figures to screen
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
   %% build thermal model %%
   HF = HalfspaceModel(30); % analytical half-space cooling
   HF = correctHF(HF); % adjust solution (variable density, etc.)
