@@ -258,7 +258,7 @@ create a new branch, e.g., `cleanup_from_v1pt2pt0` and make the following
 changes:
 
 - Copy/paste `release_notes.md` into `release_history.md`, reset `release_notes.md` for active development.
-- Go to `vbr/support/vbr_version.m` and set `Version.is_development = 0;`.
+- Go to `vbr/support/vbr_version.m` and set `Version.is_development = 0;` and update the major/minor/patch numbers as you see fit (usually just bump the patch number).
 
 Commit the changes, push up the branch and create a new pull request as usual.
 
