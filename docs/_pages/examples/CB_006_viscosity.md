@@ -44,7 +44,7 @@ function VBR = CB_006_viscosity()
   [VBR_vs_sig] = VBR_spine(VBR) ;
 
   %% Plot strain rates, viscosity %%
-  if (getenv('VBRcTesting') ~= '1')
+  if ~vbr_tests_are_running()
     figure()
     for imeth=1:numel(VBR_vs_dg.in.viscous.methods_list)
       vmeth=VBR_vs_dg.in.viscous.methods_list{imeth};

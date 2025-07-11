@@ -55,7 +55,7 @@ function [VBR,HF] = CB_010_depthProfiles()
   [VBR] = VBR_spine(VBR) ;
 
   %% Build figures %%  
-  if (getenv('VBRcTesting') ~= '1')
+  if ~vbr_tests_are_running()
     figure('PaperPosition',[0,0,14,4],'PaperPositionMode','manual')
     ax1=subplot(1,5,1);
     plot(HF.T_C,HF.z_km)

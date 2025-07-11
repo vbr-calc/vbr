@@ -66,7 +66,7 @@ function VBR = CB_012_simplecrust()
   [VBR] = VBR_spine(VBR) ;
 
   %% build figures
-  if (getenv('VBRcTesting') ~= '1')
+  if ~vbr_tests_are_running()
     figure('PaperPosition',[0,0,10,4],'PaperPositionMode','manual')
     subplot(1,4,4)
     plot(VBR.out.anelastic.andrade_psp.Vave/1e3,z_km,'k')
