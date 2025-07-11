@@ -129,4 +129,5 @@ function contour_plots(VBR, i_sigs, i_freq, T_1d, dg_1d, sig_dc_1d)
         title(['V_s at ', titlestr])
         colorbar()
     end 
-end ```
+end 
+```

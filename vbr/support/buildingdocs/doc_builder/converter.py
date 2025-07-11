@@ -79,10 +79,10 @@ class CBexample(VBRinit):
 
         if mfile_text is not None:
             rows.append('## contents\n')
-            rows.append('```matlab\n')
+            rows.append("```matlab\n")
             for ln in mfile_text:
                 rows.append(ln)
-            rows.append('```\n')
+            rows.append("\n```\n")
 
         return rows
 
