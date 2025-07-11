@@ -1,7 +1,15 @@
-# v2.0.4
+# v2.0.5dev
 
-Another quick release to address more octave/matlab compatibility issues and fix a cookbook.
+Description
+
+## New Features
 
 ## Bug fixes
 
-* fix CB_014 and fix test env check [189](https://github.com/vbr-calc/vbr/pull/189) by @chrishavlin
+## Documentation 
+
+## Deprecations
+
+## Infrastructure improvements
+
+## Other changes
