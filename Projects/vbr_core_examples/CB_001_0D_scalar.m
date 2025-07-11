@@ -41,7 +41,7 @@ function VBR = CB_001_0D_scalar()
   [VBR] = VBR_spine(VBR) ;
 
   %% Build plots %%
-  if (getenv('VBRcTesting') ~= '1')
+  if ~vbr_tests_are_running()
     figure('PaperPosition',[0,0,7,4],'PaperPositionMode','manual')
     % Loop over anelastic methods, plot result of each
     for imeth=1:numel(VBR.in.anelastic.methods_list)

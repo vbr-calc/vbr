@@ -54,7 +54,7 @@ function VBR = CB_016_complex_viscosity()
 
     tau_f = 1./ tau_M;
 
-    if (getenv('VBRcTesting') ~= '1')
+    if ~vbr_tests_are_running()
         figure('PaperPosition',[0,0,6,8],'PaperPositionMode','manual')
         subplot(3,1,1)
         loglog(VBR.in.SV.f, eta_app, 'linewidth', 2)

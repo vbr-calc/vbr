@@ -35,7 +35,7 @@ function VBR = CB_005_grainsize_melt()
   [VBR] = VBR_spine(VBR) ;
 
   %% Build Plots %%
-  if (getenv('VBRcTesting') ~= '1')
+  if ~vbr_tests_are_running()
     figure('Position', [10 10 650 650],'PaperPosition',[0,0,7,7],'PaperPositionMode','manual');
     fixed_dg=.01 * 1e6; % 1 cm grain size
     fixed_phi=.001; % melt fraction
