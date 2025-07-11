@@ -42,7 +42,7 @@ function VBR = CB_004_xfit_premelt()
   [VBR] = VBR_spine(VBR) ;
 
   %% plot frequency dependence %%
-  if (getenv('VBRcTesting') ~= '1')
+  if ~vbr_tests_are_running()
     figure;
     subplot(1,3,1)
     semilogx(1./VBR.in.SV.f,squeeze(VBR.out.anelastic.xfit_premelt.M(1,:,:)/1e9));

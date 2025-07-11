@@ -34,7 +34,7 @@ function VBR = CB_015_analytical_andrade()
      VBR = VBR_spine(VBR) ;
 
      % plot frequency dependence of attenuation
-     if (getenv('VBRcTesting') ~= '1')
+     if ~vbr_tests_are_running()
           figure('PaperPosition',[0,0,4,4],'PaperPositionMode','manual')
           loglog(VBR.in.SV.f, VBR.out.anelastic.andrade_analytical.Qinv, ...
                'displayname', 'analytical andrade', 'linewidth', 2)
@@ -72,7 +72,7 @@ function VBR = CB_015_analytical_andrade()
      VBR = VBR_spine(VBR) ;
 
      % plot frequency dependence of attenuation
-     if (getenv('VBRcTesting') ~= '1')
+     if ~vbr_tests_are_running()
           loglog(VBR.in.SV.f, VBR.out.anelastic.andrade_analytical.Qinv, ...
                'displayname', 'analytical andrade, gbs', 'linewidth', 2)
      end
@@ -106,7 +106,7 @@ function VBR = CB_015_analytical_andrade()
      VBR = VBR_spine(VBR) ;
 
      % plot frequency dependence of attenuation
-     if (getenv('VBRcTesting') ~= '1')
+     if ~vbr_tests_are_running()
           loglog(VBR.in.SV.f, VBR.out.anelastic.andrade_analytical.Qinv, ...
                'displayname', 'analytical andrade, fixed eta\_ss', 'linewidth', 2)
           xlabel('f [Hz]')

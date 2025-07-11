@@ -59,7 +59,7 @@ function case1out = case1()
   VBR_1 = VBR_spine(VBR);
 
   % figure: effect on unrelaxed modulus, wavespeed
-  if (getenv('VBRcTesting') ~= '1')
+  if ~vbr_tests_are_running()
     case1out.fig1=figure('Position', [10 10 650 250]);
     for imeth=1:numel(VBR_1.in.elastic.methods_list)
       elmeth=VBR_1.in.elastic.methods_list{imeth};
@@ -82,7 +82,7 @@ function case1out = case1()
   VBR.in.elastic.methods_list={'anharmonic'};
   VBR_2 = VBR_spine(VBR);
 
-  if (getenv('VBRcTesting') ~= '1')
+  if ~vbr_tests_are_running()
     % figure: anelastic results with and without poroelastic effect
     case1out.fig2=figure('Position', [20 20 650 250]);
     ifreq=1;
@@ -154,7 +154,7 @@ function case2out =case2()
   case2out.VBR_2=VBR_2;
 
   % figure: V,M vs. melt fraction for each method
-  if (getenv('VBRcTesting') ~= '1')
+  if ~vbr_tests_are_running()
     case2out.fig=figure('Position', [10 10 650 250]);
     ifreq=1;
     meth_colors=getMethodColors();
@@ -212,7 +212,7 @@ function case2out =case2()
   VBR_3 = VBR_spine(VBR);
 
   % figure: phi, M and V vs T
-  if (getenv('VBRcTesting') ~= '1')
+  if ~vbr_tests_are_running()
     case2out.fig2=figure('Position', [30 30 1000 500],'PaperPosition',[0,0,12,4],'PaperPositionMode','manual');
     meth_colors=getMethodColors();
     phi_range=VBR.in.SV.phi;

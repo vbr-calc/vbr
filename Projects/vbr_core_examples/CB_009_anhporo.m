@@ -19,7 +19,7 @@ function VBR = CB_009_anhporo()
   [VBR] = VBR_spine(VBR) ;
 
   %% plot the result %%
-  if (getenv('VBRcTesting') ~= '1')
+  if ~vbr_tests_are_running()
     figure('Position', [10 10 600 300],'DefaultAxesFontSize',16);
     subplot(1,2,1)
     semilogx(VBR.in.SV.phi,VBR.out.elastic.anh_poro.Gu/1e9,'k','linewidth',1.5)

@@ -34,7 +34,7 @@ function VBR = CB_008_anharmonic_Gu0()
   [VBR] = VBR_spine(VBR) ;
 
   %% plot the result %%  
-  if (getenv('VBRcTesting') ~= '1')
+  if ~vbr_tests_are_running()
     figure('PaperPosition',[0,0,16,4],'PaperPositionMode','manual')
     subplot(1, 5, 1)
     plot(VBR.in.SV.T_K-273,depth_km,'k','linewidth',1.5)
