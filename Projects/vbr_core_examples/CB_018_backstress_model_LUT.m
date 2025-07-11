@@ -33,7 +33,7 @@ function VBR = CB_018_backstress_model_LUT()
     VBR = VBR_spine(VBR); 
 
     % plotting
-    if (getenv('VBRcTesting') != '1')
+    if (getenv('VBRcTesting') ~= '1')
         i_sigs = [1, 8, numel(sig_dc_1d), ];
         i_freq = 1; 
         contour_plots(VBR, i_sigs, i_freq, T_1d, dg_1d, sig_dc_1d)

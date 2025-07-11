@@ -56,7 +56,7 @@ function TestResults = run_tests(test_file_string)
             if fld==0
                 disp(['    ',fldz{ifi}])
                 ei = ErrorMessages.(fldz{ifi});
-                disp(['        ', ei.identifier, ': ', ei.message])
+                disp(strcat(['        ', ei.identifier, ': ', ei.message]))
 
             end
         end
@@ -68,11 +68,12 @@ function TestResults = run_tests(test_file_string)
 
     skfields = fieldnames(SkippedTests);
     if numel(skfields) > 0
+        disp(' ')
+        disp('Displaying Skipped tests and reason for skipping:')
         for ifield = 1:numel(skfields)
             reason = SkippedTests.(skfields{ifield});
-            disp(' ')
-            disp('Displaying Skipped tests and reason for skipping:')
-            disp(['    ', skfields{ifield}, " : ", reason])
+            skipmessage = strjoin({'    ', skfields{ifield}, ' : ', reason},'');
+            disp(skipmessage)
             disp(' ')
         end
     end

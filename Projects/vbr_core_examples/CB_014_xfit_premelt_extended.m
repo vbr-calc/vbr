@@ -33,7 +33,7 @@ function VBR = CB_014_xfit_premelt_extended()
   VBR.in.SV.sig_MPa = full_nd(1, sz); % differential stress [MPa]
   VBR.in.SV.f = 1; % 1 Hz
 
-  if (getenv('VBRcTesting') != '1')
+  if (getenv('VBRcTesting') ~= '1')
     f1=figure('PaperPosition',[0,0,6,4],'PaperPositionMode','manual');
     nTn = numel(Tn_cases);
     VBR_results = struct();

@@ -10,7 +10,9 @@ function TestResult = test_vbrcore_cookbooks()
     TestResult.fail_message = '';
 
     % assumes we are running from top level directory
-    file_list = dir(["Projects", filesep, "vbr_core_examples"]);
+    filesephar = filesep;
+    fpath = strjoin({'Projects' 'vbr_core_examples'},  filesephar);
+    file_list = dir(fpath);
 
     n_files = numel(file_list);
 
@@ -22,9 +24,9 @@ function TestResult = test_vbrcore_cookbooks()
         fname = file_list(ifile).name;
         if strfind(fname, 'CB_') > 0
             
-            funccall = ['VBR = ', fname(1:end-2), '();'];
-            disp(['        ', funccall])
-            eval(funccall)  
+            funccall = strcat(fname(1:end-2),'()');
+            disp(strcat(['        VBR = ', funccall]))
+            VBR = eval(funccall);
 
             TestResult = check_some_VBR_values(VBR, TestResult, funccall);
             close all
@@ -74,7 +76,7 @@ function TestResult = check_some_VBR_values(VBR, TestResult, funccall)
             loc_struct(iloc) = nonzero_fields(ifield).field_loc(iloc);
         end
         [field_exists,missing] = checkStructForField(VBR, loc_struct, 0);
-        struct_loc_str = ['VBR', concat_cell_strs(loc_struct,'.')];
+        struct_loc_str = ['VBR', strjoin(loc_struct,'.')];
         
         if field_exists            
             val = get_nested_field_from_struct(VBR, loc_struct);
