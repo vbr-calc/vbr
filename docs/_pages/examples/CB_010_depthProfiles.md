@@ -24,11 +24,6 @@ function [VBR,HF] = CB_010_depthProfiles()
   %   figures to screen
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  %% put VBR in the path %%
-  path_to_top_level_vbr='../../';
-  addpath(path_to_top_level_vbr)
-  vbr_init
-
   %% build thermal model %%
   HF = HalfspaceModel(30); % analytical half-space cooling
   HF = correctHF(HF); % adjust solution (variable density, etc.)
@@ -60,50 +55,52 @@ function [VBR,HF] = CB_010_depthProfiles()
   [VBR] = VBR_spine(VBR) ;
 
   %% Build figures %%  
-  figure('PaperPosition',[0,0,14,4],'PaperPositionMode','manual')
-  ax1=subplot(1,5,1);
-  plot(HF.T_C,HF.z_km)
-  hold on
-  plot(Tsolidus_C,HF.z_km,'--k')
-  xlabel('T [C]')
-  ylabel('Depth [km]')
-  set(gca,'ydir','reverse')
-
-  ax2=subplot(1,5,2);
-  plot(HF.P/1e9,HF.z_km)
-  xlabel('P [GPa]')
-  ylabel('Depth [km]')
-  set(gca,'ydir','reverse')
-
-  ax3=subplot(1,5,3);
-  plot(HF.rho/1e3,HF.z_km)
-  xlabel('\rho [g/m3]')
-  ylabel('Depth [km]')
-  set(gca,'ydir','reverse')
-
-  for imeth = 1:numel(VBR.in.anelastic.methods_list)
-    meth=VBR.in.anelastic.methods_list{imeth};
-    
-    ax4=subplot(1,5,4);
-    hold all
-    plot(squeeze(VBR.out.anelastic.(meth).V(:,1))/1e3,HF.z_km,'displayname',meth)
-    xlabel('ave. Vs [km/s]')
+  if (getenv('VBRcTesting') ~= '1')
+    figure('PaperPosition',[0,0,14,4],'PaperPositionMode','manual')
+    ax1=subplot(1,5,1);
+    plot(HF.T_C,HF.z_km)
+    hold on
+    plot(Tsolidus_C,HF.z_km,'--k')
+    xlabel('T [C]')
     ylabel('Depth [km]')
-    xlim([4.2,4.7])
-    box on
     set(gca,'ydir','reverse')
 
-    ax5=subplot(1,5,5);
-    hold all
-    plot(squeeze(log10(VBR.out.anelastic.(meth).Q(:,1))),HF.z_km,'displayname',meth)
-    xlabel('log10(Q)')
+    ax2=subplot(1,5,2);
+    plot(HF.P/1e9,HF.z_km)
+    xlabel('P [GPa]')
     ylabel('Depth [km]')
-    box on
     set(gca,'ydir','reverse')
-    xlim([0,8])
+
+    ax3=subplot(1,5,3);
+    plot(HF.rho/1e3,HF.z_km)
+    xlabel('\rho [g/m3]')
+    ylabel('Depth [km]')
+    set(gca,'ydir','reverse')
+
+    for imeth = 1:numel(VBR.in.anelastic.methods_list)
+      meth=VBR.in.anelastic.methods_list{imeth};
+      
+      ax4=subplot(1,5,4);
+      hold all
+      plot(squeeze(VBR.out.anelastic.(meth).V(:,1))/1e3,HF.z_km,'displayname',meth)
+      xlabel('ave. Vs [km/s]')
+      ylabel('Depth [km]')
+      xlim([4.2,4.7])
+      box on
+      set(gca,'ydir','reverse')
+
+      ax5=subplot(1,5,5);
+      hold all
+      plot(squeeze(log10(VBR.out.anelastic.(meth).Q(:,1))),HF.z_km,'displayname',meth)
+      xlabel('log10(Q)')
+      ylabel('Depth [km]')
+      box on
+      set(gca,'ydir','reverse')
+      xlim([0,8])
+    end
+
+    saveas(gcf,'./figures/CB_010_depthProfiles.png')
   end
-
-  saveas(gcf,'./figures/CB_010_depthProfiles.png')
 end
 
 function HF = HalfspaceModel(age_Myrs)

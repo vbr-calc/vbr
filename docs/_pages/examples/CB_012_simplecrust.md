@@ -9,19 +9,14 @@ title: ""
 !['CB_012_simplecrust'](/vbr/assets/images/CBs/CB_012_simplecrust.png){:class="img-responsive"}
 ## contents
 ```matlab
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% CB_012_simplecrust.m
-%
-%  Calculate seismic properties for steady state plate model with simple crust
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function VBR = CB_012_simplecrust()
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % CB_012_simplecrust.m
+  %
+  %  Calculate seismic properties for steady state plate model with simple crust
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% put VBR in the path %%
-  clear
-  path_to_top_level_vbr='../../';
-  addpath(path_to_top_level_vbr)
-  vbr_init
-
-%% Set Thermodynamic State Using Steady State Plate Model with no radiogenic heating %%
+  %% Set Thermodynamic State Using Steady State Plate Model with no radiogenic heating %%
   % plate model
   Tsurf_C=0; % surface temperature [C]
   Tasth_C=1450; % asthenosphere temperature [C]
@@ -45,7 +40,7 @@ title: ""
   Psurf=0.2; % surface pressure, GPa
   P=cumtrapz(rho)*(z_km(2)-z_km(1))*1e3*9.8+Psurf*1e9;
 
-%% Load and set VBR parameters %%
+  %% Load and set VBR parameters %%
   VBR.in.elastic.methods_list={'anharmonic'};
   VBR.in.viscous.methods_list={'HK2003'};
   VBR.in.anelastic.methods_list={'andrade_psp';'xfit_mxw'};
@@ -53,7 +48,7 @@ title: ""
   VBR.in.elastic.anharmonic.Gu_0_ol = 75.5; % olivine reference shear modulus [GPa]
   VBR.in.SV.f = [0.1];%  frequencies to calculate at
 
-% copy model into VBR state variables, adjust units as needed
+  % copy model into VBR state variables, adjust units as needed
   VBR.in.SV.T_K = T+273; % temperature [K]
   VBR.in.SV.P_GPa = P/1e9; % pressure [GPa]
   VBR.in.SV.rho = rho; % density [kg m^-3]
@@ -65,30 +60,32 @@ title: ""
   VBR.in.SV.phi = 0.0 * ones(sz); % melt fraction
   VBR.in.SV.dg_um = 0.01 * 1e6 * ones(sz); % grain size [um]
 
-%% CALL THE VBR CALCULATOR %%
+  %% CALL THE VBR CALCULATOR %%
 
-%% first full anelasticity
+  %% first full anelasticity
   [VBR] = VBR_spine(VBR) ;
 
-%% build figures
-  figure('PaperPosition',[0,0,10,4],'PaperPositionMode','manual')
-  subplot(1,4,4)
-  plot(VBR.out.anelastic.andrade_psp.Vave/1e3,z_km,'k')
-  xlabel('Vs [km/s]')
-  set(gca,'ydir','reverse')
-  subplot(1,4,2)
-  plot(VBR.in.SV.T_K-273,z_km,'k')
-  xlabel('T [C]')
-  set(gca,'ydir','reverse')
-  subplot(1,4,3)
-  plot(VBR.in.SV.P_GPa,z_km,'k')
-  xlabel('P [GPa]')
-  set(gca,'ydir','reverse')
-  subplot(1,4,1)
-  plot(VBR.in.SV.chi,z_km,'k')
-  ylabel('depth [km]')
-  xlabel('composition factor')
-  xlim([-.01,1.01])
-  set(gca,'ydir','reverse')
-  saveas(gcf,'./figures/CB_012_simplecrust.png')
-```
+  %% build figures
+  if (getenv('VBRcTesting') ~= '1')
+    figure('PaperPosition',[0,0,10,4],'PaperPositionMode','manual')
+    subplot(1,4,4)
+    plot(VBR.out.anelastic.andrade_psp.Vave/1e3,z_km,'k')
+    xlabel('Vs [km/s]')
+    set(gca,'ydir','reverse')
+    subplot(1,4,2)
+    plot(VBR.in.SV.T_K-273,z_km,'k')
+    xlabel('T [C]')
+    set(gca,'ydir','reverse')
+    subplot(1,4,3)
+    plot(VBR.in.SV.P_GPa,z_km,'k')
+    xlabel('P [GPa]')
+    set(gca,'ydir','reverse')
+    subplot(1,4,1)
+    plot(VBR.in.SV.chi,z_km,'k')
+    ylabel('depth [km]')
+    xlabel('composition factor')
+    xlim([-.01,1.01])
+    set(gca,'ydir','reverse')
+    saveas(gcf,'./figures/CB_012_simplecrust.png')
+  end
+end```

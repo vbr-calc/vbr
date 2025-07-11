@@ -12,7 +12,7 @@ Simple "Cookbook" (CB) scripts demonstrating various use cases of the VBR Calcul
 * `CB_005_grainsize_melt.m` [link](/vbr/examples/CB_005_grainsize_melt/)
 * `CB_006_viscosity.m` [link](/vbr/examples/CB_006_viscosity/)
 * `CB_007_SLB2005.m` [link](/vbr/examples/CB_007_SLB2005/)
-* `CB_008_anharmonic_Guo.m` [link](/vbr/examples/CB_008_anharmonic_Guo/)
+* `CB_008_anharmonic_Gu0.m` [link](/vbr/examples/CB_008_anharmonic_Gu0/)
 * `CB_009_anhporo.m` [link](/vbr/examples/CB_009_anhporo/)
 * `CB_010_depthProfiles.m` [link](/vbr/examples/CB_010_depthProfiles/)
 * `CB_011_meltEffects.m` [link](/vbr/examples/CB_011_meltEffects/)
