@@ -1,9 +1,15 @@
-# v2.0.3
+# v2.0.4dev
 
-Bug fix release to fix some matlab/octave compatibility issues with the cookbooks and test suite.
+Description
+
+## New Features
 
 ## Bug fixes
-* Fix some matlab/octave compatibility errors [#185](https://github.com/vbr-calc/vbr/pull/185) by @chrishavlin
+
+## Documentation 
+
+## Deprecations
 
 ## Infrastructure improvements
-* remove unneeded function added in 2.0.2  [#185](https://github.com/vbr-calc/vbr/pull/185) by @chrishavlin
+
+## Other changes

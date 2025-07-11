@@ -1,3 +1,13 @@
+# v2.0.3
+
+Bug fix release to fix some matlab/octave compatibility issues with the cookbooks and test suite.
+
+## Bug fixes
+* Fix some matlab/octave compatibility errors [#185](https://github.com/vbr-calc/vbr/pull/185) by @chrishavlin
+
+## Infrastructure improvements
+* remove unneeded function added in 2.0.2  [#185](https://github.com/vbr-calc/vbr/pull/185) by @chrishavlin
+
 # v2.0.2
 
 A bug fix release to address issues with calculation of elastic moduli when using the chi-mixing for moduli that were introduced in VBRc version 2.0.0 (prior versions were unaffected). This work also includes a bunch of updates to testing infrastructure to automatically run the cookbook examples in the test suite. 
