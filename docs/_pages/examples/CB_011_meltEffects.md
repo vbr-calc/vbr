@@ -361,4 +361,5 @@ function Clrs=getMethodColors()
     Clrs.(meths{imeth})=C{imeth};
   end
 end
+
 ```

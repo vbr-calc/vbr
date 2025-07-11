@@ -78,4 +78,5 @@ function VBR = CB_006_viscosity()
     box on; xlabel('log10 \sigma [MPa]'); ylabel('log10 effective viscosity [Pa s]')
     saveas(gcf,'./figures/CB_006_viscosity.png')
   end
-end```
+end
+```
