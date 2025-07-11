@@ -195,7 +195,7 @@ for you. As of now, the only check ensures that `.m` files do not contain the
 pound/hashtag symbol, which is a valid comment symbol in octave but not matlab 
 and is a common mistake when your other projects are in Python...
 
-## Release Notes
+## How to create a release
 
 This section contains notes for the VBRc maintainers on creating releases. VBRc
 releases are simply snapshots of the code, managed by git tags and saved as source 
@@ -215,7 +215,14 @@ $ git rebase upstream/main
 
 2. Go into `vbr/support/vbr_version.m` and set `Version.is_development = 0;` and adjust the `major`, `minor` or `patch` entries in the `Version` structure to whatever version you are releasing. 
 3. Make sure the `release_notes.md` header contains the versions string you are releasing and adjust the entries in the release notes as needed.
-4. commit those changes to a new branch, e.g.:
+4. Update the release notes for the website at `docs/_pages/history.md`: you can manually copy in the latest `release_notes.md` into that file, or if you have a Python environment availabe, you can run:
+```shell
+$ cd vbr/support/buildingdocs/
+$ python sync_release_notes.py
+$ cd ../../..
+``` 
+and it will automatically update `docs/_pages/history.md`.
+5. commit those changes to a new branch, e.g.:
 
 ```shell
 $ git checkout -b release_prep_v1pt2pt0

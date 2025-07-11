@@ -1,13 +1,15 @@
-# v2.0.2dev
+# v2.0.2
 
 A bug fix release to address issues with calculation of elastic moduli when using the chi-mixing for moduli that were introduced in VBRc version 2.0.0 (prior versions were unaffected). This work also includes a bunch of updates to testing infrastructure to automatically run the cookbook examples in the test suite. 
 
 ## Bug fixes
 
-* Bug: in the calculation of elastic moduli for crustal values that gets used in the chi-mixing for anharmonic properties (units of moduli were wrong) [#181](https://github.com/vbr-calc/vbr/pull/181) by @chrishavlin
+* Bug: fix the calculation of elastic moduli for crustal values that gets used in the chi-mixing for anharmonic properties (units of moduli were wrong) [#181](https://github.com/vbr-calc/vbr/pull/181) by @chrishavlin
+* replace pound with percent in generate_parameter_sweep for bayes Project [#179](https://github.com/vbr-calc/vbr/pull/179) by @chrishavlin
 
 ## Documentation 
 
+* Release history is rendered on the website at https://vbr-calc.github.io/vbr/history/ [#177](https://github.com/vbr-calc/vbr/pull/177) by @chrishavlin
 * All cookbook examples in `Projects/vbr_core_examples` are now functions and their formatting has been updated slightly [#181](https://github.com/vbr-calc/vbr/pull/181) by @chrishavlin
 
 ## Infrastructure improvements
