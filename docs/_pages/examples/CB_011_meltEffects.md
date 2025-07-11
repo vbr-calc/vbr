@@ -29,10 +29,6 @@ function Results = CB_011_meltEffects(case2run)
   %   Also prints figures to screen
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  % put VBR in the path
-  path_to_top_level_vbr='../../';
-  addpath(path_to_top_level_vbr)
-  vbr_init
 
   % run the cases
   if ~exist('case2run')
@@ -74,59 +70,63 @@ function case1out = case1()
   VBR_1 = VBR_spine(VBR);
 
   % figure: effect on unrelaxed modulus, wavespeed
-  case1out.fig1=figure('Position', [10 10 650 250]);
-  for imeth=1:numel(VBR_1.in.elastic.methods_list)
-    elmeth=VBR_1.in.elastic.methods_list{imeth};
-    mnme=strrep(elmeth,'_','\_');
-    subplot(1,2,1)
-    hold all
-    semilogx(VBR_1.in.SV.phi,VBR_1.out.elastic.(elmeth).Gu/1e9,'DisplayName',mnme,'linewidth',2)
+  if (getenv('VBRcTesting') ~= '1')
+    case1out.fig1=figure('Position', [10 10 650 250]);
+    for imeth=1:numel(VBR_1.in.elastic.methods_list)
+      elmeth=VBR_1.in.elastic.methods_list{imeth};
+      mnme=strrep(elmeth,'_','\_');
+      subplot(1,2,1)
+      hold all
+      semilogx(VBR_1.in.SV.phi,VBR_1.out.elastic.(elmeth).Gu/1e9,'DisplayName',mnme,'linewidth',2)
 
+      subplot(1,2,2)
+      hold all
+      semilogx(VBR_1.in.SV.phi,VBR_1.out.elastic.(elmeth).Vsu/1e3,'DisplayName',mnme,'linewidth',2)
+    end
+    subplot(1,2,1)
+    xlabel('\phi'); ylabel('Unrelaxed Gu [GPa]'); box on; legend('location','southwest')
     subplot(1,2,2)
-    hold all
-    semilogx(VBR_1.in.SV.phi,VBR_1.out.elastic.(elmeth).Vsu/1e3,'DisplayName',mnme,'linewidth',2)
+    xlabel('\phi'); ylabel('Unrelaxed Vsu [km/s]'); box on;
   end
-  subplot(1,2,1)
-  xlabel('\phi'); ylabel('Unrelaxed Gu [GPa]'); box on; legend('location','southwest')
-  subplot(1,2,2)
-  xlabel('\phi'); ylabel('Unrelaxed Vsu [km/s]'); box on;
 
   % Call VBR again, only adjust elastic methods
   VBR.in.elastic.methods_list={'anharmonic'};
   VBR_2 = VBR_spine(VBR);
 
-  % figure: anelastic results with and without poroelastic effect
-  case1out.fig2=figure('Position', [20 20 650 250]);
-  ifreq=1;
-  meth_colors=getMethodColors();
-  phi_range=VBR.in.SV.phi;
-  for imeth=1:numel(VBR_1.in.anelastic.methods_list)
-    anemeth=VBR_1.in.anelastic.methods_list{imeth};
-    mnme1=strrep(anemeth,'_','\_');
+  if (getenv('VBRcTesting') ~= '1')
+    % figure: anelastic results with and without poroelastic effect
+    case1out.fig2=figure('Position', [20 20 650 250]);
+    ifreq=1;
+    meth_colors=getMethodColors();
+    phi_range=VBR.in.SV.phi;
+    for imeth=1:numel(VBR_1.in.anelastic.methods_list)
+      anemeth=VBR_1.in.anelastic.methods_list{imeth};
+      mnme1=strrep(anemeth,'_','\_');
 
-    c=meth_colors.(anemeth);
+      c=meth_colors.(anemeth);
+
+      subplot(1,2,1)
+      hold on
+      GuRat1=squeeze(VBR_1.out.anelastic.(anemeth).M(1,:,ifreq))/1e9;%./VBR_1.out.elastic.anh_poro.Gu;
+      GuRat2=squeeze(VBR_2.out.anelastic.(anemeth).M(1,:,ifreq))/1e9;%./VBR_2.out.elastic.anharmonic.Gu;
+      semilogx(phi_range,GuRat1,c,'DisplayName',mnme1,'linewidth',2)
+      mnme=[mnme1,', anh only'];
+      semilogx(phi_range,GuRat2,['--',c],'DisplayName',mnme,'linewidth',2)
+
+      subplot(1,2,2)
+      hold on
+      VRat1=squeeze(VBR_1.out.anelastic.(anemeth).V(1,:,ifreq))/1e3;%./VBR_1.out.elastic.anh_poro.Vsu;
+      VRat2=squeeze(VBR_2.out.anelastic.(anemeth).V(1,:,ifreq))/1e3;%./VBR_2.out.elastic.anharmonic.Vsu;
+      semilogx(phi_range,VRat1,c,'DisplayName',mnme1,'linewidth',2)
+      mnme=[mnme1,', anh only'];
+      semilogx(phi_range,VRat2,['--',c],'DisplayName',mnme,'linewidth',2)
+    end
 
     subplot(1,2,1)
-    hold on
-    GuRat1=squeeze(VBR_1.out.anelastic.(anemeth).M(1,:,ifreq))/1e9;%./VBR_1.out.elastic.anh_poro.Gu;
-    GuRat2=squeeze(VBR_2.out.anelastic.(anemeth).M(1,:,ifreq))/1e9;%./VBR_2.out.elastic.anharmonic.Gu;
-    semilogx(phi_range,GuRat1,c,'DisplayName',mnme1,'linewidth',2)
-    mnme=[mnme1,', anh only'];
-    semilogx(phi_range,GuRat2,['--',c],'DisplayName',mnme,'linewidth',2)
-
+    box on; xlabel('\phi'); ylabel('M [GPa]'); legend('location','southwest')
     subplot(1,2,2)
-    hold on
-    VRat1=squeeze(VBR_1.out.anelastic.(anemeth).V(1,:,ifreq))/1e3;%./VBR_1.out.elastic.anh_poro.Vsu;
-    VRat2=squeeze(VBR_2.out.anelastic.(anemeth).V(1,:,ifreq))/1e3;%./VBR_2.out.elastic.anharmonic.Vsu;
-    semilogx(phi_range,VRat1,c,'DisplayName',mnme1,'linewidth',2)
-    mnme=[mnme1,', anh only'];
-    semilogx(phi_range,VRat2,['--',c],'DisplayName',mnme,'linewidth',2)
+    box on; xlabel('\phi'); ylabel('Vs_R [km/]');
   end
-
-  subplot(1,2,1)
-  box on; xlabel('\phi'); ylabel('M [GPa]'); legend('location','southwest')
-  subplot(1,2,2)
-  box on; xlabel('\phi'); ylabel('Vs_R [km/]');
 
   case1out.VBR_1=VBR_1;
   case1out.VBR_2=VBR_2;
@@ -165,47 +165,49 @@ function case2out =case2()
   case2out.VBR_2=VBR_2;
 
   % figure: V,M vs. melt fraction for each method
-  case2out.fig=figure('Position', [10 10 650 250]);
-  ifreq=1;
-  meth_colors=getMethodColors();
-  phi_range=VBR.in.SV.phi;
-  for imeth=1:numel(VBR_1.in.anelastic.methods_list)
-    anemeth=VBR_1.in.anelastic.methods_list{imeth};
-    mnme1=strrep(anemeth,'_','\_');
+  if (getenv('VBRcTesting') ~= '1')
+    case2out.fig=figure('Position', [10 10 650 250]);
+    ifreq=1;
+    meth_colors=getMethodColors();
+    phi_range=VBR.in.SV.phi;
+    for imeth=1:numel(VBR_1.in.anelastic.methods_list)
+      anemeth=VBR_1.in.anelastic.methods_list{imeth};
+      mnme1=strrep(anemeth,'_','\_');
 
-    c=meth_colors.(anemeth);
+      c=meth_colors.(anemeth);
+
+      subplot(1,3,1)
+      hold on
+      GuRat1=squeeze(VBR_1.out.anelastic.(anemeth).M(1,:,ifreq))/1e9;%./VBR_1.out.elastic.anh_poro.Gu;
+      GuRat2=squeeze(VBR_2.out.anelastic.(anemeth).M(1,:,ifreq))/1e9;%./VBR_2.out.elastic.anharmonic.Gu;
+      semilogx(phi_range,GuRat1,c,'DisplayName',mnme1,'linewidth',2)
+      mnme=[mnme1,', melt effect'];
+      semilogx(phi_range,GuRat2,['--',c],'DisplayName',mnme,'linewidth',2)
+
+      subplot(1,3,2)
+      hold on
+      VRat1=squeeze(VBR_1.out.anelastic.(anemeth).V(1,:,ifreq))/1e3;%./VBR_1.out.elastic.anh_poro.Vsu;
+      VRat2=squeeze(VBR_2.out.anelastic.(anemeth).V(1,:,ifreq))/1e3;%./VBR_2.out.elastic.anharmonic.Vsu;
+      semilogx(phi_range,VRat1,c,'DisplayName',mnme1,'linewidth',2)
+      mnme=[mnme1,', anh only'];
+      semilogx(phi_range,VRat2,['--',c],'DisplayName',mnme,'linewidth',2)
+
+      subplot(1,3,3)
+      hold on
+      Q1=squeeze(VBR_1.out.anelastic.(anemeth).Q(1,:,ifreq))/1e3;%./VBR_1.out.elastic.anh_poro.Vsu;
+      Q2=squeeze(VBR_2.out.anelastic.(anemeth).Q(1,:,ifreq))/1e3;%./VBR_2.out.elastic.anharmonic.Vsu;
+      loglog(phi_range,Q1,c,'DisplayName',mnme1,'linewidth',2)
+      mnme=[mnme1,', anh only'];
+      loglog(phi_range,Q2,['--',c],'DisplayName',mnme,'linewidth',2)
+    end
 
     subplot(1,3,1)
-    hold on
-    GuRat1=squeeze(VBR_1.out.anelastic.(anemeth).M(1,:,ifreq))/1e9;%./VBR_1.out.elastic.anh_poro.Gu;
-    GuRat2=squeeze(VBR_2.out.anelastic.(anemeth).M(1,:,ifreq))/1e9;%./VBR_2.out.elastic.anharmonic.Gu;
-    semilogx(phi_range,GuRat1,c,'DisplayName',mnme1,'linewidth',2)
-    mnme=[mnme1,', melt effect'];
-    semilogx(phi_range,GuRat2,['--',c],'DisplayName',mnme,'linewidth',2)
-
+    box on; xlabel('\phi'); ylabel('M [GPa]'); legend('location','southwest')
     subplot(1,3,2)
-    hold on
-    VRat1=squeeze(VBR_1.out.anelastic.(anemeth).V(1,:,ifreq))/1e3;%./VBR_1.out.elastic.anh_poro.Vsu;
-    VRat2=squeeze(VBR_2.out.anelastic.(anemeth).V(1,:,ifreq))/1e3;%./VBR_2.out.elastic.anharmonic.Vsu;
-    semilogx(phi_range,VRat1,c,'DisplayName',mnme1,'linewidth',2)
-    mnme=[mnme1,', anh only'];
-    semilogx(phi_range,VRat2,['--',c],'DisplayName',mnme,'linewidth',2)
-
+    box on; xlabel('\phi'); ylabel('Vs_R [km/s]');
     subplot(1,3,3)
-    hold on
-    Q1=squeeze(VBR_1.out.anelastic.(anemeth).Q(1,:,ifreq))/1e3;%./VBR_1.out.elastic.anh_poro.Vsu;
-    Q2=squeeze(VBR_2.out.anelastic.(anemeth).Q(1,:,ifreq))/1e3;%./VBR_2.out.elastic.anharmonic.Vsu;
-    loglog(phi_range,Q1,c,'DisplayName',mnme1,'linewidth',2)
-    mnme=[mnme1,', anh only'];
-    loglog(phi_range,Q2,['--',c],'DisplayName',mnme,'linewidth',2)
+    box on; xlabel('\phi'); ylabel('Q');
   end
-
-  subplot(1,3,1)
-  box on; xlabel('\phi'); ylabel('M [GPa]'); legend('location','southwest')
-  subplot(1,3,2)
-  box on; xlabel('\phi'); ylabel('Vs_R [km/s]');
-  subplot(1,3,3)
-  box on; xlabel('\phi'); ylabel('Q');
 
   % now compare to pre-melt method (which is independent of the melt effect)
   VBR.in.anelastic.methods_list={'eburgers_psp';'andrade_psp';'xfit_mxw';'xfit_premelt'};
@@ -221,103 +223,105 @@ function case2out =case2()
   VBR_3 = VBR_spine(VBR);
 
   % figure: phi, M and V vs T
-  case2out.fig2=figure('Position', [30 30 1000 500],'PaperPosition',[0,0,12,4],'PaperPositionMode','manual');
-  meth_colors=getMethodColors();
-  phi_range=VBR.in.SV.phi;
-  Trange=VBR_3.in.SV.T_K-273;
+  if (getenv('VBRcTesting') ~= '1')
+    case2out.fig2=figure('Position', [30 30 1000 500],'PaperPosition',[0,0,12,4],'PaperPositionMode','manual');
+    meth_colors=getMethodColors();
+    phi_range=VBR.in.SV.phi;
+    Trange=VBR_3.in.SV.T_K-273;
 
-  subplot(2,4,1)
-  semilogy(Trange,phi_range,'k','linewidth',2)
-  hold on
-  phiminax=[min(phi_range),max(phi_range)];
-  Tminmax=[min(Trange),max(Trange)];
-  semilogy([T_solidus_C,T_solidus_C],phiminax,'--k','linewidth',1.5)
-  semilogy(Tminmax,[phi_c,phi_c],'--k','linewidth',2)
+    subplot(2,4,1)
+    semilogy(Trange,phi_range,'k','linewidth',2)
+    hold on
+    phiminax=[min(phi_range),max(phi_range)];
+    Tminmax=[min(Trange),max(Trange)];
+    semilogy([T_solidus_C,T_solidus_C],phiminax,'--k','linewidth',1.5)
+    semilogy(Tminmax,[phi_c,phi_c],'--k','linewidth',2)
 
-  ylabel('\phi'); xlabel('T [C]');
-  xlim([Tmin,Tmax])
-  ylim([1e-6,1e-2])
+    ylabel('\phi'); xlabel('T [C]');
+    xlim([Tmin,Tmax])
+    ylim([1e-6,1e-2])
 
-  subplot(2,4,5)
-  Tmin2=1200;
-  Tmask=(Trange>=Tmin2);
-  semilogy(Trange(Tmask),phi_range(Tmask),'k','linewidth',2)
-  hold on
-  phiminax=[min(phi_range),max(phi_range)];
-  Tminmax=[min(Trange(Tmask)),max(Trange(Tmask))];
-  semilogy([T_solidus_C,T_solidus_C],phiminax,'--k','linewidth',1.5)
-  semilogy(Tminmax,[phi_c,phi_c],'--k','linewidth',2)
-  ylabel('\phi'); xlabel('T [C]');
-  xlim([Tmin2,Tmax])
-  ylim([1e-6,1e-2])
+    subplot(2,4,5)
+    Tmin2=1200;
+    Tmask=(Trange>=Tmin2);
+    semilogy(Trange(Tmask),phi_range(Tmask),'k','linewidth',2)
+    hold on
+    phiminax=[min(phi_range),max(phi_range)];
+    Tminmax=[min(Trange(Tmask)),max(Trange(Tmask))];
+    semilogy([T_solidus_C,T_solidus_C],phiminax,'--k','linewidth',1.5)
+    semilogy(Tminmax,[phi_c,phi_c],'--k','linewidth',2)
+    ylabel('\phi'); xlabel('T [C]');
+    xlim([Tmin2,Tmax])
+    ylim([1e-6,1e-2])
 
-  for imeth=1:numel(VBR_3.in.anelastic.methods_list)
-    anemeth=VBR_3.in.anelastic.methods_list{imeth};
-    mnme1=strrep(anemeth,'_','\_');
+    for imeth=1:numel(VBR_3.in.anelastic.methods_list)
+      anemeth=VBR_3.in.anelastic.methods_list{imeth};
+      mnme1=strrep(anemeth,'_','\_');
 
-    c=meth_colors.(anemeth);
+      c=meth_colors.(anemeth);
+
+      subplot(2,4,2)
+      hold on
+      GuRat1=squeeze(VBR_3.out.anelastic.(anemeth).M(1,:,ifreq))/1e9;%./VBR_1.out.elastic.anh_poro.Gu;
+      plot(Trange,GuRat1,c,'DisplayName',mnme1,'linewidth',2)
+
+      subplot(2,4,3)
+      hold on
+      VRat1=squeeze(VBR_3.out.anelastic.(anemeth).V(1,:,ifreq))/1e3;%./VBR_1.out.elastic.anh_poro.Vsu;
+      plot(Trange,VRat1,c,'DisplayName',mnme1,'linewidth',2)
+
+      subplot(2,4,4)
+      hold on
+      Q1=squeeze(VBR_3.out.anelastic.(anemeth).Q(1,:,ifreq))/1e3;%./VBR_1.out.elastic.anh_poro.Vsu;
+      semilogy(Trange,Q1,c,'DisplayName',mnme1,'linewidth',2)
+
+      subplot(2,4,6)
+      hold on
+      GuRat1=squeeze(VBR_3.out.anelastic.(anemeth).M(1,Tmask,ifreq))/1e9;%./VBR_1.out.elastic.anh_poro.Gu;
+      plot(Trange(Tmask),GuRat1,c,'DisplayName',mnme1,'linewidth',2)
+
+      subplot(2,4,7)
+      hold on
+      VRat1=squeeze(VBR_3.out.anelastic.(anemeth).V(1,Tmask,ifreq))/1e3;%./VBR_1.out.elastic.anh_poro.Vsu;
+      plot(Trange(Tmask),VRat1,c,'DisplayName',mnme1,'linewidth',2)
+
+      subplot(2,4,8)
+      hold on
+      Q1=squeeze(VBR_3.out.anelastic.(anemeth).Q(1,Tmask,ifreq))/1e3;%./VBR_1.out.elastic.anh_poro.Vsu;
+      semilogy(Trange(Tmask),Q1,c,'DisplayName',mnme1,'linewidth',2)
+
+    end
 
     subplot(2,4,2)
+    legend('location','southwest');
     hold on
-    GuRat1=squeeze(VBR_3.out.anelastic.(anemeth).M(1,:,ifreq))/1e9;%./VBR_1.out.elastic.anh_poro.Gu;
-    plot(Trange,GuRat1,c,'DisplayName',mnme1,'linewidth',2)
-
+    plot([T_solidus_C,T_solidus_C],[60,75],'--k','linewidth',1.5,'DisplayName','T_{sol}')
+    box on; xlabel('T [C]'); ylabel('M [GPa]');
+    xlim([Tmin,Tmax]); ylim([60,75])
     subplot(2,4,3)
     hold on
-    VRat1=squeeze(VBR_3.out.anelastic.(anemeth).V(1,:,ifreq))/1e3;%./VBR_1.out.elastic.anh_poro.Vsu;
-    plot(Trange,VRat1,c,'DisplayName',mnme1,'linewidth',2)
-
+    plot([T_solidus_C,T_solidus_C],[4.2,4.9],'--k','linewidth',1.5,'DisplayName','T_{sol}')
+    box on; xlabel('T [C]'); ylabel('Vs_R [km/s]');xlim([Tmin,Tmax]); ylim([4.3,4.8])
     subplot(2,4,4)
     hold on
-    Q1=squeeze(VBR_3.out.anelastic.(anemeth).Q(1,:,ifreq))/1e3;%./VBR_1.out.elastic.anh_poro.Vsu;
-    semilogy(Trange,Q1,c,'DisplayName',mnme1,'linewidth',2)
+    semilogy([T_solidus_C,T_solidus_C],[1e-2,1e4],'--k','linewidth',1.5,'DisplayName','T_{sol}')
+    box on; xlabel('T [C]'); ylabel('Q');xlim([Tmin,Tmax])
+
 
     subplot(2,4,6)
     hold on
-    GuRat1=squeeze(VBR_3.out.anelastic.(anemeth).M(1,Tmask,ifreq))/1e9;%./VBR_1.out.elastic.anh_poro.Gu;
-    plot(Trange(Tmask),GuRat1,c,'DisplayName',mnme1,'linewidth',2)
-
+    plot([T_solidus_C,T_solidus_C],[60,70],'--k','linewidth',1.5,'DisplayName','T_{sol}')
+    box on; xlabel('T [C]'); ylabel('M [GPa]');xlim([Tmin2,Tmax]); ylim([62,69])
     subplot(2,4,7)
     hold on
-    VRat1=squeeze(VBR_3.out.anelastic.(anemeth).V(1,Tmask,ifreq))/1e3;%./VBR_1.out.elastic.anh_poro.Vsu;
-    plot(Trange(Tmask),VRat1,c,'DisplayName',mnme1,'linewidth',2)
-
+    plot([T_solidus_C,T_solidus_C],[4.3,4.9],'--k','linewidth',1.5,'DisplayName','T_{sol}')
+    box on; xlabel('T [C]'); ylabel('Vs_R [km/s]');xlim([Tmin2,Tmax]); ylim([4.3,4.6])
     subplot(2,4,8)
     hold on
-    Q1=squeeze(VBR_3.out.anelastic.(anemeth).Q(1,Tmask,ifreq))/1e3;%./VBR_1.out.elastic.anh_poro.Vsu;
-    semilogy(Trange(Tmask),Q1,c,'DisplayName',mnme1,'linewidth',2)
-
+    semilogy([T_solidus_C,T_solidus_C],[1e-2,1e1],'--k','linewidth',1.5,'DisplayName','T_{sol}')
+    box on; xlabel('T [C]'); ylabel('Q');xlim([Tmin2,Tmax])
+    saveas(gcf,'./figures/CB_011_meltEffects_case2_fig2.png')
   end
-
-  subplot(2,4,2)
-  legend('location','southwest');
-  hold on
-  plot([T_solidus_C,T_solidus_C],[60,75],'--k','linewidth',1.5,'DisplayName','T_{sol}')
-  box on; xlabel('T [C]'); ylabel('M [GPa]');
-  xlim([Tmin,Tmax]); ylim([60,75])
-  subplot(2,4,3)
-  hold on
-  plot([T_solidus_C,T_solidus_C],[4.2,4.9],'--k','linewidth',1.5,'DisplayName','T_{sol}')
-  box on; xlabel('T [C]'); ylabel('Vs_R [km/s]');xlim([Tmin,Tmax]); ylim([4.3,4.8])
-  subplot(2,4,4)
-  hold on
-  semilogy([T_solidus_C,T_solidus_C],[1e-2,1e4],'--k','linewidth',1.5,'DisplayName','T_{sol}')
-  box on; xlabel('T [C]'); ylabel('Q');xlim([Tmin,Tmax])
-
-
-  subplot(2,4,6)
-  hold on
-  plot([T_solidus_C,T_solidus_C],[60,70],'--k','linewidth',1.5,'DisplayName','T_{sol}')
-  box on; xlabel('T [C]'); ylabel('M [GPa]');xlim([Tmin2,Tmax]); ylim([62,69])
-  subplot(2,4,7)
-  hold on
-  plot([T_solidus_C,T_solidus_C],[4.3,4.9],'--k','linewidth',1.5,'DisplayName','T_{sol}')
-  box on; xlabel('T [C]'); ylabel('Vs_R [km/s]');xlim([Tmin2,Tmax]); ylim([4.3,4.6])
-  subplot(2,4,8)
-  hold on
-  semilogy([T_solidus_C,T_solidus_C],[1e-2,1e1],'--k','linewidth',1.5,'DisplayName','T_{sol}')
-  box on; xlabel('T [C]'); ylabel('Q');xlim([Tmin2,Tmax])
-  saveas(gcf,'./figures/CB_011_meltEffects_case2_fig2.png')
 
   case2out.VBR_1=VBR_1;
   case2out.VBR_2=VBR_2;
