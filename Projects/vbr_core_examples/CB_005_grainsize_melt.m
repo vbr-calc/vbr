@@ -35,54 +35,55 @@ function VBR = CB_005_grainsize_melt()
   [VBR] = VBR_spine(VBR) ;
 
   %% Build Plots %%
-  close all;
-  figure('Position', [10 10 650 650],'PaperPosition',[0,0,7,7],'PaperPositionMode','manual');
-  fixed_dg=.01 * 1e6; % 1 cm grain size
-  fixed_phi=.001; % melt fraction
-  [val,iphi]=min(abs(phi-fixed_phi));
-  [val,idg]=min(abs(dg_um-fixed_dg));
-  for imeth=1:numel(VBR.in.anelastic.methods_list)
-    meth=VBR.in.anelastic.methods_list{imeth};
-    V=VBR.out.anelastic.(meth).V/1e3;
-    Q=VBR.out.anelastic.(meth).Q;
+  if (getenv('VBRcTesting') != '1')
+    figure('Position', [10 10 650 650],'PaperPosition',[0,0,7,7],'PaperPositionMode','manual');
+    fixed_dg=.01 * 1e6; % 1 cm grain size
+    fixed_phi=.001; % melt fraction
+    [val,iphi]=min(abs(phi-fixed_phi));
+    [val,idg]=min(abs(dg_um-fixed_dg));
+    for imeth=1:numel(VBR.in.anelastic.methods_list)
+      meth=VBR.in.anelastic.methods_list{imeth};
+      V=VBR.out.anelastic.(meth).V/1e3;
+      Q=VBR.out.anelastic.(meth).Q;
+      subplot(2,2,1)
+      hold all
+      methname=strrep(meth,'_','\_');
+      semilogx(phi,V(:,idg),'DisplayName',methname,'linewidth',2)
+      box on
+      xlabel('\phi')
+      ylabel(['V at ',num2str(VBR.in.SV.f),' Hz'])
+      title(['T/T_{sol}=',num2str(Thomol),', d [um] = ',num2str(dg_um(idg))])
+
+      subplot(2,2,2)
+      hold all
+      methname=strrep(meth,'_','\_');
+      semilogx(dg_um,V(iphi,:),'DisplayName',methname,'linewidth',2)
+      box on
+      xlabel('d [um]')
+      ylabel(['V [km/s] at ',num2str(VBR.in.SV.f),' Hz'])
+      title(['T/T_{sol}=',num2str(Thomol),' \phi = ',num2str(phi(iphi))])
+
+      subplot(2,2,3)
+      hold all
+      methname=strrep(meth,'_','\_');
+      loglog(phi,Q(:,idg),'DisplayName',methname,'linewidth',2)
+      box on
+      xlabel('\phi')
+      ylabel(['Q at ',num2str(VBR.in.SV.f),' Hz'])
+      title(['T/T_{sol}=',num2str(Thomol),' d [um] = ',num2str(dg_um(idg))])
+
+      subplot(2,2,4)
+      hold all
+      methname=strrep(meth,'_','\_');
+      loglog(dg_um,Q(iphi,:),'DisplayName',methname,'linewidth',2)
+      box on
+      xlabel('d [um]')
+      ylabel(['Q at ',num2str(VBR.in.SV.f),' Hz'])
+      title(['T/T_{sol}=',num2str(Thomol),' \phi = ',num2str(phi(iphi))])
+    end
+
     subplot(2,2,1)
-    hold all
-    methname=strrep(meth,'_','\_');
-    semilogx(phi,V(:,idg),'DisplayName',methname,'linewidth',2)
-    box on
-    xlabel('\phi')
-    ylabel(['V at ',num2str(VBR.in.SV.f),' Hz'])
-    title(['T/T_{sol}=',num2str(Thomol),', d [um] = ',num2str(dg_um(idg))])
-
-    subplot(2,2,2)
-    hold all
-    methname=strrep(meth,'_','\_');
-    semilogx(dg_um,V(iphi,:),'DisplayName',methname,'linewidth',2)
-    box on
-    xlabel('d [um]')
-    ylabel(['V [km/s] at ',num2str(VBR.in.SV.f),' Hz'])
-    title(['T/T_{sol}=',num2str(Thomol),' \phi = ',num2str(phi(iphi))])
-
-    subplot(2,2,3)
-    hold all
-    methname=strrep(meth,'_','\_');
-    loglog(phi,Q(:,idg),'DisplayName',methname,'linewidth',2)
-    box on
-    xlabel('\phi')
-    ylabel(['Q at ',num2str(VBR.in.SV.f),' Hz'])
-    title(['T/T_{sol}=',num2str(Thomol),' d [um] = ',num2str(dg_um(idg))])
-
-    subplot(2,2,4)
-    hold all
-    methname=strrep(meth,'_','\_');
-    loglog(dg_um,Q(iphi,:),'DisplayName',methname,'linewidth',2)
-    box on
-    xlabel('d [um]')
-    ylabel(['Q at ',num2str(VBR.in.SV.f),' Hz'])
-    title(['T/T_{sol}=',num2str(Thomol),' \phi = ',num2str(phi(iphi))])
-  end
-
-  subplot(2,2,1)
-  legend('location','southwest')
-  saveas(gcf,'./figures/CB_005_grainsize_melt.png')
+    legend('location','southwest')
+    saveas(gcf,'./figures/CB_005_grainsize_melt.png')
+  end 
 end

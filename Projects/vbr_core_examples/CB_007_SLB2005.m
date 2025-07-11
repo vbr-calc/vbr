@@ -22,21 +22,23 @@ function VBR = CB_007_SLB2005()
   %% CALL THE VBR CALCULATOR %%
   [VBR] = VBR_spine(VBR) ;
 
-  %% Plot output
-  figure()
-  subplot(1,3,1)
-  plot(VBR.in.SV.P_GPa,z/1e3)
-  set(gca,'Ydir','reverse')
-  xlabel('P [GPa]'); ylabel('z [km]')
+  if (getenv('VBRcTesting') != '1')
+    %% Plot output
+    figure()
+    subplot(1,3,1)
+    plot(VBR.in.SV.P_GPa,z/1e3)
+    set(gca,'Ydir','reverse')
+    xlabel('P [GPa]'); ylabel('z [km]')
 
-  subplot(1,3,2)
-  plot(VBR.in.SV.T_K-273,z/1e3)
-  set(gca,'Ydir','reverse')
-  xlabel('T [C]'); ylabel('z [km]')
+    subplot(1,3,2)
+    plot(VBR.in.SV.T_K-273,z/1e3)
+    set(gca,'Ydir','reverse')
+    xlabel('T [C]'); ylabel('z [km]')
 
-  subplot(1,3,3)
-  plot(VBR.out.elastic.SLB2005.Vs,z/1e3)
-  set(gca,'Ydir','reverse')
-  xlabel('Vs [km/s]'); ylabel('z [km]')
-  saveas(gcf,'./figures/CB_007_SLB2005.png')
+    subplot(1,3,3)
+    plot(VBR.out.elastic.SLB2005.Vs,z/1e3)
+    set(gca,'Ydir','reverse')
+    xlabel('Vs [km/s]'); ylabel('z [km]')
+    saveas(gcf,'./figures/CB_007_SLB2005.png')
+  end
 end

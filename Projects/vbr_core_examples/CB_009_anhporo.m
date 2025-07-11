@@ -19,16 +19,18 @@ function VBR = CB_009_anhporo()
   [VBR] = VBR_spine(VBR) ;
 
   %% plot the result %%
-  figure('Position', [10 10 600 300],'DefaultAxesFontSize',16);
-  subplot(1,2,1)
-  semilogx(VBR.in.SV.phi,VBR.out.elastic.anh_poro.Gu/1e9,'k','linewidth',1.5)
-  xlabel('\phi'); ylabel('Gu(P,T,\phi) [GPa]')
-  set(gca,'linewidth',1.5)
+  if (getenv('VBRcTesting') != '1')
+    figure('Position', [10 10 600 300],'DefaultAxesFontSize',16);
+    subplot(1,2,1)
+    semilogx(VBR.in.SV.phi,VBR.out.elastic.anh_poro.Gu/1e9,'k','linewidth',1.5)
+    xlabel('\phi'); ylabel('Gu(P,T,\phi) [GPa]')
+    set(gca,'linewidth',1.5)
 
-  subplot(1,2,2)
-  semilogx(VBR.in.SV.phi,VBR.out.elastic.anh_poro.Vsu/1e3,'k','linewidth',1.5)
-  xlabel('\phi'); ylabel('Vsu(P,T,\phi) [km/s]')
-  set(gca,'linewidth',1.5)
+    subplot(1,2,2)
+    semilogx(VBR.in.SV.phi,VBR.out.elastic.anh_poro.Vsu/1e3,'k','linewidth',1.5)
+    xlabel('\phi'); ylabel('Vsu(P,T,\phi) [km/s]')
+    set(gca,'linewidth',1.5)
 
-  saveas(gcf,'./figures/CB_009_anhporo.png')
+    saveas(gcf,'./figures/CB_009_anhporo.png')
+  end
 end

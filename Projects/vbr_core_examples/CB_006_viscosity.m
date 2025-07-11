@@ -33,36 +33,38 @@ function VBR = CB_006_viscosity()
   [VBR_vs_sig] = VBR_spine(VBR) ;
 
   %% Plot strain rates, viscosity %%
-  figure()
-  for imeth=1:numel(VBR_vs_dg.in.viscous.methods_list)
-    vmeth=VBR_vs_dg.in.viscous.methods_list{imeth};
+  if (getenv('VBRcTesting') != '1')
+    figure()
+    for imeth=1:numel(VBR_vs_dg.in.viscous.methods_list)
+      vmeth=VBR_vs_dg.in.viscous.methods_list{imeth};
+      subplot(2,2,1)
+      hold all
+      plot(log10(VBR_vs_dg.in.SV.dg_um),log10(VBR_vs_dg.out.viscous.(vmeth).sr_tot))
+
+      subplot(2,2,2)
+      hold all
+      plot(log10(VBR_vs_dg.in.SV.dg_um),log10(VBR_vs_dg.out.viscous.(vmeth).eta_total))
+
+      subplot(2,2,3)
+      hold all
+      plot(log10(VBR_vs_sig.in.SV.sig_MPa),log10(VBR_vs_sig.out.viscous.(vmeth).sr_tot))
+
+      subplot(2,2,4)
+      hold all
+      plot(log10(VBR_vs_sig.in.SV.sig_MPa),log10(VBR_vs_sig.out.viscous.(vmeth).eta_total))
+    end
+
     subplot(2,2,1)
-    hold all
-    plot(log10(VBR_vs_dg.in.SV.dg_um),log10(VBR_vs_dg.out.viscous.(vmeth).sr_tot))
+    box on; xlabel('log10 d [um]'); ylabel('log10 total strain rate [s]')
 
     subplot(2,2,2)
-    hold all
-    plot(log10(VBR_vs_dg.in.SV.dg_um),log10(VBR_vs_dg.out.viscous.(vmeth).eta_total))
+    box on; xlabel('log10 d [um]'); ylabel('log10 effective viscosity [Pa s]')
 
     subplot(2,2,3)
-    hold all
-    plot(log10(VBR_vs_sig.in.SV.sig_MPa),log10(VBR_vs_sig.out.viscous.(vmeth).sr_tot))
+    box on; xlabel('log10 \sigma [MPa]'); ylabel('log10 total strain rate [s]')
 
     subplot(2,2,4)
-    hold all
-    plot(log10(VBR_vs_sig.in.SV.sig_MPa),log10(VBR_vs_sig.out.viscous.(vmeth).eta_total))
+    box on; xlabel('log10 \sigma [MPa]'); ylabel('log10 effective viscosity [Pa s]')
+    saveas(gcf,'./figures/CB_006_viscosity.png')
   end
-
-  subplot(2,2,1)
-  box on; xlabel('log10 d [um]'); ylabel('log10 total strain rate [s]')
-
-  subplot(2,2,2)
-  box on; xlabel('log10 d [um]'); ylabel('log10 effective viscosity [Pa s]')
-
-  subplot(2,2,3)
-  box on; xlabel('log10 \sigma [MPa]'); ylabel('log10 total strain rate [s]')
-
-  subplot(2,2,4)
-  box on; xlabel('log10 \sigma [MPa]'); ylabel('log10 effective viscosity [Pa s]')
-  saveas(gcf,'./figures/CB_006_viscosity.png')
 end

@@ -54,29 +54,31 @@ function VBR = CB_016_complex_viscosity()
 
     tau_f = 1./ tau_M;
 
-    figure('PaperPosition',[0,0,6,8],'PaperPositionMode','manual')
-    subplot(3,1,1)
-    loglog(VBR.in.SV.f, eta_app, 'linewidth', 2)
-    hold on
-    loglog([tau_f, tau_f], [1e12,1e24],'--k')
-    ylim([1e12,1e24])
-    ylabel('||\eta*||')
+    if (getenv('VBRcTesting') != '1')
+        figure('PaperPosition',[0,0,6,8],'PaperPositionMode','manual')
+        subplot(3,1,1)
+        loglog(VBR.in.SV.f, eta_app, 'linewidth', 2)
+        hold on
+        loglog([tau_f, tau_f], [1e12,1e24],'--k')
+        ylim([1e12,1e24])
+        ylabel('||\eta*||')
 
-    subplot(3,1,2)
-    Qinv = VBR.out.anelastic.andrade_analytical.Qinv;
-    loglog(VBR.in.SV.f, Qinv, 'linewidth', 2)
-    hold on
-    loglog([tau_f, tau_f], [min(Qinv), max(Qinv)],'--k')
-    ylabel('Q^{-1}')
+        subplot(3,1,2)
+        Qinv = VBR.out.anelastic.andrade_analytical.Qinv;
+        loglog(VBR.in.SV.f, Qinv, 'linewidth', 2)
+        hold on
+        loglog([tau_f, tau_f], [min(Qinv), max(Qinv)],'--k')
+        ylabel('Q^{-1}')
 
-    subplot(3,1,3)
-    semilogx(VBR.in.SV.f, eta_normalized, 'linewidth', 2)
-    hold on
-    semilogx([tau_f, tau_f], [0, 1.5],'--k')
-    semilogx([VBR.in.SV.f(1), VBR.in.SV.f(end)], [1,1],'--k')
-    ylabel('normalized ||{\eta}*||')
-    xlabel('f [Hz]')
-    ylim([0, 1.5])
+        subplot(3,1,3)
+        semilogx(VBR.in.SV.f, eta_normalized, 'linewidth', 2)
+        hold on
+        semilogx([tau_f, tau_f], [0, 1.5],'--k')
+        semilogx([VBR.in.SV.f(1), VBR.in.SV.f(end)], [1,1],'--k')
+        ylabel('normalized ||{\eta}*||')
+        xlabel('f [Hz]')
+        ylim([0, 1.5])
 
-    saveas(gcf,'./figures/CB_016_complex_viscosity.png')
+        saveas(gcf,'./figures/CB_016_complex_viscosity.png')
+    end
 end 

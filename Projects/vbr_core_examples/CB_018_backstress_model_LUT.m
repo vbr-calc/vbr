@@ -1,6 +1,6 @@
-function [T_1d, dg_1d, sig_dc_1d, VBR] = CB_018_backstress_model_LUT()
+function VBR = CB_018_backstress_model_LUT()
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % [T_1d, dg_1d, sig_dc_1d, VBR] = CB_018_backstress_model_LUT();
+    % VBR = CB_018_backstress_model_LUT();
     %
     % a more thorough exploration of the parameter space for the 
     % linearized backstress model of Hein et al., 2025
@@ -33,12 +33,13 @@ function [T_1d, dg_1d, sig_dc_1d, VBR] = CB_018_backstress_model_LUT()
     VBR = VBR_spine(VBR); 
 
     % plotting
-    i_sigs = [1, 8, numel(sig_dc_1d), ];
-    i_freq = 1; 
-    contour_plots(VBR, i_sigs, i_freq, T_1d, dg_1d, sig_dc_1d)
+    if (getenv('VBRcTesting') != '1')
+        i_sigs = [1, 8, numel(sig_dc_1d), ];
+        i_freq = 1; 
+        contour_plots(VBR, i_sigs, i_freq, T_1d, dg_1d, sig_dc_1d)
 
-    line_plots(VBR, T_1d, dg_1d, sig_dc_1d);
-
+        line_plots(VBR, T_1d, dg_1d, sig_dc_1d);
+    end
 end 
 
 function line_plots(VBR, T_1d, dg_1d, sig_dc_1d)

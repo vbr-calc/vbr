@@ -34,11 +34,12 @@ function VBR = CB_015_analytical_andrade()
      VBR = VBR_spine(VBR) ;
 
      % plot frequency dependence of attenuation
-     figure('PaperPosition',[0,0,4,4],'PaperPositionMode','manual')
-     loglog(VBR.in.SV.f, VBR.out.anelastic.andrade_analytical.Qinv, ...
-          'displayname', 'analytical andrade', 'linewidth', 2)
-     hold all
-
+     if (getenv('VBRcTesting') != '1')
+          figure('PaperPosition',[0,0,4,4],'PaperPositionMode','manual')
+          loglog(VBR.in.SV.f, VBR.out.anelastic.andrade_analytical.Qinv, ...
+               'displayname', 'analytical andrade', 'linewidth', 2)
+          hold all
+     end
      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
      % Case 2 : change the viscosity deformation mechanism
      % The default behavior is for the analytical andrade model to use the
@@ -71,9 +72,10 @@ function VBR = CB_015_analytical_andrade()
      VBR = VBR_spine(VBR) ;
 
      % plot frequency dependence of attenuation
-     loglog(VBR.in.SV.f, VBR.out.anelastic.andrade_analytical.Qinv, ...
-          'displayname', 'analytical andrade, gbs', 'linewidth', 2)
-
+     if (getenv('VBRcTesting') != '1')
+          loglog(VBR.in.SV.f, VBR.out.anelastic.andrade_analytical.Qinv, ...
+               'displayname', 'analytical andrade, gbs', 'linewidth', 2)
+     end
 
      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
      % Case 3 : directly specify the viscosity to use
@@ -104,10 +106,12 @@ function VBR = CB_015_analytical_andrade()
      VBR = VBR_spine(VBR) ;
 
      % plot frequency dependence of attenuation
-     loglog(VBR.in.SV.f, VBR.out.anelastic.andrade_analytical.Qinv, ...
-          'displayname', 'analytical andrade, fixed eta\_ss', 'linewidth', 2)
-     xlabel('f [Hz]')
-     ylabel('Q^{-1}')
-     legend()
-     saveas(gcf,'./figures/CB_015_analytical_andrade.png')
+     if (getenv('VBRcTesting') != '1')
+          loglog(VBR.in.SV.f, VBR.out.anelastic.andrade_analytical.Qinv, ...
+               'displayname', 'analytical andrade, fixed eta\_ss', 'linewidth', 2)
+          xlabel('f [Hz]')
+          ylabel('Q^{-1}')
+          legend()
+          saveas(gcf,'./figures/CB_015_analytical_andrade.png')
+     end
 end 

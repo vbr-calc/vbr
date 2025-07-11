@@ -33,32 +33,34 @@ function VBR = CB_014_xfit_premelt_extended()
   VBR.in.SV.sig_MPa = full_nd(1, sz); % differential stress [MPa]
   VBR.in.SV.f = 1; % 1 Hz
 
-  f1=figure('PaperPosition',[0,0,6,4],'PaperPositionMode','manual');
-  nTn = numel(Tn_cases);
-  VBR_results = struct();
+  if (getenv('VBRcTesting') != '1')
+    f1=figure('PaperPosition',[0,0,6,4],'PaperPositionMode','manual');
+    nTn = numel(Tn_cases);
+    VBR_results = struct();
 
-  for iTn = 1:nTn
-        VBRi = VBR;
-        VBRi.in.SV.phi = full_nd(phi_cases(iTn), sz);
-        VBRi.in.SV.Tsolidus_K = VBR.in.SV.T_K / Tn_cases(iTn);
-        [VBRi] = VBR_spine(VBRi) ;
+    for iTn = 1:nTn
+          VBRi = VBR;
+          VBRi.in.SV.phi = full_nd(phi_cases(iTn), sz);
+          VBRi.in.SV.Tsolidus_K = VBR.in.SV.T_K / Tn_cases(iTn);
+          [VBRi] = VBR_spine(VBRi) ;
 
-        results.Q = VBRi.out.anelastic.xfit_premelt.Q;
-        VBR_results(iTn) = results;
+          results.Q = VBRi.out.anelastic.xfit_premelt.Q;
+          VBR_results(iTn) = results;
 
-        dname = [num2str(Tn_cases(iTn)), ', ', num2str(phi_cases(iTn))];
-        figure(f1)
-        if iTn > 1
-            hold all
-        end
-        plot(VBR.in.SV.T_K - 273, results.Q, 'displayname', dname, 'linewidth', 1.5)
-        legend('Location','eastoutside','title', '(Tn, phi)')
-        xlabel('Temperature [C]', 'fontsize', 12)
-        ylabel('Qs', 'fontsize', 12)
-        ylim([0, 200])
+          dname = [num2str(Tn_cases(iTn)), ', ', num2str(phi_cases(iTn))];
+          figure(f1)
+          if iTn > 1
+              hold all
+          end
+          plot(VBR.in.SV.T_K - 273, results.Q, 'displayname', dname, 'linewidth', 1.5)
+          legend('Location','eastoutside','title', '(Tn, phi)')
+          xlabel('Temperature [C]', 'fontsize', 12)
+          ylabel('Qs', 'fontsize', 12)
+          ylim([0, 200])
 
-        yticks(0:20:200)
+          yticks(0:20:200)
+    end
+
+    saveas(gcf,'./figures/CB_014_xfit_premelt_extended.png')
   end
-
-  saveas(gcf,'./figures/CB_014_xfit_premelt_extended.png')
 end

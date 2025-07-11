@@ -60,44 +60,45 @@ function VBR = CB_003_JF10()
   [VBR_with_peak] = VBR_spine(VBR) ;
 
   %% build figure %%
-  figure('PaperPosition',[0,0,7,7],'PaperPositionMode','manual');
+  if (getenv('VBRcTesting') != '1')
+    figure('PaperPosition',[0,0,7,7],'PaperPositionMode','manual');
+    for iTemp = 1:numel(VBR.in.SV.T_K)
 
-  for iTemp = 1:numel(VBR.in.SV.T_K)
+      M_bg=squeeze(VBR.out.anelastic.eburgers_psp.M(1,iTemp,:)/1e9);
+      M_bg_peak=squeeze(VBR_with_peak.out.anelastic.eburgers_psp.M(1,iTemp,:)/1e9);
+      Q_bg=squeeze(VBR.out.anelastic.eburgers_psp.Qinv(1,iTemp,:));
+      Q_bg_peak=squeeze(VBR_with_peak.out.anelastic.eburgers_psp.Qinv(1,iTemp,:));
+      logper=log10(1./VBR.in.SV.f);
+      R=(iTemp-1) / (numel(VBR.in.SV.T_K)-1);
+      B=1 - (iTemp-1) / (numel(VBR.in.SV.T_K)-1);
 
-    M_bg=squeeze(VBR.out.anelastic.eburgers_psp.M(1,iTemp,:)/1e9);
-    M_bg_peak=squeeze(VBR_with_peak.out.anelastic.eburgers_psp.M(1,iTemp,:)/1e9);
-    Q_bg=squeeze(VBR.out.anelastic.eburgers_psp.Qinv(1,iTemp,:));
-    Q_bg_peak=squeeze(VBR_with_peak.out.anelastic.eburgers_psp.Qinv(1,iTemp,:));
-    logper=log10(1./VBR.in.SV.f);
-    R=(iTemp-1) / (numel(VBR.in.SV.T_K)-1);
-    B=1 - (iTemp-1) / (numel(VBR.in.SV.T_K)-1);
+      subplot(2,2,1)
+      hold on
+      plot(logper,M_bg,'color',[R,0,B],'LineWidth',2);
+      ylabel('M [GPa] (background only) '); xlabel('period [s]')
+      ylim([20,80])
 
-    subplot(2,2,1)
-    hold on
-    plot(logper,M_bg,'color',[R,0,B],'LineWidth',2);
-    ylabel('M [GPa] (background only) '); xlabel('period [s]')
-    ylim([20,80])
+      subplot(2,2,2)
+      hold on
+      plot(logper,log10(Q_bg),'color',[R,0,B],'LineWidth',2);
+      ylabel('Q^-1 (background only)'); xlabel('period [s]')
+      ylim([-2.5,0.5])
 
-    subplot(2,2,2)
-    hold on
-    plot(logper,log10(Q_bg),'color',[R,0,B],'LineWidth',2);
-    ylabel('Q^-1 (background only)'); xlabel('period [s]')
-    ylim([-2.5,0.5])
+      subplot(2,2,3)
+      hold on
+      plot(logper,M_bg_peak,'color',[R,0,B],'LineWidth',2);
+      ylabel('M [GPa] (background + peak) '); xlabel('period [s]')
+      ylim([20,80])
 
-    subplot(2,2,3)
-    hold on
-    plot(logper,M_bg_peak,'color',[R,0,B],'LineWidth',2);
-    ylabel('M [GPa] (background + peak) '); xlabel('period [s]')
-    ylim([20,80])
-
-    subplot(2,2,4)
-    hold on
-    plot(logper,log10(Q_bg_peak),'color',[R,0,B],'LineWidth',2);
-    ylabel('Q^-1 (background + peak)'); xlabel('period [s]')
-    ylim([-2.5,0.5])
+      subplot(2,2,4)
+      hold on
+      plot(logper,log10(Q_bg_peak),'color',[R,0,B],'LineWidth',2);
+      ylabel('Q^-1 (background + peak)'); xlabel('period [s]')
+      ylim([-2.5,0.5])
+    end
+    for ip = 1:4
+      subplot(2,2,ip); box on;
+    end
+    saveas(gcf,'./figures/CB_003_JF10.png')
   end
-  for ip = 1:4
-    subplot(2,2,ip); box on;
-  end
-  saveas(gcf,'./figures/CB_003_JF10.png')
 end

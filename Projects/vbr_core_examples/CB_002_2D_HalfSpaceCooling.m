@@ -59,45 +59,47 @@ function VBR = CB_002_2D_HalfSpaceCooling()
   [VBR] = VBR_spine(VBR) ;
 
   %% Build figures %%
-  % contour T(z,t)
-  figure()
-  ax1=subplot(2,2,1);
-  contourf(HF.t_Myr,HF.z_km,HF.T_C,20)
-  colormap(ax1,hot)
-  xlabel('Seaflor Age [Myr]')
-  ylabel('Depth [km]')
-  set(gca,'ydir','reverse')
-  title('Temperature [C]')
-  colorbar()
+  if (getenv('VBRcTesting') != '1')
+    % contour T(z,t)
+    figure()
+    ax1=subplot(2,2,1);
+    contourf(HF.t_Myr,HF.z_km,HF.T_C,20)
+    colormap(ax1,hot)
+    xlabel('Seaflor Age [Myr]')
+    ylabel('Depth [km]')
+    set(gca,'ydir','reverse')
+    title('Temperature [C]')
+    colorbar()
 
-  % contour shear wave velocity at different frequencies
-  for i_f=1:3
-      ax=subplot(2,2,i_f+1);
-      contourf(HF.t_Myr,HF.z_km,VBR.out.anelastic.andrade_psp.V(:,:,i_f)/1e3,20,'LineColor','none')
-      colormap(ax,winter);
-      xlabel('Seaflor Age [Myr]')
-      ylabel('Depth [km]')
-      set(gca,'ydir','reverse')
-      title(['V_s [km/s] andrade_psp at ',num2str(VBR.in.SV.f(i_f)),' Hz'])
-      colorbar()
-  end
-  saveas(gcf,'./figures/CB_002_2D_HalfSpaceCooling.png')
-  % contour percent difference in shear wave velo between two anelastic methods
-  % at different frequencies
-  dV=abs(VBR.out.anelastic.andrade_psp.V-VBR.out.anelastic.xfit_mxw.V);
-  dV=dV./VBR.out.anelastic.xfit_mxw.V*100;
-  figure()
-  for i_f=1:4
-      subplot(2,2,i_f)
-      dVmask=(dV(:,:,i_f)>0);
-      contourf(HF.t_Myr,HF.z_km,(dV(:,:,i_f).*dVmask),100,'LineColor','none')
-      colormap(hot)
-      caxis([0,max(max(dV(:,:,i_f)))])
-      xlabel('Seaflor Age [Myr]')
-      ylabel('Depth [km]')
-      set(gca,'ydir','reverse')
-      maxval=round(max(max(dV(:,:,i_f)))*100)/100;
-      title([num2str(VBR.in.SV.f(i_f)),' Hz, max(dV)=',num2str(maxval),' percent'])
-      colorbar()
+    % contour shear wave velocity at different frequencies
+    for i_f=1:3
+        ax=subplot(2,2,i_f+1);
+        contourf(HF.t_Myr,HF.z_km,VBR.out.anelastic.andrade_psp.V(:,:,i_f)/1e3,20,'LineColor','none')
+        colormap(ax,winter);
+        xlabel('Seaflor Age [Myr]')
+        ylabel('Depth [km]')
+        set(gca,'ydir','reverse')
+        title(['V_s [km/s] andrade_psp at ',num2str(VBR.in.SV.f(i_f)),' Hz'])
+        colorbar()
+    end
+    saveas(gcf,'./figures/CB_002_2D_HalfSpaceCooling.png')
+    % contour percent difference in shear wave velo between two anelastic methods
+    % at different frequencies
+    dV=abs(VBR.out.anelastic.andrade_psp.V-VBR.out.anelastic.xfit_mxw.V);
+    dV=dV./VBR.out.anelastic.xfit_mxw.V*100;
+    figure()
+    for i_f=1:4
+        subplot(2,2,i_f)
+        dVmask=(dV(:,:,i_f)>0);
+        contourf(HF.t_Myr,HF.z_km,(dV(:,:,i_f).*dVmask),100,'LineColor','none')
+        colormap(hot)
+        caxis([0,max(max(dV(:,:,i_f)))])
+        xlabel('Seaflor Age [Myr]')
+        ylabel('Depth [km]')
+        set(gca,'ydir','reverse')
+        maxval=round(max(max(dV(:,:,i_f)))*100)/100;
+        title([num2str(VBR.in.SV.f(i_f)),' Hz, max(dV)=',num2str(maxval),' percent'])
+        colorbar()
+    end
   end
 end

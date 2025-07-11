@@ -41,32 +41,34 @@ function VBR = CB_001_0D_scalar()
   [VBR] = VBR_spine(VBR) ;
 
   %% Build plots %%
-  figure('PaperPosition',[0,0,7,4],'PaperPositionMode','manual')
-  % Loop over anelastic methods, plot result of each
-  for imeth=1:numel(VBR.in.anelastic.methods_list)
-    ane_meth=VBR.in.anelastic.methods_list{imeth};
+  if (getenv('VBRcTesting') != '1')
+    figure('PaperPosition',[0,0,7,4],'PaperPositionMode','manual')
+    % Loop over anelastic methods, plot result of each
+    for imeth=1:numel(VBR.in.anelastic.methods_list)
+      ane_meth=VBR.in.anelastic.methods_list{imeth};
 
-    % pull out V and Q for this method by selecting field dynamically
-    Vs=VBR.out.anelastic.(ane_meth).V/1e3;
-    Q=VBR.out.anelastic.(ane_meth).Q;
+      % pull out V and Q for this method by selecting field dynamically
+      Vs=VBR.out.anelastic.(ane_meth).V/1e3;
+      Q=VBR.out.anelastic.(ane_meth).Q;
 
-    % add this method to the plots
+      % add this method to the plots
+      subplot(1,2,1)
+      hold all
+      name_label=strrep(ane_meth,'_','\_');
+      semilogx(VBR.in.SV.f,Vs,'linewidth',2,'DisplayName',name_label)
+
+      subplot(1,2,2)
+      hold all
+      loglog(VBR.in.SV.f,Q,'linewidth',2,'DisplayName',name_label)
+    end
+
     subplot(1,2,1)
-    hold all
-    name_label=strrep(ane_meth,'_','\_');
-    semilogx(VBR.in.SV.f,Vs,'linewidth',2,'DisplayName',name_label)
+    xlabel('Frequency [Hz]'); ylabel('Vs [km/s]'); legend('location','southeast')
+    box on;
 
     subplot(1,2,2)
-    hold all
-    loglog(VBR.in.SV.f,Q,'linewidth',2,'DisplayName',name_label)
+    xlabel('Frequency [Hz]'); ylabel('Q'); box on
+
+    saveas(gcf,'./figures/CB_001_0D_scalar.png')
   end
-
-  subplot(1,2,1)
-  xlabel('Frequency [Hz]'); ylabel('Vs [km/s]'); legend('location','southeast')
-  box on;
-
-  subplot(1,2,2)
-  xlabel('Frequency [Hz]'); ylabel('Q'); box on
-
-  saveas(gcf,'./figures/CB_001_0D_scalar.png')
 end

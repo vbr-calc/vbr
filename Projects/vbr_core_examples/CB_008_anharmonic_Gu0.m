@@ -34,34 +34,36 @@ function VBR = CB_008_anharmonic_Gu0()
   [VBR] = VBR_spine(VBR) ;
 
   %% plot the result %%  
-  figure('PaperPosition',[0,0,16,4],'PaperPositionMode','manual')
-  subplot(1, 5, 1)
-  plot(VBR.in.SV.T_K-273,depth_km,'k','linewidth',1.5)
-  xticks([0, 400, 800, 1200])
-  xlabel('T [C]'); ylabel('Depth [km]')
+  if (getenv('VBRcTesting') != '1')
+    figure('PaperPosition',[0,0,16,4],'PaperPositionMode','manual')
+    subplot(1, 5, 1)
+    plot(VBR.in.SV.T_K-273,depth_km,'k','linewidth',1.5)
+    xticks([0, 400, 800, 1200])
+    xlabel('T [C]'); ylabel('Depth [km]')
 
-  subplot(1, 5,2)
-  plot(VBR.in.SV.rho/1e3,depth_km,'k','linewidth',1.5)
-  xlabel('\rho [g/cm^3]')
+    subplot(1, 5,2)
+    plot(VBR.in.SV.rho/1e3,depth_km,'k','linewidth',1.5)
+    xlabel('\rho [g/cm^3]')
 
-  subplot(1, 5,3)
-  plot(VBR.in.SV.P_GPa,depth_km,'k','linewidth',1.5)
-  xlabel('P [GPa]')
+    subplot(1, 5,3)
+    plot(VBR.in.SV.P_GPa,depth_km,'k','linewidth',1.5)
+    xlabel('P [GPa]')
 
-  subplot(1, 5, 4)
-  plot(VBR.out.elastic.anharmonic.Gu/1e9,depth_km,'k','linewidth',1.5)
-  xlabel('Gu(T,P) [GPa]')
+    subplot(1, 5, 4)
+    plot(VBR.out.elastic.anharmonic.Gu/1e9,depth_km,'k','linewidth',1.5)
+    xlabel('Gu(T,P) [GPa]')
 
-  subplot(1, 5, 5)
-  plot(VBR.out.elastic.anharmonic.Vsu/1e3,depth_km,'k','linewidth',1.5)
-  xlabel('V_s [km/s]')
+    subplot(1, 5, 5)
+    plot(VBR.out.elastic.anharmonic.Vsu/1e3,depth_km,'k','linewidth',1.5)
+    xlabel('V_s [km/s]')
 
-  for ip =1:5
-    subplot(1, 5,ip)
-    hold on
-    ylim([0,150])
-    set(gca,'ydir','reverse')
+    for ip =1:5
+      subplot(1, 5,ip)
+      hold on
+      ylim([0,150])
+      set(gca,'ydir','reverse')
+    end
+
+    saveas(gcf,'./figures/CB_008_anharmonic_Gu0.png')
   end
-
-  saveas(gcf,'./figures/CB_008_anharmonic_Gu0.png')
 end
