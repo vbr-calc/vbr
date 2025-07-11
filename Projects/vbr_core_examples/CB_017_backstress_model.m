@@ -28,7 +28,7 @@ function VBR = CB_017_backstress_model()
        VBR = VBR_spine(VBR); 
 
        % plotting
-       if (getenv('VBRcTesting') != '1')
+       if (getenv('VBRcTesting') ~= '1')
               Qinv = VBR.out.anelastic.backstress_linear.Qinv;
               Vs = VBR.out.anelastic.backstress_linear.V / 1e3;
 

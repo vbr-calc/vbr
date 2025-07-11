@@ -22,7 +22,7 @@ function VBR = CB_007_SLB2005()
   %% CALL THE VBR CALCULATOR %%
   [VBR] = VBR_spine(VBR) ;
 
-  if (getenv('VBRcTesting') != '1')
+  if (getenv('VBRcTesting') ~= '1')
     %% Plot output
     figure()
     subplot(1,3,1)

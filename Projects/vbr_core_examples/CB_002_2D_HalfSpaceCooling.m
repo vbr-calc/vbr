@@ -59,7 +59,7 @@ function VBR = CB_002_2D_HalfSpaceCooling()
   [VBR] = VBR_spine(VBR) ;
 
   %% Build figures %%
-  if (getenv('VBRcTesting') != '1')
+  if (getenv('VBRcTesting') ~= '1')
     % contour T(z,t)
     figure()
     ax1=subplot(2,2,1);
