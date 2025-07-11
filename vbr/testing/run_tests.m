@@ -103,6 +103,8 @@ function [TestResults,failedCount, SkippedTests, ErrorMessages] = runTheMfiles(m
             disp(['    **** Running ', funcname, ' ****'])
             if any(strcmp(test_config.matlab_only, funcname)) && isOctave
                 SkippedTests.(funcname) = "MATLAB Only";
+            elseif any(strcmp(test_config.octave_only, funcname)) && ~isOctave
+                SkippedTests.(funcname) = "Octave Only";
             else
 
                 try

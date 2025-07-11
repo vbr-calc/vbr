@@ -2,7 +2,7 @@ function TestResult = test_matlab_only_test_trigger()
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % TestResult = test_matlab_only_test_trigger()
     %
-    % this tests should not run on octave
+    % this test should not run on octave
     %
     % Parameters
     % ----------
