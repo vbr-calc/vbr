@@ -16,9 +16,26 @@ function [VBR] = Q_backstress_linear(VBR)
     omega = 2 * pi * VBR.in.SV.f ;
     d_nm = VBR.in.SV.dg_um * 1e3;
 
+    % initial calulations
+    if isfield(VBR.in.SV, 'sig_dc_MPa') && ~isfield(VBR.in.SV, 'sig_MPa')
+        msg = ['!!! Deprecation Warning: sig_dc_MPa will be removed in favor of sig_MPa '...
+               '(the same SV.sig_MPa used by other VBRc methods. To silence this '...
+               'warning, set sig_MPa and not sig_dc_MPa !!!'];
+        disp(msg)
+        sig_MPa = VBR.in.SV.sig_dc_MPa;
+    elseif isfield(VBR.in.SV, 'sig_dc_MPa') && isfield(VBR.in.SV, 'sig_MPa')
+        msg = ['Both sig_dc_MPa and sig_MPa are defined in the SV structure, ' ...
+        'using sig_MPa. Only set sig_MPa to silence this warning (sig_dc_MPa is ',...
+        'no longer used).'];
+        disp(msg)
+        sig_MPa = VBR.in.SV.sig_MPa;
+    else
+        sig_MPa = VBR.in.SV.sig_MPa;
+    end
+
     % initial calculations
     E_GPa = 9*K_Pa .* G_Pa ./(3*K_Pa+G_Pa) / 1e9; % Pa, Young's modulus
-    eta1 = visc_calc_backstress_linear(VBR, params); % Pa s, linear viscosity for dislocation glide
+    eta1 = visc_calc_backstress_linear(VBR, sig_MPa, params); % Pa s, linear viscosity for dislocation glide
 
 
     % allocation of new matrixes
@@ -33,14 +50,6 @@ function [VBR] = Q_backstress_linear(VBR)
     valid_f = proc_add_freq_indeces(zeros(sz),n_freq);
     omega_o = zeros(sz);
 
-    % initial calulations
-    if isfield(VBR.in.SV, 'sig_dc_MPa') && ~isfield(VBR.in.SV, 'sig_MPa')
-        sig_MPa = VBR.in.SV.sig_dc_MPa;
-    elseif isfield(VBR.in.SV, 'sig_dc_MPa') && isfield(VBR.in.SV, 'sig_MPa')
-        sig_MPa = VBR.in.SV.sig_MPa;
-    else
-        sig_MPa = VBR.in.SV.sig_MPa;
-    end
 
     sig_p_MPa = params.sig_p_sig_dc_factor * sig_MPa;
 
@@ -97,12 +106,12 @@ function [VBR] = Q_backstress_linear(VBR)
 end
 
 
-function eta_1 = visc_calc_backstress_linear(VBR, params)
+function eta_1 = visc_calc_backstress_linear(VBR,sig_MPa, params)
 
     Aprime_T = backstress_Aprime(VBR, params); % units: 1 / (s GPa^2)
     sig_ref_T_GPa = backstress_sig_ref_GPa(VBR, params);
 
-    sig_p_GPa = params.sig_p_sig_dc_factor * VBR.in.SV.sig_MPa / 1000;
+    sig_p_GPa = params.sig_p_sig_dc_factor * sig_MPa / 1000;
 
     eta_1 = sig_ref_T_GPa ./ (Aprime_T .* sig_p_GPa.^2);
     eta_1 = eta_1 * 1e9; % Pa s
