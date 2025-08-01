@@ -67,16 +67,19 @@ Output is stored in `VBR.out.anelastic.backstress_linear`:
   [2,1] = J1
   [3,1] = J2
   [4,1] = M
-  [5,1] = V
-  [6,1] = Vave
-  [7,1] = valid_f
-  [8,1] = omega_o
-  [9,1] = units
+  [5,1] = J1_E
+  [6,1] = J2_E
+  [7,1] = E
+  [8,1] = V
+  [9,1] = Vave
+  [10,1] = valid_f
+  [11,1] = omega_o
+  [12,1] = units
 }
 
 ```
 
-The following fields are frequency dependent: `J1`,`J2`,`Q`,`Qinv`,`M`, `V` and `valid_f`. For this method, `M` is the relaxed Young's modulus (and `J1`, `J2` are the real and complex portion of the complex Young's modulus). To calculate seismic velocities, the VBRc assumes that anelastic effects on bulk modulus are negligible, so the relaxed shear modulus can be calculated from the relaxed young's modulus and the unrelaxed bulk modulus using standard relationships for isotropic linear elastic materials.
+The following fields are frequency dependent: `J1`,`J2`,`Q`,`J1_E`, `J2_E`, `E`, `Qinv`,`M`, `V` and `valid_f`. For this method, `E` is the relaxed Young's modulus (and `J1_E`, `J2_E` are the real and complex portion of the complex Young's compliance) while `J1`, `J2` and `M` are the corresponding values for the shear compliance and relaxed modulus (following the conventions of the other anelastic methods). Note that this method assumes that anelastic effects on bulk modulus are negligible when converting between Young's and shear modulus internally.
 
 In addition to the usual outputs, the linear backstress model includes a calculation of the model's characteristic angular frequency, `omega_o`, for each thermodynamic state. The corresponding output, `valid_f`, is a boolean matrix of the same shape as the frequency-dependent variables where the value is 1 if when the frequency is greater than `omega_o / 10`, indicating the regions where the linearized model is expected to be a good fit for the full backstress model (see Hein et al., 2025). This allows you to plot or highlight just the regions that are valid, e.g., see the cookbook example, `CB_017_backstress_model.m`:
 

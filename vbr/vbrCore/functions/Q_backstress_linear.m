@@ -45,6 +45,12 @@ function [VBR] = Q_backstress_linear(VBR)
     J1 = proc_add_freq_indeces(zeros(sz),n_freq);
     J2 = proc_add_freq_indeces(zeros(sz),n_freq);
     M = proc_add_freq_indeces(zeros(sz),n_freq);
+
+    J1_G = proc_add_freq_indeces(zeros(sz),n_freq);
+    J2_G = proc_add_freq_indeces(zeros(sz),n_freq);
+    M_G = proc_add_freq_indeces(zeros(sz),n_freq);
+
+
     Qinv = proc_add_freq_indeces(zeros(sz),n_freq);
     V = proc_add_freq_indeces(zeros(sz),n_freq);
     valid_f = proc_add_freq_indeces(zeros(sz),n_freq);
@@ -61,6 +67,7 @@ function [VBR] = Q_backstress_linear(VBR)
         eta_i = eta1(i_sv);
         E_R_i = E_R_Pa(i_sv);
         E_U_i = E_GPa(i_sv)*1e9;
+        G_U_i = G_Pa(i_sv);
         rho_i = VBR.in.SV.rho(i_sv);
 
         omega_o(i_sv) = sqrt(E_R_i * (E_R_i + E_U_i)) ./ eta_i / 10;
@@ -70,6 +77,7 @@ function [VBR] = Q_backstress_linear(VBR)
             E_star_inv = (1 ./ (E_R_i + eta_i .* omega(iw) .* i) + 1 ./ E_U_i);
             E_star_i = 1 ./ E_star_inv;
 
+            % youngs modulus
             J1(i_glob) = real(1./E_star_i);
             J2(i_glob) = imag(1./E_star_i);
             M(i_glob) = norm(E_star_i); % relaxed young's modulus
@@ -77,12 +85,16 @@ function [VBR] = Q_backstress_linear(VBR)
             denom = E_R_i.^2 + E_R_i.*E_U_i + eta_i*eta_i*omega(iw)*omega(iw);
             Qinv(i_glob) = eta_i * E_U_i * omega(iw) ./ (denom);
 
-            % assume no attenuation for bulk modulus, calculate relaxed shear modulus
-            % from the relaxed young's modulus
-            E_i = M(i_glob);
-            G_eff = 3 * K_Pa(i_sv) *  E_i / (9 * K_Pa(i_sv) - E_i);
+            % shear modulus
+            G_star_inv = (3 ./ (E_R_i + eta_i .* omega(iw) .* i) + 1 ./ G_U_i);
+            G_star_i = 1 ./ G_star_inv;
+
+            J1_G(i_glob) = real(1./G_star_i);
+            J2_G(i_glob) = imag(1./G_star_i);
+            M_G(i_glob) = norm(G_star_i); % relaxed shear modulus
+
             % J2_J1_frac=(1+sqrt(1+(J2(i_glob)./J1(i_glob)).^2))/2;
-            V(i_glob) = sqrt(G_eff./ rho_i);
+            V(i_glob) = sqrt(M_G(i_glob)./ rho_i);
             valid_f(i_glob) = omega(iw) >= omega_o(i_sv);
         end
     end
@@ -90,9 +102,14 @@ function [VBR] = Q_backstress_linear(VBR)
     % put it all int he output structure
     out_s = struct();
     out_s.Qinv = Qinv;
-    out_s.J1 = J1;
-    out_s.J2 = J2;
-    out_s.M = M;
+    out_s.J1 = J1_G;
+    out_s.J2 = J2_G;
+    out_s.M = M_G;
+
+    out_s.J1_E = J1;
+    out_s.J2_E = J2;
+    out_s.E = M;
+
     out_s.V = V;
     out_s.Vave = Q_aveVoverf(out_s.V, VBR.in.SV.f);
     out_s.valid_f = valid_f;
@@ -101,6 +118,11 @@ function [VBR] = Q_backstress_linear(VBR)
     out_s.units = Q_method_units();
     out_s.units.omega_o = 'rad/s';
     out_s.units.valid_f = '';
+
+    out_s.units.J1_E = out_s.units.J1;
+    out_s.units.J2_E = out_s.units.J2;
+    out_s.units.E = out_s.units.M;
+
     VBR.out.anelastic.backstress_linear = out_s;
 
 end
