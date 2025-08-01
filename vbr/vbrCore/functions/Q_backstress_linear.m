@@ -45,13 +45,13 @@ function [VBR] = Q_backstress_linear(VBR)
     J1 = proc_add_freq_indeces(zeros(sz),n_freq);
     J2 = proc_add_freq_indeces(zeros(sz),n_freq);
     M = proc_add_freq_indeces(zeros(sz),n_freq);
+    Qinv = proc_add_freq_indeces(zeros(sz),n_freq);
 
     J1_G = proc_add_freq_indeces(zeros(sz),n_freq);
     J2_G = proc_add_freq_indeces(zeros(sz),n_freq);
     M_G = proc_add_freq_indeces(zeros(sz),n_freq);
+    Qinv_G = proc_add_freq_indeces(zeros(sz),n_freq);
 
-
-    Qinv = proc_add_freq_indeces(zeros(sz),n_freq);
     V = proc_add_freq_indeces(zeros(sz),n_freq);
     valid_f = proc_add_freq_indeces(zeros(sz),n_freq);
     omega_o = zeros(sz);
@@ -79,7 +79,7 @@ function [VBR] = Q_backstress_linear(VBR)
 
             % youngs modulus
             J1(i_glob) = real(1./E_star_i);
-            J2(i_glob) = imag(1./E_star_i);
+            J2(i_glob) = -1 * imag(1./E_star_i);
             M(i_glob) = norm(E_star_i); % relaxed young's modulus
 
             denom = E_R_i.^2 + E_R_i.*E_U_i + eta_i*eta_i*omega(iw)*omega(iw);
@@ -90,8 +90,9 @@ function [VBR] = Q_backstress_linear(VBR)
             G_star_i = 1 ./ G_star_inv;
 
             J1_G(i_glob) = real(1./G_star_i);
-            J2_G(i_glob) = imag(1./G_star_i);
+            J2_G(i_glob) = -1 * imag(1./G_star_i);
             M_G(i_glob) = norm(G_star_i); % relaxed shear modulus
+            Qinv_G(i_glob) = J2_G(i_glob) ./ J1_G(i_glob); % shear attenuation
 
             % J2_J1_frac=(1+sqrt(1+(J2(i_glob)./J1(i_glob)).^2))/2;
             V(i_glob) = sqrt(M_G(i_glob)./ rho_i);
@@ -101,13 +102,15 @@ function [VBR] = Q_backstress_linear(VBR)
 
     % put it all int he output structure
     out_s = struct();
-    out_s.Qinv = Qinv;
+
     out_s.J1 = J1_G;
     out_s.J2 = J2_G;
     out_s.M = M_G;
+    out_s.Qinv = Qinv_G;
 
     out_s.J1_E = J1;
     out_s.J2_E = J2;
+    out_s.Qinv_E = Qinv;
     out_s.E = M;
 
     out_s.V = V;
@@ -122,6 +125,7 @@ function [VBR] = Q_backstress_linear(VBR)
     out_s.units.J1_E = out_s.units.J1;
     out_s.units.J2_E = out_s.units.J2;
     out_s.units.E = out_s.units.M;
+    out_s.units.Qinv_E = out_s.units.Qinv;
 
     VBR.out.anelastic.backstress_linear = out_s;
 
