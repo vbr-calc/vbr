@@ -34,8 +34,8 @@ function [VBR] = Q_backstress_linear(VBR)
     omega_o = zeros(sz); 
 
     % initial calulations     
-    sig_dc_MPa = VBR.in.SV.sig_dc_MPa; 
-    sig_p_MPa = params.sig_p_sig_dc_factor * sig_dc_MPa; 
+    sig_MPa = VBR.in.SV.sig_MPa; 
+    sig_p_MPa = params.sig_p_sig_dc_factor * sig_MPa; 
      
     sig_d_MPa = params.Beta .* (G_Pa / 1e6) .* params.burgers_vector_nm ./ d_nm;
     E_R_Pa = M_GPa .* (sig_p_MPa + sig_d_MPa) ./ sig_p_MPa * 1e9 ;    
@@ -95,7 +95,7 @@ function eta_1 = visc_calc_backstress_linear(VBR, params)
     Aprime_T = backstress_Aprime(VBR, params); % units: 1 / (s GPa^2)    
     sig_ref_T_GPa = backstress_sig_ref_GPa(VBR, params);       
 
-    sig_p_GPa = params.sig_p_sig_dc_factor * VBR.in.SV.sig_dc_MPa / 1000; 
+    sig_p_GPa = params.sig_p_sig_dc_factor * VBR.in.SV.sig_MPa / 1000; 
     
     eta_1 = sig_ref_T_GPa ./ (Aprime_T .* sig_p_GPa.^2);
     eta_1 = eta_1 * 1e9; % Pa s

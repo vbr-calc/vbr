@@ -6,10 +6,10 @@ title: ''
 
 # `backstress_linear`
 
-The `backstress_linear` anelastic method is an implementation of the linearized backstress model of dislocation-based dissipation from Hein et al., 2025, https://doi.org/10.22541/essoar.174326672.28941810/v1 . Note that the current implementation is based on the pre-print, and the model here will be updated pending pre-print review. 
+The `backstress_linear` anelastic method is an implementation of the linearized backstress model of dislocation-based dissipation from Hein et al., 2025, https://doi.org/10.22541/essoar.174326672.28941810/v1 . Note that the current implementation is based on the pre-print, and the model here will be updated pending pre-print review.
 
-Note: this method is new in VBRc 2.0.0 and still needs a bit of work to verify it is 
-working correctly. Feel free to try it out and please [report any issues](https://github.com/vbr-calc/vbr/issues/new)! 
+Note: this method is new in VBRc 2.0.0 and still needs a bit of work to verify it is
+working correctly. Feel free to try it out and please [report any issues](https://github.com/vbr-calc/vbr/issues/new)!
 
 ## Requires
 
@@ -19,9 +19,11 @@ The following state variable arrays are required:
 VBR.in.SV.T_K % temperature [K]
 VBR.in.SV.P_GPa % pressure [GPa]
 VBR.in.SV.dg_um % grain size [um]
-VBR.in.SV.sig_dc_MPa % bias stress [MPa]
+VBR.in.SV.sig_MPa % background (bias) stress [MPa]
 VBR.in.SV.rho % density in kg m<sup>-3</sup>
 ```
+
+Note: the background stress here is equivalent to the bias stress in Hein et al.
 
 ## Calling Procedure
 
@@ -34,26 +36,26 @@ VBR.in.anelastic.methods_list = {'backstress_linear'};
 VBR.in.elastic.methods_list = {'anharmonic'};
 
 % use the same anharmonic scaling as Hein et al., 2025
-VBR.in.elastic.anharmonic = Params_Elastic('anharmonic'); 
+VBR.in.elastic.anharmonic = Params_Elastic('anharmonic');
 VBR.in.elastic.anharmonic.temperature_scaling = 'isaak';
 VBR.in.elastic.anharmonic.pressure_scaling = 'abramson';
 
 % set state variables
 VBR.in.SV.T_K = [1300, 1400, 1500] + 273;
 sz = size(VBR.in.SV.T_K);
-VBR.in.SV.sig_dc_MPa = full_nd(3., sz);
+VBR.in.SV.sig_MPa = full_nd(3., sz);
 VBR.in.SV.dg_um = full_nd(0.001 * 1e6, sz);
 
 % following are needed for anharmonic calculation
 VBR.in.SV.P_GPa = full_nd(5., sz);
 VBR.in.SV.rho = full_nd(3300, sz);
-VBR.in.SV.f = logspace(-8, 0, 500);%[0.001, 0.01]; 
+VBR.in.SV.f = logspace(-8, 0, 500);%[0.001, 0.01];
 
 % calculations
-VBR = VBR_spine(VBR); 
+VBR = VBR_spine(VBR);
 ```
 
-## Output  
+## Output
 
 Output is stored in `VBR.out.anelastic.backstress_linear`:
 
@@ -108,15 +110,15 @@ copying only relevant ones:
     SV_required =
     {
       [1,1] = T_K
-      [2,1] = sig_dc_MPa
+      [2,1] = sig_MPa
       [3,1] = dg_um
     }
 ```
 
 Some notes on the above fields (see Hein et al, 2025 for more details):
 
-* `sig_p_sig_dc_factor`: the stress ratio of Taylor stress to bias stress  
-* `M_GPa`: the hardening modulus 
+* `sig_p_sig_dc_factor`: the stress ratio of Taylor stress to bias stress
+* `M_GPa`: the hardening modulus
 * `Q_J_per_mol`: activation energy, `dF` used by Hein et al.
 * `Beta`: geometric factor
 * `A`: arrhensious pre-exponentional factor for low-temperature plasticity
