@@ -16,7 +16,7 @@ function VBR = CB_017_backstress_model()
        % set state variables
        VBR.in.SV.T_K = [1300, 1400, 1500] + 273;
        sz = size(VBR.in.SV.T_K);
-       VBR.in.SV.sig_dc_MPa = full_nd(3., sz);
+       VBR.in.SV.sig_MPa = full_nd(3., sz);
        VBR.in.SV.dg_um = full_nd(0.001 * 1e6, sz);
 
        % following are needed for anharmonic calculation

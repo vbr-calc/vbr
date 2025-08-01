@@ -30,7 +30,7 @@ function VBR = CB_018_backstress_model_LUT()
 
     VBR.in.SV.T_K = T_3d;
     VBR.in.SV.dg_um = dg_3d;
-    VBR.in.SV.sig_dc_MPa = sig_dc_3d;
+    VBR.in.SV.sig_MPa = sig_dc_3d;
 
     % following are needed for anharmonic calculation
     VBR.in.SV.P_GPa = full_nd(5., sz);

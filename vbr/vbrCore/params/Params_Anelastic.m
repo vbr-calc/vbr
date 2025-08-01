@@ -169,7 +169,7 @@ function params = Params_Anelastic(method,GlobalParams)
     
     params.G_UR = 65; % GPa    
     params.M_GPa = 135; % hardening modulus GPa    
-    params.SV_required = {'T_K'; 'sig_dc_MPa' ; 'dg_um'};
+    params.SV_required = {'T_K'; 'sig_MPa' ; 'dg_um'};
     params.print_experimental_message = 1;
     params.experimental_message = "Note: the linearized backstress model is currently under development. While it nominally works, we are still working to verify correctness.";
 
