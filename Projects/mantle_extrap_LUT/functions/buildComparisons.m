@@ -57,7 +57,7 @@ function plotFreqDepPanel(VBR,Ranges,fld,labs,figDir,Fixed_indx)
   % plots a contour of fld for each method
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  meths=meths=fieldnames(VBR.out.anelastic);
+  meths=fieldnames(VBR.out.anelastic);
   Nmeths=numel(meths);
   Nfreqs=numel(VBR.in.SV.f);
 
@@ -76,6 +76,9 @@ function plotFreqDepPanel(VBR,Ranges,fld,labs,figDir,Fixed_indx)
       end
       var=var*labs.scl;
 
+      % log10 of phi will break if no melt, so just don't plot this case.
+      non0phi = Ranges.phi~=0;
+
       ax_fixedphi=subplot(Nfreqs,3,(ifreq-1)*3+1);
       contourf(Ranges.T_K-273,log10(Ranges.dg_um),squeeze(var(:,Fixed_indx.iphi,:))',20,'LineStyle','none')
       colormap(hot)
@@ -84,14 +87,14 @@ function plotFreqDepPanel(VBR,Ranges,fld,labs,figDir,Fixed_indx)
       title([labti,' at phi=',num2str(Ranges.phi(Fixed_indx.iphi)),', f=',num2str(VBR.in.SV.f(ifreq))])
 
       ax_fixedT=subplot(Nfreqs,3,(ifreq-1)*3+2);
-      contourf(Ranges.T_K-273,log10(Ranges.phi),squeeze(var(:,:,Fixed_indx.id))',20,'LineStyle','none')
+      contourf(Ranges.T_K-273,log10(Ranges.phi(non0phi)),squeeze(var(:,non0phi,Fixed_indx.id))',20,'LineStyle','none')
       colormap(hot)
       colorbar()
       xlabel('T [C]');ylabel('log10(phi)')
       title([labti,' at d=',num2str(Ranges.dg_um(Fixed_indx.id)),' um, f=',num2str(VBR.in.SV.f(ifreq))])
 
       ax_fixeddg=subplot(Nfreqs,3,(ifreq-1)*3+3);
-      contourf(log10(Ranges.phi),log10(Ranges.dg_um),squeeze(var(Fixed_indx.iT,:,:))',20,'LineStyle','none')
+      contourf(log10(Ranges.phi(non0phi)),log10(Ranges.dg_um),squeeze(var(Fixed_indx.iT,non0phi,:))',20,'LineStyle','none')
       colormap(hot)
       colorbar()
       xlabel('phi');ylabel('log10(dg) [um]')
@@ -120,7 +123,7 @@ function plotComparisons(VBR,Ranges,fld,labs,figDir,Fixed_indx)
   Tval=Ranges.T_K(Fixed_indx.iT)-273;
   fval=VBR.in.SV.f(ifreq);
 
-  fig=figure('Position', [10 10 700 400],'PaperPosition',[0,0,7,4],'PaperPositionMode','manual','DefaultAxesFontSize',8);
+  fig=figure('Position', [10 10 1100 720],'PaperPosition',[0,0,7,4],'PaperPositionMode','manual','DefaultAxesFontSize',8);
 
 
 
