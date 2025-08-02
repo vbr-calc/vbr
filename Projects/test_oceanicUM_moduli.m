@@ -1,3 +1,6 @@
+% This script uses Abers and Hacker 16 (installed separately) to 
+% calculate unrelaxed moduli and anharmonic T,P derivatives for 
+% a representative upper mantle composition.
 clear all
 % parms
 mantle_mineralogy = 'pyrolite';
@@ -9,7 +12,10 @@ dP = 1e-6;
 
 
 %% paths
-addpath('~/Dropbox/MATLAB/seis_tools/ABERSHACKER16/')
+% change the following path to point to your unpacked 
+% ABERSHACKER16 folder
+path_to_ABERS_HACKER = '~/Dropbox/MATLAB/seis_tools/ABERSHACKER16/'
+addpath(path_to_ABERS_HACKER)
 
 % Load mineral database
 [minpropar, compar]=ah16_loaddb('AbersHackerMacroJan2016.txt');
