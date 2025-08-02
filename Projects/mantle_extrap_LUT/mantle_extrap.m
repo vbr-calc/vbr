@@ -2,7 +2,7 @@
 % mantle_extrap.m
 %
 % - generates a range of mantle conditions
-% - calculates mechnaical properties from the thermal models
+% - calculates mechanical properties from the thermal models
 % - compares mechanical properties between methods for mantle conditions
 % - pulls values out of look up table
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -22,8 +22,9 @@ fprintf('\nBuilding State Variable Ranges\n')
 [SVs,Ranges] = genSVranges();
 
 % run Box through VBR calculator (or load if it exists)
-VBRsettings.ane_meths={'andrade_psp';'xfit_mxw';'eburgers_psp';'xfit_premelt'};
-VBRsettings.freqs=[0.01, 0.1];
+% VBRsettings.ane_meths={'andrade_psp';'xfit_mxw';'eburgers_psp';'xfit_premelt'};
+VBRsettings.ane_meths={'andrade_psp';'eburgers_psp';'xfit_premelt'};
+VBRsettings.freqs=[0.01, 0.1, 1.0];
 VBR = genPullVBRdata(SVs,fullfile(pwd,'data/VBR_Box.mat'),VBRsettings);
 
 
@@ -33,5 +34,5 @@ buildComparisons(VBR,Ranges,fullfile(pwd,'figures/'));
 freq_target=0.01;
 Vstarget=4.3;
 scale_fac=1/1000; % search for km/s rather than m/s
-cutoffperc=0.5;
+cutoffperc=0.1;
 PossibleRanges=getVarRange(VBR,Vstarget,'V',freq_target,cutoffperc,scale_fac);
