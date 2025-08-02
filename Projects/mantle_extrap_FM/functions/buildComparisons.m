@@ -43,9 +43,9 @@ function plotQBoxes(Box,figDir)
     B=Box(iBox);
     z=B.run_info.Z_km;
 
-    fig=figure('Position', [10 10 700 400],'PaperPosition',[0,0,6,3],'PaperPositionMode','manual','DefaultAxesFontSize',8);
+    fig=figure('Position', [10 10 1100 720],'PaperPosition',[0,0,6,3],'PaperPositionMode','manual','DefaultAxesFontSize',8);
 
-    meths=meths=fieldnames(B.VBR.out.anelastic);
+    meths=fieldnames(B.VBR.out.anelastic);
     Nmeths=numel(meths);
     Nfreqs=numel(B.VBR.in.SV.f);
     for ifreq=1:Nfreqs
@@ -114,9 +114,9 @@ function plotVsBoxes(Box,figDir)
     B=Box(iBox);
     z=B.run_info.Z_km;
 
-    fig=figure('Position', [10 10 700 400],'PaperPosition',[0,0,6,3],'PaperPositionMode','manual','DefaultAxesFontSize',8);
+    fig=figure('Position', [10 10 1100 720],'PaperPosition',[0,0,6,3],'PaperPositionMode','manual','DefaultAxesFontSize',8);
 
-    meths=meths=fieldnames(B.VBR.out.anelastic);
+    meths=fieldnames(B.VBR.out.anelastic);
     Nmeths=numel(meths);
     Nfreqs=numel(B.VBR.in.SV.f);
     for ifreq=1:Nfreqs
@@ -185,7 +185,7 @@ function plotBoxes(Box,figDir)
     B=Box(iBox);
     z=B.run_info.Z_km;
 
-    fig=figure('Position', [10 10 700 400],'PaperPosition',[0,0,6,3],'PaperPositionMode','manual','DefaultAxesFontSize',8);
+    fig=figure('Position', [10 10 1100 720],'PaperPosition',[0,0,6,3],'PaperPositionMode','manual','DefaultAxesFontSize',8);
     ax_T=subplot(1,4,1);
     ax_phi=subplot(1,4,2);
     ax_eta=subplot(1,4,3);
@@ -277,7 +277,7 @@ function plotComparisons(Box,figDir)
   BadLines(numel(Box(1).VBR.in.SV.f)*numel(meths))=struct();
 
   for iBox=1:numel(Box)
-    figure('Position', [10 10 700 400],'PaperPosition',[0,0,6,3],'PaperPositionMode','manual','DefaultAxesFontSize',8)
+    figure('Position', [10 10 1100 720],'PaperPosition',[0,0,6,3],'PaperPositionMode','manual','DefaultAxesFontSize',8)
     B=Box(iBox);
     t=B.run_info.tMyrs;
     z=B.run_info.Z_km;
@@ -341,7 +341,8 @@ function plotComparisons(Box,figDir)
     set(gcf,'currentaxes',ax_leg);
     pos=get(ax_leg,'position');
     L=legend('location','north');
-    set(L,'linewidth',0,'position',pos,'edgecolor',[1,1,1])
+%     set(L,'linewidth',0,'position',pos,'edgecolor',[1,1,1])
+    set(L,'position',pos,'edgecolor',[1,1,1])
     set(ax_leg,'visible','off')
     for iBad=1:numel(BadLines)
       set(BadLines(iBad).ln,'visible','off')

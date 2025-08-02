@@ -1,12 +1,12 @@
-function [SVs,Ranges] = genSVranges()
+function [SVs,Ranges,Constants] = genSVranges()
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  % [SVs,Ranges] = genSVranges()
+  % [SVs,Ranges,Constants] = genSVranges()
   %
   % builds state variable structure and ranges varied.
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  Ranges.T_K=800:10:1500 + 273;
-  Ranges.phi=logspace(-8,-2,20);
-  Ranges.dg_um=logspace(-3,-2,21)*1e6;
+  Ranges.T_K=(800:10:1500)' + 273;
+  Ranges.phi=[0,logspace(-5,-1.7,19)]';
+  Ranges.dg_um=logspace(-3.5,-1.5,21)'*1e6;
 
   Constants.sig_MPa=0.1;
   Constants.P_GPa=2.5;
