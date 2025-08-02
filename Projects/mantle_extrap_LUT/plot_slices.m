@@ -65,12 +65,13 @@ colorbar
 clim([0 30])
 
 %% now make the mechanism map
-qmech_slice = nan(size(qeff_slice));
-for ii = 1:size(qindiv_slice,1)
-    for jj = 1:size(qindiv_slice,2);
-[~,qmech_slice(ii,jj)] = max(qindiv_slice(ii,jj,:));
-    end
-end
+% qmech_slice = nan(size(qeff_slice));
+% for ii = 1:size(qindiv_slice,1)
+%     for jj = 1:size(qindiv_slice,2);
+%         [~,qmech_slice(ii,jj)] = max(qindiv_slice(ii,jj,:));
+%     end
+% end
+qmech_slice = max(J2_slice, [],3);
 
 figure(121)
 contourf(range.T,1000*range.gs,qmech_slice',100,'linestyle','none');hold on
