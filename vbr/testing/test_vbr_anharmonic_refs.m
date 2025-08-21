@@ -27,14 +27,14 @@ function TestResult = test_vbr_anharmonic_refs()
   Gu_0 = VBR.out.elastic.anharmonic.Gu_0;
   Ku_0 = VBR.out.elastic.anharmonic.Ku_0;
 
-  if Gu_0(1) != params_ela.upper_mantle.Gu_0 * 1e9
+  if Gu_0(1) ~= params_ela.upper_mantle.Gu_0 * 1e9
     msg = 'Gu_0 does not match expected Gu_0';
     TestResult.passed = false;
     TestResult.fail_message = msg;
     disp(msg)
   end
 
-  if Ku_0(1) != params_ela.upper_mantle.Ku_0 * 1e9
+  if Ku_0(1) ~= params_ela.upper_mantle.Ku_0 * 1e9
     msg = 'Ku_0 does not match expected Ku_0';
     TestResult.passed = false;
     TestResult.fail_message = msg;
@@ -51,7 +51,7 @@ function TestResult = test_vbr_anharmonic_refs()
   Ku_0 = VBR.out.elastic.anharmonic.Ku_0;
 
   expected = VBR.in.elastic.anharmonic.Gu_0_ol * 1e9;
-  if Gu_0(1) != expected
+  if Gu_0(1) ~= expected
     msg = 'default Gu_0 does not match expected Gu_0';
     TestResult.passed = false;
     TestResult.fail_message = msg;
@@ -60,7 +60,7 @@ function TestResult = test_vbr_anharmonic_refs()
   end
 
   expected = VBR.in.elastic.anharmonic.Ku_0_ol * 1e9;
-  if Ku_0(1) != expected
+  if Ku_0(1) ~= expected
     msg = 'default Ku_0 does not match expected Ku_0';
     TestResult.passed = false;
     TestResult.fail_message = msg;

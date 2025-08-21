@@ -67,7 +67,7 @@ function [params] = Params_Elastic(method,GlobalParams)
     params.upper_mantle.dK_dP = 4.4510;
     params.upper_mantle.dK_dP2 = 0.0;
     params.upper_mantle.rho_ref = 3.3231e+03; % kg/ m^3
-    descp = ['Values calculated with Abers and Hacker 2016 for a representative upper mantle ',
+    descp = ['Values calculated with Abers and Hacker 2016 for a representative upper mantle ' ...
              'pyrolitic composition '];
     params.upper_mantle.description = descp;
 
