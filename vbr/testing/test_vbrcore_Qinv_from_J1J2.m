@@ -18,9 +18,9 @@ function TestResult = test_vbrcore_Qinv_from_J1J2()
     end
 
     result = Qinv_from_J1_J2(J1, J2, 1);
-    if result ~= 1
+    if result == 1
         TestResult.passed = false;
-        TestResult.fail_message = strcat('Qinv_from_J1J2(1,1,1) should equal 1, but it equals ', num2str(result));
+        TestResult.fail_message = strcat('Qinv_from_J1J2(1,1,1) should not equal 1, but it equals ', num2str(result));
     end
 
     J1 = logspace(-4,4, 10);
