@@ -70,7 +70,7 @@ function [VBR] = Q_xfit_mxw(VBR)
       f_norm=tau_mxw*freq; % normalized frequency
       max_tau_norm=1./(2*pi*f_norm); % maximum normalized tau
 
-      tau_norm_f = max_tau_norm;      
+      tau_norm_f = max_tau_norm;
       tau_norm_vec_local = logspace(-30,log10(max_tau_norm),100);
       X_tau = Q_xfit_mxw_xfunc(tau_norm_vec_local,VBR.in.anelastic.xfit_mxw) ;
 
@@ -83,13 +83,10 @@ function [VBR] = Q_xfit_mxw(VBR)
       % XJ2= Q_xfit_mxw_xfunc(J2tau_norm,VBR.in.anelastic.xfit_mxw) ;
       J2(i_glob) = Ju.*((pi/2)*X_tau(end) + tau_norm(ifreq)); % eq 18  of [1]
 
-      % See McCarthy et al, 2011, Appendix B, Eqns B6 !
-      % J2_J1_frac=(1+sqrt(1+(J2(i_glob)./J1(i_glob)).^2))/2;
-      J2_J1_frac=1;
-      Qinv(i_glob) = J2(i_glob)./J1(i_glob).*(J2_J1_frac.^-1);
+      Qinv(i_glob) = J2(i_glob)./J1(i_glob);
       Q(i_glob) = 1./Qinv(i_glob);
       M(i_glob) = 1./sqrt(J1(i_glob).^2+J2(i_glob).^2);
-      V(i_glob) = sqrt(1./(J1(i_glob)*rho)).*(J2_J1_frac.^(-1/2));
+      V(i_glob) = sqrt(1./(J1(i_glob)*rho));
 
       f_norm_glob(i_glob)=f_norm;
       tau_norm_glob(i_glob)=tau_norm_f;
@@ -100,8 +97,8 @@ function [VBR] = Q_xfit_mxw(VBR)
   onm='xfit_mxw';
   VBR.out.anelastic.(onm).J1 = J1;
   VBR.out.anelastic.(onm).J2 = J2;
-  VBR.out.anelastic.(onm).Q = Q;
-  VBR.out.anelastic.(onm).Qinv = Qinv;
+  VBR.out.anelastic.(onm).Qinv = Qinv_from_J1_J2(J1, J2);
+  VBR.out.anelastic.(onm).Q = 1./VBR.out.anelastic.(onm).Qinv;
   VBR.out.anelastic.(onm).M=M;
   VBR.out.anelastic.(onm).V=V;
   VBR.out.anelastic.(onm).f_norm=f_norm_glob;
@@ -110,7 +107,7 @@ function [VBR] = Q_xfit_mxw(VBR)
 
   % calculate mean velocity along frequency dimension
   VBR.out.anelastic.(onm).Vave = Q_aveVoverf(V,VBR.in.SV.f);
-  
+
   VBR.out.anelastic.(onm).units = Q_method_units();
   VBR.out.anelastic.(onm).units.tau_M = 's';
   VBR.out.anelastic.(onm).units.f_norm = '';

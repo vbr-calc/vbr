@@ -141,8 +141,6 @@ function [VBR] = Q_eFastBurgers(VBR)
       J1(i_glob)=Ju * J_int_1_0;
       J2(i_glob)=Ju * J_int_2_0;
 
-      Q(i_glob) = J1(i_glob)./J2(i_glob) ;
-      Qinv(i_glob) = 1./Q(i_glob) ;
       M(i_glob) = (J1(i_glob).^2 + J2(i_glob).^2).^(-0.5) ;
       V(i_glob) = sqrt(M(i_glob)./rho) ;
     end
@@ -152,8 +150,8 @@ function [VBR] = Q_eFastBurgers(VBR)
   onm='eburgers_psp';
   VBR.out.anelastic.(onm).J1 = J1;
   VBR.out.anelastic.(onm).J2 = J2;
-  VBR.out.anelastic.(onm).Q = Q;
-  VBR.out.anelastic.(onm).Qinv = Qinv;
+  VBR.out.anelastic.(onm).Qinv = Qinv_from_J1_J2(J1, J2);
+  VBR.out.anelastic.(onm).Q = 1./VBR.out.anelastic.(onm).Qinv;
   VBR.out.anelastic.(onm).M=M;
   VBR.out.anelastic.(onm).V=V;
 

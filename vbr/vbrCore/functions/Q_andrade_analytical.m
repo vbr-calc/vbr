@@ -77,8 +77,7 @@ function [VBR] = Q_andrade_analytical(VBR)
 
     J1(ig1:ig2) = Ju_in .* MJ_real;
     J2(ig1:ig2) = Ju_in .* MJ_imag;
-    J1J2_fac = (1 + sqrt(1+(J2(ig1:ig2)./J1(ig1:ig2)).^2)) / 2;
-    Qinv(ig1:ig2) = (J2(ig1:ig2)./J1(ig1:ig2)) .* J1J2_fac;
+    Qinv(ig1:ig2) = Qinv_from_J1_J2(J1(ig1:ig2), J2(ig1:ig2));
     Ma(ig1:ig2) = (J1(ig1:ig2).^2 + J2(ig1:ig2).^2).^(-1/2) ;
 
     % velocities [m/s]
