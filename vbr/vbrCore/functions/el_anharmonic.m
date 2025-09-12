@@ -118,7 +118,6 @@ function M_TP = calc_Mu(VBR, t_scale, p_scale, G_or_K, Mu_0, dT, dP)
   % and the calculation
   M_TP = Mu_0 + dMdT * dT + dP * dMdP + dP.^2 * dMdP2;
 end
-end
 
 
 function [Gu_TP, Ku_TP] = chi_mixing(Gu_TP, Ku_TP, dT, dP, VBR)
@@ -137,5 +136,4 @@ function [Gu_TP, Ku_TP] = chi_mixing(Gu_TP, Ku_TP, dT, dP, VBR)
   chi = VBR.in.SV.chi;
   Gu_TP = chi .* Gu_TP + (1 - chi) .* Gu_TP_c;
   Ku_TP = chi .* Ku_TP + (1 - chi) .* Ku_TP_c;
-end
 end
