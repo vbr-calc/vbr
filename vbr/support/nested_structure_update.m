@@ -26,10 +26,6 @@ function output_struct = nested_structure_update(struct_1, struct_2)
 
     [shared_fields_12, unique_fields_12] = get_shared_unique_fields(struct_1, struct_2);
     [shared_fields_21, unique_fields_21] = get_shared_unique_fields(struct_2, struct_1);
-    % disp(shared_fields_12)
-    % disp(shared_fields_21)
-    % disp(unique_fields_12)
-    % disp(unique_fields_21)
 
     % first handle the unique fields
     for ifield = 1:numel(unique_fields_12)
@@ -68,10 +64,10 @@ function [shared_fields, unique_fields] = get_shared_unique_fields(struct_1, str
         current_field = struct_1_fields{ifield};
         if isfield(struct_2, current_field)
             n_shared = n_shared + 1;
-            shared_fields(n_shared) = current_field;
+            shared_fields{n_shared} = current_field;
         else
             n_unique = n_unique + 1;
-            unique_fields(n_unique) = current_field;
+            unique_fields{n_unique} = current_field;
         end
     end
 end
