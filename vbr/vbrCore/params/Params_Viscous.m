@@ -86,6 +86,7 @@ function params = Params_Viscous(method,GlobalParams)
     params.A_gb = 10^3.54; %Pa^-4s^-1, Pre-exponent grain-boundary diffusion recovery
     params.A_p = 10^-0.95; %Pa^-5s^-1, Pre-exponent pipe diffusion recovery
     params.A = 10^6.94; %m^2s^-1, Pre-exponent low-temperature plasticity
+    params.Resolution = 0.1e6; %Pa, resolution of numerical algorithm that finds the steady-state viscosity of BKHK2023, 0.1 MPa by default
   end
 
 
