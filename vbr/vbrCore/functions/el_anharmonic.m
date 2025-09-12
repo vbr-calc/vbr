@@ -14,6 +14,7 @@ function [VBR] = el_anharmonic(VBR)
   %  VBR    the VBR structure, with VBR.out.elastic structure
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
   % load or calculate shear and bulk moduli
   if isfield(VBR.in.elastic,'Gu_TP') && isfield(VBR.in.elastic,'Ku_TP')
     % Load unrelaxed shear and bulk moduli (at T,P of interest)
@@ -37,7 +38,6 @@ function [VBR] = el_anharmonic(VBR)
     ela = VBR.in.elastic.anharmonic;
     Ku_0 = get_M(VBR, 'K');
     Gu_0 = get_M(VBR, 'G');
-
     anharmonic.Gu_0 = Gu_0;
     anharmonic.Ku_0 = Ku_0;
     T_K_ref = ela.T_K_ref ;
@@ -57,8 +57,6 @@ function [VBR] = el_anharmonic(VBR)
       [Gu_TP, Ku_TP] = chi_mixing(Gu_TP, Ku_TP, dT, dP, VBR);
     end
   end
-
-
   % calculate velocities
   [Vp, Vs] = el_VpVs_unrelaxed(Ku_TP,Gu_TP,VBR.in.SV.rho);
 
@@ -76,6 +74,7 @@ function [VBR] = el_anharmonic(VBR)
 
   VBR.out.elastic.units = units;
   VBR.out.elastic.anharmonic = anharmonic;
+
 
 end
 
@@ -95,9 +94,12 @@ end
 
 function M_TP = calc_Mu(VBR, t_scale, p_scale, G_or_K, Mu_0, dT, dP)
   % a generic modulus calculation at temperature,
+  % a generic modulus calculation at temperature,
   % pressure for the selected temperature and pressure
   % scaling.
+  % scaling.
   %
+  % G_or_K should be in Pa!
   % G_or_K should be in Pa!
 
   % field names for G or K derivatives
@@ -109,10 +111,13 @@ function M_TP = calc_Mu(VBR, t_scale, p_scale, G_or_K, Mu_0, dT, dP)
   params = VBR.in.elastic.anharmonic;
   dMdT = params.(t_scale).(dMdT_str);
   dMdP = params.(p_scale).(dMdP_str);
+  dMdP = params.(p_scale).(dMdP_str);
   dMdP2 = params.(p_scale).(dMdP2_str);
+
 
   % and the calculation
   M_TP = Mu_0 + dMdT * dT + dP * dMdP + dP.^2 * dMdP2;
+end
 end
 
 
@@ -129,6 +134,8 @@ function [Gu_TP, Ku_TP] = chi_mixing(Gu_TP, Ku_TP, dT, dP, VBR)
 
   % voigt average (volumetric weight)
   chi = VBR.in.SV.chi;
+  chi = VBR.in.SV.chi;
   Gu_TP = chi .* Gu_TP + (1 - chi) .* Gu_TP_c;
   Ku_TP = chi .* Ku_TP + (1 - chi) .* Ku_TP_c;
+end
 end

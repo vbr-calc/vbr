@@ -23,5 +23,4 @@ function params = Params_Global()
   params.phi_c = [1e-5 1e-5 1e-5]; % [diff, disl., gbs]
   params.x_phi_c = [5 1 5/2]; % [diff, disl., gbs]
 
-
 end

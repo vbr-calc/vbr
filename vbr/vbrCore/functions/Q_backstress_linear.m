@@ -92,9 +92,8 @@ function [VBR] = Q_backstress_linear(VBR)
             J1_G(i_glob) = real(1./G_star_i);
             J2_G(i_glob) = -1 * imag(1./G_star_i);
             M_G(i_glob) = norm(G_star_i); % relaxed shear modulus
-            Qinv_G(i_glob) = J2_G(i_glob) ./ J1_G(i_glob); % shear attenuation
+            Qinv_G(i_glob) = Qinv_from_J1_J2(J1_G(i_glob), J2_G(i_glob)); % shear attenuation
 
-            % J2_J1_frac=(1+sqrt(1+(J2(i_glob)./J1(i_glob)).^2))/2;
             V(i_glob) = sqrt(M_G(i_glob)./ rho_i);
             valid_f(i_glob) = omega(iw) >= omega_o(i_sv);
         end

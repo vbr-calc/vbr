@@ -13,10 +13,24 @@ function VBR = CB_014_xfit_premelt_extended()
   VBR.in.anelastic.methods_list={'xfit_premelt'};
   VBR.in.anelastic.xfit_premelt.include_direct_melt_effect = 1;
 
-  % load anharmonic parameters, adjust Gu_0_ol and derivatives to match YT2016
+  % adjust Gu_0_ol to match YT2016
   VBR.in.elastic.anharmonic.Gu_0_ol=72.45; %[GPa]
-  VBR.in.elastic.anharmonic.dG_dT = -10.94*1e6; % Pa/C    (equivalent ot Pa/K)
-  VBR.in.elastic.anharmonic.dG_dP = 1.987; % GPa / GPa
+
+  % create and use a custom anharmonic scaling to match derivatives
+  % from YT2016. scaling for bulk modulus is arbitrary here, but
+  % will not affect shear velocity and modulus calculations (unrelaxed
+  % or relaxed).
+  YT2016_derivatives.dG_dT = -10.94*1e6;
+  YT2016_derivatives.dG_dP = 1.987; % Pa/Pa
+  YT2016_derivatives.dG_dP2 = 0;
+
+  YT2016_derivatives.dK_dT = 1.2 * YT2016_derivatives.dG_dT;
+  YT2016_derivatives.dK_dP = 3 * YT2016_derivatives.dG_dP;
+  YT2016_derivatives.dK_dP2 = 0;
+
+  VBR.in.elastic.anharmonic.YT2016_derivatives = YT2016_derivatives;
+  VBR.in.elastic.anharmonic.temperature_scaling = 'YT2016_derivatives';
+  VBR.in.elastic.anharmonic.pressure_scaling = 'YT2016_derivatives';
 
   %% Define the Thermodynamic State %%
   VBR.in.SV.T_K=1200:5:1500;
@@ -33,16 +47,17 @@ function VBR = CB_014_xfit_premelt_extended()
   VBR.in.SV.sig_MPa = full_nd(1, sz); % differential stress [MPa]
   VBR.in.SV.f = 1; % 1 Hz
 
+  % iterate over Tn and phi cases
   if ~vbr_tests_are_running()
     f1=figure('PaperPosition',[0,0,6,4],'PaperPositionMode','manual');
-    nTn = numel(Tn_cases);    
+    nTn = numel(Tn_cases);
     for iTn = 1:nTn
           VBRi = VBR;
           VBRi.in.SV.phi = full_nd(phi_cases(iTn), sz);
           VBRi.in.SV.Tsolidus_K = VBR.in.SV.T_K / Tn_cases(iTn);
           [VBRi] = VBR_spine(VBRi) ;
 
-          results.Q = VBRi.out.anelastic.xfit_premelt.Q;          
+          results.Q = VBRi.out.anelastic.xfit_premelt.Q;
 
           dname = [num2str(Tn_cases(iTn)), ', ', num2str(phi_cases(iTn))];
           figure(f1)
@@ -51,14 +66,14 @@ function VBR = CB_014_xfit_premelt_extended()
           end
           plot(VBR.in.SV.T_K - 273, results.Q, 'displayname', dname, 'linewidth', 1.5)
           legend('Location','eastoutside')
-          title('Qs vs T for different (Tn, phi) curves')          
+          title('Qs vs T for different (Tn, phi) curves')
           xlabel('Temperature [C]', 'fontsize', 12)
           ylabel('Qs', 'fontsize', 12)
           ylim([0, 200])
 
           yticks(0:20:200)
     end
-    
+
 
     saveas(gcf,'./figures/CB_014_xfit_premelt_extended.png')
   end

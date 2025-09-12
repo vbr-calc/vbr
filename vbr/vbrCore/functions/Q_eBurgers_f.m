@@ -134,12 +134,6 @@ function [VBR] = Q_eBurgers_f(VBR)
       J1(i_glob)=Ju.*J1(i_glob);
       J2(i_glob)=Ju.*J2(i_glob);
 
-      % See McCarthy et al, 2011, Appendix B, Eqns B6 !
-      % J2_J1_frac=(1+sqrt(1+(J2(i_glob)./J1(i_glob)).^2))/2;
-      J2_J1_frac=1;
-      Qinv(i_glob) = J2(i_glob)./J1(i_glob).*(J2_J1_frac.^-1);
-      Q(i_glob) = 1./Qinv(i_glob);
-
       M(i_glob) = (J1(i_glob).^2 + J2(i_glob).^2).^(-0.5) ;
       V(i_glob) = sqrt(M(i_glob)./rho) ;
     end % end loop over frequency
@@ -154,8 +148,8 @@ function [VBR] = Q_eBurgers_f(VBR)
   onm='eburgers_psp';
   VBR.out.anelastic.(onm).J1 = J1;
   VBR.out.anelastic.(onm).J2 = J2;
-  VBR.out.anelastic.(onm).Q = Q;
-  VBR.out.anelastic.(onm).Qinv = Qinv;
+  VBR.out.anelastic.(onm).Qinv = Qinv_from_J1_J2(J1, J2);
+  VBR.out.anelastic.(onm).Q = 1./VBR.out.anelastic.(onm).Qinv;
   VBR.out.anelastic.(onm).M=M;
   VBR.out.anelastic.(onm).V=V;
   VBR.out.anelastic.(onm).tau_M=tau.maxwell;
@@ -164,6 +158,6 @@ function [VBR] = Q_eBurgers_f(VBR)
   VBR.out.anelastic.(onm).Vave = Q_aveVoverf(V,f_vec);
   VBR.out.anelastic.(onm).units = Q_method_units();
   VBR.out.anelastic.(onm).units.tau_M = "s";
-  
+
 
 end

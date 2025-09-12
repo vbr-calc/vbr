@@ -53,16 +53,10 @@ function meth_params = loadTheParams(VBR,property,param_func,meth)
   % load the the default values for this property and method
   meth_params=feval(param_func,meth,VBR.in.GlobalSettings);
 
-  % loop over all fields and save those defined by user 
+  % loop over all fields and save those defined by user
   if isfield(VBR.in.(property),meth)
-    % user set parameters, check which they set
-    fldz=fieldnames(meth_params); % only propagate param-defined fields
-    for ifield=1:numel(fldz)
-      if isfield(VBR.in.(property).(meth),fldz{ifield})
-        % user set this parameter,keep it!
-        meth_params.(fldz{ifield})=VBR.in.(property).(meth).(fldz{ifield});
-      end
-    end
+    user_params = VBR.in.(property).(meth);
+    meth_params = nested_structure_update(meth_params, user_params);
   end
 
 end
