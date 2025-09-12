@@ -57,7 +57,7 @@ function [params] = Params_Elastic(method,GlobalParams)
     params.abramson.dK_dP2 = 0; % 1 / Pa
 
     params.upper_mantle.T_K_ref = 1300 + 273;
-    params.upper_mantle.P_GPa_ref = 3.0;
+    params.upper_mantle.P_Pa_ref = 3.0 * 1e9;
     params.upper_mantle.Gu_0 = 66.410;
     params.upper_mantle.Ku_0 = 119.88;
     params.upper_mantle.dG_dT = -1.3816e+07 ; %Pa/K

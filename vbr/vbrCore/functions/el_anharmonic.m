@@ -26,8 +26,7 @@ function [VBR] = el_anharmonic(VBR)
     % calculate bulk modulus
     ela = VBR.in.elastic.anharmonic;
     Ku_0 = get_M(VBR, 'K');
-    T_K_ref = ela.T_K_ref ;
-    P_Pa_ref = ela.P_Pa_ref ;
+    [T_K_ref, P_Pa_ref] = get_ref_TP(VBR);
     dT = (VBR.in.SV.T_K-T_K_ref);
     dP = (VBR.in.SV.P_GPa*1e9 - P_Pa_ref);
     t_scale = ela.temperature_scaling;
@@ -40,8 +39,8 @@ function [VBR] = el_anharmonic(VBR)
     Gu_0 = get_M(VBR, 'G');
     anharmonic.Gu_0 = Gu_0;
     anharmonic.Ku_0 = Ku_0;
-    T_K_ref = ela.T_K_ref ;
-    P_Pa_ref = ela.P_Pa_ref ;
+
+    [T_K_ref, P_Pa_ref] = get_ref_TP(VBR);
     dT = (VBR.in.SV.T_K-T_K_ref);
     dP = (VBR.in.SV.P_GPa*1e9 - P_Pa_ref);
 
@@ -77,6 +76,19 @@ function [VBR] = el_anharmonic(VBR)
 
 
 end
+
+function [T_K_ref, P_Pa_ref] = get_ref_TP(VBR)
+  ela = VBR.in.elastic.anharmonic;
+  ref_scale = ela.reference_scaling;
+  if strcmp(ref_scale, 'default')
+    T_K_ref = ela.T_K_ref ;
+    P_Pa_ref = ela.P_Pa_ref ;
+  else
+    T_K_ref = ela.(ref_scale).T_K_ref;
+    P_Pa_ref = ela.(ref_scale).P_Pa_ref;
+  end
+end
+
 
 function M = get_M(VBR, G_or_K)
   ela = VBR.in.elastic.anharmonic;
