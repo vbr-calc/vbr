@@ -13,7 +13,7 @@ function VBR = CB_014_xfit_premelt_extended()
   VBR.in.anelastic.methods_list={'xfit_premelt'};
   VBR.in.anelastic.xfit_premelt.include_direct_melt_effect = 1;
 
-  % adjust adjust Gu_0_ol to match YT2016
+  % adjust Gu_0_ol to match YT2016
   VBR.in.elastic.anharmonic.Gu_0_ol=72.45; %[GPa]
 
   % create and use a custom anharmonic scaling to match derivatives
