@@ -94,12 +94,9 @@ end
 
 function M_TP = calc_Mu(VBR, t_scale, p_scale, G_or_K, Mu_0, dT, dP)
   % a generic modulus calculation at temperature,
-  % a generic modulus calculation at temperature,
   % pressure for the selected temperature and pressure
   % scaling.
-  % scaling.
   %
-  % G_or_K should be in Pa!
   % G_or_K should be in Pa!
 
   % field names for G or K derivatives
@@ -113,7 +110,6 @@ function M_TP = calc_Mu(VBR, t_scale, p_scale, G_or_K, Mu_0, dT, dP)
   dMdP = params.(p_scale).(dMdP_str);
   dMdP = params.(p_scale).(dMdP_str);
   dMdP2 = params.(p_scale).(dMdP2_str);
-
 
   % and the calculation
   M_TP = Mu_0 + dMdT * dT + dP * dMdP + dP.^2 * dMdP2;
@@ -132,7 +128,6 @@ function [Gu_TP, Ku_TP] = chi_mixing(Gu_TP, Ku_TP, dT, dP, VBR)
   Ku_TP_c = calc_Mu(VBR, t_scale, p_scale, 'K', Ku_0, dT, dP);
 
   % voigt average (volumetric weight)
-  chi = VBR.in.SV.chi;
   chi = VBR.in.SV.chi;
   Gu_TP = chi .* Gu_TP + (1 - chi) .* Gu_TP_c;
   Ku_TP = chi .* Ku_TP + (1 - chi) .* Ku_TP_c;
