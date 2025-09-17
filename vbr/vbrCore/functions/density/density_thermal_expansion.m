@@ -1,4 +1,4 @@
-function [Rho] = density_thermal_expansion(Rho, T_K, FracFo, T_K_ref)
+function [Rho] = density_thermal_expansion(Rho, T_K, FracFo, T_ref_K)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Corrects density for thermal expansion at fixed pressure
     %
@@ -18,11 +18,11 @@ function [Rho] = density_thermal_expansion(Rho, T_K, FracFo, T_K_ref)
     %     density in same units as input density
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    if ~exist('T_ref_K')
+    if ~exist('T_ref_K','var')
         T_ref_K = 273; % reference temperature [K]
     end
 
-    al_int = thermal_expansion_coefficient(T_K, FracFo, T_K_ref);
+    al_int = thermal_expansion_coefficient(T_K, FracFo, T_ref_K);
     Rho = Rho .* exp(-al_int);
 
 end
