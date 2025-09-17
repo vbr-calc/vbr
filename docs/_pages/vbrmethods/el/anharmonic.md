@@ -56,11 +56,13 @@ Additionally, the unrelaxed modulus at reference conditions is returned in `VBR.
 ## Parameters
 
 Some important parameters are
+
 * `VBR.in.elastic.anharmonic.T_K_ref`: reference temperature in K
 * `VBR.in.elastic.anharmonic.P_Pa_ref`: reference temperature in Pa
 * `VBR.in.elastic.anharmonic.Gu_0_ol`: reference unrelaxed olivine modulus in GPa at reference T, P.
-* `VBR.in.elastic.anharmonic.temperature_scaling`: the temperature scaling to use (see below)
-* `VBR.in.elastic.anharmonic.pressure_scaling`: the pressure scaling to use (see below)
+* `VBR.in.elastic.anharmonic.reference_scaling`: the reference scaling structure to use (optional, see below)
+* `VBR.in.elastic.anharmonic.temperature_scaling`: the temperature scaling to use (optional,see below)
+* `VBR.in.elastic.anharmonic.pressure_scaling`: the pressure scaling to use (optional,see below)
 
 Default values for reference temperature and pressure are surface conditions.
 
@@ -103,6 +105,7 @@ disp(VBR.in.elastic.anharmonic.available_pressure_scaling)
 {
   [1,1] = cammarano
   [2,1] = abramson
+  [3,1] = upper_mantle
 }
 ```
 
@@ -113,17 +116,34 @@ disp(VBR.in.elastic.anharmonic.available_temperature_scaling)
 {
   [1,1] = isaak
   [2,1] = cammarano
+  [3,1] = upper_mantle
 }
 ```
 
 You can check the individual values of anharmonic derivatives for the above scalings (including `citations` fields) by accessing their respective structures, e.g., `VBR.in.elastic.anharmonic.isaak`.
 
+For both pressure and temperature scalings, the `'upper_mantle'` scaling includes anharmonic derivatives for a representative pyrolitic composition calculated from Abers and Hacker 2016.
+
 # the Reference Modulus
 
 The VBR Calculator does not calculate unrelaxed moduli for various compositions. It is expected that the user will have some other means of setting an appropriate modulus value. The user may set `VBR.in.elastic.anharmonic.Gu_0_ol` to any value they see fit, with the warning that the anelastic scalings implemented here are derived from studies on either olivine or olivine-like materials (i.e., borneol) and hence it is not certain whether the fitting parameters used are appropriate for assemblages where that assumption fails.
 
+## upper mantle reference
+
+Given the above caveat, the VBRc does provide represenative values of moduli and their anharmonic derivatives for a pyrolitic composition calculated from Abers and Hacker 2016. You can enable it by setting the ``VBR.in.elastic.anharmonic.reference_scaling` to `'upper_mantle'` (or the name of a custom structure that includes the expected fields). Valid built-in options for the `reference_scaling` are:
+
+```
+disp(VBR.in.elastic.anharmonic.available_reference_scaling)
+{
+  [1,1] = default
+  [2,1] = upper_mantle
+}
+```
+
+If set to `default` (which is the default behavior...), then the top level reference moduli in `VBR.in.elastic.anharmonic` will be used.
+
 ## `Gu_0_crust`
-While the VBR Calculator does not currently apply to non-olivine assemblages, there is a parameter structure for a crustal modulus, `VBR.in.elastic.anharmonic.crust` that includes some anorthite-like values for shear
+Additionally, there is a parameter structure for a crustal modulus, `VBR.in.elastic.anharmonic.crust` that includes some anorthite-like values for shear
 and bulk moduli and their respective temperature and pressure derivatives. This parameter allows calculation of more realistic velocity profiles in the crust and uppermost mantle at low temperatures below where anelastic affects are negligible but where having some velocity values may be useful for comparing to observed velocities.
 
 The effective unrelexed modulus is calculated as a linear mixture of the crustal and olivine endmember moduli
@@ -187,3 +207,6 @@ VBR.in.elastic.anharmonic.my_custom_scaling = my_custom_scaling;
 VBR.in.elastic.anharmonic.temperature_scaling = 'my_custom_scaling';
 VBR.in.elastic.anharmonic.pressure_scaling = 'my_custom_scaling';
 ```
+
+Additionally, if you include the following fields: `Gu_0`, `Ku_0`, `P_ref_Pa`, `T_ref_K` then you can
+use the structure with the `VBR.in.elastic.anharmonic.reference_scaling` specification.
