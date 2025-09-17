@@ -11,7 +11,7 @@ function al_int = thermal_expansion_coefficient(T_K, FracFo, T_ref_K)
     % FracFo : scalar or array
     %     volume fraction of Forsterite
     % T_ref_K : optional scalar
-    %     the reference temperature to use
+    %     the reference temperature to use, default 273 K
     % Output
     % -------
     % al_int : scalar or array

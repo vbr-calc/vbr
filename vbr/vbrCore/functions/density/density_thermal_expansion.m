@@ -11,7 +11,7 @@ function [Rho] = density_thermal_expansion(Rho, T_K, FracFo, T_ref_K)
     % FracFo : scalar or array
     %     volume fraction of Forsterite
     % T_ref_K : optional scalar
-    %     the reference temperature to use
+    %     the reference temperature to use, default 273 K
     % Output
     % -------
     % Rho : scalar or array
