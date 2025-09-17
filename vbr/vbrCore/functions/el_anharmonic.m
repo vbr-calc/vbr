@@ -14,6 +14,7 @@ function [VBR] = el_anharmonic(VBR)
   %  VBR    the VBR structure, with VBR.out.elastic structure
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
   % load or calculate shear and bulk moduli
   if isfield(VBR.in.elastic,'Gu_TP') && isfield(VBR.in.elastic,'Ku_TP')
     % Load unrelaxed shear and bulk moduli (at T,P of interest)
@@ -24,23 +25,22 @@ function [VBR] = el_anharmonic(VBR)
 
     % calculate bulk modulus
     ela = VBR.in.elastic.anharmonic;
-    Ku_0=1e9 * ela.Ku_0_ol; % convert to Pa;
-    T_K_ref = ela.T_K_ref ;
-    P_Pa_ref = ela.P_Pa_ref ;
+    Ku_0 = get_M(VBR, 'K');
+    [T_K_ref, P_Pa_ref] = get_ref_TP(VBR);
     dT = (VBR.in.SV.T_K-T_K_ref);
     dP = (VBR.in.SV.P_GPa*1e9 - P_Pa_ref);
     t_scale = ela.temperature_scaling;
     p_scale = ela.pressure_scaling;
     Ku_TP = calc_Mu(VBR, t_scale, p_scale, 'K', Ku_0, dT, dP);
+    anharmonic.Ku_0 = Ku_0;
   else
     ela = VBR.in.elastic.anharmonic;
-
-    Gu_0 = 1e9 * ela.Gu_0_ol; % convert to Pa;
-    Ku_0 = 1e9 * ela.Ku_0_ol; % convert to Pa;
+    Ku_0 = get_M(VBR, 'K');
+    Gu_0 = get_M(VBR, 'G');
     anharmonic.Gu_0 = Gu_0;
-    anharmonic.Gu_0 = Ku_0;
-    T_K_ref = ela.T_K_ref ;
-    P_Pa_ref = ela.P_Pa_ref ;
+    anharmonic.Ku_0 = Ku_0;
+
+    [T_K_ref, P_Pa_ref] = get_ref_TP(VBR);
     dT = (VBR.in.SV.T_K-T_K_ref);
     dP = (VBR.in.SV.P_GPa*1e9 - P_Pa_ref);
 
@@ -56,7 +56,6 @@ function [VBR] = el_anharmonic(VBR)
       [Gu_TP, Ku_TP] = chi_mixing(Gu_TP, Ku_TP, dT, dP, VBR);
     end
   end
-
   % calculate velocities
   [Vp, Vs] = el_VpVs_unrelaxed(Ku_TP,Gu_TP,VBR.in.SV.rho);
 
@@ -75,8 +74,35 @@ function [VBR] = el_anharmonic(VBR)
   VBR.out.elastic.units = units;
   VBR.out.elastic.anharmonic = anharmonic;
 
+
 end
 
+function [T_K_ref, P_Pa_ref] = get_ref_TP(VBR)
+  ela = VBR.in.elastic.anharmonic;
+  ref_scale = ela.reference_scaling;
+  if strcmp(ref_scale, 'default')
+    T_K_ref = ela.T_K_ref ;
+    P_Pa_ref = ela.P_Pa_ref ;
+  else
+    T_K_ref = ela.(ref_scale).T_K_ref;
+    P_Pa_ref = ela.(ref_scale).P_Pa_ref;
+  end
+end
+
+
+function M = get_M(VBR, G_or_K)
+  ela = VBR.in.elastic.anharmonic;
+  ref_scale = ela.reference_scaling;
+
+  if strcmp(ref_scale, 'default')
+    % pull from top level of ela
+    varname = [G_or_K, 'u_0_ol'];
+    M = 1e9 * ela.(varname);
+  else
+    varname = [G_or_K, 'u_0'];
+    M = 1e9 * ela.(ref_scale).(varname);
+  end
+end
 
 function M_TP = calc_Mu(VBR, t_scale, p_scale, G_or_K, Mu_0, dT, dP)
   % a generic modulus calculation at temperature,
@@ -93,6 +119,7 @@ function M_TP = calc_Mu(VBR, t_scale, p_scale, G_or_K, Mu_0, dT, dP)
   % actual derivative
   params = VBR.in.elastic.anharmonic;
   dMdT = params.(t_scale).(dMdT_str);
+  dMdP = params.(p_scale).(dMdP_str);
   dMdP = params.(p_scale).(dMdP_str);
   dMdP2 = params.(p_scale).(dMdP2_str);
 
