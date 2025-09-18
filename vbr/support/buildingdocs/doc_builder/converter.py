@@ -377,7 +377,7 @@ class SupportFunctions(VBRinit):
         lines.append("# Additional Functions\n")
         lines.append("This is a list of functions that you may find useful when using ")
         lines.append("or developing the VBRc. Note to developers: this page is auto-generated ")
-        lines.append("from vbr/vbr/support/buildingdocs/sync_support_functions.py.")
+        lines.append("from `vbr/vbr/support/buildingdocs/sync_support_functions.py`. \n")
 
         for cat,title in self.titles.items():
             lines.append(f"\n## {title}\n")

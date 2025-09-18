@@ -4,7 +4,8 @@ title: "Additional functions"
 ---
 
 # Additional Functions
-This is a list of functions that you may find useful when using or developing the VBRc. Note to developers: this page is auto-generated from vbr/vbr/support/buildingdocs/sync_support_functions.py.
+This is a list of functions that you may find useful when using or developing the VBRc. Note to developers: this page is auto-generated from `vbr/vbr/support/buildingdocs/sync_support_functions.py`. 
+
 ## Density
 functions related to calculating density
 * [thermal_expansion_coefficient](thermal_expansion_coefficient)
