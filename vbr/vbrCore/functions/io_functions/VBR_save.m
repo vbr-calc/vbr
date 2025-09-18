@@ -1,17 +1,20 @@
 function VBR_save(VBR, fname, exclude_SVs)
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Save a VBR structure to disk.
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % VBR_save(VBR, fname, exclude_SVs)
+    %
+    % Save a VBR structure to disk as a Matlab binary (even if
+    % running from Octave).
     %
     % Parameters
     % ----------
-    % VBR
+    % VBR: structure
     %     the VBR structure to save
-    % fname
+    % fname: string
     %     the filename, will append .mat if not present
-    % exclude_SVs
-    %     set to 1 to exclue VBR.in.SV from save file. Useful for
-    %     reducing disk-space when saving multiple results.
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % exclude_SVs: optional integer
+    %     default is 0. set to 1 to exclue VBR.in.SV from save file.
+    %     Useful for reducing disk-space when saving multiple results.
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     if exist('exclude_SVs','var') && exclude_SVs == 1
         VBRout = struct();
 

@@ -1,5 +1,7 @@
 function rho = san_carlos_density_from_pressure(P_GPa)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % rho = san_carlos_density_from_pressure(P_GPa)
+    %
     % calculates density of olivine for at given pressure values
     % using an interpolation of Abramson et al 1997 (at Fo90)
     %
@@ -9,7 +11,7 @@ function rho = san_carlos_density_from_pressure(P_GPa)
     % P_GPa: scalar or array
     %     the pressure(s) of interest in GPa
     %
-    % Output 
+    % Output
     % -------
     % rho : scalar
     %     density in kg/m3
