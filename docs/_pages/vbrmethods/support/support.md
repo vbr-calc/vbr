@@ -1,6 +1,7 @@
 ---
 permalink: /vbrmethods/support/support/
 title: "Additional functions"
+toc: true
 ---
 
 # Additional Functions
@@ -87,7 +88,7 @@ path: `vbr/vbr/vbrCore/functions/density/san_carlos_density_from_pressure.m`
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % rho = san_carlos_density_from_pressure(P_GPa)
     %
-    % calculates density of olivine for at given pressure values
+    % calculates density of olivine at given pressure values
     % using an interpolation of Abramson et al 1997 (at Fo90)
     %
     %

@@ -31,11 +31,13 @@ class VBRinit(object):
                     msg=msg+extramsg[req]
                 raise ValueError(msg)
 
-    def header(self,permalinkpath:str,title:str=''):
+    def header(self,permalinkpath:str,title:str='', include_toc: bool = False):
         lines: list[str]=[]
         lines.append('---\n')
         lines.append('permalink: '+permalinkpath+'\n')
         lines.append('title: "'+title+'"\n')
+        if include_toc:
+            lines.append("toc: true\n")
         lines.append('---\n\n')
         return lines
 
@@ -372,7 +374,7 @@ class SupportFunctions(VBRinit):
 
     def build_lines(self):
 
-        lines = self.header('/vbrmethods/support/support/', 'Additional functions')
+        lines = self.header('/vbrmethods/support/support/', 'Additional functions', include_toc=True)
 
         lines.append("# Additional Functions\n")
         lines.append("This is a list of functions that you may find useful when using ")
