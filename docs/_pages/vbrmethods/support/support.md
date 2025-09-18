@@ -9,39 +9,39 @@ This is a list of functions that you may find useful when using or developing th
 
 ## Density
 functions related to calculating density
-* [thermal_expansion_coefficient](thermal_expansion_coefficient)
-* [san_carlos_density_from_pressure](san_carlos_density_from_pressure)
-* [density_isothermal_compression](density_isothermal_compression)
-* [density_from_vbrc](density_from_vbrc)
-* [density_thermal_expansion](density_thermal_expansion)
-* [density_adiabatic_compression](density_adiabatic_compression)
+* [thermal_expansion_coefficient](#thermal_expansion_coefficient)
+* [san_carlos_density_from_pressure](#san_carlos_density_from_pressure)
+* [density_isothermal_compression](#density_isothermal_compression)
+* [density_from_vbrc](#density_from_vbrc)
+* [density_thermal_expansion](#density_thermal_expansion)
+* [density_adiabatic_compression](#density_adiabatic_compression)
 
 ## Other thermodynamic properties
 functions related to other thermodynamic properties
-* [adiabatic_coefficient](adiabatic_coefficient)
-* [adiabatic_gradient](adiabatic_gradient)
-* [SoLiquidus](SoLiquidus)
-* [ThermalConductivity](ThermalConductivity)
-* [SpecificHeat](SpecificHeat)
-* [sr_water_fugacity](sr_water_fugacity)
-* [Qinv_from_J1_J2](Qinv_from_J1_J2)
+* [adiabatic_coefficient](#adiabatic_coefficient)
+* [adiabatic_gradient](#adiabatic_gradient)
+* [SoLiquidus](#soliquidus)
+* [ThermalConductivity](#thermalconductivity)
+* [SpecificHeat](#specificheat)
+* [sr_water_fugacity](#sr_water_fugacity)
+* [Qinv_from_J1_J2](#qinv_from_j1_j2)
 
 ## VBRc support
 useful functions for the VBRc user
-* [vbr_version](vbr_version)
-* [VBR_list_methods](VBR_list_methods)
-* [full_nd](full_nd)
-* [vbr_categorical_color](vbr_categorical_color)
-* [vbr_categorical_cmap_array](vbr_categorical_cmap_array)
-* [VBR_save](VBR_save)
+* [vbr_version](#vbr_version)
+* [VBR_list_methods](#vbr_list_methods)
+* [full_nd](#full_nd)
+* [vbr_categorical_color](#vbr_categorical_color)
+* [vbr_categorical_cmap_array](#vbr_categorical_cmap_array)
+* [VBR_save](#vbr_save)
 
 ## Developer Support
 functions that you may find useful for developing code
-* [checkStructForField](checkStructForField)
-* [get_nested_field_from_struct](get_nested_field_from_struct)
-* [nested_structure_update](nested_structure_update)
-* [is_octave](is_octave)
-* [varargin_keyvals_to_structure](varargin_keyvals_to_structure)
+* [checkStructForField](#checkstructforfield)
+* [get_nested_field_from_struct](#get_nested_field_from_struct)
+* [nested_structure_update](#nested_structure_update)
+* [is_octave](#is_octave)
+* [varargin_keyvals_to_structure](#varargin_keyvals_to_structure)
 
 ## Full Docstrings
 
@@ -50,7 +50,7 @@ functions that you may find useful for developing code
 #### thermal_expansion_coefficient
 path: `vbr/vbr/vbrCore/functions/density/thermal_expansion_coefficient.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % al_int = thermal_expansion_coefficient(T_K, FracFo, T_ref_K)
     %
@@ -77,14 +77,14 @@ path: `vbr/vbr/vbrCore/functions/density/thermal_expansion_coefficient.m`
     % wadsleyite and ringwoodite to 20 GPa and 1373 K." Physics of the Earth
     % and Planetary Interiors 143 (2004): 321-336.
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](density:-docstrings)
+```
+[top of category!](#density:-docstrings)
 [top of page!](additional-functions)
 
 #### san_carlos_density_from_pressure
 path: `vbr/vbr/vbrCore/functions/density/san_carlos_density_from_pressure.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % rho = san_carlos_density_from_pressure(P_GPa)
     %
@@ -108,14 +108,14 @@ path: `vbr/vbr/vbrCore/functions/density/san_carlos_density_from_pressure.m`
     % The elastic constants of San Carlos olivine to 17 GPa,
     % JGR,  https://doi.org/10.1029/97JB00682
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](density:-docstrings)
+```
+[top of category!](#density:-docstrings)
 [top of page!](additional-functions)
 
 #### density_isothermal_compression
 path: `vbr/vbr/vbrCore/functions/density/density_isothermal_compression.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % rho = density_isothermal_compression(P_Pa, rho_0, K_o, dK_dP, P_Pa_ref)
     %
@@ -139,14 +139,14 @@ path: `vbr/vbr/vbrCore/functions/density/density_isothermal_compression.m`
     % rho: scalar or array
     %   the density at supplied pressure, same units as input rho_0.
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](density:-docstrings)
+```
+[top of category!](#density:-docstrings)
 [top of page!](additional-functions)
 
 #### density_from_vbrc
 path: `vbr/vbr/vbrCore/functions/density/density_from_vbrc.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % rho_TP = density_from_vbrc(P_Pa, T_K, varargin)
     %
@@ -191,14 +191,14 @@ path: `vbr/vbr/vbrCore/functions/density/density_from_vbrc.m`
     % % use the default scaling, provide a reference density (defined at the default reference pressure):
     % rho_TP = density_from_vbrc(P_Pa, T_K, 'rho_o', 3310)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](density:-docstrings)
+```
+[top of category!](#density:-docstrings)
 [top of page!](additional-functions)
 
 #### density_thermal_expansion
 path: `vbr/vbr/vbrCore/functions/density/density_thermal_expansion.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % [rho] = density_thermal_expansion(rho, T_K, FracFo, T_ref_K)
     %
@@ -219,14 +219,14 @@ path: `vbr/vbr/vbrCore/functions/density/density_thermal_expansion.m`
     % rho : scalar or array
     %     density in same units as input density
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](density:-docstrings)
+```
+[top of category!](#density:-docstrings)
 [top of page!](additional-functions)
 
 #### density_adiabatic_compression
 path: `vbr/vbr/vbrCore/functions/density/density_adiabatic_compression.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % [Rho,P] = density_adiabatic_compression(Rho_o,Z,P0)
     %
@@ -249,8 +249,8 @@ path: `vbr/vbr/vbrCore/functions/density/density_adiabatic_compression.m`
     %    P   : pressure profile in Pa
     % see page ~190 in 1st edition, 185 in 2nd edition.                 %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](density:-docstrings)
+```
+[top of category!](#density:-docstrings)
 [top of page!](additional-functions)
 
 ### Other thermodynamic properties: docstrings
@@ -258,7 +258,7 @@ path: `vbr/vbr/vbrCore/functions/density/density_adiabatic_compression.m`
 #### adiabatic_coefficient
 path: `vbr/vbr/vbrCore/functions/thermal_properties/adiabatic_coefficient.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % dTdP_s = adiabatic_coefficient(T_K, rho, FracFo)
     %
@@ -279,14 +279,14 @@ path: `vbr/vbr/vbrCore/functions/thermal_properties/adiabatic_coefficient.m`
     % dTdP_s
     %     adiabatic coefficient in K/Pa
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](other-thermodynamic-properties:-docstrings)
+```
+[top of category!](#other-thermodynamic-properties:-docstrings)
 [top of page!](additional-functions)
 
 #### adiabatic_gradient
 path: `vbr/vbr/vbrCore/functions/thermal_properties/adiabatic_gradient.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % dTdz_s = adiabatic_gradient(T_K, rho, FracFo)
     %
@@ -308,14 +308,14 @@ path: `vbr/vbr/vbrCore/functions/thermal_properties/adiabatic_gradient.m`
     % dTdz_s
     %     adiabatic gradient in K/m
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](other-thermodynamic-properties:-docstrings)
+```
+[top of category!](#other-thermodynamic-properties:-docstrings)
 [top of page!](additional-functions)
 
 #### SoLiquidus
 path: `vbr/vbr/vbrCore/functions/thermal_properties/SoLiquidus.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % [Solidus] = SoLiquidus(P_Pa,H2O,CO2,solfit)
     %
@@ -361,14 +361,14 @@ path: `vbr/vbr/vbrCore/functions/thermal_properties/SoLiquidus.m`
     %   of hydrous mantle melting. Geochemistry, Geophysics, Geosystems, 4(9).
     %   https://doi.org/10.1029/2002GC000433
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](other-thermodynamic-properties:-docstrings)
+```
+[top of category!](#other-thermodynamic-properties:-docstrings)
 [top of page!](additional-functions)
 
 #### ThermalConductivity
 path: `vbr/vbr/vbrCore/functions/thermal_properties/ThermalConductivity.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Kc = ThermalConductivity(Kc_o, T, P)
     %
@@ -392,14 +392,14 @@ path: `vbr/vbr/vbrCore/functions/thermal_properties/ThermalConductivity.m`
     %   wadsleyite and ringwoodite to 20 GPa and 1373 K, Phys Earth Planet In,
     %   143-144, 321?336, doi:10.1016/j.pepi.2004.03.005.
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](other-thermodynamic-properties:-docstrings)
+```
+[top of category!](#other-thermodynamic-properties:-docstrings)
 [top of page!](additional-functions)
 
 #### SpecificHeat
 path: `vbr/vbr/vbrCore/functions/thermal_properties/SpecificHeat.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Cp = SpecificHeat(T,FracFo)
     %
@@ -441,14 +441,14 @@ path: `vbr/vbr/vbrCore/functions/thermal_properties/SpecificHeat.m`
     % mantle before calculating Cp.
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](other-thermodynamic-properties:-docstrings)
+```
+[top of category!](#other-thermodynamic-properties:-docstrings)
 [top of page!](additional-functions)
 
 #### sr_water_fugacity
 path: `vbr/vbr/vbrCore/functions/sr_water_fugacity.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %
     % fH2O=sr_water_fugacity(H2O_PPM,H2O_o,P_Pa,T_K)
@@ -472,14 +472,14 @@ path: `vbr/vbr/vbrCore/functions/sr_water_fugacity.m`
     %        fH2O  water fugacity [MPa]
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](other-thermodynamic-properties:-docstrings)
+```
+[top of category!](#other-thermodynamic-properties:-docstrings)
 [top of page!](additional-functions)
 
 #### Qinv_from_J1_J2
 path: `vbr/vbr/vbrCore/functions/Qinv_from_J1_J2.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %  Qinv_from_J1_J2(J1, J2, use_correction)
     %
@@ -502,8 +502,8 @@ path: `vbr/vbr/vbrCore/functions/Qinv_from_J1_J2.m`
     % Qinv
     %     attenuation, same shape as J1 and J2
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](other-thermodynamic-properties:-docstrings)
+```
+[top of category!](#other-thermodynamic-properties:-docstrings)
 [top of page!](additional-functions)
 
 ### VBRc support: docstrings
@@ -511,7 +511,7 @@ path: `vbr/vbr/vbrCore/functions/Qinv_from_J1_J2.m`
 #### vbr_version
 path: `vbr/vbr/support/vbr_version.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Version = vbr_version()
     %
@@ -534,14 +534,14 @@ path: `vbr/vbr/support/vbr_version.m`
     % Version.version will include a 'dev' if you are
     % running a development version.
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](vbrc-support:-docstrings)
+```
+[top of category!](#vbrc-support:-docstrings)
 [top of page!](additional-functions)
 
 #### VBR_list_methods
 path: `vbr/vbr/support/VBR_list_methods.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % VBR_list_methods() or VBR_list_methods(single_prop)
     %
@@ -558,14 +558,14 @@ path: `vbr/vbr/support/VBR_list_methods.m`
     % VBR_list_methods() will print all methods
     % VBR_list_methods('viscous') will print only viscous methods
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](vbrc-support:-docstrings)
+```
+[top of category!](#vbrc-support:-docstrings)
 [top of page!](additional-functions)
 
 #### full_nd
 path: `vbr/vbr/vbrCore/functions/full_nd.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %
     % X = full_nd(fill_val, N)
@@ -586,14 +586,14 @@ path: `vbr/vbr/vbrCore/functions/full_nd.m`
     % matrix
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](vbrc-support:-docstrings)
+```
+[top of category!](#vbrc-support:-docstrings)
 [top of page!](additional-functions)
 
 #### vbr_categorical_color
 path: `vbr/vbr/support/vbr_categorical_color.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %
     %  rgb = vbr_categorical_color(iclr)
@@ -611,14 +611,14 @@ path: `vbr/vbr/support/vbr_categorical_color.m`
     % rgb
     %     3-element array of floating point rgb values in (0,1) range
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](vbrc-support:-docstrings)
+```
+[top of category!](#vbrc-support:-docstrings)
 [top of page!](additional-functions)
 
 #### vbr_categorical_cmap_array
 path: `vbr/vbr/support/vbr_categorical_cmap_array.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %
     % x = vbr_categorical_cmap_array()
@@ -631,14 +631,14 @@ path: `vbr/vbr/support/vbr_categorical_cmap_array.m`
     %      palettes for information visualization"
     %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](vbrc-support:-docstrings)
+```
+[top of category!](#vbrc-support:-docstrings)
 [top of page!](additional-functions)
 
 #### VBR_save
 path: `vbr/vbr/vbrCore/functions/io_functions/VBR_save.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % VBR_save(VBR, fname, exclude_SVs)
     %
@@ -655,8 +655,8 @@ path: `vbr/vbr/vbrCore/functions/io_functions/VBR_save.m`
     %     default is 0. set to 1 to exclue VBR.in.SV from save file.
     %     Useful for reducing disk-space when saving multiple results.
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](vbrc-support:-docstrings)
+```
+[top of category!](#vbrc-support:-docstrings)
 [top of page!](additional-functions)
 
 ### Developer Support: docstrings
@@ -664,7 +664,7 @@ path: `vbr/vbr/vbrCore/functions/io_functions/VBR_save.m`
 #### checkStructForField
 path: `vbr/vbr/support/checkStructForField.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % [field_exists,missing] = checkStructForField(StructA,FieldTree,Verb);
     %
@@ -728,14 +728,14 @@ path: `vbr/vbr/support/checkStructForField.m`
     %
     % indicating that the field was found.
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](developer-support:-docstrings)
+```
+[top of category!](#developer-support:-docstrings)
 [top of page!](additional-functions)
 
 #### get_nested_field_from_struct
 path: `vbr/vbr/support/get_nested_field_from_struct.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % get_nested_field_from_struct(my_struct, field_tree_cell)
     %
@@ -756,14 +756,14 @@ path: `vbr/vbr/support/get_nested_field_from_struct.m`
     % -------
     % Gu = get_nested_field_from_struct(VBR, {'out'; 'elastic'; 'anharmonic'; 'Gu'})
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](developer-support:-docstrings)
+```
+[top of category!](#developer-support:-docstrings)
 [top of page!](additional-functions)
 
 #### nested_structure_update
 path: `vbr/vbr/support/nested_structure_update.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %  output_struct = nested_structure_update(struct_1, struct_2)
     %
@@ -785,27 +785,27 @@ path: `vbr/vbr/support/nested_structure_update.m`
     %  struct
     %    a new structure with fields from struct_1 and struct_2
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](developer-support:-docstrings)
+```
+[top of category!](#developer-support:-docstrings)
 [top of page!](additional-functions)
 
 #### is_octave
 path: `vbr/vbr/support/is_octave.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % is_octave()
     %
     % returns 1 if running in Octave, 0 if running in MATLAB
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](developer-support:-docstrings)
+```
+[top of category!](#developer-support:-docstrings)
 [top of page!](additional-functions)
 
 #### varargin_keyvals_to_structure
 path: `vbr/vbr/support/varargin_keyvals_to_structure.m`
 
-'''
+```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % input_args = varargin_keyvals_to_structure(outer_varargin)
     %
@@ -850,6 +850,6 @@ path: `vbr/vbr/support/varargin_keyvals_to_structure.m`
     % where my_new_function is designed to accept 'x' and 'y' key-value arguments like
     %   my_new_function(a, b, 'x', 10, 'y', 100)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-'''
-[top of category!](developer-support:-docstrings)
+```
+[top of category!](#developer-support:-docstrings)
 [top of page!](additional-functions)

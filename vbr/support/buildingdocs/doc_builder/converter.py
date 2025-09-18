@@ -275,7 +275,7 @@ class MatlabFunction:
         if self._docstring is None:
             lines = self.raw_lines
 
-            docstring_lines: list[str] = ["'''\n"]
+            docstring_lines: list[str] = ["```matlab\n"]
 
             i_line = 0;
             n_lines = len(lines)
@@ -295,7 +295,8 @@ class MatlabFunction:
 
                 i_line += 1
 
-            docstring_lines.append("'''\n")
+            docstring_lines.append("```\n")
+
 
             self._docstring = docstring_lines
         return self._docstring
@@ -388,13 +389,14 @@ class SupportFunctions(VBRinit):
             # list the functions, with links to later
             funcs = self.func_readers[cat]
             for func in funcs:
-                lines.append(f"* [{func.func_name}]({func.func_name})\n")
+                func_link = f"#{func.func_name.lower()}"
+                lines.append(f"* [{func.func_name}]({func_link})\n")
 
         lines.append("\n## Full Docstrings\n")
 
         for cat, title in self.titles.items():
             cat_title = f"{title}: docstrings"
-            cat_title_link = cat_title.lower().replace(" ",'-')
+            cat_title_link = "#"+cat_title.lower().replace(" ",'-')
             lines.append(f"\n### {cat_title}\n")
             # list the functions
             funcs = self.func_readers[cat]
