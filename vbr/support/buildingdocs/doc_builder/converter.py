@@ -377,7 +377,7 @@ class SupportFunctions(VBRinit):
 
         lines = self.header('/vbrmethods/support/support/', 'Additional functions', include_toc=True)
 
-        lines.append("# Additional Functions\n")
+        lines.append("# Overview\n")
         lines.append("This is a list of functions that you may find useful when using ")
         lines.append("or developing the VBRc. Note to developers: this page is auto-generated ")
         lines.append("from `vbr/vbr/support/buildingdocs/sync_support_functions.py`. \n")
@@ -392,20 +392,20 @@ class SupportFunctions(VBRinit):
                 func_link = f"#{func.func_name.lower()}"
                 lines.append(f"* [{func.func_name}]({func_link})\n")
 
-        lines.append("\n## Full Docstrings\n")
+        lines.append("\n# Full Docstrings\n")
 
         for cat, title in self.titles.items():
             cat_title = f"{title}: docstrings"
-            cat_title_link = "#"+cat_title.lower().replace(" ",'-')
-            lines.append(f"\n### {cat_title}\n")
+            cat_title_link = "#"+cat_title.lower().replace(" ",'-').replace(":","")
+            lines.append(f"\n## {cat_title}\n")
             # list the functions
             funcs = self.func_readers[cat]
             for func in funcs:
-                lines.append(f"\n#### {func.func_name}\n")
+                lines.append(f"\n### {func.func_name}\n")
                 lines.append(f"path: `{func.rel_path}`\n\n")
                 lines += func.docstring
                 lines.append(f"[top of category!]({cat_title_link})\n")
-                lines.append("[top of page!](additional-functions)\n")
+                lines.append("[top of page!](#overview)\n")
 
 
 
