@@ -1,5 +1,26 @@
 function Version = vbr_version()
-    % return the current VBRc version
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Version = vbr_version()
+    %
+    % return the VBRc Version structure
+    %
+    % Returns
+    % -------
+    % Version.  : structure with the following fields
+    %        .major : int
+    %           the major version number
+    %        .minor : int
+    %           the minor version number
+    %        .patch : int
+    %           the patch version number
+    %        .version: string
+    %            the version string (e.g., '2.0.1')
+    %
+    % Notes
+    % -----
+    % Version.version will include a 'dev' if you are
+    % running a development version.
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     Version.major = 2;
     Version.minor = 0;
     Version.patch = 5;

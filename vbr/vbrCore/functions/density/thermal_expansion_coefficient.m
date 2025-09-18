@@ -1,6 +1,8 @@
 function al_int = thermal_expansion_coefficient(T_K, FracFo, T_ref_K)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % calculates the thermal expansion coefficent at a given temperature and
+    % al_int = thermal_expansion_coefficient(T_K, FracFo, T_ref_K)
+    %
+    % calculates the thermal expansion coefficient at a given temperature and
     % volume fraction of forsterite following Xu et al., 2004
     %
     %
@@ -39,6 +41,5 @@ function al_int = thermal_expansion_coefficient(T_K, FracFo, T_ref_K)
     a_3 = (FracFo*a2(1) + (1-FracFo)*a2(2));
 
     % integrate alpha(T) analytically, calculate new density
-
     al_int = a_1.*(T_K-T_ref_K)+a_2./2*(T_K.^2-T_ref_K^2) - a_3.*(1./T_K - 1/T_ref_K);
 end

@@ -1,5 +1,7 @@
 function [Rho,P] = density_adiabatic_compression(Rho_o,Z,P0)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % [Rho,P] = density_adiabatic_compression(Rho_o,Z,P0)
+    %
     % Adiabatic Compression along a profile following Turcotte and Schubert
     % should be ok for upper mantle, shallower than the 410 km phase change.
     %

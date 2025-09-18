@@ -1,19 +1,34 @@
-function Cp = SpecificHeat(T,FracFo)
+function Cp = SpecificHeat(T, FracFo)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Cp = SpecificHeat(T,FracFo)
+    %
     % Calculates specific heat as a function of temperature using a polynomial.
     %
-    % Input
+    % Parameters
+    % ----------
     %
-    %   T       temperature [K], array or scalar
-    %   FracFo  volume fraction forsterite
+    %   T: array or scalar
+    %      temperature in degrees K
+    %   FracFo: array or scalar
+    %       volume fraction forsterite
     %
-    % Output
+    % Returns
+    % -------
+    %   Cp: array or scalar
+    %       Specific Heat [J kg^-1 K^-1]
     %
-    %   Cp      Specific Heat [J kg^-1 K^-1]
+    % References
+    % ----------
+    % Berman, R. G., and L. Ya Aranovich. "Optimized standard     %
+    %   state and solution properties of minerals." Contributions to Mineralogy%
+    %   and Petrology 126.1-2 (1996): 1-24.
+    %
+    % Notes
+    % -----
     %
     % Papers report heat capacity (J/mol/K) as polynomial functions of
     % temperature with coefficients determined by fitting. To get to specific
-    % heat (J/kg/K), I divide the reported coefficients by molecular weight of
+    % heat (J/kg/K), we divide the reported coefficients by molecular weight of
     % the minerals. The function form is typically:
     %
     %  Cp = B(1) + B(2)*T + B(3)*T^2 + B(4)*T^-2 + B(5)*T^-3 + ...
@@ -23,6 +38,7 @@ function Cp = SpecificHeat(T,FracFo)
     % for forsterite (Fo) in the first row and fayalite (Fa) in the second row.
     % The two are then linearly weighted by the fraction of forsterite in the
     % mantle before calculating Cp.
+    %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     % Need molecular weights of forsterite (Mg2Si04) and fayalite (Fe2SiO4):

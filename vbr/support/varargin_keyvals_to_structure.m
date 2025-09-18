@@ -1,8 +1,23 @@
 function input_args = varargin_keyvals_to_structure(outer_varargin)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % convert key-value pair varargin to a structure
+    % input_args = varargin_keyvals_to_structure(outer_varargin)
     %
-    % for example,
+    % convert key-value pair varargin to a structure. useful for function input validation
+    %
+    % Parameters
+    % ----------
+    % outer_varargin
+    %     the varargin values from a different function
+    %
+    % Returns
+    % -------
+    % input_args: structure
+    %     a structure containing fields and values for each key-value pair in outer_varargin
+    %
+    % Examples
+    % --------
+    %
+    % basic usage:
     %
     %     disp(varargin_keyvals_to_structure('first_arg', 0, 'x', 100, 'last_arg', 'hello'))
     %
@@ -11,6 +26,22 @@ function input_args = varargin_keyvals_to_structure(outer_varargin)
     %        first_arg = 0
     %        x = 100
     %        last_arg = hello
+    %
+    % To use in other functions for validation:
+    %
+    %   function result = my_new_function(a, b, varargin)
+    %        defaults.x = 1;
+    %        defaults.y = 0;
+    %        input_args= varargin_keyvals_to_structure(varargin);
+    %
+    %        % update the structure to include defaults
+    %        input_args = nested_structure_update(defaults, input_args);
+    %
+    %        result = a * input_args.x + b * input_args.y;
+    %   end
+    %
+    % where my_new_function is designed to accept 'x' and 'y' key-value arguments like
+    %   my_new_function(a, b, 'x', 10, 'y', 100)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 

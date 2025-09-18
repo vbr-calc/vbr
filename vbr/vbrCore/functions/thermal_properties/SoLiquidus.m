@@ -1,19 +1,22 @@
-function [Solidus] = SoLiquidus(P,H2O,CO2,solfit)
+function [Solidus] = SoLiquidus(P_Pa,H2O,CO2,solfit)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  % [Solidus] = SoLiquidus(P,H2O,CO2,solfit)
+  % [Solidus] = SoLiquidus(P_Pa,H2O,CO2,solfit)
   %
-  % calculates peridotite solidus and related properties
-  %
+  % calculates peridotite solidus with volatile dependence. Water depression
+  % calculated with Katz et al (2003), CO2 depression calculated with
+  % Dasgupta et al (2007). Effects are cumulative. The dry solidus
+  % to which the depression is applied can be calculated using either
+  % Katz et al (2003) or Hirschmann (200).
   %
   % Parameters
   % ----------
-  % P         Pressure in Pa
+  % P_Pa         Pressure in Pa
   % H2O       wt % of water in the melt phase
   % CO2       wt % of CO2 in the melt phase
   % solfit    which dry solidus to use, either 'katz' or 'hirschmann'
-
-  % Output
-  % ------
+  %
+  % Returns
+  % -------
   % Solidus.  structure with following fields
   %        .Tsol       the effective solidus [C]
   %        .Tsol_dry   the volatile free solidus [C]
@@ -27,9 +30,22 @@ function [Solidus] = SoLiquidus(P,H2O,CO2,solfit)
   %        .dTdPlherz  lherzolite productivity [C/Gpa]
   %        .dTdPliq  liquidis productivity [C/Gpa]
   %        .dTdH2O   dependence of solidus on water content [C / wt %]
+  %
+  % References
+  % ----------
+  %
+  % Dasgupta, R., Hirschmann, M. M., & Smith, N. D. (2007). Water follows carbon:
+  %   CO2 incites deep silicate melting and dehydration beneath mid-ocean ridges.
+  %   Geology, 35(2), 135-138. https://doi.org/10.1130/G22856A.1
+  % Hirschmann, M. M. (2000). Mantle solidus: Experimental constraints and
+  %   the effects of peridotite composition. Geochemistry, Geophysics, Geosystems,
+  %   1(10). https://doi.org/10.1029/2000GC000070
+  % Katz, R. F., Spiegelman, M., & Langmuir, C. H. (2003). A new parameterization
+  %   of hydrous mantle melting. Geochemistry, Geophysics, Geosystems, 4(9).
+  %   https://doi.org/10.1029/2002GC000433
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  get solidus info
-   P_GPa = P * 1e-9;
+   P_GPa = P_Pa * 1e-9;
 
    [dTH2O,dTdH2O] = depression_katz(H2O,P_GPa);  % H2O in melt phase [wt%]
    dTCO2 = depression_dasgupta(CO2); % CO2 in melt phase [wt%]

@@ -16,3 +16,4 @@ if __name__ == "__main__":
     CBwalker.walkDir(clearTargetDir=clear_dir)
 
     converter.sync_release_notes()
+    converter.sync_support_functions()

@@ -25,6 +25,8 @@ docs:
         url: /vbrmethods/viscous/
       - title: Anelastic
         url: /vbrmethods/anelastic/
+      - title: Supporting Functions
+        url: /vbrmethods/supporting/
 
   - title: Examples
     children:

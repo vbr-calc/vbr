@@ -1,5 +1,7 @@
 function dTdP_s = adiabatic_coefficient(T_K, rho, FracFo)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % dTdP_s = adiabatic_coefficient(T_K, rho, FracFo)
+    %
     % calculates the adiabatic coefficient (dT/dP at constant
     % entropy) given temperature and density
     %
