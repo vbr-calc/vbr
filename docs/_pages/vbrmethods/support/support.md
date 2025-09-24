@@ -16,6 +16,19 @@ functions related to calculating density
 * [density_thermal_expansion](#density_thermal_expansion)
 * [density_adiabatic_compression](#density_adiabatic_compression)
 
+## Fitting and Statistics
+functions related to fitting observations and probability distributions. Note that many of the functions related to probability distributions are available in  other MATLAB or GNU Octave toolboxes. The VBRc implemented its own versions to avoid the  need for 3rd party packages.
+* [find_LAB_Q](#find_lab_q)
+* [probability_lognormal](#probability_lognormal)
+* [probability_uniform](#probability_uniform)
+* [joint_independent_probability](#joint_independent_probability)
+* [conditionally_independent_C_given_AB](#conditionally_independent_c_given_ab)
+* [conditional_Bayes](#conditional_bayes)
+* [probability_distributions](#probability_distributions)
+* [probability_normal](#probability_normal)
+* [likelihood_from_residuals](#likelihood_from_residuals)
+* [priorModelProbs](#priormodelprobs)
+
 ## Other thermodynamic properties
 functions related to other thermodynamic properties
 * [adiabatic_coefficient](#adiabatic_coefficient)
@@ -251,6 +264,363 @@ path: `vbr/vbr/vbrCore/functions/density/density_adiabatic_compression.m`
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ```
 [top of category!](#density-docstrings)
+[top of page!](#overview)
+
+## Fitting and Statistics: docstrings
+
+### find_LAB_Q
+path: `vbr/vbr/fitting/find_LAB_Q.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % finds seismic LAB using Q. LAB defined either as an absolute value of Q or
+    % as the depth where Q = Q_factor * ave Asthenosphere Q.
+    % Reminder low Q = high attenuation (Q^-1), so LAB Q will be > astheno Q.
+    %
+    % Parameters
+    % ----------
+    % Q_z: 1d array
+    %     Q as a function of z
+    % Z_km: 1d array
+    %     depth, same size as Q_z
+    % varargin: optional key-value arguments
+    %
+    %     'method', 'Q_factor' or 'Q_value'
+    %       if 'Q_factor' (the default), the LAB is identified as the point closest to
+    %       where Q_z equals a factor above the asthenosphere mean Q.
+    %       if 'Q_value', the LAB is identified as the point closes to the
+    %       supplied Q value.
+    %     'value', scalar
+    %       if 'method'=='Q_factor', this is the factor that multiplies the
+    %       asthenosphere Q to find the target LAB Q (default 20).
+    %       if 'method'=='Q_value', this is the target LAB Q to find.
+    %     'z_min_km', scalar
+    %       only used if 'method'=='Q_factor`, this value (default 80 km) defines the
+    %       depth above which Q values are averaged to find the mean asthenosphere Q
+    %
+    % Returns
+    % -------
+    % Z_LAB_Q: scalar
+    %     the seismic LAB depth from Q.
+    %
+    % Examples
+    % --------
+    % The following finds the depth at which Q is a factor of 20 higher than the
+    % mean asthenospheric Q. The mean asthenospheric Q will be calculated by
+    % averaging Q_z at depths greater than 150 km ('z_min', 150):
+    %
+    %    Z_LAB_Q = find_LAB_Q(Q_z,Z_km,'method','Q_factor','value',20,'z_min_km',150)
+    %
+    % To find the depth closest to an absolute value of Q:
+    %
+    %    Z_LAB_Q = find_LAB_Q(Q_z,Z_km,'method','Q_value',800)
+    %
+    % Notes
+    % -----
+    % Default behavior is to use
+    %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#fitting-and-statistics-docstrings)
+[top of page!](#overview)
+
+### probability_lognormal
+path: `vbr/vbr/fitting/probability_lognormal.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % lognormal_pdf = probability_lognormal(x, mu, sigma)
+    %
+    % Calculate the probability of having an observed value x given
+    % a log normal distribution with mean mu and standard deviation sigma.
+    %
+    % Parameters
+    % ----------
+    % x: scalar
+    %   observed value(s), must be dimensionless and > 0.
+    % mu: scalar
+    %   mean value of distribution in log-space
+    % sigma: scalar
+    %   standard deviation of the distribution in log-space
+    %
+    % Returns
+    % -------
+    % lognormal_pdf: array
+    %   prior probability of being at the observed value
+    %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#fitting-and-statistics-docstrings)
+[top of page!](#overview)
+
+### probability_uniform
+path: `vbr/vbr/fitting/probability_uniform.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % uniform_pdf = probability_uniform(x, min_val, max_val)
+    %
+    % Calculate the probability of having an observed value x given
+    % a uniform distribution between min_val and max_val.
+    % (The same as unifpdf in the stats package).
+    %
+    %
+    % Parameters
+    % ----------
+    % x: array
+    %   observed value(s)
+    % min_val: scalar
+    %   minimum for uniform distribution
+    % max_val: scalar
+    %   maximum for uniform distribution
+    %
+    % Returns
+    % -------
+    % uniform_pdf: array
+    %   prior probability of being at the observed value
+    %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#fitting-and-statistics-docstrings)
+[top of page!](#overview)
+
+### joint_independent_probability
+path: `vbr/vbr/fitting/joint_independent_probability.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % joint_independent_pdf = joint_independent_probability(marginals)
+    %
+    % Calculate the joint probability (assuming independent) of two or more
+    % marginal probabilities, {p(A), p(B), ...}.  As we are assuming all
+    % of these are independent, this is a simple product.
+    %
+    %
+    % Parameters
+    % ----------
+    %  marginals: cell array
+    %    A cell array containing the marginal probabilities p(A), p(B), etc.
+    %    All marginal probabilities must be the same size.
+    %
+    % Returns
+    % -------
+    % joint_independent_pdf: array
+    %     joint independent probability, p(A, B , ...)
+    %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#fitting-and-statistics-docstrings)
+[top of page!](#overview)
+
+### conditionally_independent_C_given_AB
+path: `vbr/vbr/fitting/conditionally_independent_C_given_AB.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % p_C_given_AB = conditionally_independent_C_given_AB( ...
+    %    p_A_given_C, p_B_given_C, p_C, p_A_and_B)
+    %
+    % Calculate the conditional probability of C given A and B, assuming that
+    % A and B are dependent but conditionally independent given C
+    % As such, we can calculate:
+    %           P(C | A, B) = P(A, B, C) / P(A, B)
+    %                       = P(A, B | C) P(C)  /  P(A, B)
+    %                       = P(A | C) P(B | C) P(C) / P(A, B)
+    %
+    % Parameters
+    % ----------
+    % p_A_given_C: array | scalar
+    %     conditional probability of A given C
+    % p_B_given_C: array | scalar
+    %     conditional probability of B given C
+    % p_C: array | scalar
+    %     prior probability of C
+    % p_A_and_B: array | scalar
+    %     joint probability of A and B
+    %     Note that A and B are dependent (but only conditionally independent
+    %     given C!) so p(A, B) != p(A) * p(B)
+    %
+    % Returns
+    % -------
+    % p_C_given_AB: array | scalar
+    %     conditional probability of C given both A and B
+    %
+    % Note: ALL inputs and outputs should be the same size (or scalars).
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#fitting-and-statistics-docstrings)
+[top of page!](#overview)
+
+### conditional_Bayes
+path: `vbr/vbr/fitting/conditional_Bayes.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % p_A_given_B = conditional_Bayes(p_B_given_A, p_A, p_B)
+    %
+    % Calculate the conditional probability using Bayes' Theorem:
+    %       p(A | B) = p(B | A) * p(A) / p(B)
+    %
+    %
+    % Parameters
+    % ----------
+    % p_B_given_A: array | scalar
+    %     probability of B given A (likelihood)
+    % p_A: array | scalar
+    %     prior probability of A
+    % p_B: array | scalar
+    %     prior probability of B
+    %
+    % Returns
+    % -------
+    % p_A_given_B: array | scalar
+    %     posterior probability of A given B
+    %
+    % Note: ALL inputs and outputs should be the same size (or scalars).
+    %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#fitting-and-statistics-docstrings)
+[top of page!](#overview)
+
+### probability_distributions
+path: `vbr/vbr/fitting/probability_distributions.m`
+
+```matlab
+```
+[top of category!](#fitting-and-statistics-docstrings)
+[top of page!](#overview)
+
+### probability_normal
+path: `vbr/vbr/fitting/probability_normal.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % normal_pdf = probability_normal(x, mu, sigma)
+    %
+    % Calculate the probability of having an observed value x given
+    % a normal distribution with mean mu and standard deviation sigma.
+    % (The same as normpdf in the stats package).
+    %
+    % Parameters
+    % ----------
+    % x: array
+    %   observed value(s), must be dimensionless and > 0.
+    % mu: scalar
+    %   mean value of distribution in log-space
+    % sigma: scalar
+    %   standard deviation of the distribution in log-space
+    %
+    % Returns
+    % -------
+    % normal_pdf: array
+    %   prior probability of being at the observed value
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#fitting-and-statistics-docstrings)
+[top of page!](#overview)
+
+### likelihood_from_residuals
+path: `vbr/vbr/fitting/likelihood_from_residuals.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % pdf = likelihood_from_residuals(obs_val, obs_std, predicted_vals)
+    %
+    % Calculate the likelihood (pdf) of the observed value at each of the given
+    % combination of state variables by comparing the observed value to the
+    % calculated value, scaled by the observed standard deviation.
+    %
+    % The likelihood p(D|A), e.g., P(Vs | T, phi, gs), is calculated using
+    % the residual (See manual, Menke book Ch 11):
+    %       p(D|A) = 1 / sqrt(2 * pi * residual) * exp(-residual / 2)
+    % residual(k) here is a chi-squared residual. Given chi-square, the PDF
+    % of data with a normal distribution:
+    %       P = 1 / sqrt(2 * pi * sigma^2) * exp(-0.5 * chi-square)
+    % where sigma = std of data, chi-square=sum((x_obs - x_preds)^2 / sigma^2)
+    % e.g. www-cdf.fnal.gov/physics/statistics/recommendations/modeling.html
+    %
+    % Parameters:
+    % -----------
+    % obs_val
+    %     observed (seismic) property
+    % obs_std
+    %     standard deviation on the observed value
+    % predicted_vals
+    %     (size(parameter sweep)) matrix of calculated values
+    %     of the observed property at each of the different
+    %     parameter sweep combinations. i.e.,
+    %           size(parameter_sweep) = size(sweep.Box)
+    % Output:
+    % -------
+    % likelihood
+    %       (size(parameter sweep)) matrix of the probability of the
+    %       observation for each of the proposed parameter (state variable)
+    %       combinations - the LIKELIHOOD.
+    %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#fitting-and-statistics-docstrings)
+[top of page!](#overview)
+
+### priorModelProbs
+path: `vbr/vbr/fitting/priorModelProbs.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % [Prior_mod, sigmaPreds] = priodModelProbs( ...
+    %       States, states_fields, ifnormal)
+    %
+    % Loop over the fields in States and calculate probabilities for each field
+    % to get total prior model pdf.  Each field (listed in states_fields) is
+    % a state variable name that we are varying.
+    %
+    % Assuming that the state variables are all independent of each other
+    %   p(var1, var2, ...) = p(var1) * p(var2) * ...
+    %
+    % Parameters
+    % ----------
+    % states: structure
+    %   A structure with the following fields for each state in the
+    %   list states_fields:
+    %    [field] : matrix
+    %       matrix of size (n_var1, n_var2, n_var3 ...) for all values of that
+    %       state variable
+    %    [field]_mean : scalar
+    %       mean (expected value) for that variable
+    %    [field]_std : scalar
+    %       standard deviation for that variable
+    %    [field]_pdf_type : string (optional)
+    %       If set, this is the PDF type to use (optional), must be one of
+    %       'normal', 'lognormal', 'uniformlog' or 'uniform'. This
+    %        option is overridden by the following field if it exists.
+    %    [field]_pdf : matrix (optional)
+    %       If there is a field [var_name]_pdf, then use that probability
+    %       as the prior for that variable instead of calculating it
+    %
+    % states_fields: cell array
+    %    names of all of the state variables we are varying. Each field name
+    %    should exist in the states structure.
+    %
+    % Returns
+    % -------
+    % [Prior_mod, sigmaPreds]
+    %   Prior_mod
+    %       joint probability of all combinations of the state variables
+    %   sigmaPreds
+    %       joint standard deviation for all combinations of the state variables
+    %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#fitting-and-statistics-docstrings)
 [top of page!](#overview)
 
 ## Other thermodynamic properties: docstrings
