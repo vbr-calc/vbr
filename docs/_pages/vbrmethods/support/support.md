@@ -492,6 +492,50 @@ path: `vbr/vbr/fitting/conditional_Bayes.m`
 path: `vbr/vbr/fitting/probability_distributions.m`
 
 ```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % pdf = probability_distributions(distribution_flag, varargin)
+    %
+    % Calculates probability in a Bayesian sense given constraints.
+    %
+    % Parameters
+    % ----------
+    % distribution_flag:   string
+    %   A string that specifies the calculation to be done options are:
+    %        Evaluate a distribution, supply one of:
+    %            'normal', 'uniform', 'lognormal'
+    %        Calculate a probability given other constraints, provide:
+    %            'likelihood from residuals'
+    %        Combining pdfs, provide one of:
+    %            'joint independent'
+    %            'A|B'
+    %            'C|A,B conditionally independent'
+    %
+    %  varargin: parameters describing the distribution, values depend on
+    %    the distribution flag value.
+    %
+    %    When evaluating distributions:
+    %       'normal'    - {x*, mean, standard deviation}
+    %       'uniform'   - {x*, min, max}
+    %       'lognormal' - {x*, mean, standard deviation}
+    %    where
+    %       x: matrix
+    %           values of random variable for which to find the probability
+    %           in the given pdf
+    %    expected varargin values for the other distribution_flag
+    %    values are:
+    %       'likelihood from residuals' - {obs val, obs std, predicted}
+    %       'joint independent' - {marginal p_A, p_B, ...}
+    %        'A|B' - {p_B_given_A, p_A, p_B}
+    %        'C|A,B conditionally independent' - {p_A_given_C, p_B_given_C,
+    %                                             p_C, p_A_and_B}
+    %
+    % Returns
+    % ------
+    % pdf: matrix
+    %   probability for each of the values in x
+    %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ```
 [top of category!](#fitting-and-statistics-docstrings)
 [top of page!](#overview)
