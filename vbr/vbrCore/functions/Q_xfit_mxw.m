@@ -21,16 +21,7 @@ function [VBR] = Q_xfit_mxw(VBR)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   % state variables
-  rho_in = VBR.in.SV.rho ;
-  if isfield(VBR.in.elastic,'anh_poro')
-   Mu_in = VBR.out.elastic.anh_poro.Gu ;
-  elseif isfield(VBR.in.elastic,'anharmonic')
-   Mu_in = VBR.out.elastic.anharmonic.Gu ;
-  end
-  Ju_in  = 1./Mu_in ;
-
-  % Frequency
-  f_vec = VBR.in.SV.f;  % frequency
+  [rho_in, Mu_in, Ju_in, f_vec] = Q_get_state_vars(VBR);
   period_vec = 1./f_vec ;
   omega_vec = f_vec.*(2*pi) ;
   tau_vec = 1./omega_vec ;
@@ -46,8 +37,7 @@ function [VBR] = Q_xfit_mxw(VBR)
   n_th = numel(Mu_in); % total elements
 
   % frequency dependent vars
-  J1 = proc_add_freq_indeces(zeros(sz),n_freq);
-  J2 = J1; Q = J1; Qinv = J1; M1 = J1; M2 = J1; M = J1; V = J1;
+  [J1, J2, ~, M, V] = Q_init_output_vars(sz, n_freq);
   f_norm_glob=J1; tau_norm_glob=J1;
 
   % vectorized rho and Vave
@@ -83,8 +73,6 @@ function [VBR] = Q_xfit_mxw(VBR)
       % XJ2= Q_xfit_mxw_xfunc(J2tau_norm,VBR.in.anelastic.xfit_mxw) ;
       J2(i_glob) = Ju.*((pi/2)*X_tau(end) + tau_norm(ifreq)); % eq 18  of [1]
 
-      Qinv(i_glob) = J2(i_glob)./J1(i_glob);
-      Q(i_glob) = 1./Qinv(i_glob);
       M(i_glob) = 1./sqrt(J1(i_glob).^2+J2(i_glob).^2);
       V(i_glob) = sqrt(1./(J1(i_glob)*rho));
 
