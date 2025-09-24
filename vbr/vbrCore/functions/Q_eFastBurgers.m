@@ -37,25 +37,14 @@ function [VBR] = Q_eFastBurgers(VBR)
 % same size as incoming thermodynamic state variables.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  %% ===========================
-  %% read in thermodynamic state
-  %% ===========================
-  f_vec = VBR.in.SV.f ;
-  if isfield(VBR.in.elastic,'anh_poro')
-    Mu = VBR.out.elastic.anh_poro.Gu ;
-  elseif isfield(VBR.in.elastic,'anharmonic')
-    Mu = VBR.out.elastic.anharmonic.Gu ;
-  end
-  rho_mat = VBR.in.SV.rho ;
+  % State Variables
+  [rho_mat, Mu, Ju_mat, f_vec] = Q_get_state_vars(VBR);
   w_vec = 2*pi.*f_vec ; % period
-  Ju_mat = 1./Mu ; % unrelaxed compliance
 
   %  allocate matrices
   nfreq = numel(f_vec);
   sz=size(Ju_mat);
-  Jz=zeros(sz);
-  J1 = proc_add_freq_indeces(Jz,nfreq);
-  J2 = J1; Q = J1; Qinv = J1; M = J1; V = J1;
+  [J1, J2, ~, M, V] = Q_init_output_vars(sz, nfreq);
 
   % read in reference values
   Burger_params=VBR.in.anelastic.eburgers_psp;
