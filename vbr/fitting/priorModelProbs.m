@@ -12,55 +12,60 @@ function [Prior_mod, sigmaPreds] = priorModelProbs( ...
 % Assuming that the state variables are all independent of each other
 %   p(var1, var2, ...) = p(var1) * p(var2) * ...
 %
-% Parameters:
-% -----------
-%       states          structure with the following fields for each state
-%                       in the list states_fields
-%           [field]         matrix of size (n_var1, n_var2, n_var3 ...)
-%                           for all values of that state variable
-%           [field]_mean    mean (expected value) for that variable
-%           [field]_std     standard deviation for that variable
+% Parameters
+% ----------
+% states: structure
+%   A structure with the following fields for each state in the
+%   list states_fields:
+%    [field] : matrix
+%       matrix of size (n_var1, n_var2, n_var3 ...) for all values of that
+%       state variable
+%    [field]_mean : scalar
+%       mean (expected value) for that variable
+%    [field]_std : scalar
+%       standard deviation for that variable
+%    [field]_pdf_type : string (optional)
+%       If set, this is the PDF type to use (optional), must be one of
+%       'normal', 'lognormal', 'uniformlog' or 'uniform'. This
+%        option is overridden by the following field if it exists.
+%    [field]_pdf : matrix (optional)
+%       If there is a field [var_name]_pdf, then use that probability
+%       as the prior for that variable instead of calculating it
 %
-%           [field]_pdf_type the PDF type to use (optional). If set, will use this pdf 
-%                            type: 'normal' or 'uniform'. Defaults to 'uniform'. This 
-%                            option is overridden by the following field if it exists. 
-%           ([field]_pdf)   If there is a field [var_name]_pdf, then use
-%                           that probability as the prior for that variable
-%                           instead of assuming a normal or uniform pdf.
+% states_fields: cell array
+%    names of all of the state variables we are varying. Each field name
+%    should exist in the states structure.
 %
-%       states_fields   names of all of the state varaibles we are varying
-%
-%
-% Output:
+% Returns
 % -------
-%        Prior_mod      joint probability of all combinations of the state
-%                       variables
-%  
-%        sigmaPreds     joint standard deviation for all combinations of 
-%                       the state variables
+% [Prior_mod, sigmaPreds]
+%   Prior_mod
+%       joint probability of all combinations of the state variables
+%   sigmaPreds
+%       joint standard deviation for all combinations of the state variables
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
   sigmaPreds = 1;
   marginals{numel(states_fields)} = 1;
-  
+
   for i_field = 1:numel(states_fields)
     this_field=states_fields{i_field};
     std_field=[this_field,'_std']; % e.g., Tpot_std
     mn_field=[this_field,'_mean']; % e.g., Tpot_mean
-    
+
     if isfield(states,[this_field,'_pdf_type'])
         pdf_type = states.([this_field,'_pdf_type']);
-    else 
+    else
         pdf_type = 'uniform';
-    end 
+    end
 
-    % always override pdf_type if we have an input pdf 
+    % always override pdf_type if we have an input pdf
     if isfield(states,[this_field,'_pdf'])
         pdf_type = 'input';
-    end 
-    
+    end
+
     switch pdf_type
         case 'input'
             marginals{i_field} = states.([this_field, '_pdf']);
@@ -79,12 +84,12 @@ function [Prior_mod, sigmaPreds] = priorModelProbs( ...
             x      = states.(this_field); % measurements
             marginals{i_field} = probability_distributions(...
                 'lognormal', x, mu, sigma);
-        case 'uniformlog' 
-            % uniform probability over natural log space 
+        case 'uniformlog'
+            % uniform probability over natural log space
             x = log(states.(this_field));
             minv = min(x(:));
-            maxv = max(x(:)); 
-            sigma = 1; 
+            maxv = max(x(:));
+            sigma = 1;
             marginals{i_field} = probability_distributions(...
                 'uniform', x, minv, maxv);
         otherwise
@@ -96,8 +101,8 @@ function [Prior_mod, sigmaPreds] = priorModelProbs( ...
             marginals{i_field} = probability_distributions(...
                 'uniform', x, minv, maxv);
     end
-    
-    % Propagation of uncertainty for product of two real variables, 
+
+    % Propagation of uncertainty for product of two real variables,
     %       f = A * B
     % sigma_f = |f| * sqrt((sigma_A/A)^2) + (sigma_B/B)^2 + 2(cov_AB/A/B))
     % from https://en.wikipedia.org/wiki/Propagation_of_uncertainty
@@ -105,6 +110,6 @@ function [Prior_mod, sigmaPreds] = priorModelProbs( ...
     % (assumed) independent state variables
     sigmaPreds = sigmaPreds .* sigma;
   end
-  
+
   Prior_mod = probability_distributions('joint independent', marginals);
 end

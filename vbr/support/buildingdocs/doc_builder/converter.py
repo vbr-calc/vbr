@@ -339,8 +339,12 @@ class SupportFunctions(VBRinit):
                     'nested_structure_update.m',
                     'is_octave.m', 'varargin_keyvals_to_structure.m', ]
 
+        fitting_path = os.path.join(str(self.VBRpath), 'vbr', 'fitting')
+        fitting_funcs = list_mfiles(fitting_path)
+
         self.support_functions = {
             'density': dens_funcs,
+            'fitting': fitting_funcs,
             'other_properties': thermo_prop_funcs,
             'VBRc_support_functions': support_funcs,
             'developer_functions': gen_funcs,
@@ -348,13 +352,20 @@ class SupportFunctions(VBRinit):
 
         self.paths = {
             'density': [dens_path,],
+            'fitting': [fitting_path,],
             'other_properties': [thermo_path, os.path.join(str(self.CorePath), 'functions')],
             'VBRc_support_functions': [io_path, support_path, gen_func_path],
             'developer_functions': [support_path,],
         }
 
+        fitting_desc = 'functions related to fitting observations and probability distributions. '
+        fitting_desc += 'Note that many of the functions related to probability distributions are available in  '
+        fitting_desc += 'other MATLAB or GNU Octave toolboxes. The VBRc implemented its own versions to avoid the '
+        fitting_desc += ' need for 3rd party packages.'
+
         self.categories = {
             'density': 'functions related to calculating density',
+            'fitting': fitting_desc,
             'other_properties': 'functions related to other thermodynamic properties',
             'VBRc_support_functions': 'useful functions for the VBRc user',
             'developer_functions': 'functions that you may find useful for developing code'
@@ -362,6 +373,7 @@ class SupportFunctions(VBRinit):
 
         self.titles = {
             'density': 'Density',
+            'fitting': 'Fitting and Statistics',
             'other_properties': 'Other thermodynamic properties',
             'VBRc_support_functions': 'VBRc support',
             'developer_functions': 'Developer Support'
