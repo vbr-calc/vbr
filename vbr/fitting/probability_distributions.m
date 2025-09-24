@@ -1,5 +1,5 @@
 function pdf = probability_distributions(distribution_flag, varargin)
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % pdf = probability_distributions(distribution_flag, varargin)
 %
@@ -42,7 +42,7 @@ function pdf = probability_distributions(distribution_flag, varargin)
 % pdf: matrix
 %   probability for each of the values in x
 %
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 switch distribution_flag
     case 'uniform'
         x = varargin{1};
