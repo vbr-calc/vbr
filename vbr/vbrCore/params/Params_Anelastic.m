@@ -19,7 +19,7 @@ function params = Params_Anelastic(method,GlobalParams)
 
   % available anelastic methods
   params.possible_methods={'eburgers_psp'; 'andrade_psp'; 'xfit_mxw'; 'xfit_premelt'; ...
-                           'andrade_analytical'; 'backstress_linear';};
+                           'andrade_analytical'; 'maxwell_analytical'; 'backstress_linear';};
 
   if strcmp(method,'eburgers_psp')
     % extended burgers parameters
@@ -152,28 +152,40 @@ function params = Params_Anelastic(method,GlobalParams)
       params.eta_ss = 1e23; % only used if params.viscosity_method == 'fixed'
   end
 
+  if strcmp(method, 'maxwell_analytical')
+      params.description='analytical Maxwell model';
+      params.citations = {...
+           'Maxwell, James Clerk. "IV. On the dynamical theory of gases." Philosophical transactions of the Royal Society of London 157 (1867): 49-88.';...
+           'Nowick, Arthur S. Anelastic relaxation in crystalline solids. Vol. 1. Elsevier, 2012.'; ...
+           'Lau and Holtzman, 2019, GRL. https://doi.org/10.1029/2019GL083529';};
+      params.func_name='Q_maxwell_analytical';
+      params.viscosity_method = 'calculated'; % one of 'calculated' or 'fixed'
+      params.viscosity_method_mechanism = 'diff'; % one of the viscous deformation mechanism structure fields
+      params.eta_ss = 1e23; % only used if params.viscosity_method == 'fixed'
+  end
+
 
   if strcmp(method, 'backstress_linear')
     params.func_name='Q_backstress_linear'; % the name of the matlab function
     params.citations={'Hein et al., 2025, ESS Open Archive (Submitted to JGR Solid Earth ), https://doi.org/10.22541/essoar.174326672.28941810/v1'};
     params.description='Linearized backstress model.';
-    
-    params.sig_p_sig_dc_factor = 0.8; % see supplement figure S12    
+
+    params.sig_p_sig_dc_factor = 0.8; % see supplement figure S12
     params.burgers_vector_nm = .5; % burgers vector in micrometers
     params.Beta = 2; % geometric constant
 
-    params.Q_J_per_mol = 450 *1e3; % activation energy J/mol, DeltaF in text    
+    params.Q_J_per_mol = 450 *1e3; % activation energy J/mol, DeltaF in text
     params.A = 10^6.94; % Pre-exponent low-temperature plasticity, units are MPa−2 s−1
     params.pierls_barrier_GPa = 3.1; % symbol in text is capital Sigma
     params.sig_p_sig_dc_factor = 0.8; % see supplement figure S12
-    
-    params.G_UR = 65; % GPa    
-    params.M_GPa = 135; % hardening modulus GPa    
+
+    params.G_UR = 65; % GPa
+    params.M_GPa = 135; % hardening modulus GPa
     params.SV_required = {'T_K'; 'sig_MPa' ; 'dg_um'};
     params.print_experimental_message = 1;
     params.experimental_message = "Note: the linearized backstress model is currently under development. While it nominally works, we are still working to verify correctness.";
 
-  end 
+  end
 
   % set steady-state melt dependence for diff. creep (i.e., exp(-alpha * phi))
   HK2003 = Params_Viscous('HK2003'); % viscous parameters
