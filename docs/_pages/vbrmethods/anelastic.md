@@ -11,7 +11,7 @@ The anelastic methods displayed by `VBR_list_methods` currently include:
 * `xfit_mxw` [documentation](/vbr/vbrmethods/anel/xfitmxw/): Master Curve Fit, maxwell scaling
 * `xfit_premelt` [documentation](/vbr/vbrmethods/anel/xfitpremelt/): Master Curve Fit, pre-melting maxwell scaling
 * `andrade_analytical` [documentation](/vbr/vbrmethods/anel/andradeanalytical/): A theoretical Andrade Model, no scaling.
-* `maxwell_analytical` [documentation](/vbr/vbrmethods/anel/maxwellalytical/): A theoretical Maxwell Model, no scaling.
+* `maxwell_analytical` [documentation](/vbr/vbrmethods/anel/maxwellanalytical/): A theoretical Maxwell Model, no scaling.
 * `backstress_linear` [documentation](/vbr/vbrmethods/anel/backstresslinear/): Dislocation-based dissipation using the linearized backstress of Hein et al., 2025.
 
 A detailed theoretical description of each is provided in the full methods paper ([link](https://doi.org/10.1016/j.pepi.2020.106639)) or in the papers cited by the methods and so here, we only describe the computational aspects useful to the end user.
