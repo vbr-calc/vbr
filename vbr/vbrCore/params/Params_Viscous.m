@@ -75,18 +75,16 @@ function params = Params_Viscous(method,GlobalParams)
     params.citations={'Breithaupt et al., 2023, PNAS, https://doi.org/10.1073/pnas.2203448120'};
     params.possible_mechs={'gbnp'}; % viscosity of full, nonlinear backstress model, including dislocation recovery by grain boundary diffusion and pipe diffusion
     params.description='Steady state flow law for backstress model, all parameters from Breithaupt et al., 2023';
-    params.M = 135*1e9; %Pa, Hardening modulus
+    params.M = 135e9; %Pa, Hardening modulus
     params.alpha = 2.46; %-, Taylor constant
     params.b = 5e-10; %m, Burgers vector
     params.beta = 2; %geometric constant
-    params.mu = 65*1e9; %Pa, Shear modulus
-    params.sigb_max = 1.8*1e9; %Pa, maximum Taylor stress
+    params.s_rho_max = 1.8e9; %Pa, maximum Taylor stress
     params.DeltaF = 450*1e3; %J/mol, Activation energy
     params.Sigma = 3.1*1e9; %Pa, Peierls barrier height
     params.A_gb = 10^3.54; %Pa^-4s^-1, Pre-exponent grain-boundary diffusion recovery
     params.A_p = 10^-0.95; %Pa^-5s^-1, Pre-exponent pipe diffusion recovery
     params.A = 10^6.94; %m^2s^-1, Pre-exponent low-temperature plasticity
-    params.Resolution = 0.1e6; %Pa, resolution of numerical algorithm that finds the steady-state viscosity of BKHK2023, 0.1 MPa by default
   end
 
 
