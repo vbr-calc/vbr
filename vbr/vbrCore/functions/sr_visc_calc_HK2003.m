@@ -68,7 +68,7 @@ function VBR= sr_visc_calc_HK2003(VBR)
   VBR.out.viscous.HK2003.eta_total = sig*1e6./sr_tot ; % total viscosity
   units.sr = "1/s";
   units.eta = "Pa*s";
-  units.sr_tot = "Pa*s";
+  units.sr_tot = "1/s";
   units.eta_total = "Pa*s";
   VBR.out.viscous.HK2003.units = units;
 end
