@@ -2,7 +2,6 @@ function VBR= sr_visc_calc_BKHK2023(VBR)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % VBR= sr_visc_calc_BKHK2023(VBR)
-% DH 9/26/2025
 %
 % calculates strain rates and viscosities for input state variables.
 %
