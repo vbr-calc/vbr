@@ -8,6 +8,7 @@ function VBR= sr_visc_calc_BKHK2023(VBR)
 %
 % reference:
 % Breithaupt, T., Katz, R. F., Hansen, L. N., & Kumamoto, K. M. (2023). Dislocation theory of steady and transient creep of crystalline solids: Predictions for olivine. Proceedings of the National Academy of Sciences, 120(8), e2203448120.
+% https://doi.org/10.1073/pnas.2203448120
 %
 % Parameters:
 % -----------
@@ -68,10 +69,13 @@ end
 %outputs
 VBR.out.viscous.BKHK2023.gbnp.sr = sr_ss; %s-1, steady-state strain rate
 VBR.out.viscous.BKHK2023.gbnp.eta = eta; %Pas, steady-state viscosity
-
+ VBR.out.viscous.BKHK2023.sr_tot=sr_ss; % total strain rate
+ VBR.out.viscous.BKHK2023.eta_total = eta ; % total viscosity
 % store total composite strain rate and effective viscosity
 units.sr = "1/s";
 units.eta = "Pa*s";
+units.eta_total = "Pa*s";
+units.sr_tot = "1/s";
 VBR.out.viscous.BKHK2023.units = units;
 
 end
