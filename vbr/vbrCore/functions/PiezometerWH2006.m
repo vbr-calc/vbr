@@ -1,4 +1,4 @@
-function d = PiezometerWH2006(sig)
+function d_um = PiezometerWH2006(sig_MPa)
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %
         % d = PiezometerWH2006(sig)
@@ -12,19 +12,24 @@ function d = PiezometerWH2006(sig)
         %   Warren, J. M., & Hirth, G. (2006). Grain size sensitive deformation 
         %   mechanisms in naturally deformed peridotites. Earth and Planetary 
         %   Science Letters, 248(1-2), 438-450.
+        %   https://doi.org/10.1016/j.epsl.2006.06.006
         %
         % Parameters:
         % ----------
-        % sig, differential stress in MPa
+        % sig_MPa: array | scalar
+        %     differential stress in MPa. Can be an array of any shape or a scalar. If not provided, 
+        %    this function will make a plot.
         %
         % Output:
         % ------
-        % d, grain size in um
+        % d_um: array | scalar
+        %     grain size in um, same shape as the input sig_MPa 
+        % 
         %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
         if exist("sig",'var')
-            d = 10.^(log10(sig).*-1.3370+4.1755); %mu, grain size
+            d_um = 10.^(log10(sig_MPa).*-1.3370+4.1755); %mu, grain size
         else
             % Piezometer: Karato et al. (1980) and Van der Wal et al. (1993)
             % The original data in the next lines was used in a linear least squares
