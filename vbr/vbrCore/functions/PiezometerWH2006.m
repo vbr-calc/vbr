@@ -1,4 +1,4 @@
-function d_um = PiezometerWH2006(sig_MPa)
+function dg_um = PiezometerWH2006(sig_MPa)
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %
         % d_um = PiezometerWH2006(sig_MPa)
@@ -27,8 +27,8 @@ function d_um = PiezometerWH2006(sig_MPa)
         %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-        if exist("sig",'var')
-            d_um = 10.^(log10(sig_MPa).*-1.3370+4.1755); %mu, grain size
+        if exist("sig_MPa",'var')
+            dg_um = 10.^(log10(sig_MPa).*-1.3370+4.1755); %mu, grain size
         else
             % Piezometer: Karato et al. (1980) and Van der Wal et al. (1993)
             % The original data in the next lines was used in a linear least squares
