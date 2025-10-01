@@ -19,7 +19,7 @@ function TestResult = test_vbrcore_001()
   TestResult.fail_message = '';
 
   VBR.in.elastic.methods_list={'anharmonic';'anh_poro';'SLB2005'};
-  VBR.in.viscous.methods_list={'HK2003','HZK2011'};
+  VBR.in.viscous.methods_list={'HK2003'; 'HZK2011'; 'BKHK2023'};
   VBR.in.anelastic.methods_list={'eburgers_psp';'andrade_psp';'xfit_mxw';'xfit_premelt'};
 
   % load anharmonic parameters, adjust Gu_0_ol
