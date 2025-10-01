@@ -17,49 +17,21 @@ function [VBR] = Q_andrade_analytical(VBR)
 
   method_settings = VBR.in.anelastic.andrade_analytical;
 
-  % state variables
-  rho_in = VBR.in.SV.rho ;
-  if isfield(VBR.in.elastic,'anh_poro')
-   Mu_in = VBR.out.elastic.anh_poro.Gu ;
-  elseif isfield(VBR.in.elastic,'anharmonic')
-   Mu_in = VBR.out.elastic.anharmonic.Gu ;
-  end
-  Ju_in = 1./Mu_in;
-  % Frequency
-  f_vec = VBR.in.SV.f;  % frequency
+  % get inputs
+  [rho_in, Mu_in, Ju_in, f_vec] = Q_get_state_vars(VBR);
+  n_th = numel(Mu_in); % total elements
+  n_freq = numel(f_vec);
+  sz = size(Mu_in);
+
+  % initialize outputs
+  [J1, J2, Qinv, Ma, Va] = Q_init_output_vars(sz, n_freq);
 
   % Andrade parameters, set in params file
   alf = method_settings.alpha  ; % andrade exponent
   beta =  method_settings.Beta  ; % pre-factor
-  % allocation of Qstruct and V
-  n_freq = numel(f_vec);
-  sz = size(Mu_in);
-
-  % frequency dependent vars
-  J1 = proc_add_freq_indeces(zeros(sz),n_freq);
-  J2 = J1; Qinv = J1; Ma = J1; Va = J1;
-
-  % vectorized rho
-  n_th = numel(Mu_in); % total elements
 
   % maxwell time:
-  % get the steady state viscosity
-  if strcmp(method_settings.viscosity_method, 'calculated')
-      visc_method=VBR.in.viscous.methods_list{1};
-      mech = method_settings.viscosity_method_mechanism; % e.g., 'diff'
-      if strcmp(mech, 'eta_total')
-          eta_ss = VBR.out.viscous.(visc_method).(mech);
-      else
-          eta_ss = VBR.out.viscous.(visc_method).(mech).eta ;
-      end
-  elseif strcmp(method_settings.viscosity_method, 'fixed')
-      eta_ss = method_settings.eta_ss .* ones(sz);
-  else
-      msg = ["VBR.in.anelastic.andrade_analytical.viscosity_method must be", ...
-             " one of 'calculated' or 'fixed', but found ", ...
-             method_settings.viscosity_method]
-      error(msg)
-  end
+  eta_ss = select_steady_state_viscosity(VBR, method_settings, 'andrade_analytical');
   tau.maxwell = eta_ss ./ Mu_in ; % maxwell relaxation time
 
   % loop over frequency

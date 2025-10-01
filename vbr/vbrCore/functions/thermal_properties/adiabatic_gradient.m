@@ -1,5 +1,7 @@
 function dTdz_s = adiabatic_gradient(T_K, rho, FracFo)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % dTdz_s = adiabatic_gradient(T_K, rho, FracFo)
+    %
     % calculates the adiabatic gradient (dT/dz at constant
     % entropy) given temperature and density for the upper
     % mantle (g = 9.8 m/s^2)
@@ -13,7 +15,7 @@ function dTdz_s = adiabatic_gradient(T_K, rho, FracFo)
     % FracFo
     %     volume fraction forsterite
     %
-    % Output
+    % Returns
     % -------
     % dTdz_s
     %     adiabatic gradient in K/m

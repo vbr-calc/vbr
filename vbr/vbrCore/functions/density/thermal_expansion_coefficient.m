@@ -1,6 +1,8 @@
-function al_int = thermal_expansion_coefficient(T_K, FracFo)
+function al_int = thermal_expansion_coefficient(T_K, FracFo, T_ref_K)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % calculates the thermal expansion coefficent at a given temperature and
+    % al_int = thermal_expansion_coefficient(T_K, FracFo, T_ref_K)
+    %
+    % calculates the thermal expansion coefficient at a given temperature and
     % volume fraction of forsterite following Xu et al., 2004
     %
     %
@@ -10,7 +12,8 @@ function al_int = thermal_expansion_coefficient(T_K, FracFo)
     %     temperature in Kelvin
     % FracFo : scalar or array
     %     volume fraction of Forsterite
-    %
+    % T_ref_K : optional scalar
+    %     the reference temperature to use, default 273 K
     % Output
     % -------
     % al_int : scalar or array
@@ -22,6 +25,9 @@ function al_int = thermal_expansion_coefficient(T_K, FracFo)
     % wadsleyite and ringwoodite to 20 GPa and 1373 K." Physics of the Earth
     % and Planetary Interiors 143 (2004): 321-336.
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    if ~exist('T_ref_K','var')
+        T_ref_K = 273; % reference temperature [K]
+    end
 
     % mean values for coefficients: a*(1) is forsterite, a*(2) is fayalite.
     a0(1) = mean([0.0663 0.1201 0.1172 0.3034 0.2635 0.3407 0.2854]*1e-4);
@@ -35,6 +41,5 @@ function al_int = thermal_expansion_coefficient(T_K, FracFo)
     a_3 = (FracFo*a2(1) + (1-FracFo)*a2(2));
 
     % integrate alpha(T) analytically, calculate new density
-    Tref = 273; % reference temperature [K]
-    al_int = a_1.*(T_K-Tref)+a_2./2*(T_K.^2-Tref^2) - a_3.*(1./T_K - 1/Tref);
+    al_int = a_1.*(T_K-T_ref_K)+a_2./2*(T_K.^2-T_ref_K^2) - a_3.*(1./T_K - 1/T_ref_K);
 end

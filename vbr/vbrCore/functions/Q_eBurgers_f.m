@@ -22,24 +22,14 @@ function [VBR] = Q_eBurgers_f(VBR)
   % VBR    the VBR structure, with new VBR.out.anelastic.eburgers_psp structure
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  % angular frequency
-  f_vec = VBR.in.SV.f ;
+  % State Variables
+  [rho_mat, Mu, Ju_mat, f_vec] = Q_get_state_vars(VBR);
   w_vec = 2*pi.*f_vec ;
-
-  % unrelaxed compliance and density
-  if isfield(VBR.in.elastic,'anh_poro')
-   Mu = VBR.out.elastic.anh_poro.Gu ;
-  elseif isfield(VBR.in.elastic,'anharmonic')
-   Mu = VBR.out.elastic.anharmonic.Gu ;
-  end
-  Ju_mat = 1./Mu ;
-  rho_mat = VBR.in.SV.rho ; % density
 
   % allocation (frequency is added as a new dimension at end of array.)
   nfreq = numel(f_vec);
-  J1 = proc_add_freq_indeces(zeros(size(Ju_mat)),nfreq);
-  J2 = J1; Q = J1; Qinv = J1; M = J1; V = J1;
   sz=size(Ju_mat);
+  [J1, J2, ~, M, V] = Q_init_output_vars(sz, nfreq);
 
   % Calculate maxwell time, integration limits and location of peak:
   % tau=MaxwellTimes(VBR,Mu);

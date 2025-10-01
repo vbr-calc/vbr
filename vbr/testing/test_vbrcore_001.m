@@ -20,7 +20,9 @@ function TestResult = test_vbrcore_001()
 
   VBR.in.elastic.methods_list={'anharmonic';'anh_poro';'SLB2005'};
   VBR.in.viscous.methods_list={'HK2003'; 'HZK2011'; 'BKHK2023'};
-  VBR.in.anelastic.methods_list={'eburgers_psp';'andrade_psp';'xfit_mxw';'xfit_premelt'};
+
+  meths = Params_Anelastic('eburgers_psp');
+  VBR.in.anelastic.methods_list=meths.possible_methods;
 
   % load anharmonic parameters, adjust Gu_0_ol
   VBR.in.elastic.anharmonic=Params_Elastic('anharmonic'); % unrelaxed elasticity
