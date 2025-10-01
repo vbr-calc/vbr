@@ -1,30 +1,29 @@
 function d_um = PiezometerWH2006(sig_MPa)
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         %
-        % d = PiezometerWH2006(sig)
+        % d_um = PiezometerWH2006(sig_MPa)
         %
         % returns an array of the same size as sig with grainsizes in um calculcated
         % using the rectysallized grain-size piezometer for olivine of Warren and
         % Hirth (2006). If no stress is specified the function simply produces a
         % plot of the piezometer, the data it was regressed to, and its uncertainty.
-        %  
-        % Citation: 
-        %   Warren, J. M., & Hirth, G. (2006). Grain size sensitive deformation 
-        %   mechanisms in naturally deformed peridotites. Earth and Planetary 
+        %
+        % Citation:
+        %   Warren, J. M., & Hirth, G. (2006). Grain size sensitive deformation
+        %   mechanisms in naturally deformed peridotites. Earth and Planetary
         %   Science Letters, 248(1-2), 438-450.
         %   https://doi.org/10.1016/j.epsl.2006.06.006
         %
         % Parameters:
         % ----------
         % sig_MPa: array | scalar
-        %     differential stress in MPa. Can be an array of any shape or a scalar. If not provided, 
-        %    this function will make a plot.
+        %    differential stress in MPa. Can be an array of any shape or a scalar.
+        %    If not provided, this function will make a plot.
         %
         % Output:
         % ------
         % d_um: array | scalar
-        %     grain size in um, same shape as the input sig_MPa 
-        % 
+        %     grain size in um, same shape as the input sig_MPa
         %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -47,9 +46,9 @@ function d_um = PiezometerWH2006(sig_MPa)
             sfit(:,1)=((log10(gs')-b)./m);				% Log10(Stress) in MPa
             sfit(:,2)=((log10(gs')-(b-sb))./(m+sm));	% Error in stress
             sfit(:,3)=((log10(gs')-(b+sb))./(m-sm));	% Error in stress
-            
+
             dfit = 10.^(log10(sigma_range).*m+b); %mu, grain size
-            
+
             % plot
             figure; hold on
             scatter(dk,sk,'red','filled','o')
