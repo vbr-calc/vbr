@@ -33,9 +33,9 @@ function TestResult = test_vbr_PiezometerWH2006()
 
     dg_um = PiezometerWH2006(sig_MPa); %Calculate grain size in um using piezometer for sig_MPa
     
-    [~, ind_max_sig_MPa] = max(sig_MPa,[],'all'); % find index of largest stress
-    [~, ind_min_dg_um] = min(dg_um,[],'all'); % find index of smallest grain size
-
+    [~, ind_max_sig_MPa] = max(sig_MPa(:)); % find index of largest stress
+    [~, ind_min_dg_um] = min(dg_um(:)); % find index of smallest grain size
+    
     if size(dg_um) ~= size(sig_MPa)
         TestResult.passed = false;
         msg = ['Returned dg_um array does not match the dimensions of input sig_MPa array.', ...
