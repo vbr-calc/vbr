@@ -6,16 +6,11 @@ function VBR = CB_019_backstress_maxwell
         % of the backstress model using the analytical_andrade model
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
-        VBR.in.anelastic.methods_list = {'andrade_analytical'};
-        VBR.in.anelastic.andrade_analytical.Beta = 0; % turn off anelastic part of Andrade model and turns it into a Maxwell model
-        VBR.in.anelastic.andrade_analytical.viscosity_method_mechanism = 'gbnp'; % select viscous method, in this case the backstress model
-        VBR.in.viscous.methods_list = {'BKHK2023'}; % select viscosity steady-state viscosity of backstress model ('BKHK2023')
-        VBR.in.anelastic.andrade_analytical.viscosity_method_mechanism = 'gbnp'; % select viscous method, in this case the backstress model including both gb and pipe recovery
-        VBR.in.elastic.methods_list = {'anharmonic'};
-        VBR.in.elastic.anharmonic = Params_Elastic('anharmonic'); 
-        VBR.in.elastic.anharmonic.temperature_scaling = 'isaak';
-        VBR.in.elastic.anharmonic.pressure_scaling = 'abramson';
-
+        VBR.in.elastic.methods_list={'anharmonic';};
+        VBR.in.viscous.methods_list={'BKHK2023'};
+        VBR.in.anelastic.methods_list={'maxwell_analytical'};
+        VBR.in.anelastic.maxwell_analytical.viscosity_method_mechanism = 'gbnp'; % select viscous method, in this case the backstress model with dislocation recovery by grain-boundary and pipe diffusion
+        
         % set state variables
         VBR.in.SV.T_K = [1300, 1400, 1500] + 273;
         sz = size(VBR.in.SV.T_K);
@@ -32,10 +27,10 @@ function VBR = CB_019_backstress_maxwell
         
         % plotting
         if ~vbr_tests_are_running()
-            loglog(VBR.in.SV.f,squeeze(VBR.out.anelastic.andrade_analytical.Qinv))
+            loglog(VBR.in.SV.f,squeeze(VBR.out.anelastic.maxwell_analytical.Qinv),'LineWidth',2)
             title({'Maxwell model using steady-state viscosity of', 'backstress model at three different temperatures (K)'})
             xlabel('Frequency (Hz)')
-            ylabel('Q^{-1}')
+            ylabel('Attenuation, {\it Q}^{-1}')
             legend([num2str(VBR.in.SV.T_K(1,:,1)')])
             box on
         end
