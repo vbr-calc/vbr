@@ -50,7 +50,7 @@ function rho_TP = density_from_vbrc(P_Pa, T_K, varargin)
     %%%%%%%%%%%%%%%%%%%
 
     input_args = varargin_keyvals_to_structure(varargin);
-
+    
     % set easy defaults
     defaults.reference_scaling = 'default';
     defaults.params_elastic = Params_Elastic('anharmonic');
@@ -59,6 +59,7 @@ function rho_TP = density_from_vbrc(P_Pa, T_K, varargin)
     % less easy defaults
     if strcmp(input_args.reference_scaling, 'default')
         param_struct = input_args.params_elastic;
+        param_struct.Ku_0 = param_struct.Ku_0_ol;
     else
         param_struct = input_args.params_elastic.(input_args.reference_scaling);
     end
