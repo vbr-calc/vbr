@@ -16,7 +16,7 @@ function params = Params_Viscous(method,GlobalParams)
   % ------
   % params    the parameter structure for the viscous method
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  params.possible_methods={'HK2003';'HZK2011';'xfit_premelt';};
+  params.possible_methods={'HK2003';'HZK2011';'xfit_premelt';'BKHK2023'};
 
   % pull in the small melt effect parameter values
   if ~exist('GlobalParams')
@@ -69,6 +69,22 @@ function params = Params_Viscous(method,GlobalParams)
     % Priestly & McKenzie EPSL 2013 and dg_um = dg_um_r. This assumes that
     % the grain size is at the mean grain size of the upper mantle, which
     % Priestly & McKenzie calculate as 4 mm.
+  elseif strcmp(method,'BKHK2023')
+    % Breithaupt et al., 2023
+    params.func_name='sr_visc_calc_BKHK2023'; % the name of the matlab function
+    params.citations={'Breithaupt et al., 2023, PNAS, https://doi.org/10.1073/pnas.2203448120'};
+    params.possible_mechs={'gbnp'}; % viscosity of full, nonlinear backstress model, including dislocation recovery by grain boundary diffusion and pipe diffusion
+    params.description='Steady state flow law for backstress model, all parameters from Breithaupt et al., 2023';
+    params.M = 135e9; %Pa, Hardening modulus
+    params.alpha = 2.46; %-, Taylor constant
+    params.b = 5e-10; %m, Burgers vector
+    params.beta = 2; %geometric constant
+    params.s_rho_max = 1.8e9; %Pa, maximum Taylor stress
+    params.DeltaF = 450*1e3; %J/mol, Activation energy
+    params.Sigma = 3.1*1e9; %Pa, Peierls barrier height
+    params.A_gb = 10^3.54; %Pa^-4s^-1, Pre-exponent grain-boundary diffusion recovery
+    params.A_p = 10^-0.95; %Pa^-5s^-1, Pre-exponent pipe diffusion recovery
+    params.A = 10^6.94; %m^2s^-1, Pre-exponent low-temperature plasticity
   end
 
 

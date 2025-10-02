@@ -19,7 +19,7 @@ function TestResult = test_vbrcore_001()
   TestResult.fail_message = '';
 
   VBR.in.elastic.methods_list={'anharmonic';'anh_poro';'SLB2005'};
-  VBR.in.viscous.methods_list={'HK2003','HZK2011'};
+  VBR.in.viscous.methods_list={'HK2003'; 'HZK2011'; 'BKHK2023'};
 
   meths = Params_Anelastic('eburgers_psp');
   VBR.in.anelastic.methods_list=meths.possible_methods;
