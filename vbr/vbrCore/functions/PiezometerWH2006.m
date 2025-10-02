@@ -61,7 +61,7 @@ function dg_um = PiezometerWH2006(sig_MPa)
             ylabel('Stress (MPa)')
             set(gca,'XScale','log')
             set(gca,'YScale','log')
-            legend('Karato et al. (1980)', 'Van der Wal et al. (1993)', 'Combined regression',
+            legend('Karato et al. (1980)', 'Van der Wal et al. (1993)', 'Combined regression', ...
                    'error: upper bound', 'error: lower bound', 'Piezometer prediction')
             box on
         end
