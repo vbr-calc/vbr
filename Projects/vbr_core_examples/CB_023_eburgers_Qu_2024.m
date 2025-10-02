@@ -14,7 +14,6 @@ function VBR = CB_023_eburgers_Qu_2024()
   % all params in ../vbr/vbrCore/params/ will be loaded in call to VBR spine,
   % but you can load them here and adjust any one of them (rather than changing
   % those parameter files).
-
   VBR.in.anelastic.eburgers_psp=Params_Anelastic('eburgers_psp');
 
   % use the single sample background only fit:
@@ -53,15 +52,11 @@ function VBR = CB_023_eburgers_Qu_2024()
       lab = [num2str(T_i-273), ' C'];
       subplot(1,2,1)
       hold on
-
       plot(logper,M_out,'color',[R,0,B],'LineWidth',2, 'displayname', lab);
-
 
       subplot(1,2,2)
       hold on
       plot(logper,log10(Q_out),'color',[R,0,B],'LineWidth',2,  'displayname', lab);
-
-
     end
     subplot(1,2,1)
     title("Qu et al 2024", 'Interpreter', 'none')
@@ -72,7 +67,6 @@ function VBR = CB_023_eburgers_Qu_2024()
     ylabel('Q^-1');
     ylim([-2.5,0.5])
     legend('location', 'northwest', 'NumColumns', 2)
-
 
     for ip = 1:2
       subplot(1,2,ip); box on;
