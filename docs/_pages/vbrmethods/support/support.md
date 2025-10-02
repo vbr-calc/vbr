@@ -38,6 +38,7 @@ functions related to other thermodynamic properties
 * [SpecificHeat](#specificheat)
 * [sr_water_fugacity](#sr_water_fugacity)
 * [Qinv_from_J1_J2](#qinv_from_j1_j2)
+* [PiezometerWH2006](#piezometerwh2006)
 
 ## VBRc support
 useful functions for the VBRc user
@@ -916,6 +917,41 @@ path: `vbr/vbr/vbrCore/functions/Qinv_from_J1_J2.m`
     % Qinv
     %     attenuation, same shape as J1 and J2
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#other-thermodynamic-properties-docstrings)
+[top of page!](#overview)
+
+### PiezometerWH2006
+path: `vbr/vbr/vbrCore/functions/PiezometerWH2006.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % d_um = PiezometerWH2006(sig_MPa)
+    %
+    % returns an array of the same size as sig with grainsizes in um calculcated
+    % using the rectysallized grain-size piezometer for olivine of Warren and
+    % Hirth (2006). If no stress is specified the function simply produces a
+    % plot of the piezometer, the data it was regressed to, and its uncertainty.
+    %
+    % Citation:
+    %   Warren, J. M., & Hirth, G. (2006). Grain size sensitive deformation
+    %   mechanisms in naturally deformed peridotites. Earth and Planetary
+    %   Science Letters, 248(1-2), 438-450.
+    %   https://doi.org/10.1016/j.epsl.2006.06.006
+    %
+    % Parameters:
+    % ----------
+    % sig_MPa: array | scalar
+    %    differential stress in MPa. Can be an array of any shape or a scalar.
+    %    If not provided, this function will make a plot.
+    %
+    % Output:
+    % ------
+    % d_um: array | scalar
+    %     grain size in um, same shape as the input sig_MPa
+    %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ```
 [top of category!](#other-thermodynamic-properties-docstrings)
 [top of page!](#overview)
