@@ -57,8 +57,8 @@ function dg_um = PiezometerWH2006(sig_MPa)
             plot(gs',10.^sfit(:,2),'k:','linewidth',0.5);	% Plot error
             plot(gs',10.^sfit(:,3),'k:','linewidth',0.5);	% Plot error
             plot(dfit,sigma_range,'--','color', [0.2, .8, 0.2], 'linewidth',1.5)
-            xlabel('Grainsize (\mum)')
-            ylabel('Stress (MPa)')
+            xlabel('Grain size (µm)')
+            ylabel('Differential stress (MPa)')
             set(gca,'XScale','log')
             set(gca,'YScale','log')
             legend('Karato et al. (1980)', 'Van der Wal et al. (1993)', 'Combined regression', ...
