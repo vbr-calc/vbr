@@ -1,6 +1,6 @@
-function FitData_Qu2024_eBurgers()
+function FitData_Qu2024_eburgers()
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % FitData_Qu2024_eBurgers()    
+    % FitData_Qu2024_eburgers()    
     %
     % Parameters
     % ----------
@@ -17,6 +17,7 @@ function FitData_Qu2024_eBurgers()
         vbr_path='../../../';
     end
     addpath(vbr_path)
+    addpath('./functions')
     vbr_init
   
     % set elastic, anelastic methods, load parameters
@@ -25,8 +26,11 @@ function FitData_Qu2024_eBurgers()
     VBR0.in.elastic.anharmonic=Params_Elastic('anharmonic'); %
     VBR0.in.anelastic.eburgers_psp=Params_Anelastic('eburgers_psp');
     % temperature range
-    VBR0.in.SV.T_K=700:50:1200;
+    VBR0.in.SV.T_K=700:50:1350;
     VBR0.in.SV.T_K=VBR0.in.SV.T_K+273;
+    T_min_K = min(VBR0.in.SV.T_K);
+    T_max_K = max(VBR0.in.SV.T_K);
+    n_T = numel(VBR0.in.SV.T_K);
     sz=size(VBR0.in.SV.T_K); % temperature [K]
     VBR0.in.SV.P_GPa = 0.2 * ones(sz); % pressure [GPa]
     VBR0.in.SV.rho = 3300 * ones(sz); % density [kg m^-3]
@@ -34,27 +38,24 @@ function FitData_Qu2024_eBurgers()
     VBR0.in.SV.phi = 0.0 * ones(sz); % melt fraction
 
     % frequencies to calculate at
-    VBR0.in.SV.f = 1./logspace(-2,4,100);
+    VBR0.in.SV.f = 1./logspace(-.1,3.1,50);
 
     sample_ids = {'A1802';'A1906'; 'A1928'};
     
     VBRresults = struct();
-
     for isample = 1:numel(sample_ids)
+        
         sample_name = sample_ids{isample};
-
+        disp(["Forward VBRc calculation with sample fit ", sample_name])
         VBR = VBR0; 
         VBR.in.anelastic.eburgers_psp.eBurgerFit=sample_name; % 'bg_only' or 'bg_peak' or 's6585_bg_only'
-  
-        % JF10 have Gu_0=62.5 GPa, but that's at 900 Kelvin and 0.2 GPa,
-        % so set Gu_0_ol s.t. it ends up at 62.5 at those conditions
-        dGdT=VBR.in.elastic.anharmonic.isaak.dG_dT;
-        dGdP=VBR.in.elastic.anharmonic.cammarano.dG_dP;
-        Tref=VBR.in.elastic.anharmonic.T_K_ref;
-        Pref=VBR.in.elastic.anharmonic.P_Pa_ref/1e9;
-        GUJF10=VBR.in.anelastic.eburgers_psp.s6585_bg_only.G_UR;
-        VBR.in.elastic.anharmonic.Gu_0_ol = GUJF10 - (900+273-Tref) * dGdT/1e9 - (0.2-Pref)*dGdP; % olivine reference shear modulus [GPa]
-  
+                          
+        GU=VBR.in.anelastic.eburgers_psp.(sample_name).G_UR;
+        TR=VBR.in.anelastic.eburgers_psp.(sample_name).TR;
+        PR=VBR.in.anelastic.eburgers_psp.(sample_name).PR*1e9;
+        VBR.in.elastic.anharmonic.Gu_0_ol = GU; 
+        VBR.in.elastic.anharmonic.T_K_ref = TR;
+        VBR.in.elastic.anharmonic.P_Pa_ref = PR;
         % set the grain size to the average size of the sample
         dg_um = VBR.in.anelastic.eburgers_psp.(sample_name).dR; 
         VBR.in.SV.dg_um=dg_um*ones(sz);    
@@ -66,92 +67,78 @@ function FitData_Qu2024_eBurgers()
     end 
 
     % load data if it exists
-    data = tryDataLoad();
+    data = load_Qu2024_data();
   
     %% ====================================================
     %% Display some things ================================
     %% ====================================================
     
     figure;
-
     n_samples = numel(sample_ids);
     for isample = 1:n_samples
         sample_name = sample_ids{isample};
         VBR = VBRresults.(sample_name);
-        logper=log10(1./VBR.in.SV.f);
+        logper=1./VBR.in.SV.f;
 
         for iTemp = 1:numel(VBR.in.SV.T_K)
             M=squeeze(VBR.out.anelastic.eburgers_psp.M(1,iTemp,:)/1e9);      
-            Qinv=squeeze(VBR.out.anelastic.eburgers_psp.Qinv(1,iTemp,:));   
-
-      
-            R=(iTemp-1) / (numel(VBR.in.SV.T_K)-1);
-            B=1 - (iTemp-1) / (numel(VBR.in.SV.T_K)-1);
+            Qinv=squeeze(VBR.out.anelastic.eburgers_psp.Qinv(1,iTemp,:));
+            RGB = normalize_color(VBR.in.SV.T_K(iTemp), T_min_K, T_max_K, iTemp);            
             
             subplot(n_samples,2,isample*2-1)
             hold on
-            plot(logper,M,'color',[R,0,B],'LineWidth',2);
+            semilogx(logper,M,'color',RGB,'LineWidth',2);
             
             subplot(n_samples,2,isample*2)
             hold on
-            semilogy(logper,Qinv,'color',[R,0,B],'LineWidth',2);
-            
+            loglog(logper,Qinv,'color',RGB,'LineWidth',2);
         end 
 
         subplot(n_samples,2,isample*2-1)
         ylabel(['M [GPa] : ', sample_name])
         box on
         subplot(n_samples,2,isample*2)
-        ylabel('log10 Q^{-1}')
+        ylabel('log10 Q^{-1}')        
         box on
     end 
-    
-  
-  
-    %   if isfield(data,'Qinv')
-    %     theT=VBR.in.SV.T_K(iTemp);
-    %     disp(['plotting data for T=',num2str(theT-273)])
-    %     expQinvPer=log10(data.Qinv.period_s(data.Qinv.T_K==theT));
-    %     expQinv=log10(data.Qinv.Qinv(data.Qinv.T_K==theT));
-    %     expGPer=log10(data.G.period_s(data.G.T_K==theT));
-    %     expG=data.G.G(data.G.T_K==theT);
-  
-    %     subplot(2,2,1)
-    %     hold on
-    %     plot(expGPer,expG,'.','color',[R,0,B],'markersize',10);
-    %     subplot(2,2,3)
-    %     hold on
-    %     plot(expGPer,expG,'.','color',[R,0,B],'markersize',10);
-  
-    %     subplot(2,2,2)
-    %     hold on
-    %     plot(expQinvPer,expQinv,'.','color',[R,0,B],'markersize',10);
-    %     subplot(2,2,4)
-    %     hold on
-    %     plot(expQinvPer,expQinv,'.','color',[R,0,B],'markersize',10);
-    %   end
-    % end
-  
-    saveas(gcf,'./figures/Qu2024_eBurgers.eps','epsc')
-  end
-  
-  function data = tryDataLoad()
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % loads data if available
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    
-    dataDir = getenv('vbrPublicData');
 
-    fi = [dataDir, filesep, 'Qu_etal_2024', filesep, 'Qu_2024_data.mat'];
-    if exist(fi,'file')
-      disp(['found Qu et al 2024 file at:', fi])
-      data = load(fi);
-    else
-      msg = ['Qu et al 2024 data not found. ', ...
-             'Clone https://github.com/vbr-calc/vbrPublicData (outside the vbr repo dir) ',...
-             ' and set the vbrPublicData environment variable to point to /the/path/to/vbrPublicData'];
-      disp(msg)
-      data = 0;
-    end
+    if numfields(data) > 0
+        for isample = 1:n_samples
+            sdata = data.(sample_name);
+            for iTemp = 1:numel(sdata.T_K)
+                T_K = sdata.T_K(iTemp);
+                Qinv = 10.^sdata.logQs_inv(iTemp);                
+                G_GPa = sdata.G_GPa(iTemp);
+                period = 10.^sdata.log_period(iTemp);                
+                dT = abs(T_K - VBR0.in.SV.T_K);
+                iTemp_other = find(dT == min(dT));                
+                RGB = normalize_color(T_K, T_min_K, T_max_K, iTemp_other);            
+
+                subplot(n_samples,2,isample*2-1)
+                hold on
+                semilogx(period, G_GPa,'color',RGB, 'linestyle', 'none', 'marker', '.', 'markersize', 12);
+                
+                subplot(n_samples,2,isample*2)
+                hold on
+                semilogy(period,Qinv,'color',RGB, 'linestyle', 'none', 'marker', '.', 'markersize', 12);
+                ylim([-2.3, .3])
+
+            end 
+        end 
+    end 
+    
+    saveas(gcf,'./figures/Qu2024_eBurgers.png')
   end
   
+
+
+function RGB = normalize_color(T_K, T_min_K, T_max_K, i_T)
+    % R = (T_K - T_min_K) / (T_max_K - T_min_K);
+    % G = 0.;
+    % B = 1 - R; 
+    % RGB = [R, G, B];
+    % RGB(RGB<0) = 0;
+    % RGB(RGB>1) = 1;
+
+    RGB = vbr_categorical_color(i_T);
+end 
