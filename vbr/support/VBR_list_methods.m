@@ -1,15 +1,19 @@
 function VBR_list_methods(single_prop)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  % VBR_list_methods
+  % VBR_list_methods() or VBR_list_methods(single_prop)
   %
   % prints available methods by property to screen
   %
-  % Parameters:
+  % Parameters
   % -----------
-  % single_prop: optional string, must be in 'anelastic', 'elastic' or 'viscous'
+  % single_prop: optional string
+  %     if included, must be in 'anelastic', 'elastic' or 'viscous'
+  %
+  % Examples
+  % --------
   %
   % VBR_list_methods() will print all methods
-  % VBR_list_methods('viscous') will print only viscous methods 
+  % VBR_list_methods('viscous') will print only viscous methods
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   param_types={'anelastic';'elastic';'viscous'};

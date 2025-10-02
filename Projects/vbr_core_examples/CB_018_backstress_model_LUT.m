@@ -1,14 +1,10 @@
-function [T_1d, dg_1d, sig_dc_1d, VBR] = CB_018_backstress_model_LUT()
+function VBR = CB_018_backstress_model_LUT()
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % [T_1d, dg_1d, sig_dc_1d, VBR] = CB_018_backstress_model_LUT();
+    % VBR = CB_018_backstress_model_LUT();
     %
     % a more thorough exploration of the parameter space for the 
     % linearized backstress model of Hein et al., 2025
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-    path_to_top_level_vbr='../../';
-    addpath(path_to_top_level_vbr)
-    vbr_init
 
     VBR.in.anelastic.methods_list = {'backstress_linear'};
     VBR.in.elastic.methods_list = {'anharmonic'};
@@ -26,7 +22,7 @@ function [T_1d, dg_1d, sig_dc_1d, VBR] = CB_018_backstress_model_LUT()
 
     VBR.in.SV.T_K = T_3d;
     VBR.in.SV.dg_um = dg_3d;
-    VBR.in.SV.sig_dc_MPa = sig_dc_3d;
+    VBR.in.SV.sig_MPa = sig_dc_3d;
 
     % following are needed for anharmonic calculation
     VBR.in.SV.P_GPa = full_nd(5., sz);
@@ -37,12 +33,13 @@ function [T_1d, dg_1d, sig_dc_1d, VBR] = CB_018_backstress_model_LUT()
     VBR = VBR_spine(VBR); 
 
     % plotting
-    i_sigs = [1, 8, numel(sig_dc_1d), ];
-    i_freq = 1; 
-    contour_plots(VBR, i_sigs, i_freq, T_1d, dg_1d, sig_dc_1d)
+    if ~vbr_tests_are_running()
+        i_sigs = [1, 8, numel(sig_dc_1d), ];
+        i_freq = 1; 
+        contour_plots(VBR, i_sigs, i_freq, T_1d, dg_1d, sig_dc_1d)
 
-    line_plots(VBR, T_1d, dg_1d, sig_dc_1d);
-
+        line_plots(VBR, T_1d, dg_1d, sig_dc_1d);
+    end
 end 
 
 function line_plots(VBR, T_1d, dg_1d, sig_dc_1d)

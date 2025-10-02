@@ -58,7 +58,7 @@ function VBR= sr_visc_calc_HZK2011(VBR)
   VBR.out.viscous.HZK2011.eta_total = sig*1e6./sr_tot ; % total viscosity
   units.sr = "1/s";
   units.eta = "Pa*s";
-  units.sr_tot = "Pa*s";
+  units.sr_tot = "1/s";
   units.eta_tot = "Pa*s";
   VBR.out.viscous.HZK2011.units = units;
 end

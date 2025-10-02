@@ -37,25 +37,14 @@ function [VBR] = Q_eFastBurgers(VBR)
 % same size as incoming thermodynamic state variables.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  %% ===========================
-  %% read in thermodynamic state
-  %% ===========================
-  f_vec = VBR.in.SV.f ;
-  if isfield(VBR.in.elastic,'anh_poro')
-    Mu = VBR.out.elastic.anh_poro.Gu ;
-  elseif isfield(VBR.in.elastic,'anharmonic')
-    Mu = VBR.out.elastic.anharmonic.Gu ;
-  end
-  rho_mat = VBR.in.SV.rho ;
+  % State Variables
+  [rho_mat, Mu, Ju_mat, f_vec] = Q_get_state_vars(VBR);
   w_vec = 2*pi.*f_vec ; % period
-  Ju_mat = 1./Mu ; % unrelaxed compliance
 
   %  allocate matrices
   nfreq = numel(f_vec);
   sz=size(Ju_mat);
-  Jz=zeros(sz);
-  J1 = proc_add_freq_indeces(Jz,nfreq);
-  J2 = J1; Q = J1; Qinv = J1; M = J1; V = J1;
+  [J1, J2, ~, M, V] = Q_init_output_vars(sz, nfreq);
 
   % read in reference values
   Burger_params=VBR.in.anelastic.eburgers_psp;
@@ -141,8 +130,6 @@ function [VBR] = Q_eFastBurgers(VBR)
       J1(i_glob)=Ju * J_int_1_0;
       J2(i_glob)=Ju * J_int_2_0;
 
-      Q(i_glob) = J1(i_glob)./J2(i_glob) ;
-      Qinv(i_glob) = 1./Q(i_glob) ;
       M(i_glob) = (J1(i_glob).^2 + J2(i_glob).^2).^(-0.5) ;
       V(i_glob) = sqrt(M(i_glob)./rho) ;
     end
@@ -152,8 +139,8 @@ function [VBR] = Q_eFastBurgers(VBR)
   onm='eburgers_psp';
   VBR.out.anelastic.(onm).J1 = J1;
   VBR.out.anelastic.(onm).J2 = J2;
-  VBR.out.anelastic.(onm).Q = Q;
-  VBR.out.anelastic.(onm).Qinv = Qinv;
+  VBR.out.anelastic.(onm).Qinv = Qinv_from_J1_J2(J1, J2);
+  VBR.out.anelastic.(onm).Q = 1./VBR.out.anelastic.(onm).Qinv;
   VBR.out.anelastic.(onm).M=M;
   VBR.out.anelastic.(onm).V=V;
 

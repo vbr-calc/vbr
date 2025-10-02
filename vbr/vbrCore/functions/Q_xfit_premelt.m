@@ -7,6 +7,8 @@ function [VBR] = Q_xfit_premelt(VBR)
   % references:
   % [1] Yamauchi and Takei, JGR 2016, https://doi.org/10.1002/2016JB013316
   %     particularly Eqs. 13,14,15
+  % [2] Yamauchi and Takei, JGR 2024, https://doi.org/10.1029/2023JB027738
+  %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   if isfield(VBR.in.SV,'Tsolidus_K')
@@ -21,7 +23,7 @@ function [VBR] = Q_xfit_premelt(VBR)
   if has_solidus
     % state variables
     if params.include_direct_melt_effect == 1
-        % in YT2024, all poroealstic effects are applied internally to J1, so
+        % in YT2024, all poroelastic effects are applied internally to J1, so
         % always use anharmonic as unrelaxed
         Gu_in = VBR.out.elastic.anharmonic.Gu;
     else
@@ -93,14 +95,11 @@ function [VBR] = Q_xfit_premelt(VBR)
     % store and calculate other fields
     VBRout.J1 = J1;
     VBRout.J2 = J2;
-
-    % J2_J1_frac=(1+sqrt(1+(J2./J1).^2))/2;
-    J2_J1_frac=1;
     rho_f = proc_add_freq_indeces(rho,n_freq);
-    VBRout.V=sqrt(1./(J1.*rho_f)).*(J2_J1_frac.^(-1/2));
+    VBRout.V=sqrt(1./(J1.*rho_f));
     VBRout.M1 = 1./J1;
     VBRout.M2 = 1./J2;
-    VBRout.Qinv = J2./J1.*(J2_J1_frac.^-1);
+    VBRout.Qinv = Qinv_from_J1_J2(J1, J2);
     VBRout.Q = 1./VBRout.Qinv;
     VBRout.M=1./sqrt(J1.^2+J2.^2);
     VBRout.f_norm = f_norm_glob;

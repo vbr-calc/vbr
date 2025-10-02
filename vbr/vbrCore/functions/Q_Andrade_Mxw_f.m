@@ -92,9 +92,7 @@ function [VBR]=Q_Andrade_Mxw_f(VBR)
     % pure andrade model
     J1(ig1:ig2) = Ju_in + BetaA.*gamma(1+alf).*w^(-alf)*cos(alf*pi/2)  ;
     J2(ig1:ig2) =  1./(w.*eta_ss) + BetaA.*gamma(1+alf)*w^(-alf)*sin(alf*pi/2) ; %why a (-) in there before?
-
-    Qa(ig1:ig2) = J1(ig1:ig2)./J2(ig1:ig2) ;
-    Qinv(ig1:ig2) = 1./Qa(ig1:ig2);
+    Qinv(ig1:ig2) = Qinv_from_J1_J2(J1(ig1:ig2), J2(ig1:ig2));
     Ma(ig1:ig2) = (J1(ig1:ig2).^2 + J2(ig1:ig2).^2).^(-1/2) ;
 
     % % gbs relaxation bump
@@ -118,8 +116,8 @@ function [VBR]=Q_Andrade_Mxw_f(VBR)
   % Store output in VBR structure
   VBR.out.anelastic.andrade_mxw.J1 = J1;
   VBR.out.anelastic.andrade_mxw.J2 = J2;
-  VBR.out.anelastic.andrade_mxw.Q = Qa;
   VBR.out.anelastic.andrade_mxw.Qinv = Qinv;
+  VBR.out.anelastic.andrade_mxw.Q = 1./Qinv;
   VBR.out.anelastic.andrade_mxw.M=Ma;
   VBR.out.anelastic.andrade_mxw.V=Va;
 

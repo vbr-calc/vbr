@@ -18,14 +18,11 @@ function [VBR] = Q_Andrade_PseudoP_f(VBR)
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
   % State Variables
-  if isfield(VBR.in.elastic,'anh_poro')
-   Mu_in = VBR.out.elastic.anh_poro.Gu ;
-  elseif isfield(VBR.in.elastic,'anharmonic')
-   Mu_in = VBR.out.elastic.anharmonic.Gu ;
-  end
-  Ju_in = 1./Mu_in ; % compliance
-  rho_in = VBR.in.SV.rho ;
-  f_vec = VBR.in.SV.f;  % frequency [this, however, is not a mat -- is a 1D vector]
+  [rho_in, Mu_in, Ju_in, f_vec] = Q_get_state_vars(VBR);
+  n_th = numel(Ju_in); % total elements
+  n_freq = numel(f_vec);
+  sz = size(Mu_in);
+
   w_vec = 2*pi.*f_vec ; % angular frequency
   Tau0_vec = 1./f_vec ; % period
 
@@ -43,18 +40,12 @@ function [VBR] = Q_Andrade_PseudoP_f(VBR)
   % pseudo-period master variable independent of period/freqency
   Xtilde = calculateXtilde(VBR);
 
-  % allocation of Qstruct and V
-  n_freq = numel(f_vec);
-  sz = size(Mu_in);
-
   % frequency dependent vars
-  J1 = proc_add_freq_indeces(zeros(sz),n_freq);
-  J2 = J1; Qa = J1; Qinv = J1; Ma = J1; Va = J1;
-  J1_gbs = J1; J2_gbs = J1; Q_gbs = J1; M_gbs = J1;
-  J1_comp = J1; J2_comp = J1; Q_comp = J1; M_comp = J1; Va_comp = J1;
+  [J1, J2, ~, Ma, Va] = Q_init_output_vars(sz, n_freq);
+  % J1_gbs = J1; J2_gbs = J1; Q_gbs = J1; M_gbs = J1;
+  % J1_comp = J1; J2_comp = J1; Q_comp = J1; M_comp = J1; Va_comp = J1;
 
   % vectorized rho
-  n_th = numel(Ju_in); % total elements
   rho_vec = reshape(rho_in,size(Ma(1:n_th)));
 
   %% =============================
@@ -78,8 +69,6 @@ function [VBR] = Q_Andrade_PseudoP_f(VBR)
     % pure andrade model
     J1(ig1:ig2) = Ju_in.*(1 + param1 * (wX_mat.^-n)) ;
     J2(ig1:ig2) = Ju_in.*(param2 * (wX_mat.^-n) + 1./(Tau_MR.*wX_mat));
-    Qa(ig1:ig2) = J1(ig1:ig2)./J2(ig1:ig2) ;
-    Qinv(ig1:ig2) = 1./Qa(ig1:ig2);
     Ma(ig1:ig2) = (J1(ig1:ig2).^2 + J2(ig1:ig2).^2).^(-1/2) ;
 
     % gbs relaxation bump
@@ -102,8 +91,8 @@ function [VBR] = Q_Andrade_PseudoP_f(VBR)
   % Store output in VBR structure
   VBR.out.anelastic.(andrade_nm).J1 = J1;
   VBR.out.anelastic.(andrade_nm).J2 = J2;
-  VBR.out.anelastic.(andrade_nm).Q = Qa;
-  VBR.out.anelastic.(andrade_nm).Qinv = Qinv;
+  VBR.out.anelastic.(andrade_nm).Qinv = Qinv_from_J1_J2(J1, J2);
+  VBR.out.anelastic.(andrade_nm).Q = 1./VBR.out.anelastic.(andrade_nm).Qinv;
   VBR.out.anelastic.(andrade_nm).M=Ma;
   VBR.out.anelastic.(andrade_nm).V=Va;
   % VBR.out.anelastic.(andrade_nm).J1_gbs = J1_gbs;

@@ -9,21 +9,17 @@ title: ""
 !['CB_004_xfit_premelt'](/vbr/assets/images/CBs/CB_004_xfit_premelt.png){:class="img-responsive"}
 ## contents
 ```matlab
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% CB_004_xfit_premelt.m
-%
-%  Calls VBR using xfit_premelt method from:
-%    Hatsuki Yamauchi and Yasuko Takei, JGR 2016, "Polycrystal anelasticity at
-%    near-solidus temperatures,"
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function VBR = CB_004_xfit_premelt()
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % CB_004_xfit_premelt.m
+  %
+  %  Calls VBR using xfit_premelt method from:
+  %    Hatsuki Yamauchi and Yasuko Takei, JGR 2016, "Polycrystal anelasticity at
+  %    near-solidus temperatures,"
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% put VBR in the path %%
-  clear; close all
-  path_to_top_level_vbr='../../';
-  addpath(path_to_top_level_vbr)
-  vbr_init
 
-%% write method list %%
+  %% write method list %%
   VBR.in.elastic.methods_list={'anharmonic','anh_poro'};
   VBR.in.anelastic.methods_list={'xfit_premelt'};
 
@@ -32,7 +28,7 @@ title: ""
   VBR.in.elastic.anharmonic.dG_dT = -10.94*1e6; % Pa/C    (equivalent ot Pa/K)
   VBR.in.elastic.anharmonic.dG_dP = 1.987; % GPa / GPa
 
-%% Define the Thermodynamic State %%
+  %% Define the Thermodynamic State %%
 
   VBR.in.SV.T_K=700:50:1200;
   VBR.in.SV.T_K=VBR.in.SV.T_K+273;
@@ -53,23 +49,26 @@ title: ""
   VBR.in.SV.phi = 0.0 * ones(sz); % melt fraction
   VBR.in.SV.f = 1./logspace(-2,4,100); % frequency range
 
-%% CALL THE VBR CALCULATOR %%
+  %% CALL THE VBR CALCULATOR %%
   [VBR] = VBR_spine(VBR) ;
 
-%% plot frequency dependence %%
-  figure;
-  subplot(1,3,1)
-  semilogx(1./VBR.in.SV.f,squeeze(VBR.out.anelastic.xfit_premelt.M(1,:,:)/1e9));
-  ylabel('M [GPa]'); xlabel('period [s]')
-  ylim([0,80])
+  %% plot frequency dependence %%
+  if ~vbr_tests_are_running()
+    figure;
+    subplot(1,3,1)
+    semilogx(1./VBR.in.SV.f,squeeze(VBR.out.anelastic.xfit_premelt.M(1,:,:)/1e9));
+    ylabel('M [GPa]'); xlabel('period [s]')
+    ylim([0,80])
 
-  subplot(1,3,2)
-  loglog(1./VBR.in.SV.f,squeeze(VBR.out.anelastic.xfit_premelt.Qinv(1,:,:)));
-  ylabel('Q^-1'); xlabel('period [s]')
-  ylim([1e-3,.1])
+    subplot(1,3,2)
+    loglog(1./VBR.in.SV.f,squeeze(VBR.out.anelastic.xfit_premelt.Qinv(1,:,:)));
+    ylabel('Q^-1'); xlabel('period [s]')
+    ylim([1e-3,.1])
 
-  subplot(1,3,3)
-  semilogx(1./VBR.in.SV.f,1e-3*squeeze(VBR.out.anelastic.xfit_premelt.V(1,:,:)));
-  ylabel('V_s [km/s]'); xlabel('period [s]')
-  saveas(gcf,'./figures/CB_004_xfit_premelt.png')
+    subplot(1,3,3)
+    semilogx(1./VBR.in.SV.f,1e-3*squeeze(VBR.out.anelastic.xfit_premelt.V(1,:,:)));
+    ylabel('V_s [km/s]'); xlabel('period [s]')
+    saveas(gcf,'./figures/CB_004_xfit_premelt.png')
+  end
+end
 ```
