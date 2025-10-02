@@ -1,6 +1,6 @@
-function VBR = CB_019_backstress_maxwell
+function VBR = CB_022_backstress_maxwell
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        % CB_019_backstress_maxwell
+        % CB_022_backstress_maxwell
         %
         % Demonstration of a Maxwell model with steady-state viscosity
         % of the backstress model using the analytical_andrade model
