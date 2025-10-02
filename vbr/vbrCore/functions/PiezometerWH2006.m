@@ -27,8 +27,10 @@ function dg_um = PiezometerWH2006(sig_MPa)
         %
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+        m=-1.3370; % Slope from lsqfitma regression of x on y and y on x
+        b=4.1755; % Intercept from lsqfitma regression of x on y and y on x
         if exist("sig_MPa",'var')
-            dg_um = 10.^(log10(sig_MPa).*-1.3370+4.1755); %mu, grain size
+            dg_um = 10.^(log10(sig_MPa).*m+b); %mu, grain size
         else
             % Piezometer: Karato et al. (1980) and Van der Wal et al. (1993)
             % The original data in the next lines was used in a linear least squares
@@ -39,28 +41,28 @@ function dg_um = PiezometerWH2006(sig_MPa)
             svdw=[146 174 212 58 119 284 63 85 88 90 127 146 188 120 132 102 150 266]';	% MPa
             gs = logspace(0,4,10); %um, grainsize
             sigma_range = logspace(-1,3,10); %MPa, differential stress
-            m=-1.3370;		% Slope from lsqfitma regression of x on y and y on x
             sm=0.0791;		% Standard deviation of the slope
-            b=4.1755;		% Intercept from lsqfitma regression of x on y and y on x
             sb=0.1133;		% Standard deviation of the y-intercept
             sfit(:,1)=((log10(gs')-b)./m);				% Log10(Stress) in MPa
             sfit(:,2)=((log10(gs')-(b-sb))./(m+sm));	% Error in stress
             sfit(:,3)=((log10(gs')-(b+sb))./(m-sm));	% Error in stress
-
             dfit = 10.^(log10(sigma_range).*m+b); %mu, grain size
-
             % plot
             figure; hold on
-            scatter(dk,sk,'red','filled','o')
-            scatter(dvdw,svdw,'blue','filled','d')
+            plot(dk,sk,'MarkerEdgeColor', 'black', 'marker','o',...
+                'markersize',8, 'linestyle', 'none', 'MarkerFaceColor', 'red')
+            plot(dvdw,svdw,'MarkerEdgeColor', 'black', 'marker','d', ...
+                'markersize',8, 'linestyle', 'none', 'MarkerFaceColor', 'blue')
             plot(gs',10.^sfit(:,1),'k-','linewidth',2);	% Regression line through exp. data
             plot(gs',10.^sfit(:,2),'k:','linewidth',0.5);	% Plot error
             plot(gs',10.^sfit(:,3),'k:','linewidth',0.5);	% Plot error
-            plot(dfit,sigma_range,'k--','linewidth',2)
+            plot(dfit,sigma_range,'--','color', [0.2, .8, 0.2], 'linewidth',1.5)
             xlabel('Grainsize (\mum)')
             ylabel('Stress (MPa)')
             set(gca,'XScale','log')
             set(gca,'YScale','log')
-            legend('Karato et al. (1980)', 'Van der Wal et al. (1993)', 'Combined regression', 'error')
+            legend('Karato et al. (1980)', 'Van der Wal et al. (1993)', 'Combined regression',
+                   'error: upper bound', 'error: lower bound', 'Piezometer prediction')
             box on
         end
+end
