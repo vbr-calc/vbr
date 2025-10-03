@@ -35,14 +35,14 @@ function VBR = CB_021_analytical_methods()
 
      % plot frequency dependence of attenuation
      if ~vbr_tests_are_running()
-          figure('PaperPosition',[0,0,4,4],'PaperPositionMode','manual')
+          figure('PaperPosition',[0,0,6,6],'PaperPositionMode','manual')
           mxw = VBR.out.anelastic.maxwell_analytical.Qinv;
           loglog(VBR.in.SV.f, VBR.out.anelastic.andrade_analytical.Qinv, ...
                'displayname', 'analytical andrade', 'linewidth', 2)
           hold all
           loglog(VBR.in.SV.f, mxw, ...
                'displayname', 'analytical maxwell', 'linewidth', 2)
-          xlabel('f [Hz]')
+          xlabel('f [Hz]')          
           ylabel('Q^{-1}')
           legend()
           saveas(gcf,'./figures/CB_021_analyticalmethods.png')

@@ -33,5 +33,6 @@ function VBR = CB_022_backstress_maxwell
         ylabel('Attenuation, {\it Q}^{-1}')
         legend([num2str(VBR.in.SV.T_K(1,:,1)')])
         box on
-    end
+        saveas(gcf,'./figures/CB_022_backstress_maxwell.png')
+    end        
 end
