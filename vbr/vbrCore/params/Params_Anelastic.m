@@ -167,7 +167,7 @@ function params = Params_Anelastic(method,GlobalParams)
 
   if strcmp(method, 'backstress_linear')
     params.func_name='Q_backstress_linear'; % the name of the matlab function
-    params.citations={'Hein et al., 2025, ESS Open Archive (Submitted to JGR Solid Earth ), https://doi.org/10.22541/essoar.174326672.28941810/v1'};
+    params.citations={'Hein et al., 2025, JGR, https://doi.org/10.1029/2025JB031674'};
     params.description='Linearized backstress model.';
 
     params.sig_p_sig_dc_factor = 0.8; % see supplement figure S12
@@ -177,14 +177,10 @@ function params = Params_Anelastic(method,GlobalParams)
     params.Q_J_per_mol = 450 *1e3; % activation energy J/mol, DeltaF in text
     params.A = 10^6.94; % Pre-exponent low-temperature plasticity, units are MPa−2 s−1
     params.pierls_barrier_GPa = 3.1; % symbol in text is capital Sigma
-    params.sig_p_sig_dc_factor = 0.8; % see supplement figure S12
 
     params.G_UR = 65; % GPa
     params.M_GPa = 135; % hardening modulus GPa
     params.SV_required = {'T_K'; 'sig_MPa' ; 'dg_um'};
-    params.print_experimental_message = 1;
-    params.experimental_message = "Note: the linearized backstress model is currently under development. While it nominally works, we are still working to verify correctness.";
-
   end
 
   % set steady-state melt dependence for diff. creep (i.e., exp(-alpha * phi))
