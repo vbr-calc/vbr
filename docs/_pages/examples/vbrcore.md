@@ -23,3 +23,7 @@ Simple "Cookbook" (CB) scripts demonstrating various use cases of the VBR Calcul
 * `CB_016_complex_viscosity.m` [link](/vbr/examples/CB_016_complex_viscosity/)
 * `CB_017_backstress_model.m` [link](/vbr/examples/CB_017_backstress_model/)
 * `CB_018_backstress_model_LUT.m` [link](/vbr/examples/CB_018_backstress_model_LUT/)
+* `CB_019_custom_anharmonic_derivatives.m` [link](/vbr/examples/CB_019_custom_anharmonic_derivatives/)
+* `CB_020_uppermantle_reference_values.m` [link](/vbr/examples/CB_020_uppermantle_reference_values/)
+* `CB_021_analytical_methods.m` [link](/vbr/examples/CB_021_analytical_methods/)
+* `CB_022_backstress_maxwell.m` [link](/vbr/examples/CB_022_backstress_maxwell/)

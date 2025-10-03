@@ -9,150 +9,84 @@ This is a list of functions that you may find useful when using or developing th
 
 ## Density
 functions related to calculating density
-* [thermal_expansion_coefficient](#thermal_expansion_coefficient)
-* [san_carlos_density_from_pressure](#san_carlos_density_from_pressure)
-* [density_isothermal_compression](#density_isothermal_compression)
-* [density_from_vbrc](#density_from_vbrc)
-* [density_thermal_expansion](#density_thermal_expansion)
 * [density_adiabatic_compression](#density_adiabatic_compression)
+* [density_from_vbrc](#density_from_vbrc)
+* [density_isothermal_compression](#density_isothermal_compression)
+* [density_thermal_expansion](#density_thermal_expansion)
+* [san_carlos_density_from_pressure](#san_carlos_density_from_pressure)
+* [thermal_expansion_coefficient](#thermal_expansion_coefficient)
 
 ## Fitting and Statistics
 functions related to fitting observations and probability distributions. Note that many of the functions related to probability distributions are available in  other MATLAB or GNU Octave toolboxes. The VBRc implemented its own versions to avoid the  need for 3rd party packages.
-* [find_LAB_Q](#find_lab_q)
-* [probability_lognormal](#probability_lognormal)
-* [probability_uniform](#probability_uniform)
-* [joint_independent_probability](#joint_independent_probability)
-* [conditionally_independent_C_given_AB](#conditionally_independent_c_given_ab)
 * [conditional_Bayes](#conditional_bayes)
-* [probability_distributions](#probability_distributions)
-* [probability_normal](#probability_normal)
+* [conditionally_independent_C_given_AB](#conditionally_independent_c_given_ab)
+* [find_LAB_Q](#find_lab_q)
+* [joint_independent_probability](#joint_independent_probability)
 * [likelihood_from_residuals](#likelihood_from_residuals)
 * [priorModelProbs](#priormodelprobs)
+* [probability_distributions](#probability_distributions)
+* [probability_lognormal](#probability_lognormal)
+* [probability_normal](#probability_normal)
+* [probability_uniform](#probability_uniform)
 
 ## Other thermodynamic properties
 functions related to other thermodynamic properties
+* [PiezometerWH2006](#piezometerwh2006)
+* [Qinv_from_J1_J2](#qinv_from_j1_j2)
+* [SoLiquidus](#soliquidus)
+* [SpecificHeat](#specificheat)
+* [ThermalConductivity](#thermalconductivity)
 * [adiabatic_coefficient](#adiabatic_coefficient)
 * [adiabatic_gradient](#adiabatic_gradient)
-* [SoLiquidus](#soliquidus)
-* [ThermalConductivity](#thermalconductivity)
-* [SpecificHeat](#specificheat)
 * [sr_water_fugacity](#sr_water_fugacity)
-* [Qinv_from_J1_J2](#qinv_from_j1_j2)
-* [PiezometerWH2006](#piezometerwh2006)
 
 ## VBRc support
 useful functions for the VBRc user
-* [vbr_version](#vbr_version)
 * [VBR_list_methods](#vbr_list_methods)
-* [full_nd](#full_nd)
-* [vbr_categorical_color](#vbr_categorical_color)
-* [vbr_categorical_cmap_array](#vbr_categorical_cmap_array)
 * [VBR_save](#vbr_save)
+* [full_nd](#full_nd)
+* [vbr_categorical_cmap_array](#vbr_categorical_cmap_array)
+* [vbr_categorical_color](#vbr_categorical_color)
+* [vbr_version](#vbr_version)
 
 ## Developer Support
 functions that you may find useful for developing code
 * [checkStructForField](#checkstructforfield)
 * [get_nested_field_from_struct](#get_nested_field_from_struct)
-* [nested_structure_update](#nested_structure_update)
 * [is_octave](#is_octave)
+* [nested_structure_update](#nested_structure_update)
 * [varargin_keyvals_to_structure](#varargin_keyvals_to_structure)
 
 # Full Docstrings
 
 ## Density: docstrings
 
-### thermal_expansion_coefficient
-path: `vbr/vbr/vbrCore/functions/density/thermal_expansion_coefficient.m`
+### density_adiabatic_compression
+path: `vbr/vbr/vbrCore/functions/density/density_adiabatic_compression.m`
 
 ```matlab
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % al_int = thermal_expansion_coefficient(T_K, FracFo, T_ref_K)
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % [Rho,P] = density_adiabatic_compression(Rho_o,Z,P0)
     %
-    % calculates the thermal expansion coefficient at a given temperature and
-    % volume fraction of forsterite following Xu et al., 2004
-    %
+    % Adiabatic Compression along a profile following Turcotte and Schubert
+    % should be ok for upper mantle, shallower than the 410 km phase change.
     %
     % Parameters
     % ----------
-    % T_K : scalar or array
-    %     temperature in Kelvin
-    % FracFo : scalar or array
-    %     volume fraction of Forsterite
-    % T_ref_K : optional scalar
-    %     the reference temperature to use, default 273 K
-    % Output
-    % -------
-    % al_int : scalar or array
-    %     coefficient of thermal expansion
-    %
-    % References
-    % ----------
-    % Xu, Yousheng, et al."Thermal diffusivity and conductivity of olivine,
-    % wadsleyite and ringwoodite to 20 GPa and 1373 K." Physics of the Earth
-    % and Planetary Interiors 143 (2004): 321-336.
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-```
-[top of category!](#density-docstrings)
-[top of page!](#overview)
-
-### san_carlos_density_from_pressure
-path: `vbr/vbr/vbrCore/functions/density/san_carlos_density_from_pressure.m`
-
-```matlab
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % rho = san_carlos_density_from_pressure(P_GPa)
-    %
-    % calculates density of olivine at given pressure values
-    % using an interpolation of Abramson et al 1997 (at Fo90)
-    %
-    %
-    % Parameters
-    % ----------
-    % P_GPa: scalar or array
-    %     the pressure(s) of interest in GPa
+    % Rho_o
+    %     reference density in kg/m^3
+    % Z
+    %     depth in m
+    % P0
+    %     reference pressure in Pa
     %
     % Output
     % -------
-    % rho : scalar
-    %     density in kg/m3
-    %
-    % References
-    % ----------
-    % E. H. Abramson, J. M. Brown, L. J. Slutsky, J. Zaug, 1997,
-    % The elastic constants of San Carlos olivine to 17 GPa,
-    % JGR,  https://doi.org/10.1029/97JB00682
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-```
-[top of category!](#density-docstrings)
-[top of page!](#overview)
-
-### density_isothermal_compression
-path: `vbr/vbr/vbrCore/functions/density/density_isothermal_compression.m`
-
-```matlab
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % rho = density_isothermal_compression(P_Pa, rho_0, K_o, dK_dP, P_Pa_ref)
-    %
-    % calculates density under isothermal compression for a bulk modulus with linear pressure dependence.
-    %
-    % Parameters
-    % ----------
-    % P_Pa: scalar or array
-    %   pressure in Pa. if array must be same size as other arrays
-    % rho_0: scalar or array
-    %   reference density in any units. if array must be same size as other arrays
-    % K_o: scalar or array
-    %   reference bulk modulus in Pa. if array must be same size as other arrays
-    % dK_dP: scalar
-    %   anharmonic pressure derivative of bulk modulus in Pa/Pa
-    % P_Pa_ref: scalar
-    %   reference pressure in Pa
-    %
-    % Returns
-    % -------
-    % rho: scalar or array
-    %   the density at supplied pressure, same units as input rho_0.
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % [Rho, P]
+    %    Rho : adiabatic-corrected density in kg/m^3
+    %    P   : pressure profile in Pa
+    % see page ~190 in 1st edition, 185 in 2nd edition.                 %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ```
 [top of category!](#density-docstrings)
 [top of page!](#overview)
@@ -209,6 +143,37 @@ path: `vbr/vbr/vbrCore/functions/density/density_from_vbrc.m`
 [top of category!](#density-docstrings)
 [top of page!](#overview)
 
+### density_isothermal_compression
+path: `vbr/vbr/vbrCore/functions/density/density_isothermal_compression.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % rho = density_isothermal_compression(P_Pa, rho_0, K_o, dK_dP, P_Pa_ref)
+    %
+    % calculates density under isothermal compression for a bulk modulus with linear pressure dependence.
+    %
+    % Parameters
+    % ----------
+    % P_Pa: scalar or array
+    %   pressure in Pa. if array must be same size as other arrays
+    % rho_0: scalar or array
+    %   reference density in any units. if array must be same size as other arrays
+    % K_o: scalar or array
+    %   reference bulk modulus in Pa. if array must be same size as other arrays
+    % dK_dP: scalar
+    %   anharmonic pressure derivative of bulk modulus in Pa/Pa
+    % P_Pa_ref: scalar
+    %   reference pressure in Pa
+    %
+    % Returns
+    % -------
+    % rho: scalar or array
+    %   the density at supplied pressure, same units as input rho_0.
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#density-docstrings)
+[top of page!](#overview)
+
 ### density_thermal_expansion
 path: `vbr/vbr/vbrCore/functions/density/density_thermal_expansion.m`
 
@@ -237,37 +202,145 @@ path: `vbr/vbr/vbrCore/functions/density/density_thermal_expansion.m`
 [top of category!](#density-docstrings)
 [top of page!](#overview)
 
-### density_adiabatic_compression
-path: `vbr/vbr/vbrCore/functions/density/density_adiabatic_compression.m`
+### san_carlos_density_from_pressure
+path: `vbr/vbr/vbrCore/functions/density/san_carlos_density_from_pressure.m`
 
 ```matlab
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % [Rho,P] = density_adiabatic_compression(Rho_o,Z,P0)
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % rho = san_carlos_density_from_pressure(P_GPa)
     %
-    % Adiabatic Compression along a profile following Turcotte and Schubert
-    % should be ok for upper mantle, shallower than the 410 km phase change.
+    % calculates density of olivine at given pressure values
+    % using an interpolation of Abramson et al 1997 (at Fo90)
+    %
     %
     % Parameters
     % ----------
-    % Rho_o
-    %     reference density in kg/m^3
-    % Z
-    %     depth in m
-    % P0
-    %     reference pressure in Pa
+    % P_GPa: scalar or array
+    %     the pressure(s) of interest in GPa
     %
     % Output
     % -------
-    % [Rho, P]
-    %    Rho : adiabatic-corrected density in kg/m^3
-    %    P   : pressure profile in Pa
-    % see page ~190 in 1st edition, 185 in 2nd edition.                 %
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % rho : scalar
+    %     density in kg/m3
+    %
+    % References
+    % ----------
+    % E. H. Abramson, J. M. Brown, L. J. Slutsky, J. Zaug, 1997,
+    % The elastic constants of San Carlos olivine to 17 GPa,
+    % JGR,  https://doi.org/10.1029/97JB00682
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#density-docstrings)
+[top of page!](#overview)
+
+### thermal_expansion_coefficient
+path: `vbr/vbr/vbrCore/functions/density/thermal_expansion_coefficient.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % al_int = thermal_expansion_coefficient(T_K, FracFo, T_ref_K)
+    %
+    % calculates the thermal expansion coefficient at a given temperature and
+    % volume fraction of forsterite following Xu et al., 2004
+    %
+    %
+    % Parameters
+    % ----------
+    % T_K : scalar or array
+    %     temperature in Kelvin
+    % FracFo : scalar or array
+    %     volume fraction of Forsterite
+    % T_ref_K : optional scalar
+    %     the reference temperature to use, default 273 K
+    % Output
+    % -------
+    % al_int : scalar or array
+    %     coefficient of thermal expansion
+    %
+    % References
+    % ----------
+    % Xu, Yousheng, et al."Thermal diffusivity and conductivity of olivine,
+    % wadsleyite and ringwoodite to 20 GPa and 1373 K." Physics of the Earth
+    % and Planetary Interiors 143 (2004): 321-336.
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ```
 [top of category!](#density-docstrings)
 [top of page!](#overview)
 
 ## Fitting and Statistics: docstrings
+
+### conditional_Bayes
+path: `vbr/vbr/fitting/conditional_Bayes.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % p_A_given_B = conditional_Bayes(p_B_given_A, p_A, p_B)
+    %
+    % Calculate the conditional probability using Bayes' Theorem:
+    %       p(A | B) = p(B | A) * p(A) / p(B)
+    %
+    %
+    % Parameters
+    % ----------
+    % p_B_given_A: array | scalar
+    %     probability of B given A (likelihood)
+    % p_A: array | scalar
+    %     prior probability of A
+    % p_B: array | scalar
+    %     prior probability of B
+    %
+    % Returns
+    % -------
+    % p_A_given_B: array | scalar
+    %     posterior probability of A given B
+    %
+    % Note: ALL inputs and outputs should be the same size (or scalars).
+    %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#fitting-and-statistics-docstrings)
+[top of page!](#overview)
+
+### conditionally_independent_C_given_AB
+path: `vbr/vbr/fitting/conditionally_independent_C_given_AB.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % p_C_given_AB = conditionally_independent_C_given_AB( ...
+    %    p_A_given_C, p_B_given_C, p_C, p_A_and_B)
+    %
+    % Calculate the conditional probability of C given A and B, assuming that
+    % A and B are dependent but conditionally independent given C
+    % As such, we can calculate:
+    %           P(C | A, B) = P(A, B, C) / P(A, B)
+    %                       = P(A, B | C) P(C)  /  P(A, B)
+    %                       = P(A | C) P(B | C) P(C) / P(A, B)
+    %
+    % Parameters
+    % ----------
+    % p_A_given_C: array | scalar
+    %     conditional probability of A given C
+    % p_B_given_C: array | scalar
+    %     conditional probability of B given C
+    % p_C: array | scalar
+    %     prior probability of C
+    % p_A_and_B: array | scalar
+    %     joint probability of A and B
+    %     Note that A and B are dependent (but only conditionally independent
+    %     given C!) so p(A, B) != p(A) * p(B)
+    %
+    % Returns
+    % -------
+    % p_C_given_AB: array | scalar
+    %     conditional probability of C given both A and B
+    %
+    % Note: ALL inputs and outputs should be the same size (or scalars).
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#fitting-and-statistics-docstrings)
+[top of page!](#overview)
 
 ### find_LAB_Q
 path: `vbr/vbr/fitting/find_LAB_Q.m`
@@ -325,68 +398,6 @@ path: `vbr/vbr/fitting/find_LAB_Q.m`
 [top of category!](#fitting-and-statistics-docstrings)
 [top of page!](#overview)
 
-### probability_lognormal
-path: `vbr/vbr/fitting/probability_lognormal.m`
-
-```matlab
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %
-    % lognormal_pdf = probability_lognormal(x, mu, sigma)
-    %
-    % Calculate the probability of having an observed value x given
-    % a log normal distribution with mean mu and standard deviation sigma.
-    %
-    % Parameters
-    % ----------
-    % x: scalar
-    %   observed value(s), must be dimensionless and > 0.
-    % mu: scalar
-    %   mean value of distribution in log-space
-    % sigma: scalar
-    %   standard deviation of the distribution in log-space
-    %
-    % Returns
-    % -------
-    % lognormal_pdf: array
-    %   prior probability of being at the observed value
-    %
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-```
-[top of category!](#fitting-and-statistics-docstrings)
-[top of page!](#overview)
-
-### probability_uniform
-path: `vbr/vbr/fitting/probability_uniform.m`
-
-```matlab
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %
-    % uniform_pdf = probability_uniform(x, min_val, max_val)
-    %
-    % Calculate the probability of having an observed value x given
-    % a uniform distribution between min_val and max_val.
-    % (The same as unifpdf in the stats package).
-    %
-    %
-    % Parameters
-    % ----------
-    % x: array
-    %   observed value(s)
-    % min_val: scalar
-    %   minimum for uniform distribution
-    % max_val: scalar
-    %   maximum for uniform distribution
-    %
-    % Returns
-    % -------
-    % uniform_pdf: array
-    %   prior probability of being at the observed value
-    %
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-```
-[top of category!](#fitting-and-statistics-docstrings)
-[top of page!](#overview)
-
 ### joint_independent_probability
 path: `vbr/vbr/fitting/joint_independent_probability.m`
 
@@ -411,161 +422,6 @@ path: `vbr/vbr/fitting/joint_independent_probability.m`
     % joint_independent_pdf: array
     %     joint independent probability, p(A, B , ...)
     %
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-```
-[top of category!](#fitting-and-statistics-docstrings)
-[top of page!](#overview)
-
-### conditionally_independent_C_given_AB
-path: `vbr/vbr/fitting/conditionally_independent_C_given_AB.m`
-
-```matlab
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %
-    % p_C_given_AB = conditionally_independent_C_given_AB( ...
-    %    p_A_given_C, p_B_given_C, p_C, p_A_and_B)
-    %
-    % Calculate the conditional probability of C given A and B, assuming that
-    % A and B are dependent but conditionally independent given C
-    % As such, we can calculate:
-    %           P(C | A, B) = P(A, B, C) / P(A, B)
-    %                       = P(A, B | C) P(C)  /  P(A, B)
-    %                       = P(A | C) P(B | C) P(C) / P(A, B)
-    %
-    % Parameters
-    % ----------
-    % p_A_given_C: array | scalar
-    %     conditional probability of A given C
-    % p_B_given_C: array | scalar
-    %     conditional probability of B given C
-    % p_C: array | scalar
-    %     prior probability of C
-    % p_A_and_B: array | scalar
-    %     joint probability of A and B
-    %     Note that A and B are dependent (but only conditionally independent
-    %     given C!) so p(A, B) != p(A) * p(B)
-    %
-    % Returns
-    % -------
-    % p_C_given_AB: array | scalar
-    %     conditional probability of C given both A and B
-    %
-    % Note: ALL inputs and outputs should be the same size (or scalars).
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-```
-[top of category!](#fitting-and-statistics-docstrings)
-[top of page!](#overview)
-
-### conditional_Bayes
-path: `vbr/vbr/fitting/conditional_Bayes.m`
-
-```matlab
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %
-    % p_A_given_B = conditional_Bayes(p_B_given_A, p_A, p_B)
-    %
-    % Calculate the conditional probability using Bayes' Theorem:
-    %       p(A | B) = p(B | A) * p(A) / p(B)
-    %
-    %
-    % Parameters
-    % ----------
-    % p_B_given_A: array | scalar
-    %     probability of B given A (likelihood)
-    % p_A: array | scalar
-    %     prior probability of A
-    % p_B: array | scalar
-    %     prior probability of B
-    %
-    % Returns
-    % -------
-    % p_A_given_B: array | scalar
-    %     posterior probability of A given B
-    %
-    % Note: ALL inputs and outputs should be the same size (or scalars).
-    %
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-```
-[top of category!](#fitting-and-statistics-docstrings)
-[top of page!](#overview)
-
-### probability_distributions
-path: `vbr/vbr/fitting/probability_distributions.m`
-
-```matlab
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %
-    % pdf = probability_distributions(distribution_flag, varargin)
-    %
-    % Calculates probability in a Bayesian sense given constraints.
-    %
-    % Parameters
-    % ----------
-    % distribution_flag:   string
-    %   A string that specifies the calculation to be done options are:
-    %        Evaluate a distribution, supply one of:
-    %            'normal', 'uniform', 'lognormal'
-    %        Calculate a probability given other constraints, provide:
-    %            'likelihood from residuals'
-    %        Combining pdfs, provide one of:
-    %            'joint independent'
-    %            'A|B'
-    %            'C|A,B conditionally independent'
-    %
-    %  varargin: parameters describing the distribution, values depend on
-    %    the distribution flag value.
-    %
-    %    When evaluating distributions:
-    %       'normal'    - {x*, mean, standard deviation}
-    %       'uniform'   - {x*, min, max}
-    %       'lognormal' - {x*, mean, standard deviation}
-    %    where
-    %       x: matrix
-    %           values of random variable for which to find the probability
-    %           in the given pdf
-    %    expected varargin values for the other distribution_flag
-    %    values are:
-    %       'likelihood from residuals' - {obs val, obs std, predicted}
-    %       'joint independent' - {marginal p_A, p_B, ...}
-    %        'A|B' - {p_B_given_A, p_A, p_B}
-    %        'C|A,B conditionally independent' - {p_A_given_C, p_B_given_C,
-    %                                             p_C, p_A_and_B}
-    %
-    % Returns
-    % ------
-    % pdf: matrix
-    %   probability for each of the values in x
-    %
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-```
-[top of category!](#fitting-and-statistics-docstrings)
-[top of page!](#overview)
-
-### probability_normal
-path: `vbr/vbr/fitting/probability_normal.m`
-
-```matlab
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %
-    % normal_pdf = probability_normal(x, mu, sigma)
-    %
-    % Calculate the probability of having an observed value x given
-    % a normal distribution with mean mu and standard deviation sigma.
-    % (The same as normpdf in the stats package).
-    %
-    % Parameters
-    % ----------
-    % x: array
-    %   observed value(s), must be dimensionless and > 0.
-    % mu: scalar
-    %   mean value of distribution in log-space
-    % sigma: scalar
-    %   standard deviation of the distribution in log-space
-    %
-    % Returns
-    % -------
-    % normal_pdf: array
-    %   prior probability of being at the observed value
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ```
 [top of category!](#fitting-and-statistics-docstrings)
@@ -668,7 +524,349 @@ path: `vbr/vbr/fitting/priorModelProbs.m`
 [top of category!](#fitting-and-statistics-docstrings)
 [top of page!](#overview)
 
+### probability_distributions
+path: `vbr/vbr/fitting/probability_distributions.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % pdf = probability_distributions(distribution_flag, varargin)
+    %
+    % Calculates probability in a Bayesian sense given constraints.
+    %
+    % Parameters
+    % ----------
+    % distribution_flag:   string
+    %   A string that specifies the calculation to be done options are:
+    %        Evaluate a distribution, supply one of:
+    %            'normal', 'uniform', 'lognormal'
+    %        Calculate a probability given other constraints, provide:
+    %            'likelihood from residuals'
+    %        Combining pdfs, provide one of:
+    %            'joint independent'
+    %            'A|B'
+    %            'C|A,B conditionally independent'
+    %
+    %  varargin: parameters describing the distribution, values depend on
+    %    the distribution flag value.
+    %
+    %    When evaluating distributions:
+    %       'normal'    - {x*, mean, standard deviation}
+    %       'uniform'   - {x*, min, max}
+    %       'lognormal' - {x*, mean, standard deviation}
+    %    where
+    %       x: matrix
+    %           values of random variable for which to find the probability
+    %           in the given pdf
+    %    expected varargin values for the other distribution_flag
+    %    values are:
+    %       'likelihood from residuals' - {obs val, obs std, predicted}
+    %       'joint independent' - {marginal p_A, p_B, ...}
+    %        'A|B' - {p_B_given_A, p_A, p_B}
+    %        'C|A,B conditionally independent' - {p_A_given_C, p_B_given_C,
+    %                                             p_C, p_A_and_B}
+    %
+    % Returns
+    % ------
+    % pdf: matrix
+    %   probability for each of the values in x
+    %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#fitting-and-statistics-docstrings)
+[top of page!](#overview)
+
+### probability_lognormal
+path: `vbr/vbr/fitting/probability_lognormal.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % lognormal_pdf = probability_lognormal(x, mu, sigma)
+    %
+    % Calculate the probability of having an observed value x given
+    % a log normal distribution with mean mu and standard deviation sigma.
+    %
+    % Parameters
+    % ----------
+    % x: scalar
+    %   observed value(s), must be dimensionless and > 0.
+    % mu: scalar
+    %   mean value of distribution in log-space
+    % sigma: scalar
+    %   standard deviation of the distribution in log-space
+    %
+    % Returns
+    % -------
+    % lognormal_pdf: array
+    %   prior probability of being at the observed value
+    %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#fitting-and-statistics-docstrings)
+[top of page!](#overview)
+
+### probability_normal
+path: `vbr/vbr/fitting/probability_normal.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % normal_pdf = probability_normal(x, mu, sigma)
+    %
+    % Calculate the probability of having an observed value x given
+    % a normal distribution with mean mu and standard deviation sigma.
+    % (The same as normpdf in the stats package).
+    %
+    % Parameters
+    % ----------
+    % x: array
+    %   observed value(s), must be dimensionless and > 0.
+    % mu: scalar
+    %   mean value of distribution in log-space
+    % sigma: scalar
+    %   standard deviation of the distribution in log-space
+    %
+    % Returns
+    % -------
+    % normal_pdf: array
+    %   prior probability of being at the observed value
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#fitting-and-statistics-docstrings)
+[top of page!](#overview)
+
+### probability_uniform
+path: `vbr/vbr/fitting/probability_uniform.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % uniform_pdf = probability_uniform(x, min_val, max_val)
+    %
+    % Calculate the probability of having an observed value x given
+    % a uniform distribution between min_val and max_val.
+    % (The same as unifpdf in the stats package).
+    %
+    %
+    % Parameters
+    % ----------
+    % x: array
+    %   observed value(s)
+    % min_val: scalar
+    %   minimum for uniform distribution
+    % max_val: scalar
+    %   maximum for uniform distribution
+    %
+    % Returns
+    % -------
+    % uniform_pdf: array
+    %   prior probability of being at the observed value
+    %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#fitting-and-statistics-docstrings)
+[top of page!](#overview)
+
 ## Other thermodynamic properties: docstrings
+
+### PiezometerWH2006
+path: `vbr/vbr/vbrCore/functions/PiezometerWH2006.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % d_um = PiezometerWH2006(sig_MPa)
+    %
+    % returns an array of the same size as sig with grainsizes in um calculcated
+    % using the rectysallized grain-size piezometer for olivine of Warren and
+    % Hirth (2006). If no stress is specified the function simply produces a
+    % plot of the piezometer, the data it was regressed to, and its uncertainty.
+    %
+    % Citation:
+    %   Warren, J. M., & Hirth, G. (2006). Grain size sensitive deformation
+    %   mechanisms in naturally deformed peridotites. Earth and Planetary
+    %   Science Letters, 248(1-2), 438-450.
+    %   https://doi.org/10.1016/j.epsl.2006.06.006
+    %
+    % Parameters:
+    % ----------
+    % sig_MPa: array | scalar
+    %    differential stress in MPa. Can be an array of any shape or a scalar.
+    %    If not provided, this function will make a plot.
+    %
+    % Output:
+    % ------
+    % d_um: array | scalar
+    %     grain size in um, same shape as the input sig_MPa
+    %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#other-thermodynamic-properties-docstrings)
+[top of page!](#overview)
+
+### Qinv_from_J1_J2
+path: `vbr/vbr/vbrCore/functions/Qinv_from_J1_J2.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %  Qinv_from_J1_J2(J1, J2, use_correction)
+    %
+    % calculate attenuation from J1 and J2 with optional
+    % correction factor.
+    %
+    % Parameters
+    % ----------
+    % J1
+    %    real part of complex compliance (same shape as J2)
+    % J2
+    %    imaginary part of complex compliance (same shape as J1)
+    % use_correction
+    %    optional integer flag (default is 0). If set to 1, will
+    %    use the small Q (large Qinv) factor from equation B6
+    %    of McCarthy et al 2011 (https://doi.org/10.1029/2011JB008382)
+    %
+    % Returns
+    % %%%%%%%
+    % Qinv
+    %     attenuation, same shape as J1 and J2
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#other-thermodynamic-properties-docstrings)
+[top of page!](#overview)
+
+### SoLiquidus
+path: `vbr/vbr/vbrCore/functions/thermal_properties/SoLiquidus.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % [Solidus] = SoLiquidus(P_Pa,H2O,CO2,solfit)
+    %
+    % calculates peridotite solidus with volatile dependence. Water depression
+    % calculated with Katz et al (2003), CO2 depression calculated with
+    % Dasgupta et al (2007). Effects are cumulative. The dry solidus
+    % to which the depression is applied can be calculated using either
+    % Katz et al (2003) or Hirschmann (200).
+    %
+    % Parameters
+    % ----------
+    % P_Pa         Pressure in Pa
+    % H2O       wt % of water in the melt phase
+    % CO2       wt % of CO2 in the melt phase
+    % solfit    which dry solidus to use, either 'katz' or 'hirschmann'
+    %
+    % Returns
+    % -------
+    % Solidus.  structure with following fields
+    %        .Tsol       the effective solidus [C]
+    %        .Tsol_dry   the volatile free solidus [C]
+    %
+    % if using 'katz' parametrization, Solidus will also include:
+    %
+    % Solidus.
+    %        .Tliq   effective liquidus [C]
+    %        .Tlherz idealized lherzolite solidus [C]
+    %        .dTdPsol  productivity [C/GPa]
+    %        .dTdPlherz  lherzolite productivity [C/Gpa]
+    %        .dTdPliq  liquidis productivity [C/Gpa]
+    %        .dTdH2O   dependence of solidus on water content [C / wt %]
+    %
+    % References
+    % ----------
+    %
+    % Dasgupta, R., Hirschmann, M. M., & Smith, N. D. (2007). Water follows carbon:
+    %   CO2 incites deep silicate melting and dehydration beneath mid-ocean ridges.
+    %   Geology, 35(2), 135-138. https://doi.org/10.1130/G22856A.1
+    % Hirschmann, M. M. (2000). Mantle solidus: Experimental constraints and
+    %   the effects of peridotite composition. Geochemistry, Geophysics, Geosystems,
+    %   1(10). https://doi.org/10.1029/2000GC000070
+    % Katz, R. F., Spiegelman, M., & Langmuir, C. H. (2003). A new parameterization
+    %   of hydrous mantle melting. Geochemistry, Geophysics, Geosystems, 4(9).
+    %   https://doi.org/10.1029/2002GC000433
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#other-thermodynamic-properties-docstrings)
+[top of page!](#overview)
+
+### SpecificHeat
+path: `vbr/vbr/vbrCore/functions/thermal_properties/SpecificHeat.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Cp = SpecificHeat(T,FracFo)
+    %
+    % Calculates specific heat as a function of temperature using a polynomial.
+    %
+    % Parameters
+    % ----------
+    %
+    %   T: array or scalar
+    %      temperature in degrees K
+    %   FracFo: array or scalar
+    %       volume fraction forsterite
+    %
+    % Returns
+    % -------
+    %   Cp: array or scalar
+    %       Specific Heat [J kg^-1 K^-1]
+    %
+    % References
+    % ----------
+    % Berman, R. G., and L. Ya Aranovich. "Optimized standard     %
+    %   state and solution properties of minerals." Contributions to Mineralogy%
+    %   and Petrology 126.1-2 (1996): 1-24.
+    %
+    % Notes
+    % -----
+    %
+    % Papers report heat capacity (J/mol/K) as polynomial functions of
+    % temperature with coefficients determined by fitting. To get to specific
+    % heat (J/kg/K), we divide the reported coefficients by molecular weight of
+    % the minerals. The function form is typically:
+    %
+    %  Cp = B(1) + B(2)*T + B(3)*T^2 + B(4)*T^-2 + B(5)*T^-3 + ...
+    %       B(6)*T^-0.5 + B(7)/T
+    %
+    % In this implementation, the array B initially has two rows, with values
+    % for forsterite (Fo) in the first row and fayalite (Fa) in the second row.
+    % The two are then linearly weighted by the fraction of forsterite in the
+    % mantle before calculating Cp.
+    %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#other-thermodynamic-properties-docstrings)
+[top of page!](#overview)
+
+### ThermalConductivity
+path: `vbr/vbr/vbrCore/functions/thermal_properties/ThermalConductivity.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Kc = ThermalConductivity(Kc_o, T, P)
+    %
+    % calculates thermal conductivity using Xu et al 2004.
+    %
+    % Parameters
+    % ----------
+    %  Kc_o   scalar or array of reference values for thermal conductivity
+    %         in units of [W / m / K]
+    %  T      temperature (scalar or array) [K]
+    %  P      pressure (scalar or array) [Pa]
+    %
+    % Returns
+    % -------
+    % Kc      thermal conductivity in [W / m / K]
+    %
+    % References
+    % ----------
+    % Xu, Y., T. J. Shankland, S. Linhardt, D. C. Rubie, F. Langenhorst, and K.
+    %   Klasinski (2004), Thermal diffusivity and conductivity of olivine,
+    %   wadsleyite and ringwoodite to 20 GPa and 1373 K, Phys Earth Planet In,
+    %   143-144, 321?336, doi:10.1016/j.pepi.2004.03.005.
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#other-thermodynamic-properties-docstrings)
+[top of page!](#overview)
 
 ### adiabatic_coefficient
 path: `vbr/vbr/vbrCore/functions/thermal_properties/adiabatic_coefficient.m`
@@ -727,139 +925,6 @@ path: `vbr/vbr/vbrCore/functions/thermal_properties/adiabatic_gradient.m`
 [top of category!](#other-thermodynamic-properties-docstrings)
 [top of page!](#overview)
 
-### SoLiquidus
-path: `vbr/vbr/vbrCore/functions/thermal_properties/SoLiquidus.m`
-
-```matlab
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % [Solidus] = SoLiquidus(P_Pa,H2O,CO2,solfit)
-    %
-    % calculates peridotite solidus with volatile dependence. Water depression
-    % calculated with Katz et al (2003), CO2 depression calculated with
-    % Dasgupta et al (2007). Effects are cumulative. The dry solidus
-    % to which the depression is applied can be calculated using either
-    % Katz et al (2003) or Hirschmann (200).
-    %
-    % Parameters
-    % ----------
-    % P_Pa         Pressure in Pa
-    % H2O       wt % of water in the melt phase
-    % CO2       wt % of CO2 in the melt phase
-    % solfit    which dry solidus to use, either 'katz' or 'hirschmann'
-    %
-    % Returns
-    % -------
-    % Solidus.  structure with following fields
-    %        .Tsol       the effective solidus [C]
-    %        .Tsol_dry   the volatile free solidus [C]
-    %
-    % if using 'katz' parametrization, Solidus will also include:
-    %
-    % Solidus.
-    %        .Tliq   effective liquidus [C]
-    %        .Tlherz idealized lherzolite solidus [C]
-    %        .dTdPsol  productivity [C/GPa]
-    %        .dTdPlherz  lherzolite productivity [C/Gpa]
-    %        .dTdPliq  liquidis productivity [C/Gpa]
-    %        .dTdH2O   dependence of solidus on water content [C / wt %]
-    %
-    % References
-    % ----------
-    %
-    % Dasgupta, R., Hirschmann, M. M., & Smith, N. D. (2007). Water follows carbon:
-    %   CO2 incites deep silicate melting and dehydration beneath mid-ocean ridges.
-    %   Geology, 35(2), 135-138. https://doi.org/10.1130/G22856A.1
-    % Hirschmann, M. M. (2000). Mantle solidus: Experimental constraints and
-    %   the effects of peridotite composition. Geochemistry, Geophysics, Geosystems,
-    %   1(10). https://doi.org/10.1029/2000GC000070
-    % Katz, R. F., Spiegelman, M., & Langmuir, C. H. (2003). A new parameterization
-    %   of hydrous mantle melting. Geochemistry, Geophysics, Geosystems, 4(9).
-    %   https://doi.org/10.1029/2002GC000433
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-```
-[top of category!](#other-thermodynamic-properties-docstrings)
-[top of page!](#overview)
-
-### ThermalConductivity
-path: `vbr/vbr/vbrCore/functions/thermal_properties/ThermalConductivity.m`
-
-```matlab
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Kc = ThermalConductivity(Kc_o, T, P)
-    %
-    % calculates thermal conductivity using Xu et al 2004.
-    %
-    % Parameters
-    % ----------
-    %  Kc_o   scalar or array of reference values for thermal conductivity
-    %         in units of [W / m / K]
-    %  T      temperature (scalar or array) [K]
-    %  P      pressure (scalar or array) [Pa]
-    %
-    % Returns
-    % -------
-    % Kc      thermal conductivity in [W / m / K]
-    %
-    % References
-    % ----------
-    % Xu, Y., T. J. Shankland, S. Linhardt, D. C. Rubie, F. Langenhorst, and K.
-    %   Klasinski (2004), Thermal diffusivity and conductivity of olivine,
-    %   wadsleyite and ringwoodite to 20 GPa and 1373 K, Phys Earth Planet In,
-    %   143-144, 321?336, doi:10.1016/j.pepi.2004.03.005.
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-```
-[top of category!](#other-thermodynamic-properties-docstrings)
-[top of page!](#overview)
-
-### SpecificHeat
-path: `vbr/vbr/vbrCore/functions/thermal_properties/SpecificHeat.m`
-
-```matlab
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Cp = SpecificHeat(T,FracFo)
-    %
-    % Calculates specific heat as a function of temperature using a polynomial.
-    %
-    % Parameters
-    % ----------
-    %
-    %   T: array or scalar
-    %      temperature in degrees K
-    %   FracFo: array or scalar
-    %       volume fraction forsterite
-    %
-    % Returns
-    % -------
-    %   Cp: array or scalar
-    %       Specific Heat [J kg^-1 K^-1]
-    %
-    % References
-    % ----------
-    % Berman, R. G., and L. Ya Aranovich. "Optimized standard     %
-    %   state and solution properties of minerals." Contributions to Mineralogy%
-    %   and Petrology 126.1-2 (1996): 1-24.
-    %
-    % Notes
-    % -----
-    %
-    % Papers report heat capacity (J/mol/K) as polynomial functions of
-    % temperature with coefficients determined by fitting. To get to specific
-    % heat (J/kg/K), we divide the reported coefficients by molecular weight of
-    % the minerals. The function form is typically:
-    %
-    %  Cp = B(1) + B(2)*T + B(3)*T^2 + B(4)*T^-2 + B(5)*T^-3 + ...
-    %       B(6)*T^-0.5 + B(7)/T
-    %
-    % In this implementation, the array B initially has two rows, with values
-    % for forsterite (Fo) in the first row and fayalite (Fa) in the second row.
-    % The two are then linearly weighted by the fraction of forsterite in the
-    % mantle before calculating Cp.
-    %
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-```
-[top of category!](#other-thermodynamic-properties-docstrings)
-[top of page!](#overview)
-
 ### sr_water_fugacity
 path: `vbr/vbr/vbrCore/functions/sr_water_fugacity.m`
 
@@ -891,102 +956,7 @@ path: `vbr/vbr/vbrCore/functions/sr_water_fugacity.m`
 [top of category!](#other-thermodynamic-properties-docstrings)
 [top of page!](#overview)
 
-### Qinv_from_J1_J2
-path: `vbr/vbr/vbrCore/functions/Qinv_from_J1_J2.m`
-
-```matlab
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %  Qinv_from_J1_J2(J1, J2, use_correction)
-    %
-    % calculate attenuation from J1 and J2 with optional
-    % correction factor.
-    %
-    % Parameters
-    % ----------
-    % J1
-    %    real part of complex compliance (same shape as J2)
-    % J2
-    %    imaginary part of complex compliance (same shape as J1)
-    % use_correction
-    %    optional integer flag (default is 0). If set to 1, will
-    %    use the small Q (large Qinv) factor from equation B6
-    %    of McCarthy et al 2011 (https://doi.org/10.1029/2011JB008382)
-    %
-    % Returns
-    % %%%%%%%
-    % Qinv
-    %     attenuation, same shape as J1 and J2
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-```
-[top of category!](#other-thermodynamic-properties-docstrings)
-[top of page!](#overview)
-
-### PiezometerWH2006
-path: `vbr/vbr/vbrCore/functions/PiezometerWH2006.m`
-
-```matlab
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %
-    % d_um = PiezometerWH2006(sig_MPa)
-    %
-    % returns an array of the same size as sig with grainsizes in um calculcated
-    % using the rectysallized grain-size piezometer for olivine of Warren and
-    % Hirth (2006). If no stress is specified the function simply produces a
-    % plot of the piezometer, the data it was regressed to, and its uncertainty.
-    %
-    % Citation:
-    %   Warren, J. M., & Hirth, G. (2006). Grain size sensitive deformation
-    %   mechanisms in naturally deformed peridotites. Earth and Planetary
-    %   Science Letters, 248(1-2), 438-450.
-    %   https://doi.org/10.1016/j.epsl.2006.06.006
-    %
-    % Parameters:
-    % ----------
-    % sig_MPa: array | scalar
-    %    differential stress in MPa. Can be an array of any shape or a scalar.
-    %    If not provided, this function will make a plot.
-    %
-    % Output:
-    % ------
-    % d_um: array | scalar
-    %     grain size in um, same shape as the input sig_MPa
-    %
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-```
-[top of category!](#other-thermodynamic-properties-docstrings)
-[top of page!](#overview)
-
 ## VBRc support: docstrings
-
-### vbr_version
-path: `vbr/vbr/support/vbr_version.m`
-
-```matlab
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Version = vbr_version()
-    %
-    % return the VBRc Version structure
-    %
-    % Returns
-    % -------
-    % Version.  : structure with the following fields
-    %        .major : int
-    %           the major version number
-    %        .minor : int
-    %           the minor version number
-    %        .patch : int
-    %           the patch version number
-    %        .version: string
-    %            the version string (e.g., '2.0.1')
-    %
-    % Notes
-    % -----
-    % Version.version will include a 'dev' if you are
-    % running a development version.
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-```
-[top of category!](#vbrc-support-docstrings)
-[top of page!](#overview)
 
 ### VBR_list_methods
 path: `vbr/vbr/support/VBR_list_methods.m`
@@ -1008,6 +978,30 @@ path: `vbr/vbr/support/VBR_list_methods.m`
     % VBR_list_methods() will print all methods
     % VBR_list_methods('viscous') will print only viscous methods
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#vbrc-support-docstrings)
+[top of page!](#overview)
+
+### VBR_save
+path: `vbr/vbr/vbrCore/functions/io_functions/VBR_save.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % VBR_save(VBR, fname, exclude_SVs)
+    %
+    % Save a VBR structure to disk as a Matlab binary (even if
+    % running from Octave).
+    %
+    % Parameters
+    % ----------
+    % VBR: structure
+    %     the VBR structure to save
+    % fname: string
+    %     the filename, will append .mat if not present
+    % exclude_SVs: optional integer
+    %     default is 0. set to 1 to exclue VBR.in.SV from save file.
+    %     Useful for reducing disk-space when saving multiple results.
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ```
 [top of category!](#vbrc-support-docstrings)
 [top of page!](#overview)
@@ -1040,6 +1034,26 @@ path: `vbr/vbr/vbrCore/functions/full_nd.m`
 [top of category!](#vbrc-support-docstrings)
 [top of page!](#overview)
 
+### vbr_categorical_cmap_array
+path: `vbr/vbr/support/vbr_categorical_cmap_array.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %
+    % x = vbr_categorical_cmap_array()
+    %
+    % return an array of rgb values for a categorical colormap.
+    %
+    % colormap was generated with http://vrl.cs.brown.edu/color , see:
+    %  Gramazio et al., 2017, IEEE Transactions on Visualization and Computer
+    %      Graphics, "Colorgorical: creating discriminable and preferable color
+    %      palettes for information visualization"
+    %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#vbrc-support-docstrings)
+[top of page!](#overview)
+
 ### vbr_categorical_color
 path: `vbr/vbr/support/vbr_categorical_color.m`
 
@@ -1065,46 +1079,32 @@ path: `vbr/vbr/support/vbr_categorical_color.m`
 [top of category!](#vbrc-support-docstrings)
 [top of page!](#overview)
 
-### vbr_categorical_cmap_array
-path: `vbr/vbr/support/vbr_categorical_cmap_array.m`
+### vbr_version
+path: `vbr/vbr/support/vbr_version.m`
 
 ```matlab
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Version = vbr_version()
     %
-    % x = vbr_categorical_cmap_array()
+    % return the VBRc Version structure
     %
-    % return an array of rgb values for a categorical colormap.
+    % Returns
+    % -------
+    % Version.  : structure with the following fields
+    %        .major : int
+    %           the major version number
+    %        .minor : int
+    %           the minor version number
+    %        .patch : int
+    %           the patch version number
+    %        .version: string
+    %            the version string (e.g., '2.0.1')
     %
-    % colormap was generated with http://vrl.cs.brown.edu/color , see:
-    %  Gramazio et al., 2017, IEEE Transactions on Visualization and Computer
-    %      Graphics, "Colorgorical: creating discriminable and preferable color
-    %      palettes for information visualization"
-    %
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-```
-[top of category!](#vbrc-support-docstrings)
-[top of page!](#overview)
-
-### VBR_save
-path: `vbr/vbr/vbrCore/functions/io_functions/VBR_save.m`
-
-```matlab
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % VBR_save(VBR, fname, exclude_SVs)
-    %
-    % Save a VBR structure to disk as a Matlab binary (even if
-    % running from Octave).
-    %
-    % Parameters
-    % ----------
-    % VBR: structure
-    %     the VBR structure to save
-    % fname: string
-    %     the filename, will append .mat if not present
-    % exclude_SVs: optional integer
-    %     default is 0. set to 1 to exclue VBR.in.SV from save file.
-    %     Useful for reducing disk-space when saving multiple results.
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Notes
+    % -----
+    % Version.version will include a 'dev' if you are
+    % running a development version.
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ```
 [top of category!](#vbrc-support-docstrings)
 [top of page!](#overview)
@@ -1210,6 +1210,19 @@ path: `vbr/vbr/support/get_nested_field_from_struct.m`
 [top of category!](#developer-support-docstrings)
 [top of page!](#overview)
 
+### is_octave
+path: `vbr/vbr/support/is_octave.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % is_octave()
+    %
+    % returns 1 if running in Octave, 0 if running in MATLAB
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#developer-support-docstrings)
+[top of page!](#overview)
+
 ### nested_structure_update
 path: `vbr/vbr/support/nested_structure_update.m`
 
@@ -1235,19 +1248,6 @@ path: `vbr/vbr/support/nested_structure_update.m`
     %  struct
     %    a new structure with fields from struct_1 and struct_2
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-```
-[top of category!](#developer-support-docstrings)
-[top of page!](#overview)
-
-### is_octave
-path: `vbr/vbr/support/is_octave.m`
-
-```matlab
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % is_octave()
-    %
-    % returns 1 if running in Octave, 0 if running in MATLAB
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ```
 [top of category!](#developer-support-docstrings)
 [top of page!](#overview)
