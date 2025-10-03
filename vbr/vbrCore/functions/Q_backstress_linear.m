@@ -2,11 +2,7 @@ function [VBR] = Q_backstress_linear(VBR)
 
     % pull out some parameters
     params = VBR.in.anelastic.backstress_linear;
-    if params.print_experimental_message == 1
-        disp(params.experimental_message)
-    end
-
-    M_GPa = params.M_GPa;
+    M_GPa = params.M_GPa; % hardening modulus
 
     % pull out state variables
     P = VBR.in.SV.P_GPa;
@@ -33,10 +29,9 @@ function [VBR] = Q_backstress_linear(VBR)
         sig_MPa = VBR.in.SV.sig_MPa;
     end
 
-    % initial calculations
-    E_GPa = 9*K_Pa .* G_Pa ./(3*K_Pa+G_Pa) / 1e9; % Pa, Young's modulus
+    % initial calculations    
+    E_Pa = youngs(K_Pa, G_Pa);
     eta1 = visc_calc_backstress_linear(VBR, sig_MPa, params); % Pa s, linear viscosity for dislocation glide
-
 
     % allocation of new matrixes
     n_freq = numel(omega);
@@ -56,7 +51,6 @@ function [VBR] = Q_backstress_linear(VBR)
     valid_f = proc_add_freq_indeces(zeros(sz),n_freq);
     omega_o = zeros(sz);
 
-
     sig_p_MPa = params.sig_p_sig_dc_factor * sig_MPa;
 
     sig_d_MPa = params.Beta .* (G_Pa / 1e6) .* params.burgers_vector_nm ./ d_nm;
@@ -66,7 +60,7 @@ function [VBR] = Q_backstress_linear(VBR)
     for i_sv = 1:n_th
         eta_i = eta1(i_sv);
         E_R_i = E_R_Pa(i_sv);
-        E_U_i = E_GPa(i_sv)*1e9;
+        E_U_i = E_Pa(i_sv);
         G_U_i = G_Pa(i_sv);
         rho_i = VBR.in.SV.rho(i_sv);
 
@@ -148,7 +142,6 @@ function A_prime_T = backstress_Aprime(VBR, params)
     % units will be: 1 / (s GPa^2)
 
     % parameters for convenience
-
     Q = params.Q_J_per_mol;
     A = params.A; % MPa−2 s−1
     R = 8.31446261815324; % J/mol/K

@@ -6,10 +6,9 @@ title: ''
 
 # `backstress_linear`
 
-The `backstress_linear` anelastic method is an implementation of the linearized backstress model of dislocation-based dissipation from Hein et al., 2025, https://doi.org/10.22541/essoar.174326672.28941810/v1 . Note that the current implementation is based on the pre-print, and the model here will be updated pending pre-print review.
+The `backstress_linear` anelastic method is an implementation of the linearized backstress model of dislocation-based dissipation from Hein et al., 2025, [https://doi.org/10.1029/2025JB031674](https://doi.org/10.1029/2025JB031674). 
 
-Note: this method is new in VBRc 2.0.0 and still needs a bit of work to verify it is
-working correctly. Feel free to try it out and please [report any issues](https://github.com/vbr-calc/vbr/issues/new)!
+This available in VBRc >= 2.0.0.
 
 ## Requires
 
