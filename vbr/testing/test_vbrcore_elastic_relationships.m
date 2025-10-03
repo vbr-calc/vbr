@@ -21,7 +21,7 @@ function TestResult = test_vbrcore_elastic_relationships()
     
 
     E = youngs(1, 1);
-    if E != 9 / 4
+    if E ~= 9 / 4
         TestResult.passed=false;
         TestResult.fail_message = ['incorrect youngs modulus. Expected 9/4, found ', num2str(E)];  
     end 
