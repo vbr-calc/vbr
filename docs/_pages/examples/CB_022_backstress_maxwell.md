@@ -1,3 +1,14 @@
+---
+permalink: /examples/CB_022_backstress_maxwell/
+title: ""
+---
+
+# CB_022_backstress_maxwell.m
+## output figures
+
+!['CB_022_backstress_maxwell'](/vbr/assets/images/CBs/CB_022_backstress_maxwell.png){:class="img-responsive"}
+## contents
+```matlab
 function VBR = CB_022_backstress_maxwell
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % CB_022_backstress_maxwell
@@ -36,3 +47,4 @@ function VBR = CB_022_backstress_maxwell
         saveas(gcf,'./figures/CB_022_backstress_maxwell.png')
     end        
 end
+```

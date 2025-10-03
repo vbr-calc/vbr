@@ -1,3 +1,11 @@
+---
+permalink: /examples/CB_021_analytical_methods/
+title: ""
+---
+
+# CB_021_analytical_methods.m
+## contents
+```matlab
 function VBR = CB_021_analytical_methods()
      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
      %  CB_021_analytical_methods
@@ -49,3 +57,4 @@ function VBR = CB_021_analytical_methods()
      end
 
 end
+```

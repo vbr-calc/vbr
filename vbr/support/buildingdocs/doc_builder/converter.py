@@ -320,29 +320,35 @@ class SupportFunctions(VBRinit):
         # assemble some function names
         dens_path = os.path.join(self.CorePath, 'functions', 'density')
         dens_funcs = list_mfiles(dens_path)
+        dens_funcs.sort() 
 
         io_path = os.path.join(self.CorePath, 'functions', 'io_functions')
         io_funcs = list_mfiles(io_path)
+        io_funcs.sort()
 
         thermo_path = os.path.join(self.CorePath, 'functions', 'thermal_properties')
         thermo_prop_funcs = list_mfiles(thermo_path)
         thermo_prop_funcs.append('sr_water_fugacity.m')
         thermo_prop_funcs.append('Qinv_from_J1_J2.m')
         thermo_prop_funcs.append('PiezometerWH2006.m')
+        thermo_prop_funcs.sort()
 
         support_path = os.path.join(str(self.VBRpath), 'vbr', 'support')
         gen_func_path = os.path.join(str(self.CorePath), 'functions')
         support_funcs = ['vbr_version.m', 'VBR_list_methods.m', 'full_nd.m',
                          'vbr_categorical_color.m', 'vbr_categorical_cmap_array.m']
         support_funcs = support_funcs + io_funcs
+        support_funcs.sort() 
 
         gen_funcs =['checkStructForField.m', 'get_nested_field_from_struct.m',
                     'nested_structure_update.m',
                     'is_octave.m', 'varargin_keyvals_to_structure.m', ]
+        gen_funcs.sort() 
 
         fitting_path = os.path.join(str(self.VBRpath), 'vbr', 'fitting')
         fitting_funcs = list_mfiles(fitting_path)
-
+        fitting_funcs.sort() 
+        
         self.support_functions = {
             'density': dens_funcs,
             'fitting': fitting_funcs,
