@@ -20,114 +20,35 @@ function FitData_Qu2024_eburgers()
     addpath('./functions')
     vbr_init
   
-    % set elastic, anelastic methods, load parameters
-    VBR0.in.elastic.methods_list={'anharmonic'};
-    VBR0.in.anelastic.methods_list={'eburgers_psp'};      
-    VBR0.in.elastic.anharmonic=Params_Elastic('anharmonic'); %
-    VBR0.in.anelastic.eburgers_psp=Params_Anelastic('eburgers_psp');
-    % temperature range
-    VBR0.in.SV.T_K=700:50:1350;
-    VBR0.in.SV.T_K=VBR0.in.SV.T_K+273;
-    T_min_K = min(VBR0.in.SV.T_K);
-    T_max_K = max(VBR0.in.SV.T_K);
-    n_T = numel(VBR0.in.SV.T_K);
-    sz=size(VBR0.in.SV.T_K); % temperature [K]
-    VBR0.in.SV.P_GPa = 0.2 * ones(sz); % pressure [GPa]
-    VBR0.in.SV.rho = 3300 * ones(sz); % density [kg m^-3]
-    VBR0.in.SV.sig_MPa = 10 * ones(sz); % differential stress [MPa]
-    VBR0.in.SV.phi = 0.0 * ones(sz); % melt fraction
-
-    % frequencies to calculate at
-    VBR0.in.SV.f = 1./logspace(-.1,3.1,50);
 
     sample_ids = {'A1802';'A1906'; 'A1928'};
-    
+    sample_temps.A1802.Tmin_C = 900;
+    sample_temps.A1802.Tmax_C = 1200;
+    sample_temps.A1906.Tmin_C = 900;
+    sample_temps.A1906.Tmax_C = 1300;
+    sample_temps.A1928.Tmin_C = 950;
+    sample_temps.A1928.Tmax_C = 1300;
+
+    global_T_min_max_K = [900, 1300] + 273;
+
     VBRresults = struct();
-    for isample = 1:numel(sample_ids)
-        
+    for isample = 1:numel(sample_ids)        
         sample_name = sample_ids{isample};
-        disp(["Forward VBRc calculation with sample fit ", sample_name])
-        VBR = VBR0; 
-        VBR.in.anelastic.eburgers_psp.eBurgerFit=sample_name; % 'bg_only' or 'bg_peak' or 's6585_bg_only'
-                          
-        GU=VBR.in.anelastic.eburgers_psp.(sample_name).G_UR;
-        TR=VBR.in.anelastic.eburgers_psp.(sample_name).TR;
-        PR=VBR.in.anelastic.eburgers_psp.(sample_name).PR*1e9;
-        VBR.in.elastic.anharmonic.Gu_0_ol = GU; 
-        VBR.in.elastic.anharmonic.T_K_ref = TR;
-        VBR.in.elastic.anharmonic.P_Pa_ref = PR;
-        % set the grain size to the average size of the sample
-        dg_um = VBR.in.anelastic.eburgers_psp.(sample_name).dR; 
-        VBR.in.SV.dg_um=dg_um*ones(sz);    
-
-        % run it initially (eburgers_psp uses high-temp background only by default)
-        [VBR] = VBR_spine(VBR) ;
-
-        VBRresults.(sample_name) = VBR; 
+        disp(["Forward VBRc calculation with sample fit ", sample_name])        
+        VBRresults.(sample_name) = sample_VBR(sample_name, sample_temps); 
     end 
 
     % load data if it exists
     data = load_Qu2024_data();
-  
-    %% ====================================================
-    %% Display some things ================================
-    %% ====================================================
-    
-    figure;
-    n_samples = numel(sample_ids);
-    for isample = 1:n_samples
+
+    plot_data = true;
+    for isample = 1:numel(sample_ids)        
         sample_name = sample_ids{isample};
-        VBR = VBRresults.(sample_name);
-        logper=1./VBR.in.SV.f;
-
-        for iTemp = 1:numel(VBR.in.SV.T_K)
-            M=squeeze(VBR.out.anelastic.eburgers_psp.M(1,iTemp,:)/1e9);      
-            Qinv=squeeze(VBR.out.anelastic.eburgers_psp.Qinv(1,iTemp,:));
-            RGB = normalize_color(VBR.in.SV.T_K(iTemp), T_min_K, T_max_K, iTemp);            
-            
-            subplot(n_samples,2,isample*2-1)
-            hold on
-            semilogx(logper,M,'color',RGB,'LineWidth',2);
-            
-            subplot(n_samples,2,isample*2)
-            hold on
-            loglog(logper,Qinv,'color',RGB,'LineWidth',2);
-        end 
-
-        subplot(n_samples,2,isample*2-1)
-        ylabel(['M [GPa] : ', sample_name])
-        box on
-        subplot(n_samples,2,isample*2)
-        ylabel('log10 Q^{-1}')        
-        box on
+        VBR = VBRresults.(sample_name); 
+        plot_VBR_and_sample(sample_name, sample_temps, VBR, data, plot_data, global_T_min_max_K);
     end 
 
-    if numfields(data) > 0
-        for isample = 1:n_samples
-            sdata = data.(sample_name);
-            for iTemp = 1:numel(sdata.T_K)
-                T_K = sdata.T_K(iTemp);
-                Qinv = 10.^sdata.logQs_inv(iTemp);                
-                G_GPa = sdata.G_GPa(iTemp);
-                period = 10.^sdata.log_period(iTemp);                
-                dT = abs(T_K - VBR0.in.SV.T_K);
-                iTemp_other = find(dT == min(dT));                
-                RGB = normalize_color(T_K, T_min_K, T_max_K, iTemp_other);            
-
-                subplot(n_samples,2,isample*2-1)
-                hold on
-                semilogx(period, G_GPa,'color',RGB, 'linestyle', 'none', 'marker', '.', 'markersize', 12);
-                
-                subplot(n_samples,2,isample*2)
-                hold on
-                semilogy(period,Qinv,'color',RGB, 'linestyle', 'none', 'marker', '.', 'markersize', 12);
-                ylim([-2.3, .3])
-
-            end 
-        end 
-    end 
     
-    saveas(gcf,'./figures/Qu2024_eBurgers.png')
   end
   
 
@@ -141,4 +62,123 @@ function RGB = normalize_color(T_K, T_min_K, T_max_K, i_T)
     % RGB(RGB>1) = 1;
 
     RGB = vbr_categorical_color(i_T);
+end 
+
+
+function VBR = sample_VBR(sample_name, sample_temps)
+
+    % set elastic, anelastic methods, load parameters
+    VBR.in.elastic.methods_list={'anharmonic'};
+    VBR.in.anelastic.methods_list={'eburgers_psp'};      
+    VBR.in.elastic.anharmonic=Params_Elastic('anharmonic'); %
+    VBR.in.anelastic.eburgers_psp=Params_Anelastic('eburgers_psp');
+    
+    % temperature range
+    T_min_K = sample_temps.(sample_name).Tmin_C + 273;
+    T_max_K = sample_temps.(sample_name).Tmax_C + 273;    
+    VBR.in.SV.T_K=T_min_K:50:T_max_K;    
+    
+    n_T = numel(VBR.in.SV.T_K);
+    sz=size(VBR.in.SV.T_K); % temperature [K]
+    VBR.in.SV.P_GPa = 0.2 * ones(sz); % pressure [GPa]
+    VBR.in.SV.rho = 3300 * ones(sz); % density [kg m^-3]
+    VBR.in.SV.sig_MPa = 10 * ones(sz); % differential stress [MPa]
+    VBR.in.SV.phi = 0.0 * ones(sz); % melt fraction
+
+    % frequencies to calculate at
+    VBR.in.SV.f = 1./logspace(-.5,3.5,50);
+
+    VBR.in.anelastic.eburgers_psp.eBurgerFit=sample_name; % 'bg_only' or 'bg_peak' or 's6585_bg_only'
+    
+    % set the reference anharmonic properties    
+    GU=VBR.in.anelastic.eburgers_psp.(sample_name).G_UR;
+    disp([sample_name, " ", num2str(GU)]);
+    TR=VBR.in.anelastic.eburgers_psp.(sample_name).TR;
+    PR=VBR.in.anelastic.eburgers_psp.(sample_name).PR*1e9;    
+    VBR.in.elastic.anharmonic.Gu_0_ol = GU; 
+    VBR.in.elastic.anharmonic.T_K_ref = TR;
+    VBR.in.elastic.anharmonic.P_Pa_ref = PR;        
+
+    % set the grain size to the average size of the sample
+    dg_um = VBR.in.anelastic.eburgers_psp.(sample_name).dR; 
+    VBR.in.SV.dg_um=dg_um*ones(sz);    
+
+    % run it initially (eburgers_psp uses high-temp background only by default)
+    [VBR] = VBR_spine(VBR) ;
+end 
+
+
+function plot_VBR_and_sample(sample_name, sample_temps, VBR, data, plot_data, 
+    global_T_min_max_K)
+
+    figure('PaperPosition',[0,0,8,4],'PaperPositionMode','manual') 
+    logper=log10(1./VBR.in.SV.f);
+    T_sample_min =  sample_temps.(sample_name).Tmin_C;
+    T_sample_max =  sample_temps.(sample_name).Tmax_C;
+    T_min_K = global_T_min_max_K(1);
+    T_max_K = global_T_min_max_K(2);
+    for iTemp = 1:numel(VBR.in.SV.T_K)        
+        T_val_C = VBR.in.SV.T_K(iTemp) - 273;                
+        if T_val_C >= T_sample_min && T_val_C <= T_sample_max;
+            M=squeeze(VBR.out.anelastic.eburgers_psp.M(1,iTemp,:)/1e9);      
+            Qinv=squeeze(VBR.out.anelastic.eburgers_psp.Qinv(1,iTemp,:));
+            RGB = normalize_color(VBR.in.SV.T_K(iTemp), T_min_K, T_max_K, iTemp);            
+            
+            subplot(1,2,1)
+            hold on
+            plot(logper,M,'color',RGB,'LineWidth',2);
+            
+            subplot(1,2,2)
+            hold on
+            plot(logper,log10(Qinv),'color',RGB,'LineWidth',2);
+        end 
+    end 
+
+
+    if numfields(data) > 0 && plot_data
+        sdata = data.(sample_name);
+        for iTemp = 1:numel(sdata.T_C)
+            T_K = sdata.T_C(iTemp) + 273;
+
+            T_val_C = T_K - 273;
+            T_sample_min =  sample_temps.(sample_name).Tmin_C;
+            T_sample_max =  sample_temps.(sample_name).Tmax_C;
+            if T_val_C >= T_sample_min && T_val_C <= T_sample_max;
+                Qinv = sdata.log_Qinv(iTemp);  
+                                
+                G_GPa = sdata.G_GPa(iTemp);
+                
+                period = sdata.log_period_s(iTemp);                
+                dT = abs(T_K - VBR.in.SV.T_K);
+                iTemp_other = find(dT == min(dT));                
+                RGB = normalize_color(T_K, T_min_K, T_max_K, iTemp_other);            
+
+                subplot(1,2,1)
+                hold on
+                plot(period, G_GPa,'color',RGB, 'linestyle', 'none', 'marker', '.', 'markersize', 12);                
+                
+                subplot(1,2,2)
+                hold on
+                plot(period,Qinv,'color',RGB, 'linestyle', 'none', 'marker', '.', 'markersize', 12);                
+                
+            end 
+        end 
+    end 
+
+    subplot(1,2,1)
+    ylabel(['M [GPa] : ', sample_name])
+    ylim([0, 80])
+    logperrange = [min(logper), max(logper)];
+    xlim(logperrange)
+    title(sample_name)
+    box on
+
+    subplot(1,2,2)
+    ylim([-2.5, .3])
+    xlim(logperrange)
+    ylabel('log10 Q^{-1}')
+    box on
+
+    saveas(gcf,['./figures/Qu2024_eBurgers_',sample_name, '.png'])
+
 end 
