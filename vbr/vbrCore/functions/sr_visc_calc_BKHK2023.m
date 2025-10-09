@@ -53,10 +53,10 @@ for i_SV = 1:n_SVs
     sr = A_ltp*s_rho_ss^2*sinh((sig(i_SV)-s_rho_ss-s_d)/s_ref); %calculate steady-state strain rate
     
     % convert strain rate to shear-strain rate
-    sr_ss(i_SV) = sr*(3)^0.5; %s^-1, plastic shear-strain rate calculated through LTP law of the backstress model
+    sr_ss(i_SV) = sr * sqrt(3); %s^-1, plastic shear-strain rate calculated through LTP law of the backstress model
 
     % Calculating shear viscosity
-    eta(i_SV) = sig(i_SV)./(3)^0.5./sr_ss(i_SV); %Pas, steady-state shear viscosity
+    eta(i_SV) = sig(i_SV) ./ sr_ss(i_SV) / sqrt(3); %Pas, steady-state shear viscosity
 
     if s_d > sig(i_SV) %throw error if grain stress exceeds applied stress and set viscosity and strainrate to NaN
         warning(['Grain-size dependent threshold stress exceeds deviatoric stress, no steady-state solution for deviatoric stress = ' num2str(sig(i_SV)/1e6) ' MPa and d = ' num2str(d(i_SV)*1e6) ' um. Setting steady-state viscosity and strainrate to NaN. Pick a larger deviatoric stress or larger grain size to resolve this issue.'])
