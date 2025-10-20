@@ -112,7 +112,7 @@ To use the updated fitting parameters from Qu et al 2024:
 
 ```matlab
 VBR.in.anelastic.eburgers_psp=Params_Anelastic('eburgers_psp');
-VBR.in.anelastic.eburgers_psp.eBurgerFit='Qu2024'; % select the bg + peak
+VBR.in.anelastic.eburgers_psp.eBurgerFit='Qu2024';
 ```
 
 Future versions of the VBRc will likely change the default fit to Qu et al 2024.
