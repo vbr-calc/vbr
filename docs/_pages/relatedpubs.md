@@ -12,8 +12,10 @@ The following publications have contributed directly towards writing or formulat
 
 The following papers have used the VBRc in some capacity:
 
-* **Hua, J., Grand, S.P., Becker, T.W., Janiszewski, H.A., Liu, C., Trugman, D.T. and Zhu, H., (2025)**. Seismic full-waveform tomography of active cratonic thinning beneath North America consistent with slab-induced dripping. Nat. Geosci. 18, 358–364 (2025). https://doi.org/10.1038/s41561-025-01671-x
+* **Dannberg, J., Eilon, Z., Russell, J.B. & Gassmöller, R. (2025)**. Understanding sub‐lithospheric small‐scale convection by linking models of grain size evolution, mantle convection, and seismic tomography. Geochemistry, Geophysics, Geosystems, 26(9), p.e2025GC012289. https://doi.org/10.1029/2025GC012289
+* **Hua, J., Grand, S.P., Becker, T.W., Janiszewski, H.A., Liu, C., Trugman, D.T. & Zhu, H., (2025)**. Seismic full-waveform tomography of active cratonic thinning beneath North America consistent with slab-induced dripping. Nat. Geosci. 18, 358–364 (2025). https://doi.org/10.1038/s41561-025-01671-x
 * **Eilon, Z. C. (2025)**. Attenuation and Velocity Tomography of the Northern East African Rift. Journal of Geophysical Research: Solid Earth 130.2, e2024JB030417. https://doi.org/10.1029/2024JB030417
+* **Sim, S. J., Yu, T. Y., & Havlin, C. (2024)**. Persistent heterogeneities in the oceanic lithosphere due to differential freezing beneath ridges. Geophysical Research Letters, 51(23), e2024GL109440. https://doi.org/10.1029/2024GL109440
 * **Bezada, M. J., Byrnes, J. S., Zhu, Z., & Lee, H. (2023)**. Lateral variations in teleseismic attenuation of the conterminous U.S. and new insights derived from its relationship to Mantle seismic velocity. Journal of Geophysical Research: Solid Earth, 128, e2023JB027299. https://doi.org/10.1029/2023JB027299
 * **Byrnes, J. S., J. Gaherty, & E. Hopper (2023)**. Seismic Architecture of the Lithosphere-Asthenosphere System in the Western United States from a Joint Inversion of Body- and Surface-wave Observations: Distribution of Partial Melt in the Upper Mantle, Seismica, 2(2), https://doi.org/10.26443/seismica.v2i2.272
 * **Lau, H.C., Holtzman, B.K. & Havlin, C. (2020)**. Toward a Self‐Consistent Characterization of Lithospheric Plates Using Full‐Spectrum Viscoelasticity. AGU Advances 1 (4), e2020AV000205, https://doi.org/10.1029/2020AV000205
