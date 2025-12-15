@@ -4,8 +4,6 @@
 
 **Citing**: Please see the [How to Cite](#how-to-cite) section at the end of this document if using the VBRc for your research.
 
-**Funding**: The VBR calculator has been developed with funding from the following NSF grants (PI Holtzman unless otherwise noted): EAR 1736165 (Earthscope, co-PI C. Havlin), EAR 13-15254 (Geophysics, PI J. Davis), EAR 1056332 (Geophysics- CAREER).
-
 Further documentation available at [https://vbr-calc.github.io/vbr/](https://vbr-calc.github.io/vbr/).
 
 ## Overview
@@ -152,7 +150,7 @@ The VBR Calculator works with [GNU Octave](https://octave.sourceforge.io/io/inde
 
 # Other Learning Resources
 
-Want more of a deep dive into the VBRc? Check out the respository for the [2024 VBRc Virtual Workshop](https://github.com/vbr-calc/VBRc_2024_workshop) where you'll find some sample code as well as links to recorded tutorial sessions as well as talks from researchers who have used the VBRc. 
+Want more of a deep dive into the VBRc? Check out the respository for the [2024 VBRc Virtual Workshop](https://github.com/vbr-calc/VBRc_2024_workshop) where you'll find some sample code as well as links to recorded tutorial sessions as well as talks from researchers who have used the VBRc.
 
 # Getting Help
 
@@ -182,58 +180,58 @@ When you submit a pull request, a suite of tests will run via github actions. Th
 
 Ensuring that code runs on both MATLAB and Octave can be tricky. Please avoid using MATLAB Toolboxes or 3rd party Octave packages. If you would like to add functionality that requires either of these, please open a discussion via the Issues page or reach out on Slack and we can figure out ways to minimize impact and properly test new functionality.
 
-If you use Python for other projects, you can use some pre-commit checks here to 
-help catch some errors. From a fresh environment, run 
+If you use Python for other projects, you can use some pre-commit checks here to
+help catch some errors. From a fresh environment, run
 `pip install -r dev_requirements.txt` to install some extra dependencies and then run
 
 ```
 pre-commit install
 ```
 
-After which, any time you run `git commit`, pre-commit will run some simple checks 
-for you. As of now, the only check ensures that `.m` files do not contain the 
-pound/hashtag symbol, which is a valid comment symbol in octave but not matlab 
+After which, any time you run `git commit`, pre-commit will run some simple checks
+for you. As of now, the only check ensures that `.m` files do not contain the
+pound/hashtag symbol, which is a valid comment symbol in octave but not matlab
 and is a common mistake when your other projects are in Python...
 
 ## How to create a release
 
 This section contains notes for the VBRc maintainers on creating releases. VBRc
-releases are simply snapshots of the code, managed by git tags and saved as source 
+releases are simply snapshots of the code, managed by git tags and saved as source
 code copies in github releases (and automatically backed up to zenodo).
 
-### Release prep 
+### Release prep
 
-To create a release, there are a few changes you first have to make: 
+To create a release, there are a few changes you first have to make:
 
 1. Make sure your local `main` branch matches the remote upstream `main` branch:
 
 ```shell
-$ git checkout main 
-$ git fetch --all 
+$ git checkout main
+$ git fetch --all
 $ git rebase upstream/main
 ```
 
-2. Go into `vbr/support/vbr_version.m` and set `Version.is_development = 0;` and adjust the `major`, `minor` or `patch` entries in the `Version` structure to whatever version you are releasing. 
+2. Go into `vbr/support/vbr_version.m` and set `Version.is_development = 0;` and adjust the `major`, `minor` or `patch` entries in the `Version` structure to whatever version you are releasing.
 3. Make sure the `release_notes.md` header contains the versions string you are releasing and adjust the entries in the release notes as needed.
 4. Update the release notes for the website at `docs/_pages/history.md`: you can manually copy in the latest `release_notes.md` into that file, or if you have a Python environment availabe, you can run:
 ```shell
 $ cd vbr/support/buildingdocs/
 $ python sync_release_notes.py
 $ cd ../../..
-``` 
+```
 and it will automatically update `docs/_pages/history.md`.
 5. commit those changes to a new branch, e.g.:
 
 ```shell
 $ git checkout -b release_prep_v1pt2pt0
-$ git add . 
+$ git add .
 $ git commit -m "release prep v1.2.0"
 ```
 5. push up the new branch and create a pull request as usual
 
-You're now ready to release! 
+You're now ready to release!
 
-### Actually releasing 
+### Actually releasing
 
 To release, create a new version tag locally:
 
@@ -247,14 +245,14 @@ and push it up to gitub
 $ git push upstream v0.99.5
 ```
 
-this will trigger a github action that drafts a release based on the current 
-version of `release_notes.md`. Go to github, edit the release and then hit publish 
+this will trigger a github action that drafts a release based on the current
+version of `release_notes.md`. Go to github, edit the release and then hit publish
 when ready.
 
 ### release cleanup:
 
-Make sure your local `main` matches the upstream VBRc `main` branch and then 
-create a new branch, e.g., `cleanup_from_v1pt2pt0` and make the following 
+Make sure your local `main` matches the upstream VBRc `main` branch and then
+create a new branch, e.g., `cleanup_from_v1pt2pt0` and make the following
 changes:
 
 - Copy/paste `release_notes.md` into `release_history.md`, reset `release_notes.md` for active development.
@@ -262,10 +260,10 @@ changes:
 
 Commit the changes, push up the branch and create a new pull request as usual.
 
-Finally, go check out the github [milestones](https://github.com/vbr-calc/vbr/milestones) and 
-if there is a corresponding version for this release, close it out (if there are open issues 
-or pull requests remaining that did not make it to release, remove them from the milestone and 
-add them to a new one). 
+Finally, go check out the github [milestones](https://github.com/vbr-calc/vbr/milestones) and
+if there is a corresponding version for this release, close it out (if there are open issues
+or pull requests remaining that did not make it to release, remove them from the milestone and
+add them to a new one).
 
 # How to Cite
 
@@ -307,3 +305,12 @@ will display relevant citations for the `eburgers_psp` method.
 ## Licensing
 
 The VBRc is open source and licensed under an MIT license. See the [LICENSE](LICENSE) file for more information.
+
+# Funding
+
+Over the years, support for development of the VBR Calculator has been provided by a number of public funding sources, including:
+
+* 2022: NSF FRES [2218542](https://www.nsf.gov/awardsearch/show-award?AWD_ID=2218542), in particular [2217616](https://www.nsf.gov/awardsearch/show-award?AWD_ID=2217616), Dalton, Lau, Chanard, Hansen, Havlin, Turk, Holtzman & Eilon (see also [istrum.github.io](https://istrum.github.io))
+* 2017: [NSF EAR Earthscope 1736165](https://www.nsf.gov/awardsearch/show-award/?AWD_ID=1736165), Holtzman & Havlin
+* 2013: [NSF EAR Geophysics 1315254](https://www.nsf.gov/awardsearch/show-award?AWD_ID=1315254), Davis, Holtzman & Nettles
+* 2011: [NSF EAR Geophysics (CAREER) 1056332](https://www.nsf.gov/awardsearch/show-award?AWD_ID=1056332), Holtzman
