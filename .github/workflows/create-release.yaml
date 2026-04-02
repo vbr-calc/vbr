@@ -12,7 +12,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       # The exit status for grep -q is 0 if a match is found, 1 if not fund
       - name: confirm that Version.is_development is 0
         run: grep -q "Version.is_development = 0;" vbr/support/vbr_version.m
