@@ -20,7 +20,7 @@ jobs:
     container:
       image: gnuoctave/octave
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Check octave installation
       run: octave --eval "disp(version)"
     - name: Run tests
