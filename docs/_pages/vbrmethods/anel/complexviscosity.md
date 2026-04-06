@@ -8,7 +8,7 @@ title: ''
 
 The complex viscosity is analogous to the complex modulus cast to viscosity, see the references below for more background. 
 
-There are 2 functions for calculating complex viscosity from VBRc outputs: 
+VBRc version: 2.2.0 introduced 2 functions for calculating complex viscosity from VBRc outputs: 
 
 * `complex_viscosity` ([full docstring](/vbr/vbrmethods/support/support/#complex_viscosity)): calculate complex viscosity from complex compliance.
 * `complex_viscosity_from_method` ([full docstring](/vbr/vbrmethods/support/support/#complex_viscosity_from_method)): calculate complex viscosity from the VBR output structure.

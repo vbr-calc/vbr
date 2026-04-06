@@ -27,6 +27,9 @@ function [eta_star, eta_normalized, eta_app] = complex_viscosity(J1, J2, f_Hz, G
     %   maxwell-normalized complex viscosity
     % eta_app
     %   apparent viscosity
+    %
+    %
+    % Introduced in VBRc version: 2.2.0
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     etao = maxwell_time * Gu;
     

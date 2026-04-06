@@ -21,6 +21,9 @@ function [eta_star, eta_star_bar, eta_app] = complex_viscosity_from_method(VBR, 
     %   maxwell-normalized complex viscosity
     % eta_app
     %   apparent viscosity
+    %
+    %
+    % Introduced in VBRc version: 2.2.0
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     ane = VBR.out.anelastic.(anelastic_method);    
     J1 = VBR.out.anelastic.(anelastic_method).J1;
