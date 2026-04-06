@@ -19,7 +19,8 @@ function [VBR]=checkInput(VBR)
         'anelastic','eburgers_psp','elastic','method';
         'anelastic','andrade_psp','elastic','method';
         'anelastic','xfit_premelt','elastic','method';
-        'anelastic','xfit_premelt','SV.Tsolidus_K','SV'};
+        'anelastic','xfit_premelt','SV.Tsolidus_K','SV';
+        'viscous','BKHK2023','elastic','method'};
 
   % list of messages to display for each of those requirements
   Msgs={'xfit_mxw requires a viscosity method. e.g., VBR.in.viscous.methods_list={''HZK2011''};';
@@ -27,23 +28,25 @@ function [VBR]=checkInput(VBR)
         'eburgers_psp requires an elasticity method. e.g., VBR.in.elastic.methods_list={''anharmonic''}';
         'andrade_psp requires an elasticity method. e.g., VBR.in.elastic.methods_list={''anharmonic''}';
         'xfit_premelt requires an elasticity method. e.g., VBR.in.elastic.methods_list={''anharmonic''}';
-        'xfit_premelt requires a solidus state variable e.g., VBR.in.SV.Tsolidus_K=1200*ones(size(T))'};
+        'xfit_premelt requires a solidus state variable e.g., VBR.in.SV.Tsolidus_K=1200*ones(size(T))';
+        'BKHK2023 viscous method requires an elasticity method. e.g., VBR.in.elastic.methods_list={''anharmonic''}'};
 
   Defs={'HZK2011';
         'anharmonic';
         'anharmonic';
         'anharmonic';
         'anharmonic';
+        'null';
         'null'} ;
 
   % defaults for GlobalSettings
   % GlobalDefaults.melt_enhancement=0; % global melt enhacement flag on/off.
   GlobalDefaults=Params_Global();
-  
+
   % loop over requirements, check them.
   for ri = 1:size(Reqs,1)
       typ=Reqs{ri,1}; % general method field
-      if isfield(VBR.in,typ)
+      if isfield(VBR.in,typ) && isfield(VBR.in.(typ), 'methods_list')
         % check if the method is invoked
         method=Reqs{ri,2};
         methods=VBR.in.(typ).methods_list;
