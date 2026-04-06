@@ -932,7 +932,7 @@ path: `vbr/vbr/vbrCore/functions/complex_viscosity.m`
 
 ```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % [eta_star, eta_star_bar, eta_app] = complex_viscosity(J1, J2, f_Hz, Gu, maxwell_time);
+    % [eta_star, eta_normalized, eta_app] = complex_viscosity(J1, J2, f_Hz, Gu, maxwell_time);
     %
     % calculate the complex viscosity
     %
@@ -940,16 +940,20 @@ path: `vbr/vbr/vbrCore/functions/complex_viscosity.m`
     % ----------
     % J1
     %   real part of complex compliance. Assumes frequency dependence is store
-    %   in final index.
+    %   in final index. Can be matrix of any size, but frequency index assumed to be
+    %   the final dimension.
     % J2
     %   imaginary part of complex compliance. Assumes frequency dependence is store
-    %   in final index.
+    %   in final index. Same sie as J1
     % f_Hz
-    %   frequency (NOT angular frequency)
+    %   frequency (NOT angular frequency). If a matrix, should be the same
+    %   size as the final dimension of J1 and J2.
     % Gu
-    %   unrelaxed modulus
+    %   unrelaxed modulus. If a matrix, should be the same size as the non-frequency
+    %   indices of J1, J2 (i.e., if J1 is of size (10, 10, 5), Gu should be size (10, 10))
     % maxwell_time
-    %   the maxwell time
+    %   the maxwell time. If a matrix, should be the same size as the non-frequency
+    %   indices of J1, J2 (i.e., if J1 is of size (10, 10, 5), maxwell_time should be size (10, 10))
     %
     % Returns
     % -------
@@ -959,6 +963,9 @@ path: `vbr/vbr/vbrCore/functions/complex_viscosity.m`
     %   maxwell-normalized complex viscosity
     % eta_app
     %   apparent viscosity
+    %
+    %
+    % Introduced in VBRc version: 2.2.0
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ```
 [top of category!](#other-thermodynamic-properties-docstrings)
@@ -969,7 +976,7 @@ path: `vbr/vbr/vbrCore/functions/complex_viscosity_from_method.m`
 
 ```matlab
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % [eta_star, eta_star_bar, eta_app] = complex_viscosity_from_method(VBR, anelastic_method, Gu_method);
+    % [eta_star, eta_normalized, eta_app] = complex_viscosity_from_method(VBR, anelastic_method, Gu_method);
     %
     % calculate the complex viscosity for an existing anelastic output
     %
@@ -990,6 +997,9 @@ path: `vbr/vbr/vbrCore/functions/complex_viscosity_from_method.m`
     %   maxwell-normalized complex viscosity
     % eta_app
     %   apparent viscosity
+    %
+    %
+    % Introduced in VBRc version: 2.2.0
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ```
 [top of category!](#other-thermodynamic-properties-docstrings)

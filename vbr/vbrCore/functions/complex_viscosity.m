@@ -1,6 +1,6 @@
 function [eta_star, eta_normalized, eta_app] = complex_viscosity(J1, J2, f_Hz, Gu, maxwell_time);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % [eta_star, eta_star_bar, eta_app] = complex_viscosity(J1, J2, f_Hz, Gu, maxwell_time);
+    % [eta_star, eta_normalized, eta_app] = complex_viscosity(J1, J2, f_Hz, Gu, maxwell_time);
     %
     % calculate the complex viscosity
     %
@@ -8,16 +8,20 @@ function [eta_star, eta_normalized, eta_app] = complex_viscosity(J1, J2, f_Hz, G
     % ----------
     % J1
     %   real part of complex compliance. Assumes frequency dependence is store
-    %   in final index.
+    %   in final index. Can be matrix of any size, but frequency index assumed to be
+    %   the final dimension. 
     % J2
     %   imaginary part of complex compliance. Assumes frequency dependence is store
-    %   in final index.
+    %   in final index. Same sie as J1
     % f_Hz
-    %   frequency (NOT angular frequency)
+    %   frequency (NOT angular frequency). If a matrix, should be the same 
+    %   size as the final dimension of J1 and J2.
     % Gu
-    %   unrelaxed modulus
+    %   unrelaxed modulus. If a matrix, should be the same size as the non-frequency 
+    %   indices of J1, J2 (i.e., if J1 is of size (10, 10, 5), Gu should be size (10, 10))
     % maxwell_time
-    %   the maxwell time
+    %   the maxwell time. If a matrix, should be the same size as the non-frequency 
+    %   indices of J1, J2 (i.e., if J1 is of size (10, 10, 5), maxwell_time should be size (10, 10))
     %
     % Returns
     % -------
@@ -31,8 +35,7 @@ function [eta_star, eta_normalized, eta_app] = complex_viscosity(J1, J2, f_Hz, G
     %
     % Introduced in VBRc version: 2.2.0
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    etao = maxwell_time * Gu;
-    
+    etao = maxwell_time .* Gu;    
     omega = 2 * pi * f_Hz; 
     % allocate output arrays
     full_size = size(J1);
@@ -48,7 +51,6 @@ function [eta_star, eta_normalized, eta_app] = complex_viscosity(J1, J2, f_Hz, G
     % allocate intermediate arrays for frequency loop
     eta_star_mx_i = zeros(n_not_freq,1);
     eta_star_i = zeros(n_not_freq,1);
-    eta_star_bar_i = zeros(n_not_freq,1);
     eta_app_i = zeros(n_not_freq,1);
     
 
@@ -59,7 +61,7 @@ function [eta_star, eta_normalized, eta_app] = complex_viscosity(J1, J2, f_Hz, G
         % linear index range for this frequency
         i_start = (ifreq - 1) * n_not_freq + 1;
         i_end = i_start + n_not_freq - 1;
-
+        
         % get complex modulus for this frequency range
         J = J1(i_start:i_end) - J2(i_start:i_end) * i;
         Mstar = 1./J;        
