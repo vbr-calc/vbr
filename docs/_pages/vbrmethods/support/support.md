@@ -38,6 +38,8 @@ functions related to other thermodynamic properties
 * [ThermalConductivity](#thermalconductivity)
 * [adiabatic_coefficient](#adiabatic_coefficient)
 * [adiabatic_gradient](#adiabatic_gradient)
+* [complex_viscosity](#complex_viscosity)
+* [complex_viscosity_from_method](#complex_viscosity_from_method)
 * [sr_water_fugacity](#sr_water_fugacity)
 
 ## VBRc support
@@ -921,6 +923,74 @@ path: `vbr/vbr/vbrCore/functions/thermal_properties/adiabatic_gradient.m`
     % dTdz_s
     %     adiabatic gradient in K/m
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#other-thermodynamic-properties-docstrings)
+[top of page!](#overview)
+
+### complex_viscosity
+path: `vbr/vbr/vbrCore/functions/complex_viscosity.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % [eta_star, eta_star_bar, eta_app] = complex_viscosity(J1, J2, f_Hz, Gu, maxwell_time);
+    %
+    % calculate the complex viscosity
+    %
+    % Parameters
+    % ----------
+    % J1
+    %   real part of complex compliance. Assumes frequency dependence is store
+    %   in final index.
+    % J2
+    %   imaginary part of complex compliance. Assumes frequency dependence is store
+    %   in final index.
+    % f_Hz
+    %   frequency (NOT angular frequency)
+    % Gu
+    %   unrelaxed modulus
+    % maxwell_time
+    %   the maxwell time
+    %
+    % Returns
+    % -------
+    % eta_star
+    %   complex viscosity
+    % eta_normalized
+    %   maxwell-normalized complex viscosity
+    % eta_app
+    %   apparent viscosity
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+```
+[top of category!](#other-thermodynamic-properties-docstrings)
+[top of page!](#overview)
+
+### complex_viscosity_from_method
+path: `vbr/vbr/vbrCore/functions/complex_viscosity_from_method.m`
+
+```matlab
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % [eta_star, eta_star_bar, eta_app] = complex_viscosity_from_method(VBR, anelastic_method, Gu_method);
+    %
+    % calculate the complex viscosity for an existing anelastic output
+    %
+    % Parameters
+    % ----------
+    % VBR
+    %   a VBR structure with output anelastic resuls
+    % anelastic_method
+    %   the anelastic method to calculate complex viscosity for
+    % Gu_method
+    %   the elastic method to pull the unrelaxed modulus from (default is "anharmonic")
+    %
+    % Returns
+    % -------
+    % eta_star
+    %   complex viscosity
+    % eta_normalized
+    %   maxwell-normalized complex viscosity
+    % eta_app
+    %   apparent viscosity
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ```
 [top of category!](#other-thermodynamic-properties-docstrings)
 [top of page!](#overview)

@@ -331,6 +331,8 @@ class SupportFunctions(VBRinit):
         thermo_prop_funcs.append('sr_water_fugacity.m')
         thermo_prop_funcs.append('Qinv_from_J1_J2.m')
         thermo_prop_funcs.append('PiezometerWH2006.m')
+        thermo_prop_funcs.append('complex_viscosity.m')
+        thermo_prop_funcs.append('complex_viscosity_from_method.m')
         thermo_prop_funcs.sort()
 
         support_path = os.path.join(str(self.VBRpath), 'vbr', 'support')

@@ -17,3 +17,5 @@ The anelastic methods displayed by `VBR_list_methods` currently include:
 A detailed theoretical description of each is provided in the full methods paper ([link](https://doi.org/10.1016/j.pepi.2020.106639)) or in the papers cited by the methods and so here, we only describe the computational aspects useful to the end user.
 
 All of the anelastic methods require results of an elastic calculation, specifically the unrelaxed elastic moduli. If calculated, the anelastic methods may also use moduli from `VBR.out.elastic.anh_poro` and default to those from `VBR.out.elastic.anharmonic`.
+
+Additionally, a number of methods exist for calculating the complex viscosity for VBRc outputs, see the page on [complex viscosity](/vbr/vbrmethods/anel/complexviscosity).
