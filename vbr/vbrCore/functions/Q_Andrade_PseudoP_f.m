@@ -39,7 +39,7 @@ function [VBR] = Q_Andrade_PseudoP_f(VBR)
 
   % pseudo-period master variable independent of period/freqency
   Xtilde = calculateXtilde(VBR);
-
+  tau_M = Tau_MR ./ Xtilde;
   % frequency dependent vars
   [J1, J2, ~, Ma, Va] = Q_init_output_vars(sz, n_freq);
   % J1_gbs = J1; J2_gbs = J1; Q_gbs = J1; M_gbs = J1;
@@ -95,6 +95,7 @@ function [VBR] = Q_Andrade_PseudoP_f(VBR)
   VBR.out.anelastic.(andrade_nm).Q = 1./VBR.out.anelastic.(andrade_nm).Qinv;
   VBR.out.anelastic.(andrade_nm).M=Ma;
   VBR.out.anelastic.(andrade_nm).V=Va;
+  VBR.out.anelastic.(andrade_nm).tau_M=tau_M;
   % VBR.out.anelastic.(andrade_nm).J1_gbs = J1_gbs;
   % VBR.out.anelastic.(andrade_nm).J2_gbs = J2_gbs;
   % VBR.out.anelastic.(andrade_nm).Q_gbs = Q_gbs;

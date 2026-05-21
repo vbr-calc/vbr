@@ -62,7 +62,6 @@ function [VBR] = Q_maxwell_analytical(VBR)
   % calculate mean velocity along frequency dimension
   VBR.out.anelastic.maxwell_analytical.Vave = Q_aveVoverf(Va,f_vec);
 
-  VBR.out.anelastic.maxwell_analytical.units = Q_method_units();
-  VBR.out.anelastic.maxwell_analytical.units.tau_M = 's';
+  VBR.out.anelastic.maxwell_analytical.units = Q_method_units();  
 
 end
