@@ -23,11 +23,11 @@ function Version = vbr_version()
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     Version.major = 2;
     Version.minor = 1;
-    Version.patch = 0;
+    Version.patch = 1;
     Version.version = [num2str(Version.major), '.', ...
                        num2str(Version.minor), '.', ...
                        num2str(Version.patch)];
-    Version.is_development = 1;
+    Version.is_development = 0;
     if Version.is_development == 1
         Version.version = [Version.version, 'dev'];
     end

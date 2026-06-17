@@ -4,6 +4,26 @@ title: "Release Notes"
 toc: false
 ---
 
+# v2.1.1
+
+Bux fix release with fixes for the new viscous backstress (BKHK2023) method
+
+## Bug fixes
+
+* Update sr_visc_calc_BKHK2023.m by @Diede-Hein in https://github.com/vbr-calc/vbr/pull/229
+* BKHK2023 Viscosity: set NaN for nonpositive taylor stress, warn once by @chrishavlin in https://github.com/vbr-calc/vbr/pull/242
+* check for anharmonic method for BKHK2023 viscous method by @chrishavlin in https://github.com/vbr-calc/vbr/pull/243
+
+## Documentation
+
+* update funding section by @chrishavlin in https://github.com/vbr-calc/vbr/pull/231
+* add Dannberg, Sim citations to related publications by @chrishavlin in https://github.com/vbr-calc/vbr/pull/230
+
+## Infrastructure improvements
+
+* bump checkout, matlab runner versions by @chrishavlin in https://github.com/vbr-calc/vbr/pull/244
+
+
 # v2.1.0
 
 This release features a number of new methods (a steady state viscosity for the dislocation-based backstress model, an implementation of the Warren & Hirth 2006 grain size piezometer and a new analytical maxwell anelastic model) as well a new reference anharmonic scaling for the upper mantle. 
