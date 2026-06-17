@@ -1,13 +1,33 @@
+# v2.1.1
+
+Bux fix release with fixes for the new viscous backstress (BKHK2023) method
+
+## Bug fixes
+
+* Update sr_visc_calc_BKHK2023.m by @Diede-Hein in https://github.com/vbr-calc/vbr/pull/229
+* BKHK2023 Viscosity: set NaN for nonpositive taylor stress, warn once by @chrishavlin in https://github.com/vbr-calc/vbr/pull/242
+* check for anharmonic method for BKHK2023 viscous method by @chrishavlin in https://github.com/vbr-calc/vbr/pull/243
+
+## Documentation
+
+* update funding section by @chrishavlin in https://github.com/vbr-calc/vbr/pull/231
+* add Dannberg, Sim citations to related publications by @chrishavlin in https://github.com/vbr-calc/vbr/pull/230
+
+## Infrastructure improvements
+
+* bump checkout, matlab runner versions by @chrishavlin in https://github.com/vbr-calc/vbr/pull/244
+
+
 # v2.1.0
 
-This release features a number of new methods (a steady state viscosity for the dislocation-based backstress model, an implementation of the Warren & Hirth 2006 grain size piezometer and a new analytical maxwell anelastic model) as well a new reference anharmonic scaling for the upper mantle. 
+This release features a number of new methods (a steady state viscosity for the dislocation-based backstress model, an implementation of the Warren & Hirth 2006 grain size piezometer and a new analytical maxwell anelastic model) as well a new reference anharmonic scaling for the upper mantle.
 
 ## New Features
 
 ### New Methods!
 
-* Viscous backstress by @Diede-Hein in https://github.com/vbr-calc/vbr/pull/206 . [link to docs](https://vbr-calc.github.io/vbr/vbrmethods/visc/bkhk2023/).  
-* Adding the Warren & Hirth (2006) Piezometer function by @Diede-Hein in https://github.com/vbr-calc/vbr/pull/221 . See the [link to docs](https://vbr-calc.github.io/vbr/vbrmethods/support/support/#piezometerwh2006) for details. 
+* Viscous backstress by @Diede-Hein in https://github.com/vbr-calc/vbr/pull/206 . [link to docs](https://vbr-calc.github.io/vbr/vbrmethods/visc/bkhk2023/).
+* Adding the Warren & Hirth (2006) Piezometer function by @Diede-Hein in https://github.com/vbr-calc/vbr/pull/221 . See the [link to docs](https://vbr-calc.github.io/vbr/vbrmethods/support/support/#piezometerwh2006) for details.
 * add analytical maxwell model by @chrishavlin in https://github.com/vbr-calc/vbr/pull/216 [link to docs](https://vbr-calc.github.io/vbr/vbrmethods/anel/maxwellanalytical/)
 
 
@@ -16,7 +36,7 @@ This release features a number of new methods (a steady state viscosity for the 
 The following contributions are all related to the new `upper_mantle` reference scaling, see the [anharmonic docs for details](https://vbr-calc.github.io/vbr/vbrmethods/el/anharmonic/#the-reference-modulus):
 
 * some accumulated changes that are nice by @eilonzach in https://github.com/vbr-calc/vbr/pull/202
-* Custom anharmonic scaling structures and preserving nested paramater structures by @chrishavlin in https://github.com/vbr-calc/vbr/pull/209 
+* Custom anharmonic scaling structures and preserving nested paramater structures by @chrishavlin in https://github.com/vbr-calc/vbr/pull/209
 * adding upper_mantle ref value switches, density helper functions by @chrishavlin in https://github.com/vbr-calc/vbr/pull/203
 
 ### Other new features
@@ -35,9 +55,9 @@ A couple of updates to the linearized backstress model:
 
 * BUG: fix default behavior for density_from_vbrc by @chrishavlin in https://github.com/vbr-calc/vbr/pull/224
 
-## Documentation 
+## Documentation
 
-### Supporting methods 
+### Supporting methods
 
 The following changes are related to the new [supporting methods](https://vbr-calc.github.io/vbr/vbrmethods/supporting/) page, where you can check out all the functions that are available in the VBRc but until now were not obviously documented.
 
@@ -47,13 +67,13 @@ The following changes are related to the new [supporting methods](https://vbr-ca
 * Add the fitting/stats functions to documented functions. by @chrishavlin in https://github.com/vbr-calc/vbr/pull/214
 * fix docstring for probability_distributions by @chrishavlin in https://github.com/vbr-calc/vbr/pull/215
 
-### Other documentation improvements 
+### Other documentation improvements
 
 * Linearized Backstress: add an example at lab conditions, update citation by @chrishavlin in https://github.com/vbr-calc/vbr/pull/225
 
 ## Deprecations
 
-None 
+None
 
 ## Infrastructure improvements
 
@@ -90,14 +110,14 @@ Bug fix release to fix some matlab/octave compatibility issues with the cookbook
 
 # v2.0.2
 
-A bug fix release to address issues with calculation of elastic moduli when using the chi-mixing for moduli that were introduced in VBRc version 2.0.0 (prior versions were unaffected). This work also includes a bunch of updates to testing infrastructure to automatically run the cookbook examples in the test suite. 
+A bug fix release to address issues with calculation of elastic moduli when using the chi-mixing for moduli that were introduced in VBRc version 2.0.0 (prior versions were unaffected). This work also includes a bunch of updates to testing infrastructure to automatically run the cookbook examples in the test suite.
 
 ## Bug fixes
 
 * Bug: fix the calculation of elastic moduli for crustal values that gets used in the chi-mixing for anharmonic properties (units of moduli were wrong) [#181](https://github.com/vbr-calc/vbr/pull/181) by @chrishavlin
 * replace pound with percent in generate_parameter_sweep for bayes Project [#179](https://github.com/vbr-calc/vbr/pull/179) by @chrishavlin
 
-## Documentation 
+## Documentation
 
 * Release history is rendered on the website at https://vbr-calc.github.io/vbr/history/ [#177](https://github.com/vbr-calc/vbr/pull/177) by @chrishavlin
 * All cookbook examples in `Projects/vbr_core_examples` are now functions and their formatting has been updated slightly [#181](https://github.com/vbr-calc/vbr/pull/181) by @chrishavlin
@@ -107,17 +127,17 @@ A bug fix release to address issues with calculation of elastic moduli when usin
 * [#181](https://github.com/vbr-calc/vbr/pull/181) added an automated test that runs all cookbook examples, which included some updates to testing and support functions:
     * a new environment variable `VBRcTesting` that gets set to `'1'` when tests are running in order to suppress plotting in the cookbook examples
     * some minimal field value validation for many fields in the output VBR structure
-    * a new function, `get_nested_field_from_struct` let's you get a nested structure field by supplying a cell string "path" to the field: `Q = get_nested_field_from_struct(VBR, {'out'; 'anelastic'; 'andrade_psp'; 'Q'})`. 
-    * a new function, `concat_cell_strs` concatenates all the strings in a cell array of strings, `concat_cell_strs({'hello'; 'there'}, '_')` will result in `hello_there`. 
+    * a new function, `get_nested_field_from_struct` let's you get a nested structure field by supplying a cell string "path" to the field: `Q = get_nested_field_from_struct(VBR, {'out'; 'anelastic'; 'andrade_psp'; 'Q'})`.
+    * a new function, `concat_cell_strs` concatenates all the strings in a cell array of strings, `concat_cell_strs({'hello'; 'there'}, '_')` will result in `hello_there`.
 
 # v2.0.1
 
-Bugfix release to improve velocity calculations from the new linearized backstress anelastic method (`backstress_model`) 
+Bugfix release to improve velocity calculations from the new linearized backstress anelastic method (`backstress_model`)
 
 ## Bug fixes
 * BUG: fix the velocity calculation for backstress model by @chrishavlin in https://github.com/vbr-calc/vbr/pull/171
 
-## Documentation 
+## Documentation
 * adding a citation from Hua et al 2025 by @chrishavlin in https://github.com/vbr-calc/vbr/pull/172
 
 ## Other changes
@@ -131,12 +151,12 @@ This release of the VBRc introduces a few small but potentially breaking changes
 
 * updates to the anharmonic calculation (PR166)[https://github.com/vbr-calc/vbr/pull/166]. Check out the updated docs page: https://vbr-calc.github.io/vbr/vbrmethods/el/anharmonic/ but here's an overview of the changes:
     * adds new flags for specifying the temperature and pressure scaling to use
-    * removes the fixed poisson ratio and instead calculates a bulk modulus following the shear modulus method: there are now fields for reference bulk modulus and temperature, pressure derivatives. 
+    * removes the fixed poisson ratio and instead calculates a bulk modulus following the shear modulus method: there are now fields for reference bulk modulus and temperature, pressure derivatives.
     * adds a pressure scaling from Abramson et al 1997
 
-* new anelastic method! `backstress_linear` implements the linearized backstress model of dislocation-based dissipation from Hein et al., 2025. See the docs and new example: [docs](https://vbr-calc.github.io/vbr/vbrmethods/anel/backstresslinear/), [cookbook example](https://vbr-calc.github.io/vbr/examples/CB_017_backstress_model/). 
+* new anelastic method! `backstress_linear` implements the linearized backstress model of dislocation-based dissipation from Hein et al., 2025. See the docs and new example: [docs](https://vbr-calc.github.io/vbr/vbrmethods/anel/backstresslinear/), [cookbook example](https://vbr-calc.github.io/vbr/examples/CB_017_backstress_model/).
 
-## Documentation 
+## Documentation
 
 * add VBRc workshop links to readme in [162](https://github.com/vbr-calc/vbr/pull/162)
 
@@ -154,7 +174,7 @@ This is a maintenance release to fix an issue with filename clashes with git on 
 ## Bug fixes
 * move deprecated funcs to avoid case insensitive git clash by @chrishavlin in https://github.com/vbr-calc/vbr/pull/152
 
-## Documentation 
+## Documentation
 * Add notes on installing specific versions @chrishavlin [#149](https://github.com/vbr-calc/vbr/pull/149)
 
 ## Deprecations
@@ -168,9 +188,9 @@ This is a maintenance release to fix an issue with filename clashes with git on 
 
 ## New Features
 * new method: analytical_andrade, see [documentation](https://vbr-calc.github.io/vbr/vbrmethods/anel/andradeanalytical/) for detials.
-* updates to xfit_premelt: 
+* updates to xfit_premelt:
   * add direct melt effects from Yamauchi and Takei, 2024. The `xfit_premelt` method will use the updated parameter values when `VBR.in.anelastic.xfit_premelt.include_direct_melt_effect = 1;` (default is 0, a future VBRc version will change the default to 1).
-  * change default exponential melt factor (the alpha in exp(-alpha*phi) in the viscosity relationship) from 25 to 30. 
+  * change default exponential melt factor (the alpha in exp(-alpha*phi) in the viscosity relationship) from 25 to 30.
 * add a `VBR_save` function for saving `VBR` structures
 * add convenience function, `full_nd`, to create filled arrays
 
@@ -190,7 +210,7 @@ This is a maintenance release to fix an issue with filename clashes with git on 
 
 # v1.1.2
 
-Minor bug fix release 
+Minor bug fix release
 
 ## bug fixes
 
@@ -198,7 +218,7 @@ Minor bug fix release
 
 # v1.1.1
 
-Minor bug fix release 
+Minor bug fix release
 
 ## bug fixes
 
