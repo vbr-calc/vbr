@@ -38,6 +38,7 @@ s_d_mat = zeros(SV_shape);
 % looping over state variables - new version
 warn_stress_threshold = 0;
 warn_taylor_stress_nonpositive = 0;
+warn_stress_no_solution = 0;
 for i_SV = 1:n_SVs
     % calculate temperature and grainsize dependent
     % model-specific parameters
@@ -52,16 +53,28 @@ for i_SV = 1:n_SVs
     % and its acceleration is negative
     s_rho_0 = [sig(i_SV)]; %Initial guess of Taylor stress near which to search for negative-slope zero crossing of Taylor stress rate as a function of Taylor stress
     eqn = @(s_rho) (s_rho + s_d)/s_rho*A_ltp*s_rho^2*sinh((sig(i_SV)-s_rho-s_d)/s_ref) - s_rho/params.s_rho_max*abs(A_ltp*s_rho^2*sinh((sig(i_SV)-s_rho-s_d)/s_ref)) - Rp*s_rho^5 - Rgb*s_rho^3*s_d;
-    s_rho_ss = fzero(eqn,s_rho_0); %find zero crossing near s_rho_0
-    s_rho_ss_mat(i_SV) = s_rho_ss;
-    % calculate steady-state strain rate
-    sr = A_ltp*s_rho_ss^2*sinh((sig(i_SV)-s_rho_ss-s_d)/s_ref); %calculate steady-state strain rate
+    try
+        s_rho_ss = fzero(eqn,s_rho_0); %find zero crossing near s_rho_0
+        s_rho_ss_mat(i_SV) = s_rho_ss;
+        % calculate steady-state strain rate
+        sr = A_ltp*s_rho_ss^2*sinh((sig(i_SV)-s_rho_ss-s_d)/s_ref); %calculate steady-state strain rate
 
-    % convert strain rate to shear-strain rate
-    sr_ss(i_SV) = sr * sqrt(3); %s^-1, plastic shear-strain rate calculated through LTP law of the backstress model
+        % convert strain rate to shear-strain rate
+        sr_ss(i_SV) = sr * sqrt(3); %s^-1, plastic shear-strain rate calculated through LTP law of the backstress model
 
-    % Calculating shear viscosity
-    eta(i_SV) = sig(i_SV) ./ sr_ss(i_SV) / sqrt(3); %Pas, steady-state shear viscosity
+        % Calculating shear viscosity
+        eta(i_SV) = sig(i_SV) ./ sr_ss(i_SV) / sqrt(3); %Pas, steady-state shear viscosity
+    catch ME
+        msg = ME.message;
+        if (strfind(msg, "zero point is not bracketed"))
+            sr_ss(i_SV) = NaN;
+            eta(i_SV)   = NaN;
+            warn_stress_no_solution = 1;
+        else
+            rethrow(ME)
+        end
+    end
+
 
     if s_d > sig(i_SV) %throw error if grain stress exceeds applied stress and set viscosity and strainrate to NaN
         warn_stress_threshold = 1;
@@ -85,6 +98,10 @@ if warn_taylor_stress_nonpositive == 1
     warning([msg])
 end
 
+if warn_stress_no_solution == 1
+    msg = 'BKHK2023 did not find a solution for Taylor stress (fzero not bracketed) for at least one condition, outputs will contain NaN values. Pick a larger deviatoric stress or larger grain size to resolve this issue.';
+    warning([msg])
+end
 %outputs
 VBR.out.viscous.BKHK2023.gbnp.sr = sr_ss; %s-1, steady-state strain rate
 VBR.out.viscous.BKHK2023.gbnp.sig_rho_ss = s_rho_ss_mat; % taylor stress
