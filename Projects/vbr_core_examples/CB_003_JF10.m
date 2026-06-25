@@ -20,7 +20,7 @@ function VBR = CB_003_JF10()
   VBR.in.anelastic.eburgers_psp=Params_Anelastic('eburgers_psp');
 
   % use the single sample background only fit:
-  VBR.in.anelastic.eburgers_psp.eBurgerMethod='s6585_bg_only'; % 'bg_only' or 'bg_peak' or 's6585_bg_only'
+  VBR.in.anelastic.eburgers_psp.eBurgerFit='s6585_bg_only'; % 'bg_only' or 'bg_peak' or 's6585_bg_only'
 
   % JF10 have Gu_0=62.5 GPa, but that's at 900 Kelvin and 0.2 GPa,
   % so set Gu_0_ol s.t. it ends up at 62.5 at those conditions
