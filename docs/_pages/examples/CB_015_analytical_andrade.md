@@ -6,7 +6,7 @@ title: ""
 # CB_015_analytical_andrade.m
 ## output figures
 
-!['CB_015_analytical_andrade'](/vbr/assets/images/CBs/CB_015_analytical_andrade.png){:class="img-responsive"}
+!['CB_015_analytical_andrade']({{ '/assets/images/CBs/CB_015_analytical_andrade.png' | relative_url }}){:class="img-responsive"}
 ## contents
 ```matlab
 function VBR = CB_015_analytical_andrade()

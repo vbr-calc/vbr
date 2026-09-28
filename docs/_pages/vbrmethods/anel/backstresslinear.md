@@ -82,7 +82,7 @@ The following fields are frequency dependent: `J1`,`J2`,`Q`,`J1_E`, `J2_E`, `E`,
 
 In addition to the usual outputs, the linear backstress model includes a calculation of the model's characteristic angular frequency, `omega_o`, for each thermodynamic state. The corresponding output, `valid_f`, is a boolean matrix of the same shape as the frequency-dependent variables where the value is 1 if when the frequency is greater than `omega_o / 10`, indicating the regions where the linearized model is expected to be a good fit for the full backstress model (see Hein et al., 2025). This allows you to plot or highlight just the regions that are valid, e.g., see the cookbook example, `CB_017_backstress_model.m`:
 
-!['backstressexample'](/vbr/assets/images/backstress_example.png){:class="img-responsive"}
+!['backstressexample']({{ '/assets/images/backstress_example.png' | relative_url }}){:class="img-responsive"}
 
 ## Parameters
 

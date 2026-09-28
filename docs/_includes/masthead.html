@@ -1,0 +1,107 @@
+{% comment %}
+  Override of minimal-mistakes 4.17.2 _includes/masthead.html that adds a
+  documentation version switcher and a banner on non-stable versions.
+  Version data comes from _data/versions.yml; the version being built is
+  site.docs_version (set by the deploy workflow, unset for local builds).
+
+  The theme renders this include with include_cached, so it must not depend
+  on page variables: the switcher carries each version's base path and a
+  small script swaps the base path of the current location.
+{% endcomment %}
+{% assign docs_root = site.docs_root | default: "" %}
+{% assign stable = site.data.versions.stable %}
+{% assign current = site.docs_version | default: "dev" %}
+
+{% if site.logo contains "://" %}
+  {% capture logo_path %}{{ site.logo }}{% endcapture %}
+{% else %}
+  {% capture logo_path %}{{ site.logo }}{% endcapture %}
+{% endif %}
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        {% unless logo_path == empty %}
+          <a class="site-logo" href="{{ '/' | relative_url }}"><img src="{{ logo_path | relative_url }}" alt=""></a>
+        {% endunless %}
+        <a class="site-title" href="{{ '/' | relative_url }}">
+          {{ site.masthead_title | default: site.title }}
+          {% if site.subtitle %}<span class="site-subtitle">{{ site.subtitle }}</span>{% endif %}
+        </a>
+        <ul class="visible-links">
+          {%- for link in site.data.navigation.main -%}
+            {%- if link.url contains '://' -%}
+              {%- assign url = link.url -%}
+            {%- else -%}
+              {%- assign url = link.url | relative_url -%}
+            {%- endif -%}
+            <li class="masthead__menu-item">
+              <a href="{{ url }}" {% if link.description %}title="{{ link.description }}"{% endif %}>{{ link.title }}</a>
+            </li>
+          {%- endfor -%}
+        </ul>
+        <label class="visually-hidden" for="docs-version-select">Documentation version</label>
+        <select id="docs-version-select" class="docs-version-select" data-base="{{ site.baseurl }}" onchange="docsSwitchVersion(this)">
+          <option value="{{ docs_root }}"{% if current == stable %} selected{% endif %}>{{ stable }} (stable)</option>
+          <option value="{{ docs_root }}/dev"{% if current == "dev" %} selected{% endif %}>dev</option>
+          {%- for tag in site.data.versions.tags -%}
+            {%- if tag != stable -%}
+          <option value="{{ docs_root }}/{{ tag }}"{% if current == tag %} selected{% endif %}>{{ tag }}</option>
+            {%- endif -%}
+          {%- endfor -%}
+        </select>
+        {% if site.search == true %}
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">{{ site.data.ui-text[site.locale].search_label | default: "Toggle search" }}</span>
+          <svg class="icon" width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.99 16">
+            <path d="M15.5,13.12L13.19,10.8a1.69,1.69,0,0,0-1.28-.55l-0.06-.06A6.5,6.5,0,0,0,5.77,0,6.5,6.5,0,0,0,2.46,11.59a6.47,6.47,0,0,0,7.74.26l0.05,0.05a1.65,1.65,0,0,0,.5,1.24l2.38,2.38A1.68,1.68,0,0,0,15.5,13.12ZM6.4,2A4.41,4.41,0,1,1,2,6.4,4.43,4.43,0,0,1,6.4,2Z" transform="translate(-.01)"></path>
+          </svg>
+        </button>
+        {% endif %}
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">{{ site.data.ui-text[site.locale].menu_label | default: "Toggle menu" }}</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+{% if current == "dev" %}
+<div class="docs-version-banner">
+  This is the documentation for the development version of the VBRc.
+  The documentation for the latest release ({{ stable }}) is <a class="docs-version-stable-link" href="{{ docs_root }}/">here</a>.
+</div>
+{% elsif current != stable %}
+<div class="docs-version-banner">
+  This is the documentation for VBRc {{ current }}.
+  The documentation for the latest release ({{ stable }}) is <a class="docs-version-stable-link" href="{{ docs_root }}/">here</a>.
+</div>
+{% endif %}
+<script>
+  // Map the current page onto another version: swap this build's base path
+  // for the chosen version's base path, keeping the rest of the path.
+  function docsSamePageIn(base) {
+    var select = document.getElementById("docs-version-select");
+    var current = select.getAttribute("data-base") || "";
+    var path = window.location.pathname;
+    if (current && path.indexOf(current + "/") === 0) {
+      path = path.slice(current.length);
+    } else if (path === current) {
+      path = "/";
+    } else {
+      path = "/";
+    }
+    return base + path + window.location.hash;
+  }
+  function docsSwitchVersion(select) {
+    window.location.href = docsSamePageIn(select.value);
+  }
+  (function () {
+    var link = document.querySelector(".docs-version-stable-link");
+    if (link) {
+      link.setAttribute("href", docsSamePageIn("{{ docs_root }}"));
+    }
+  })();
+</script>

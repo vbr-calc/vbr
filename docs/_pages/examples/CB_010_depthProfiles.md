@@ -6,7 +6,7 @@ title: ""
 # CB_010_depthProfiles.m
 ## output figures
 
-!['CB_010_depthProfiles'](/vbr/assets/images/CBs/CB_010_depthProfiles.png){:class="img-responsive"}
+!['CB_010_depthProfiles']({{ '/assets/images/CBs/CB_010_depthProfiles.png' | relative_url }}){:class="img-responsive"}
 ## contents
 ```matlab
 function [VBR,HF] = CB_010_depthProfiles()

@@ -22,6 +22,10 @@ title: VBR Calculator
 description: >- # this means to ignore newlines until "baseurl:"
   The VBR Calculator
 baseurl: "/vbr" # the subpath of your site, e.g. /blog
+# Versioned docs: docs_root is the path shared by every published version. The
+# deploy workflow overrides baseurl per version (e.g. /vbr/dev) and sets
+# docs_version to "dev" or a tag name; unset docs_version is treated as dev.
+docs_root: "/vbr"
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  vbr-calc
 name: &name "Ben Holtzman & Chris Havlin" # &name is a YAML anchor which can be *referenced later

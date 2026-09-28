@@ -6,7 +6,7 @@ title: ""
 # CB_020_uppermantle_reference_values.m
 ## output figures
 
-!['CB_020_uppermantle_reference_values'](/vbr/assets/images/CBs/CB_020_uppermantle_reference_values.png){:class="img-responsive"}
+!['CB_020_uppermantle_reference_values']({{ '/assets/images/CBs/CB_020_uppermantle_reference_values.png' | relative_url }}){:class="img-responsive"}
 ## contents
 ```matlab
 function VBR = CB_020_uppermantle_reference_values()

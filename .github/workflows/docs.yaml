@@ -1,5 +1,15 @@
 name: Docs
 
+# Builds and deploys versioned documentation:
+#   <docs_root>/          the stable tag  (docs/_data/versions.yml: stable)
+#   <docs_root>/dev/      the main branch (or the PR under test)
+#   <docs_root>/<tag>/    every tag listed in docs/_data/versions.yml: tags
+#                         (the stable tag is published here as well)
+# Every version is rebuilt on every run, because a Pages deployment replaces
+# the whole site. The Gemfile, _includes/ and _data/versions.yml from the
+# triggering commit are used for every version so old tags get the current
+# theme overrides (version switcher) and gem set.
+
 on:
   pull_request:
     paths:
@@ -21,31 +31,134 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: Build docs
+  versions:
+    name: Read version list
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: docs
+    outputs:
+      matrix: ${{ steps.versions.outputs.matrix }}
     steps:
     - uses: actions/checkout@v6
+    - id: versions
+      name: Build matrix from docs/_data/versions.yml
+      shell: python
+      run: |
+        import json, os, yaml
+
+        with open("docs/_data/versions.yml") as f:
+            cfg = yaml.safe_load(f)
+        stable = cfg["stable"]
+        tags = list(cfg.get("tags") or [])
+        legacy = set(cfg.get("legacy") or [])
+        if stable not in tags:
+            tags.insert(0, stable)
+
+        # name: artifact name; version: docs_version; subdir: path under docs_root
+        entries = [{"name": "dev", "version": "dev", "ref": os.environ["DEV_REF"],
+                    "subdir": "dev", "legacy": False},
+                   {"name": "stable", "version": stable, "ref": stable,
+                    "subdir": "", "legacy": stable in legacy}]
+        for tag in tags:
+            entries.append({"name": tag, "version": tag, "ref": tag,
+                            "subdir": tag, "legacy": tag in legacy})
+        with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+            f.write("matrix=" + json.dumps({"include": entries}) + "\n")
+        print(json.dumps(entries, indent=2))
+      env:
+        DEV_REF: ${{ github.sha }}
+
+  build:
+    name: Build ${{ matrix.name }}
+    needs: versions
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix: ${{ fromJson(needs.versions.outputs.matrix) }}
+    steps:
+    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6
+      with:
+        ref: ${{ matrix.ref }}
+        path: version-src
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: "3.3"
         bundler-cache: true
         working-directory: docs
+    - name: Overlay current theme overrides and version data
+      run: |
+        rm -rf version-src/docs/_includes
+        cp -r docs/_includes version-src/docs/_includes
+        mkdir -p version-src/docs/_data
+        cp docs/_data/versions.yml version-src/docs/_data/versions.yml
+    - name: Write per-version config
+      run: |
+        docs_root="$(grep -E '^docs_root:' docs/_config.yml | sed -E 's/^docs_root: *"?([^"#]*)"?.*/\1/')"
+        docs_root="${docs_root%/}"
+        if [ -n "${{ matrix.subdir }}" ]; then
+          baseurl="${docs_root}/${{ matrix.subdir }}"
+        else
+          baseurl="${docs_root}"
+        fi
+        cat > version-src/docs/_config_version.yml <<EOF
+        baseurl: "${baseurl}"
+        docs_root: "${docs_root}"
+        docs_version: "${{ matrix.version }}"
+        EOF
+        cat version-src/docs/_config_version.yml
     - name: Build site
-      run: bundle exec jekyll build
+      working-directory: docs
+      run: |
+        bundle exec jekyll build \
+          --source "$GITHUB_WORKSPACE/version-src/docs" \
+          --destination "$GITHUB_WORKSPACE/site-out" \
+          --config "$GITHUB_WORKSPACE/version-src/docs/_config.yml,$GITHUB_WORKSPACE/version-src/docs/_config_version.yml"
       env:
         JEKYLL_ENV: production
+    - name: Rewrite hardcoded links (legacy tag)
+      if: matrix.legacy && matrix.subdir != ''
+      run: |
+        docs_root="$(grep -E '^docs_root:' version-src/docs/_config_version.yml | sed -E 's/^docs_root: *"([^"]*)".*/\1/')"
+        # Old docs sources link with a literal site root (e.g. href="/vbr/about/").
+        # Insert the version subdir unless the link already targets a version.
+        find site-out -name '*.html' -print0 | xargs -0 perl -pi -e \
+          's{((?:href|src)=")'"$docs_root"'/(?!dev/|v\d)}{$1'"$docs_root"'/${{ matrix.subdir }}/}g'
+    - uses: actions/upload-artifact@v4
+      with:
+        name: site-${{ matrix.name }}
+        path: site-out
+        retention-days: 1
+        if-no-files-found: error
+
+  assemble:
+    name: Assemble site
+    needs: [versions, build]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        path: parts
+    - name: Arrange versions
+      run: |
+        mkdir -p _site
+        echo '${{ needs.versions.outputs.matrix }}' > matrix.json
+        python3 - <<'EOF'
+        import json, shutil, os
+        matrix = json.load(open("matrix.json"))["include"]
+        for entry in matrix:
+            src = os.path.join("parts", "site-" + entry["name"])
+            dest = os.path.join("_site", entry["subdir"]) if entry["subdir"] else "_site"
+            shutil.copytree(src, dest, dirs_exist_ok=True)
+            print(f'{entry["name"]:>12} -> {dest}/')
+        EOF
+        find _site -maxdepth 2 -name index.html
     - uses: actions/upload-pages-artifact@v5
       with:
-        path: docs/_site
+        path: _site
 
   deploy:
     name: Deploy to GitHub Pages
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    needs: build
+    needs: assemble
     runs-on: ubuntu-latest
     permissions:
       pages: write

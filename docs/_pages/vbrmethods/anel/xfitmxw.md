@@ -21,7 +21,7 @@ VBR.in.SV.rho % density in kg m<sup>-3</sup>
 ```
 Additionally, `xfit_mxw` relies on output from the elastic methods and viscous methods.
 
-**Required Elastic Methods**: `anharmonic` MUST be in the `VBR.in.elastic.methods_list`. If `anh_poro` is in the methods list then `xfit_mxw` will use the unrelaxed moduli from `anh_poro` (which includes the P,T projection of `anharmonic` plus the poroelastic correction). See the section on [elastic methods](/vbr/vbrmethods/elastic/) for more details.
+**Required Elastic Methods**: `anharmonic` MUST be in the `VBR.in.elastic.methods_list`. If `anh_poro` is in the methods list then `xfit_mxw` will use the unrelaxed moduli from `anh_poro` (which includes the P,T projection of `anharmonic` plus the poroelastic correction). See the section on [elastic methods]({{ '/vbrmethods/elastic/' | relative_url }}) for more details.
 
 **Required Viscous Methods**: `xfit_mxw` relies on a viscosity relationship to calculate maxwell times. If none is set in `VBR.in.viscous.methods_list` then the VBR Calculator will use `HZK2011`. To use a different method, set `VBR.in.viscous.methods_list={'HK2003'}`. If multiple viscous methods are set, only the first will be used by `xfit_mxw`.
 
@@ -95,6 +95,6 @@ One parameter of particular note is `VBR.in.anelastic.xfit_mxw.fit`, which can b
 
 The Project script, `Projects/1_LabData/1_Attenuation/FitData_McCT11.m` calculates J1 and J2 normalized by unrelaxed modulus vs. maxwell-normalized period for borneol following McCarthy et al. 2011:
 
-!['mxwLab'](/vbr/assets/images/xfitmxwJ1J2.png){:class="img-responsive"}
+!['mxwLab']({{ '/assets/images/xfitmxwJ1J2.png' | relative_url }}){:class="img-responsive"}
 
 Data are from figure 15 of McCarthy et al. 2011 and are not included in the repository. The solid and dashed lines are fit 1 and fit 2, respectively.
