@@ -75,7 +75,7 @@ class CBexample(VBRinit):
         if self.HasImageFiles:
             rows.append('## output figures\n')
             for f in self.ImFiles:
-                ImLink='/vbr/assets/images/CBs/'+f
+                ImLink="{{ '/assets/images/CBs/"+f+"' | relative_url }}"
                 ImName=f.split('.')[0]
                 rows.append("\n!['"+ImName+"']("+ImLink+'){:class="img-responsive"}\n')
 

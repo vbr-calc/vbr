@@ -19,7 +19,7 @@ VBR.in.SV.sig_MPa % differential stress [MPa]
 VBR.in.SV.phi % melt fraction / porosity
 VBR.in.SV.rho % density in kg m<sup>-3</sup>
 ```
-Additionally, `eburgers_psp` relies on output from the elastic methods so `anharmonic` MUST be in the `VBR.in.elastic.methods_list`. If `anh_poro` is in the methods list then `eburgers_psp` will use the unrelaxed moduli from `anh_poro` (which includes the P,T projection of `anharmonic` plus the poroelastic correction). See the section on [elastic methods](/vbr/vbrmethods/elastic/) for more details.
+Additionally, `eburgers_psp` relies on output from the elastic methods so `anharmonic` MUST be in the `VBR.in.elastic.methods_list`. If `anh_poro` is in the methods list then `eburgers_psp` will use the unrelaxed moduli from `anh_poro` (which includes the P,T projection of `anharmonic` plus the poroelastic correction). See the section on [elastic methods]({{ '/vbrmethods/elastic/' | relative_url }}) for more details.
 
 ## Calling Procedure
 
@@ -112,7 +112,7 @@ It is important to stress that these values **are not used by the anharmonic** c
 # Example at Laboratory Conditions
 The script `Projects/1_LabData/1_Attenuation/FitData_FJ10_eBurgers.m` calculates the modulus, M, and attenuation, Q<sup>-1</sup>, for a temperature range of 700-1200<sup>o</sup>C in 50<sup>o</sup>C increments for periods in 10<sup>-2</sup> to 10<sup>4</sup> s using the single sample fitting parameters for sample 6585 following Jackson and Faul (2010):
 
-!['eBurgersLab'](/vbr/assets/images/FJ10eBurgers.png){:class="img-responsive"}
+!['eBurgersLab']({{ '/assets/images/FJ10eBurgers.png' | relative_url }}){:class="img-responsive"}
 
 The top row (panels a and b) use the fitting parameters for the high temperature background only while the bottom row uses the fitting parameters when an additional dissipation peak is included. Data are from figure 1a-1d of Jackson and Faul 2010 and are not included in the present repository. The single sample fits are selected by setting the `eBurgerFit` parameter. For the background only,
 

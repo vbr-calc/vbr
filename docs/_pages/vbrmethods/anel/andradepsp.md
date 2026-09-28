@@ -20,7 +20,7 @@ VBR.in.SV.sig_MPa % differential stress [MPa]
 VBR.in.SV.phi % melt fraction / porosity
 VBR.in.SV.rho % density in kg m<sup>-3</sup>
 ```
-Additionally, `andrade_psp` relies on output from the elastic methods so `anharmonic` MUST be in the `VBR.in.elastic.methods_list`. If `anh_poro` is in the methods list then `andrade_psp` will use the unrelaxed moduli from `anh_poro` (which includes the P,T projection of `anharmonic` plus the poroelastic correction). See the section on [elastic methods](/vbr/vbrmethods/elastic/) for more details.
+Additionally, `andrade_psp` relies on output from the elastic methods so `anharmonic` MUST be in the `VBR.in.elastic.methods_list`. If `anh_poro` is in the methods list then `andrade_psp` will use the unrelaxed moduli from `anh_poro` (which includes the P,T projection of `anharmonic` plus the poroelastic correction). See the section on [elastic methods]({{ '/vbrmethods/elastic/' | relative_url }}) for more details.
 
 ## Calling Procedure
 
@@ -96,6 +96,6 @@ It is important to stress that these values **are not used by the anharmonic** c
 # Example at Laboratory Conditions
 The script `Projects/1_LabData/1_Attenuation/FitData_FJ10_Andrade.m` calculates the modulus, M, and attenuation, Q<sup>-1</sup>, for a temperature range of 700-1200<sup>o</sup>C in 50<sup>o</sup>C increments for periods in 10<sup>-2</sup> to 10<sup>4</sup> s following Jackson and Faul (2010):
 
-!['andradeLab'](/vbr/assets/images/FJ10andrade.png){:class="img-responsive"}
+!['andradeLab']({{ '/assets/images/FJ10andrade.png' | relative_url }}){:class="img-responsive"}
 
 Data are from figure 1e-1f of Jackson and Faul 2010 and are not included in the present repository.

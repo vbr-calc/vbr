@@ -6,7 +6,7 @@ title: ""
 # CB_006_viscosity.m
 ## output figures
 
-!['CB_006_viscosity'](/vbr/assets/images/CBs/CB_006_viscosity.png){:class="img-responsive"}
+!['CB_006_viscosity']({{ '/assets/images/CBs/CB_006_viscosity.png' | relative_url }}){:class="img-responsive"}
 ## contents
 ```matlab
 function VBR = CB_006_viscosity()

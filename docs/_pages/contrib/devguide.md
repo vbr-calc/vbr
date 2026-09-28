@@ -113,3 +113,42 @@ bundle exec jekyll serve
 and open [http://127.0.0.1:4000/vbr/](http://127.0.0.1:4000/vbr/) in a browser. The site is configured with a base path of `/vbr` to match its location on github pages, so the trailing `/vbr/` is required. The server rebuilds pages when you edit them (changes to `_config.yml` require a restart). To only build, `bundle exec jekyll build` writes the site to `docs/_site/` (opening the html files directly will not work because of the base path, so use `jekyll serve` or another local web server).
 
 The first build downloads the site theme from github, so requires a network connection.
+
+## linking between pages
+
+Because the same source is published at several paths (see below), links to other pages or to images must not hardcode the `/vbr/` site root. Use the `relative_url` filter instead, which prepends whatever base path the current build uses:
+
+{% raw %}
+```
+[quick start]({{ '/gettingstarted/' | relative_url }})
+![figure]({{ '/assets/images/VBRsimpleFlowchart.png' | relative_url }})
+```
+{% endraw %}
+
+# versioned documentation
+
+The github action in `.github/workflows/docs.yaml` publishes several versions of the site:
+
+* `https://vbr-calc.github.io/vbr/`: the latest release (the `stable` tag in `docs/_data/versions.yml`)
+* `https://vbr-calc.github.io/vbr/dev/`: the `main` branch
+* `https://vbr-calc.github.io/vbr/vX.Y.Z/`: every tag listed under `tags` in `docs/_data/versions.yml`
+
+A drop-down in the site header switches between them. Every version is rebuilt from its git tag on every deploy (a github pages deployment replaces the whole site), using the current `docs/_includes/` and `docs/_data/versions.yml` so that old versions get the version switcher too. Merges to `main` only update the `dev` docs.
+
+## publishing the docs for a new release
+
+After the release tag exists on github, open a pull request that sets `stable` to the new tag and adds it to `tags` in `docs/_data/versions.yml`. Merging it deploys the new release at the site root. Do not list a tag before it has been pushed, because the docs build will fail trying to check it out.
+
+To drop an old version from the site, remove it from `tags`. Tags listed under `legacy` predate the `relative_url` convention above, so the workflow rewrites their hardcoded `/vbr/` links in the built html; new tags do not need to be listed there.
+
+## previewing a version locally
+
+A plain `bundle exec jekyll serve` builds the site as `dev` at `/vbr/`. To mimic what the deploy workflow does for a given version, write a `docs/_config_version.yml` (ignored by git) such as
+
+```
+baseurl: "/vbr/dev"
+docs_root: "/vbr"
+docs_version: "dev"
+```
+
+and pass it as a second config file: `bundle exec jekyll serve --config _config.yml,_config_version.yml`. The switcher links point at the deployed site, so they will not resolve locally.

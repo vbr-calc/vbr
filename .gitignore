@@ -1,4 +1,5 @@
 docs/_site/
+docs/_config_version.yml
 *.pyc
 *.mat
 *.png

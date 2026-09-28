@@ -36,14 +36,14 @@ Additionally, `xfit_premelt` relies on output from the elastic and viscous metho
 is treated differently depending on the value of `include_direct_melt_effect`. 
 If `include_direct_melt_effect==0` and `anh_poro` is in the methods list then `xfit_premelt` will use the unrelaxed moduli 
 from `anh_poro` (which includes the P,T projection of `anharmonic` plus the poroelastic correction). See the section 
-on [elastic methods](/vbr/vbrmethods/elastic/) for more details. If `include_direct_melt_effect==1`, then poroelasticity is incororated within 
+on [elastic methods]({{ '/vbrmethods/elastic/' | relative_url }}) for more details. If `include_direct_melt_effect==1`, then poroelasticity is incororated within 
 J1, following Yamauchi and Takei (2024). The current version of the VBRc uses `include_direct_melt_effect=0` as the default, 
 future versions will set this flag to 1 by default.
 
-**Optional Viscous Methods**: `xfit_premelt` calculates maxwell times using the [viscous xfit_premelt method](/vbr/vbrmethods/visc/xfit_premelt/). 
+**Optional Viscous Methods**: `xfit_premelt` calculates maxwell times using the [viscous xfit_premelt method]({{ '/vbrmethods/visc/xfitpremelt/' | relative_url }}). 
 If you want to adjust the viscosity calculation used in the maxwell time, you can add `xfit_premelt` to `VBR.in.viscous.methods_list` 
 and adjust the desired parameters. The anelastic calculation will then use the results calculated by the viscous `xfit_premelt` method. 
-This is particularly useful when fitting laboratory measurements of borneol (see [example](/vbr/vbrmethods/anel/xfitpremelt/#example-at-laboratory-conditions) below).
+This is particularly useful when fitting laboratory measurements of borneol (see [example]({{ '/vbrmethods/anel/xfitpremelt/#example-at-laboratory-conditions' | relative_url }}) below).
 
 ## Calling Procedure
 
@@ -113,10 +113,10 @@ Any of the parameters can be set before calling `VBR_spine`.
 
 The Project script, `Projects/1_LabData/1_Attenuation/FitData_YT16.m` calculates attenuation and modulus for borneol sample 41 at temperatures of 8, 13, 18, 29, 35, 39 and 47<sup>o</sup>C following Yamauchi and Takei (2016):
 
-!['mxwPMLab'](/vbr/assets/images/xfitpremelt1.png){:class="img-responsive"}
+!['mxwPMLab']({{ '/assets/images/xfitpremelt1.png' | relative_url }}){:class="img-responsive"}
 
 Data are from figure 10 of Yamauchi and Takei (2016) and are not included in the repository at present.
 
 The Project script,  `Projects/1_LabData/1_Attenuation/FitData_YT24.m` reproduces figure 7 from Yamauchi and Takei (2024).
 
-!['mxwPMLab'](/vbr/assets/images/xfitpremelt_melt_effects.png){:class="img-responsive"}
+!['mxwPMLab']({{ '/assets/images/xfitpremelt_melt_effects.png' | relative_url }}){:class="img-responsive"}

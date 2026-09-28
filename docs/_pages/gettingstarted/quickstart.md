@@ -3,7 +3,7 @@ permalink: /gettingstarted/
 title: 'Quick Start'
 ---
 
-The following outlines the basic usage for the VBR calculator. Additionally, there are a growing number of [examples](/vbr/examples/) in Projects/ to illustrate more complex usage, particularly in developing a statistical framework for comparing predicted mechanical properties to observed properties. In general, the flow is to:
+The following outlines the basic usage for the VBR calculator. Additionally, there are a growing number of [examples]({{ '/examples/' | relative_url }}) in Projects/ to illustrate more complex usage, particularly in developing a statistical framework for comparing predicted mechanical properties to observed properties. In general, the flow is to:
 
 1. Initialize VBR
 2. Set Methods List
@@ -16,7 +16,7 @@ The following outlines the basic usage for the VBR calculator. Additionally, the
 
 The VBR Calculator is built around MATLAB structures. All direction and data is stored in the `VBR` structure, which gets passed around to where it needs to go. `VBR.in` contains the user's input. `VBR.out` contains the results of any calculations.
 
-!['VBRstructure'](/vbr/assets/images/vbrcoreflowchart.png){:class="img-responsive"}
+!['VBRstructure']({{ '/assets/images/vbrcoreflowchart.png' | relative_url }}){:class="img-responsive"}
 
 ## 1. Initialize VBR
 
@@ -32,7 +32,7 @@ If desired, you can permanently add the vbr directory to your path and even call
 
 ## 2. Set Methods List
 
-The user must supply a cell array called `methods_list` for each property for which they want to calculate (see [here](/vbr/gettingstarted/methods/) for more on available methods):
+The user must supply a cell array called `methods_list` for each property for which they want to calculate (see [here]({{ '/gettingstarted/methods/' | relative_url }}) for more on available methods):
 
 ```matlab
 VBR.in.elastic.methods_list={'anharmonic';'anh_poro';};

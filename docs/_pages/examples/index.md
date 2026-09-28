@@ -6,7 +6,7 @@ toc: false
 
 The `vbr/Projects/` folder contains a number of "Projects", each of which is a self contained example of using the VBR Calculator in various ways.
 
-* [`vbr/Projects/vbr_core_examples`](/vbr/examples/vbrcore/): simple scripts that call various methods of the VBR Calculator.
+* [`vbr/Projects/vbr_core_examples`]({{ '/examples/vbrcore/' | relative_url }}): simple scripts that call various methods of the VBR Calculator.
 
 * `vbr/Projects/1_LabData/1_Attenuation`: calculates elastic moduli and attenuation at laboratory conditions.
 
