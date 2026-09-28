@@ -20,3 +20,5 @@ Projects/1_LabData/1_Attenuation/not_used/
 .vbr_test_data_dir
 *.zip
 docs/.sass-cache/
+docs/vendor/
+docs/.bundle/
