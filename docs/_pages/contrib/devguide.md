@@ -61,3 +61,55 @@ In case you're new to git or developing the VBRc, here are some helpful tips!
 **conflict resolution**: there are a number of tools to aid in conflict resolution. `git mergetool` will pull up a 3-way diff of your local file, the remote file and the most recent common ancestor base file and most editors will let you step through successive conflicts and choose which version to use for the conflict. If resolving conflicts for which there is a Pull Request, you can use github's online conflict resolution editor. If you use the atom editor with github integration, you can use the built in mergetool. Whatever tool you use, if you are unsure of how to resolve the conflict, get in touch and we'll try to help!
 
 **commit history**: `git log` will print a list of all the commits on your branch, `git log --pretty=format:"%h %s" --graph` will print the commit history in a pretty way. You can then pull up the details of a single commit with `git show commit_id` where `commit_id` is the ID of the commit. If you want less detail, you can also check a single `commit_id` with `git log --name-status --diff-filter="ACDMRT" -1 -U commit_id`.
+
+# building the documentation locally
+
+The website lives in the `docs/` directory and is built with [Jekyll](https://jekyllrb.com/). Pull requests that touch `docs/` are built automatically by a github action, and merges to `main` deploy the site. To preview changes before opening a pull request, you can build the site locally. You will need Ruby (3.1 or newer), the `bundler` gem (included with Ruby) and a C compiler (some gems build native extensions). The Ruby that ships with macOS is too old.
+
+## option 1: conda
+
+If you use conda, the easiest route is a dedicated environment with Ruby and compilers from conda-forge:
+
+```
+conda create -n vbr-docs -c conda-forge ruby c-compiler cxx-compiler pkg-config make
+conda activate vbr-docs
+cd docs
+bundle install
+```
+
+The compilers are needed because conda's Ruby expects conda's own compiler when building native extensions. Gems are installed into the conda environment, so removing the environment removes everything.
+
+## option 2: system packages
+
+On macOS, install Ruby with homebrew (the Xcode command line tools provide the compiler):
+
+```
+brew install ruby
+export PATH="$(brew --prefix ruby)/bin:$PATH"
+```
+
+On Debian or Ubuntu:
+
+```
+sudo apt install ruby-full build-essential libssl-dev zlib1g-dev
+```
+
+Other Linux distributions are similar: install Ruby, the Ruby development headers, the OpenSSL development headers and a compiler. Then install the gems into a directory within `docs/` so nothing is written to system directories:
+
+```
+cd docs
+bundle config set --local path vendor/bundle
+bundle install
+```
+
+## building and serving
+
+From within `docs/`:
+
+```
+bundle exec jekyll serve
+```
+
+and open [http://127.0.0.1:4000/vbr/](http://127.0.0.1:4000/vbr/) in a browser. The site is configured with a base path of `/vbr` to match its location on github pages, so the trailing `/vbr/` is required. The server rebuilds pages when you edit them (changes to `_config.yml` require a restart). To only build, `bundle exec jekyll build` writes the site to `docs/_site/` (opening the html files directly will not work because of the base path, so use `jekyll serve` or another local web server).
+
+The first build downloads the site theme from github, so requires a network connection.
