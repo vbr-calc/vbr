@@ -17,6 +17,8 @@ We follow a typical open source workflow. To submit changes:
 * push those changes to your fork on github
 * submit a pull request back to the main VBRc repo
 
+If you're adding a new method, be sure to add a new test (see [testing](#testing) below) and add a note to the active release notes (`release_notes.md`) with a short summary of your work.
+
 If you're new to git, github or contributing to open source projects, the following article has a nice overview with sample git commands: [GitHub Standard Fork & Pull Request Workflow](https://gist.github.com/Chaser324/ce0505fbed06b947d962), but we outline the steps below:
 
 ## developing a feature branch
@@ -42,11 +44,32 @@ This command sets the remote branch that your local `new_branch` will track. Any
 
 4. **Develop your branch**: develop as normal on the new branch, adding commits as you see fit.
 
-5. **Test your branch**: If your feature branch adds new functionality to the `vbr` directory, you should add new test functions for your new features in `vbr/testing` (see the README there, `vbr/testing/README.md`) and occasionally run the existing test functions during development. If your new feature is a self contained project in `Projects`, new test functions are not required (as running your project is its own test). In either case, before submitting a pull request back to main, please run the full test (we don't have any automated testing from within github... yet?).
+5. **Test your branch**: If your feature branch adds new functionality to the `vbr` directory, you should add new test functions for your new features in `vbr/testing` (see the README there, `vbr/testing/README.md`) and occasionally run the existing test functions during development. If your new feature is a self contained project in `Projects`, new test functions are not required (as running your project is its own test). In either case, before submitting a pull request back to main, please run the full test suite (see [testing](#testing) below).
 
 6. **Final push and pull request**: Your branch is ready! The tests run successfully and you want to submit your great new feature back into the main VBR repository so that other people can use your great work! So push up any remaining commits to github and then visit your github page for your vbr fork. There should be a notice up top saying something to the effect of "YOUR_NEW_BRANCH had recent pushes 11 minutes ago (Compare & pull request)". Click the button to "Compare & pull request". If it's not visible, you can select your branch from the dropdown menu and then the button should appear. To submit the pull request: hit the button and then enter a sensible title and a description of what you've done, and click "Create pull request".
 
 7. **Pull request review**: so you've created a pull request! What happens now? Well the core VBRc developers will get a notice of your pull request and they will look it over (hopefully in a timely fashion). They may request code changes or more information or may merge it into the VBRc repository directly! If your branch cannot be automatically merged due to conflicts and you need help rebasing or merging, we'll help!
+
+## testing
+
+When you submit a pull request, a suite of tests will run via github actions. These actions test functionality in both MATLAB and Octave. You can run the full test suite locally by running the `run_all_tests.m` script in the top level of the repository. See `vbr/testing/README.md` for details on adding new tests and running subsets of tests.
+
+## MATLAB and Octave compatibility (and pre-commit)
+
+Ensuring that code runs on both MATLAB and Octave can be tricky. Please avoid using MATLAB Toolboxes or 3rd party Octave packages. If you would like to add functionality that requires either of these, please open a discussion via the Issues page or reach out on Slack and we can figure out ways to minimize impact and properly test new functionality.
+
+If you use Python for other projects, you can use some pre-commit checks here to
+help catch some errors. From a fresh environment, run
+`pip install -r dev_requirements.txt` to install some extra dependencies and then run
+
+```
+pre-commit install
+```
+
+After which, any time you run `git commit`, pre-commit will run some simple checks
+for you. As of now, the only check ensures that `.m` files do not contain the
+pound/hashtag symbol, which is a valid comment symbol in octave but not matlab
+and is a common mistake when your other projects are in Python...
 
 ## style guide & helpful git tips:
 
@@ -64,7 +87,7 @@ In case you're new to git or developing the VBRc, here are some helpful tips!
 
 # building the documentation locally
 
-The website lives in the `docs/` directory and is built with [Jekyll](https://jekyllrb.com/). Pull requests that touch `docs/` are built automatically by a github action, and merges to `main` deploy the site. To preview changes before opening a pull request, you can build the site locally. You will need Ruby (3.1 or newer), the `bundler` gem (included with Ruby) and a C compiler (some gems build native extensions). The Ruby that ships with macOS is too old.
+The website lives in the `docs/` directory and is built with [Jekyll](https://jekyllrb.com/). Pull requests that touch `docs/` are built automatically by a github action, and merges to `main` deploy the site (see [versioned documentation](#versioned-documentation) below). To preview changes before opening a pull request, you can build the site locally. You will need Ruby (3.1 or newer), the `bundler` gem (included with Ruby) and a C compiler (some gems build native extensions). The Ruby that ships with macOS is too old.
 
 ## option 1: conda
 
@@ -125,6 +148,10 @@ Because the same source is published at several paths (see below), links to othe
 ```
 {% endraw %}
 
+## generated pages
+
+Some pages are generated from the MATLAB source by the python scripts in `vbr/support/buildingdocs/` (standard library only, see the README there): the example pages under `docs/_pages/examples/` and their figures, the release notes page `docs/_pages/history.md` and the supporting functions page. Edit the source (or the script) rather than the generated markdown, then re-run the script and commit the result.
+
 # versioned documentation
 
 The github action in `.github/workflows/docs.yaml` publishes several versions of the site:
@@ -133,11 +160,7 @@ The github action in `.github/workflows/docs.yaml` publishes several versions of
 * `https://vbr-calc.github.io/vbr/dev/`: the `main` branch
 * `https://vbr-calc.github.io/vbr/vX.Y.Z/`: every tag listed under `tags` in `docs/_data/versions.yml`
 
-A drop-down in the site header switches between them. Every version is rebuilt from its git tag on every deploy (a github pages deployment replaces the whole site), using the current `docs/_includes/` and `docs/_data/versions.yml` so that old versions get the version switcher too. Merges to `main` only update the `dev` docs.
-
-## publishing the docs for a new release
-
-After the release tag exists on github, open a pull request that sets `stable` to the new tag and adds it to `tags` in `docs/_data/versions.yml`. Merging it deploys the new release at the site root. Do not list a tag before it has been pushed, because the docs build will fail trying to check it out.
+A drop-down in the site header switches between them. Every version is rebuilt from its git tag on every deploy (a github pages deployment replaces the whole site), using the current `docs/_includes/` and `docs/_data/versions.yml` so that old versions get the version switcher too. Merges to `main` only update the `dev` docs; the docs for a release are published as part of the [release cleanup](#release-cleanup) below.
 
 To drop an old version from the site, remove it from `tags`. Tags listed under `legacy` predate the `relative_url` convention above, so the workflow rewrites their hardcoded `/vbr/` links in the built html; new tags do not need to be listed there.
 
@@ -152,3 +175,76 @@ docs_version: "dev"
 ```
 
 and pass it as a second config file: `bundle exec jekyll serve --config _config.yml,_config_version.yml`. The switcher links point at the deployed site, so they will not resolve locally.
+
+# how to create a release
+
+This section contains notes for the VBRc maintainers on creating releases. VBRc
+releases are simply snapshots of the code, managed by git tags and saved as source
+code copies in github releases (and automatically backed up to zenodo).
+
+## release prep
+
+To create a release, there are a few changes you first have to make:
+
+1. Make sure your local `main` branch matches the remote upstream `main` branch:
+
+```shell
+$ git checkout main
+$ git fetch --all
+$ git rebase upstream/main
+```
+
+2. Go into `vbr/support/vbr_version.m` and set `Version.is_development = 0;` and adjust the `major`, `minor` or `patch` entries in the `Version` structure to whatever version you are releasing.
+3. Make sure the `release_notes.md` header contains the versions string you are releasing and adjust the entries in the release notes as needed.
+4. Update the release notes for the website at `docs/_pages/history.md`: you can manually copy in the latest `release_notes.md` into that file, or if you have a Python environment availabe, you can run:
+```shell
+$ cd vbr/support/buildingdocs/
+$ python sync_release_notes.py
+$ cd ../../..
+```
+and it will automatically update `docs/_pages/history.md`.
+5. commit those changes to a new branch, e.g.:
+
+```shell
+$ git checkout -b release_prep_v1pt2pt0
+$ git add .
+$ git commit -m "release prep v1.2.0"
+```
+6. push up the new branch and create a pull request as usual
+
+You're now ready to release!
+
+## actually releasing
+
+To release, create a new version tag locally:
+
+```
+$ git tag v0.99.5
+```
+
+and push it up to gitub
+
+```
+$ git push upstream v0.99.5
+```
+
+this will trigger a github action that drafts a release based on the current
+version of `release_notes.md`. Go to github, edit the release and then hit publish
+when ready.
+
+## release cleanup
+
+Make sure your local `main` matches the upstream VBRc `main` branch and then
+create a new branch, e.g., `cleanup_from_v1pt2pt0` and make the following
+changes:
+
+- Copy/paste `release_notes.md` into `release_history.md`, reset `release_notes.md` for active development.
+- Go to `vbr/support/vbr_version.m` and set `Version.is_development = 1;` and update the major/minor/patch numbers as you see fit (usually just bump the patch number).
+- In `docs/_data/versions.yml`, set `stable` to the new tag and add the tag to the `tags` list. Merging this publishes the release's documentation at the site root (the tag must already be on github, otherwise the docs build fails trying to check it out).
+
+Commit the changes, push up the branch and create a new pull request as usual.
+
+Finally, go check out the github [milestones](https://github.com/vbr-calc/vbr/milestones) and
+if there is a corresponding version for this release, close it out (if there are open issues
+or pull requests remaining that did not make it to release, remove them from the milestone and
+add them to a new one).
