@@ -37,7 +37,7 @@ jobs:
     outputs:
       matrix: ${{ steps.versions.outputs.matrix }}
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
     - id: versions
       name: Build matrix from docs/_data/versions.yml
       shell: python
@@ -74,8 +74,8 @@ jobs:
       fail-fast: true
       matrix: ${{ fromJson(needs.versions.outputs.matrix) }}
     steps:
-    - uses: actions/checkout@v6
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
+    - uses: actions/checkout@v7
       with:
         ref: ${{ matrix.ref }}
         path: version-src
@@ -122,7 +122,7 @@ jobs:
         # Insert the version subdir unless the link already targets a version.
         find site-out -name '*.html' -print0 | xargs -0 perl -pi -e \
           's{((?:href|src)=")'"$docs_root"'/(?!dev/|v\d)}{$1'"$docs_root"'/${{ matrix.subdir }}/}g'
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v7
       with:
         name: site-${{ matrix.name }}
         path: site-out
@@ -134,7 +134,7 @@ jobs:
     needs: [versions, build]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v8
       with:
         path: parts
     - name: Arrange versions
