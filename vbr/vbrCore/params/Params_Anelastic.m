@@ -34,7 +34,9 @@ function params = Params_Anelastic(method,GlobalParams)
     params.useJF10visc=1; % if 1, will use the scaling from JF10 for maxwell time. If 0, will calculate
     params.integration_method=0; % 0 for trapezoidal, 1 for quadrature.
     params.tau_integration_points = 500 ; % number of points for integration of high-T background if trapezoidal
+    params.available_fits = {};
     params=load_JF10_eBurger_params(params);
+    params=load_Qu2024_eBurger_params(params);
   end
 
   if strcmp(method,'andrade_psp')
@@ -224,6 +226,7 @@ function params=load_JF10_eBurger_params(params)
   params.bg_only.DeltaP=0; % no peak, set to 0
   params.bg_only.sig=0;% no peak, set to 0
   params.bg_only.Tau_PR=0;% no peak, set to 0
+  params.bg_only.description='Background only, multi-sample fit';
 
   % multiple sample best high-temp background + peak fit:
   params.bg_peak.DeltaP=0.057; % relaxation strength of peak
@@ -238,6 +241,7 @@ function params=load_JF10_eBurger_params(params)
   params.bg_peak.Tau_LR = 1e-3 ; % Relaxation time lower limit reference
   params.bg_peak.Tau_HR = 1e7 ; % Relaxation time higher limit reference
   params.bg_peak.Tau_MR = 10^7.48 ; % Reference Maxwell relaxation time
+  params.bg_peak.description='Background plus peak, multi-sample fit';
 
   % single sample 6585 fit, HTB only
   params.s6585_bg_only.dR = 3.1; % ref grain size in microns
@@ -252,6 +256,8 @@ function params=load_JF10_eBurger_params(params)
   params.s6585_bg_only.DeltaP=0; % no peak, set to 0
   params.s6585_bg_only.sig=0;% no peak, set to 0
   params.s6585_bg_only.Tau_PR=0;% no peak, set to 0
+  params.s6585_bg_only.description='Single sample 6585 background only fit';
+
 
   % single sample 6585 fit, HTB + dissipation peak
   params.s6585_bg_peak.DeltaP=0.07; % relaxation strength of peak
@@ -266,15 +272,113 @@ function params=load_JF10_eBurger_params(params)
   params.s6585_bg_peak.Tau_LR = 1e-2 ; % Relaxation time lower limit reference
   params.s6585_bg_peak.Tau_HR = 1e6 ; % Relaxation time higher limit reference
   params.s6585_bg_peak.Tau_MR = 10^5.4 ; % Reference Maxwell relaxation time
+  params.s6585_bg_peak.description='Single sample 6585 background plus peak fit';
 
   % parameters commmon to all the above
   meths={'s6585_bg_peak';'s6585_bg_only';'bg_peak';'bg_only'};
+  nfits = numel(params.available_fits);
   for imeth=1:numel(meths)
     meth=meths{imeth};
     params.(meth).TR=1173; % ref temp [K]
     params.(meth).PR = 0.2; % ref confining pressure of experiments, GPa
     params.(meth).Vstar = 10e-6 ; % m^3/mol (Activation Volume? or molar volume?)
     params.(meth).m_v = 3 ; % viscous grain size exponent for maxwell time
+    nfits = nfits + 1;
+    params.available_fits{nfits} = meth;
+
+    params.(meth).citations = params.citations;
+  end
+
+
+end
+
+function params=load_Qu2024_eBurger_params(params)
+  % Table 2 of Qu et al, 2024, supplemented with info
+  % from Qu et al 2021 for grain size dependence.
+
+  % some notes:
+  %
+  % Grain size dependence is from Qu et al 2021, which cite
+  % unpublished re-analysis of JF10 data in leiu of new experimental
+  % constraints. Reference grain size for each sample is set to the
+  % sample's average grain size to reproduce single sample fitting
+  % curves (because Qu et al 2024 does not fit for grain size dependence).
+  % The cross-sample average uses a reference grain size of 3.1 following
+  % Qu et al 2021.
+  %
+  % Cross-sample average values of Tau_LR and Tau_HR are not given
+  % in Qu et al, 2024. Using log(Tau_LR) = -4 as the lower limit
+  % since it's a manually adjusted parameter, log(Tau_HR) as 9.49,
+  % which is an average of the 3 measurements.
+
+  params.A1802.DeltaB = .76 ;% relaxation strength of background.
+  params.A1802.alf = 0.217 ; % high temp background tau exponent
+  params.A1802.Tau_LR = 1e-4 ; % Relaxation time lower limit reference
+  params.A1802.Tau_HR = 10^8.87 ; % Relaxation time higher limit reference
+  params.A1802.DeltaP=.012; % relaxation strength of peak
+  params.A1802.Tau_PR=10^3.7; % center maxwell time
+  params.A1802.sig=1.1; % sigma, peak breadth
+  params.A1802.E = 660000 ; % J/mol
+  params.A1802.description = "SS-jacketed dunite, 900-1200C";
+  params.A1802.dR = 3.7; % ref grain size in microns
+
+  params.A1906.DeltaB = .93 ;% relaxation strength of background.
+  params.A1906.alf = 0.222 ; % high temp background tau exponent
+  params.A1906.Tau_LR = 1e-4 ; % Relaxation time lower limit reference
+  params.A1906.Tau_HR = 10^9.93 ; % Relaxation time higher limit reference
+  params.A1906.DeltaP=.006; % relaxation strength of peak
+  params.A1906.Tau_PR=10^4.8; % center maxwell time
+  params.A1906.sig=0.6; % sigma, peak breadth
+  params.A1906.E = 671000 ; % J/mol
+  params.A1906.description = "MS-jacketed dunite, 900-1300C";
+  params.A1906.dR = 6.5; % ref grain size in microns
+
+  params.A1928.DeltaB = .87 ;% relaxation strength of background.
+  params.A1928.alf = 0.250 ; % high temp background tau exponent
+  params.A1928.Tau_LR = 1e-5 ; % Relaxation time lower limit reference
+  params.A1928.Tau_HR = 10^9.68 ; % Relaxation time higher limit reference
+  params.A1928.DeltaP=.029; % relaxation strength of peak
+  params.A1928.Tau_PR=10^5.1; % center maxwell time
+  params.A1928.sig=0.9; % sigma, peak breadth
+  params.A1928.E = 664000 ; % J/mol
+  params.A1928.description = "MS-jacketed dunite, 1050-1300C";
+  params.A1928.dR = 6.3; % ref grain size in microns
+
+  params.Qu2024.DeltaB = .87 ;% relaxation strength of background.
+  params.Qu2024.alf = 0.233 ; % high temp background tau exponent
+  params.Qu2024.DeltaP=0.018; % relaxation strength of peak
+  params.Qu2024.Tau_PR=10^4.35; % center maxwell time
+  params.Qu2024.sig=0.85; % sigma, peak breadth
+  params.Qu2024.E = 662000 ; % J/mol
+  % these are not mentioned in the paragraph
+  params.Qu2024.Tau_LR = 10^-4 ; % Relaxation time lower limit reference
+  params.Qu2024.Tau_HR = 10^9.49 ; % Relaxation time higher limit reference
+  params.Qu2024.description = "multi-sample averages, see Qu et al 2024 text";
+  params.Qu2024.dR = 3.1; % ref grain size in microns
+
+  meths={'A1802';'A1906'; 'A1928'; 'Qu2024'};
+  nfits = numel(params.available_fits);
+  for imeth=1:numel(meths)
+    meth=meths{imeth};
+    params.(meth).TR=1173; % ref temp [K]
+    params.(meth).G_UR = 66.5 ; % GPa, unrel. G, reference val.
+    params.(meth).PR = 0.2; % ref confining pressure of experiments, GPa
+    params.(meth).Vstar = 10e-6 ; % m^3/mol (Activation Volume? or molar volume?)
+    params.(meth).m_v = 3 ; % viscous grain size exponent for maxwell time
+
+
+    % "Unpublished analysis of the Jackson and Faul (2010) data
+    % set including alternative/supplementary data shows that a
+    % fixed grain size exponent m=1.44, simultaneously applied to
+    % the three relaxation times (with tau_H=tau_M ), could achieve
+    % reasonable fit" - Qu et al 2021
+    params.(meth).m_a = 1.44 ; % grain size exponent for tau_i, i in (L,H,P)
+    params.(meth).Tau_MR = params.(meth).Tau_HR ; % Reference Maxwell relaxation time
+    nfits = nfits + 1;
+    params.available_fits{nfits} = meth;
+
+    params.(meth).citations = {'Qu et al, 2024, PEPI, https://doi.org/10.1016/j.pepi.2024.107160'; ...
+                               'Qu et al, 2021, PEIP, https://doi.org/10.1016/j.pepi.2024.107160'};
   end
 
 end

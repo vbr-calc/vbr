@@ -5,7 +5,9 @@ title: ''
 
 # `eburgers_psp`
 
-Extended Burgers Model with Pseudo-Period Scaling, following Jackson and Faul (2010), Phys. Earth Planet. Inter., [DOI](https://doi.org/10.1016/j.pepi.2010.09.005). The default fitting parameters used are those of the multi-sample extended burgers fit (see below for other otpions).
+Extended Burgers Model with Pseudo-Period Scaling, following Jackson and Faul (2010, [DOI](https://doi.org/10.1016/j.pepi.2010.09.005)). The default fitting parameters used are those of the multi-sample extended burgers fit from Jackson and Faul (2020).
+
+VBRc >= 2.1.0 includes the updated parameter set of Qu et al (2024, [DOI](https://doi.org/10.1016/j.pepi.2024.107160)) with grain-size dependence from Qu et al (2021, [DOI](https://doi.org/10.1029/2021JB022504)). See the [this section](#using-the-updated-fits-from-qu-et-al-2024) for enabling it (future versions of the VBRc will switch the default).
 
 ## Requires
 
@@ -50,7 +52,7 @@ VBR.in.anelastic.methods_list={'eburgers_psp'};
 [VBR] = VBR_spine(VBR) ;
 ```
 
-## Output  
+## Output
 
 Output is stored in `VBR.out.anelastic.eburgers_psp`:
 
@@ -80,14 +82,21 @@ disp(VBR.in.anelastic.eburgers_psp)
 ```
 
 Several import fields of `VBR.in.anelastic.eburgers_psp` include:
-* `eBurgerFit`: This field specifies which parameter fitting from Jackson and Faul (2010) to use. The possible values include:
-  * `bg_only`: (default) multi-sample fit for the high temperature background only
-  * `bg_peak`: multi-sample fit for the high temperature background plus a dissipation peak
-  * `s6585_bg_only`: single sample fit for the high temperature background only
-  * `s6585_bg_peak`: single sample fit for the high temperature background plus a dissipation peak   
-* `method`: This field determines the method of calculating the integral within the relationship for real/complex dynamic compliances. The default value `PointWise` is a standard numerical integration. If set to `FastBurger`, the integral is computed using a look-up table approach. While the `FastBurger` is significantly more efficient computationally, it only works when the dissipation peak is not included in the formulation.
+* `eBurgerFit`: This field specifies which parameter fitting to use. Available fits include original fits from Jackson and Faul (2010) and updated fits from Qu et al (2024).
+  * Jackson and Faul (2010) fits include:
+    * `bg_only`: (default) multi-sample fit for the high temperature background only
+    * `bg_peak`: multi-sample fit for the high temperature background plus a dissipation peak
+    * `s6585_bg_only`: single sample fit for the high temperature background only
+    * `s6585_bg_peak`: single sample fit for the high temperature background plus a dissipation peak
+  * Qu et al (2024) fits include:
+    * `Qu2024`: multi-sample averages
+    * `A1802`: SS-jacketed dunite, 900-1200C
+    * `A1906`: MS-jacketed dunite, 900-1300C
+    * `A1928`: MS-jacketed dunite, 1050-1300C
 
-To change the actual fitting parameters in `VBR.in.anelastic.eburgers_psp.(fit)`, you should first load the parameter set and then modify values before calling the VBR Calculator. For example, to change the strength of the dissipation peak for the background and peak fit, `bg_peak`:  
+* `method`: This field determines the method of calculating the integral within the relationship for real/complex dynamic compliances. The default value `PointWise` is a standard numerical integration and works for all fitting parameters. If set to `FastBurger`, the integral is computed using a look-up table approach. While the `FastBurger` is significantly more efficient computationally, it only works when the dissipation peak is not included in the formulation (`bg_only` fits from Jackson and Faul 2010).
+
+To change the actual fitting parameters in `VBR.in.anelastic.eburgers_psp.(fit)`, you should first load the parameter set and then modify values before calling the VBR Calculator. For example, to change the strength of the dissipation peak for the background and peak fit, `bg_peak`:
 
 ```matlab
 VBR.in.anelastic.eburgers_psp=Params_Anelastic('eburgers_psp');
@@ -96,6 +105,18 @@ disp(VBR.in.anelastic.eburgers_psp.bg_peak.DeltaP) % print the default peak stre
 VBR.in.anelastic.eburgers_psp.bg_peak.DeltaP=.07; % increase peak strength
 disp(VBR.in.anelastic.eburgers_psp.bg_peak.DeltaP)
 ```
+
+### Using the updated fits from Qu et al 2024
+
+To use the updated fitting parameters from Qu et al 2024:
+
+```matlab
+VBR.in.anelastic.eburgers_psp=Params_Anelastic('eburgers_psp');
+VBR.in.anelastic.eburgers_psp.eBurgerFit='Qu2024';
+```
+
+Future versions of the VBRc will likely change the default fit to Qu et al 2024.
+
 ### on the reference modulus
 
 The parameter fits include a value for the reference modulus, temperature and pressure. In the case of the `bg_peak` fit, these are:
@@ -103,8 +124,8 @@ The parameter fits include a value for the reference modulus, temperature and pr
 ```matlab
 G_UR =  66.500
 TR =  1173
-PR =  0.20000    
-```    
+PR =  0.20000
+```
 which reflect the experimental conditions.
 
 It is important to stress that these values **are not used by the anharmonic** calculation (as a result the reference modulus here **is not used anywhere**). The reference temperature and pressure are only used in calculating maxwell times when calculating the effective diffusion creep viscosity and **do not match the reference values used by the anharmonic methods**. In order to use the exact unrelaxed reference modulus of Jackson and Faul, 2010, you must either (1) overwrite `VBR.in.elastic.anharmonic.Gu_0_ol` using the JF10 value projected to the surface, as done in `Projects/1_LabData/1_Attenuation/FitData_FJ10_eBurgers.m` or (2) set `VBR.in.elastic.anharmonic.Gu_0_ol` to the exact JF10 value but then change `VBR.in.elastic.anharmonic.T_K_ref` and `VBR.in.elastic.anharmonic.P_Pa_ref` to match the the JF10 values.
