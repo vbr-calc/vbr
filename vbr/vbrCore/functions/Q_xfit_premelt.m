@@ -103,6 +103,7 @@ function [VBR] = Q_xfit_premelt(VBR)
     VBRout.Q = 1./VBRout.Qinv;
     VBRout.M=1./sqrt(J1.^2+J2.^2);
     VBRout.f_norm = f_norm_glob;
+    VBRout.tau_M = tau_m;
 
     % calculate mean velocity along frequency dimension
     VBRout.Vave = Q_aveVoverf(VBRout.V,VBR.in.SV.f);

@@ -6,4 +6,5 @@ function units = Q_method_units()
     units.M = 'Pa'; 
     units.V = 'm/s';
     units.Vave = 'm/s';
+    units.tau_M = 's';
 end

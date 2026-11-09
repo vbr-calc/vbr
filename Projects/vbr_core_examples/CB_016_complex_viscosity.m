@@ -29,29 +29,10 @@ function VBR = CB_016_complex_viscosity()
 
     VBR = VBR_spine(VBR) ;
 
+    [eta_star, eta_normalized, eta_app] = complex_viscosity_from_method(VBR, 'andrade_analytical', 'anharmonic');
+
     % extract variables for convenience
     tau_M = VBR.out.anelastic.andrade_analytical.tau_M;
-    omega = 2 * pi * VBR.in.SV.f;
-    eta_ss = VBR.in.anelastic.andrade_analytical.eta_ss;
-
-    J1 = VBR.out.anelastic.andrade_analytical.J1;
-    J2 = VBR.out.anelastic.andrade_analytical.J2;
-    J = J1 - J2 * i;
-    M = 1./J;
-
-    % complex viscosity
-    eta_star= -i * M ./ omega;  % complex viscosity
-
-    % apparent viscosity
-    eta_app = abs(eta_star);
-
-    % complex maxwell viscosity
-    M_maxwell = i * omega * eta_ss ./(1.+i*omega * tau_M);
-    eta_maxwell = -i * M_maxwell ./ omega;
-
-    % maxwell-normalized apparent viscosity
-    eta_normalized = abs(eta_star) ./ abs(eta_maxwell);
-
     tau_f = 1./ tau_M;
 
     if ~vbr_tests_are_running()
