@@ -6,7 +6,7 @@ title: ""
 # CB_012_simplecrust.m
 ## output figures
 
-!['CB_012_simplecrust'](/vbr/assets/images/CBs/CB_012_simplecrust.png){:class="img-responsive"}
+!['CB_012_simplecrust']({{ '/assets/images/CBs/CB_012_simplecrust.png' | relative_url }}){:class="img-responsive"}
 ## contents
 ```matlab
 function VBR = CB_012_simplecrust()

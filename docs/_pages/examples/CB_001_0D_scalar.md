@@ -6,7 +6,7 @@ title: ""
 # CB_001_0D_scalar.m
 ## output figures
 
-!['CB_001_0D_scalar'](/vbr/assets/images/CBs/CB_001_0D_scalar.png){:class="img-responsive"}
+!['CB_001_0D_scalar']({{ '/assets/images/CBs/CB_001_0D_scalar.png' | relative_url }}){:class="img-responsive"}
 ## contents
 ```matlab
 function VBR = CB_001_0D_scalar()

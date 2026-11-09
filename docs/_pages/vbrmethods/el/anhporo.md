@@ -46,4 +46,4 @@ Output is stored in `VBR.out.elastic.anh_poro`:
 
 See `Projects/vbr_core_examples/CB_009_anhporo.m`:
 
-!['CB_009_anhporo'](/vbr/assets/images/CBanhporo.png){:class="img-responsive"}
+!['CB_009_anhporo']({{ '/assets/images/CBanhporo.png' | relative_url }}){:class="img-responsive"}

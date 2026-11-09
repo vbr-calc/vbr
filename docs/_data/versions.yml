@@ -1,0 +1,14 @@
+# Documentation versions published by .github/workflows/docs.yaml.
+#
+# stable: the tag deployed at the site root (docs_root in _config.yml).
+# tags:   every tag to publish, each at <docs_root>/<tag>/ (stable included).
+#         Tags must exist on github before they are listed here.
+# legacy: tags whose docs source predates the `relative_url` link fix; the
+#         workflow rewrites hardcoded /vbr/ links in the built html for these.
+#
+# The development version (main) is always published at <docs_root>/dev/.
+stable: v2.1.1
+tags:
+  - v2.1.1
+legacy:
+  - v2.1.1

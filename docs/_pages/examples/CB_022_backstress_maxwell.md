@@ -6,7 +6,7 @@ title: ""
 # CB_022_backstress_maxwell.m
 ## output figures
 
-!['CB_022_backstress_maxwell'](/vbr/assets/images/CBs/CB_022_backstress_maxwell.png){:class="img-responsive"}
+!['CB_022_backstress_maxwell']({{ '/assets/images/CBs/CB_022_backstress_maxwell.png' | relative_url }}){:class="img-responsive"}
 ## contents
 ```matlab
 function VBR = CB_022_backstress_maxwell

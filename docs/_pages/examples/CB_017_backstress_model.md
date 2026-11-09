@@ -6,7 +6,7 @@ title: ""
 # CB_017_backstress_model.m
 ## output figures
 
-!['CB_017_backstress_model'](/vbr/assets/images/CBs/CB_017_backstress_model.png){:class="img-responsive"}
+!['CB_017_backstress_model']({{ '/assets/images/CBs/CB_017_backstress_model.png' | relative_url }}){:class="img-responsive"}
 ## contents
 ```matlab
 function VBR = CB_017_backstress_model()

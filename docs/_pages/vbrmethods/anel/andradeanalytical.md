@@ -24,9 +24,9 @@ VBR.in.SV.rho % density in kg m<sup>-3</sup>
 ```
 
 **Required Elastic Methods**: `anharmonic` MUST be in the `VBR.in.elastic.methods_list`. If `anh_poro` is set, then `andrade_analytical` will use the unrelaxed moduli from `anh_poro` (which includes the P,T projection of `anharmonic` plus the poroelastic correction). See the section
-on [elastic methods](/vbr/vbrmethods/elastic/) for more details.
+on [elastic methods]({{ '/vbrmethods/elastic/' | relative_url }}) for more details.
 
-**Required Viscous Methods**: The default behavior requires at least one [`viscous` method](/vbr/vbrmethods/viscous/) to be set. If multiple are defined, `andrade_analytical` will use the first in the list. The default behavior uses the diffusion creep viscosity from the specified viscous method as the steady state viscosity within the andrade model.
+**Required Viscous Methods**: The default behavior requires at least one [`viscous` method]({{ '/vbrmethods/viscous/' | relative_url }}) to be set. If multiple are defined, `andrade_analytical` will use the first in the list. The default behavior uses the diffusion creep viscosity from the specified viscous method as the steady state viscosity within the andrade model.
 
 ## Calling Procedure
 

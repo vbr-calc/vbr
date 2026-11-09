@@ -1,7 +1,19 @@
 source "https://rubygems.org"
 
-gem "github-pages", group: :jekyll_plugins
-gem "jekyll-include-cache"
+# github-pages pins jekyll-remote-theme to 0.4.3 (rubyzip < 3), so the plugins it
+# provided are listed directly, at the versions github-pages 232 uses.
+gem "jekyll", "~> 3.10.0"
+gem "jekyll-remote-theme", "~> 0.5.2", group: :jekyll_plugins
+gem "jekyll-include-cache", "~> 0.2.1"
+gem "jekyll-feed", "~> 0.17.0"
+gem "jekyll-sass-converter", "~> 1.5.2"
+gem "kramdown-parser-gfm", "~> 1.1.0"
+gem "rubyzip", ">= 3.4.0"
+gem "webrick"
+# no longer default gems in Ruby >= 3.4
+gem "base64"
+gem "bigdecimal"
+gem "csv"
 # source "https://rubygems.org"
 # Hello! This is where you manage which Jekyll version is used to run.
 # When you want to use a different version, change it below, save the

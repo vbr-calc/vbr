@@ -6,7 +6,7 @@ title: ""
 # CB_009_anhporo.m
 ## output figures
 
-!['CB_009_anhporo'](/vbr/assets/images/CBs/CB_009_anhporo.png){:class="img-responsive"}
+!['CB_009_anhporo']({{ '/assets/images/CBs/CB_009_anhporo.png' | relative_url }}){:class="img-responsive"}
 ## contents
 ```matlab
 function VBR = CB_009_anhporo()

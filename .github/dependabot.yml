@@ -1,0 +1,14 @@
+version: 2
+updates:
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    # Directory where workflow files are located
+    directory: "/"
+    # Check for updates daily, weekly, or monthly
+    schedule:
+      interval: "weekly"
+    # Optional: Group action updates into a single PR
+    groups:
+      github-actions-dependencies:
+        patterns:
+          - "*"

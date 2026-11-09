@@ -6,7 +6,7 @@ title: ""
 # CB_002_2D_HalfSpaceCooling.m
 ## output figures
 
-!['CB_002_2D_HalfSpaceCooling'](/vbr/assets/images/CBs/CB_002_2D_HalfSpaceCooling.png){:class="img-responsive"}
+!['CB_002_2D_HalfSpaceCooling']({{ '/assets/images/CBs/CB_002_2D_HalfSpaceCooling.png' | relative_url }}){:class="img-responsive"}
 ## contents
 ```matlab
 function VBR = CB_002_2D_HalfSpaceCooling()

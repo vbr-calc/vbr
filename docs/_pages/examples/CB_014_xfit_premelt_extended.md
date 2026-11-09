@@ -6,7 +6,7 @@ title: ""
 # CB_014_xfit_premelt_extended.m
 ## output figures
 
-!['CB_014_xfit_premelt_extended'](/vbr/assets/images/CBs/CB_014_xfit_premelt_extended.png){:class="img-responsive"}
+!['CB_014_xfit_premelt_extended']({{ '/assets/images/CBs/CB_014_xfit_premelt_extended.png' | relative_url }}){:class="img-responsive"}
 ## contents
 ```matlab
 function VBR = CB_014_xfit_premelt_extended()

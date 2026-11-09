@@ -6,7 +6,7 @@ title: ""
 # CB_008_anharmonic_Gu0.m
 ## output figures
 
-!['CB_008_anharmonic_Gu0'](/vbr/assets/images/CBs/CB_008_anharmonic_Gu0.png){:class="img-responsive"}
+!['CB_008_anharmonic_Gu0']({{ '/assets/images/CBs/CB_008_anharmonic_Gu0.png' | relative_url }}){:class="img-responsive"}
 ## contents
 ```matlab
 function VBR = CB_008_anharmonic_Gu0()

@@ -6,7 +6,7 @@ title: ""
 # CB_016_complex_viscosity.m
 ## output figures
 
-!['CB_016_complex_viscosity'](/vbr/assets/images/CBs/CB_016_complex_viscosity.png){:class="img-responsive"}
+!['CB_016_complex_viscosity']({{ '/assets/images/CBs/CB_016_complex_viscosity.png' | relative_url }}){:class="img-responsive"}
 ## contents
 ```matlab
 function VBR = CB_016_complex_viscosity()
